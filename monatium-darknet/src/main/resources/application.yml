@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/monatium-darknet
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+
+logging.level:
+  org.hibernate.SQL: debug # show executed SQL
+  org.hibernate.resource.transaction: debug # show transaction (commit, rollback)
+  org.springframework.orm.jpa.JpaTransactionManager: debug
+  org.hibernate.orm.jdbc.bind: trace # show binding parameter
+
+
