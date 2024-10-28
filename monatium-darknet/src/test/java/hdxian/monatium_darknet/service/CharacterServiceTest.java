@@ -109,6 +109,7 @@ class CharacterServiceTest {
         lowSkill.setName("마력탄 폭주");
         lowSkill.setDescription("폭주하는 마력탄을 4개 발사해 무작위 적들에게 범위 마법 피해를 입힌다.");
         lowSkill.setCooldown(null);
+        lowSkill.setImageUrl("lowSkill_image_url");
         lowSkill.addAttribute("총 마법 피해", "350%");
 
         Skill highSkill = new Skill();
@@ -116,6 +117,7 @@ class CharacterServiceTest {
         highSkill.setName("돌겨어어어!!!억..?");
         highSkill.setDescription("지팡이에 마력을 가득 담아 돌격해 적들에게 범위 마법 피해를 입힌다.");
         highSkill.setCooldown(15);
+        highSkill.setImageUrl("highSkill_image_url");
         highSkill.addAttribute("마법 피해", "525%");
 
         CharacterUrl urls = new CharacterUrl("portrait_url", "profile_url", "body_url");

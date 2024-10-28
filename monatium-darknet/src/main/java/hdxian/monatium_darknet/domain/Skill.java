@@ -22,6 +22,7 @@ public class Skill {
     private String name;
     private String description;
     private Integer cooldown;
+    private String imageUrl;
 
     @ElementCollection
     @CollectionTable(name = "skill_attributes", joinColumns = @JoinColumn(name = "skill_id"))
