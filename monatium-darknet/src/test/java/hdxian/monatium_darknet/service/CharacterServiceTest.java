@@ -31,16 +31,29 @@ class CharacterServiceTest {
         // given
         CharacterStat stat = new CharacterStat(7, 3, 4);
 
-        Attack normalAttack = new Attack("마력탄을 날려 적에게 마법 피해를 입힌다.");
+        Attack normalAttack = new Attack();
+        normalAttack.setCategory(AttackCategory.NORMAL);
+        normalAttack.setDescription("마력탄을 날려 적에게 마법 피해를 입힌다.");
         normalAttack.addAttribute("마법 피해", "55%");
 
-        Attack enhancedAttack = new Attack("일정 확률로 친구 몰래 케이크를 꺼내 먹어 SP를 회복한다.");
+        Attack enhancedAttack = new Attack();
+        enhancedAttack.setCategory(AttackCategory.ENHANCED);
+        enhancedAttack.setDescription("일정 확률로 친구 몰래 케이크를 꺼내 먹어 SP를 회복한다.");
         enhancedAttack.addAttribute("SP 회복", "50%");
+        enhancedAttack.addAttribute("마나 회복", "15%");
 
-        Skill lowSkill = new Skill("마력탄 폭주", "폭주하는 마력탄을 4개 발사해 무작위 적들에게 범위 마법 피해를 입힌다.", null);
+        Skill lowSkill = new Skill();
+        lowSkill.setCategory(SkillCategory.LOW);
+        lowSkill.setName("마력탄 폭주");
+        lowSkill.setDescription("폭주하는 마력탄을 4개 발사해 무작위 적들에게 범위 마법 피해를 입힌다.");
+        lowSkill.setCooldown(null);
         lowSkill.addAttribute("총 마법 피해", "350%");
 
-        Skill highSkill = new Skill("돌겨어어어!!!억..?", "지팡이에 마력을 가득 담아 돌격해 적들에게 범위 마법 피해를 입힌다.", 15);
+        Skill highSkill = new Skill();
+        highSkill.setCategory(SkillCategory.HIGH);
+        highSkill.setName("돌겨어어어!!!억..?");
+        highSkill.setDescription("지팡이에 마력을 가득 담아 돌격해 적들에게 범위 마법 피해를 입힌다.");
+        highSkill.setCooldown(15);
         highSkill.addAttribute("마법 피해", "525%");
 
         CharacterUrl urls = new CharacterUrl("portrait_url", "profile_url", "body_url");

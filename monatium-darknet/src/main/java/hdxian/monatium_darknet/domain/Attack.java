@@ -2,34 +2,31 @@ package hdxian.monatium_darknet.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Embeddable
-@Getter
+@Entity
+@Getter @Setter
 public class Attack {
+
+    @Id @GeneratedValue
+    @Column(name = "attack_id")
+    private Long id;
+
+    @Column(name = "attack_category")
+    @Enumerated(EnumType.STRING)
+    private AttackCategory category; // ENUM [NORMAL, ENHANCED] 일반, 강화공격
 
     private String description;
 
     @ElementCollection
-    @CollectionTable(name = "attack_attributes", joinColumns = @JoinColumn(name = "character_id"))
-    @AttributeOverrides({
-            @AttributeOverride(name = "name", column = @Column(name = "attribute_name")),
-            @AttributeOverride(name = "value", column = @Column(name = "attribute_value"))
-    })
+    @CollectionTable(name = "attack_attributes", joinColumns = @JoinColumn(name = "attack_id"))
     private List<Attribute> attributes = new ArrayList<>();
 
-    // for JPA spec
-    protected Attack() {
-    }
-
-    public Attack(String description) {
-        this.description = description;
-    }
-
-    public void addAttribute(String key, String val) {
-        this.attributes.add(new Attribute(key, val));
+    public void addAttribute(String name, String value) {
+        this.attributes.add(new Attribute(name, value));
     }
 
 }

@@ -9,16 +9,15 @@ import lombok.Getter;
 @Getter
 public class Attribute {
 
-    private String name;
-    private String value;
+    private String attrName;
+    private String attrValue;
 
     // for JPA spec
     protected Attribute() {
     }
 
-    public Attribute(String name, String value) {
-        this.name = name;
-        this.value = value;
+    public Attribute(String attrName, String attrValue) {
+        this.attrName = attrName;
+        this.attrValue = attrValue;
     }
-
 }

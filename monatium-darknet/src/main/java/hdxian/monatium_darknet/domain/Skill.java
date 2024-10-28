@@ -7,30 +7,25 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Embeddable
-@Getter
+@Entity
+@Getter @Setter
 public class Skill {
+
+    @Id @GeneratedValue
+    @Column(name = "skill_id")
+    private Long id;
+
+    @Column(name = "skill_category")
+    @Enumerated(EnumType.STRING)
+    private SkillCategory category; // ENUM [LOW, HIGH, ATTACHMENT] - 저학년, 고학년, 애착 아티팩트
 
     private String name;
     private String description;
     private Integer cooldown;
 
     @ElementCollection
-    @CollectionTable(name = "skill_attributes", joinColumns = @JoinColumn(name = "character_id"))
-    @AttributeOverrides({
-            @AttributeOverride(name = "name", column = @Column(name = "attribute_name")),
-            @AttributeOverride(name = "value", column = @Column(name = "attribute_value"))
-    })
+    @CollectionTable(name = "skill_attributes", joinColumns = @JoinColumn(name = "skill_id"))
     private List<Attribute> attributes = new ArrayList<>();
-
-    protected Skill() {
-    }
-
-    public Skill(String name, String description, Integer cooldown) {
-        this.name = name;
-        this.description = description;
-        this.cooldown = cooldown;
-    }
 
     public void addAttribute(String key, String val) {
         this.attributes.add(new Attribute(key, val));

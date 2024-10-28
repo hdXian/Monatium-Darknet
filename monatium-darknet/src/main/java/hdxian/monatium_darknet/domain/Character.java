@@ -39,28 +39,20 @@ public class Character {
     @Embedded
     private CharacterStat stat;
 
-    @Embedded
-    @AttributeOverride(name = "description", column = @Column(name = "normal_attack_description"))
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "normal_attack_id")
     private Attack normalAttack; // 기본 공격
 
-    @Embedded
-    @AttributeOverride(name = "description", column = @Column(name = "enhanced_attack_description"))
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "enhanced_attack_id")
     private Attack enhancedAttack; // 강화 공격
 
-    @Embedded
-    @AttributeOverrides( {
-            @AttributeOverride(name = "name", column = @Column(name = "low_skill_name")),
-            @AttributeOverride(name = "description", column = @Column(name = "low_skill_description")),
-            @AttributeOverride(name = "cooldown", column = @Column(name = "low_skill_cooldown"))
-    } )
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "low_skill_id")
     private Skill lowSkill; // 저학년 스킬
 
-    @Embedded
-    @AttributeOverrides( {
-            @AttributeOverride(name = "name", column = @Column(name = "high_skill_name")),
-            @AttributeOverride(name = "description", column = @Column(name = "high_skill_description")),
-            @AttributeOverride(name = "cooldown", column = @Column(name = "high_skill_cooldown"))
-    } )
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "high_skill_id")
     private Skill highSkill; // 고학년 스킬
 
     @Embedded
