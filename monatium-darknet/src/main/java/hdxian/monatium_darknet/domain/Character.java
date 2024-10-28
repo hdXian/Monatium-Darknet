@@ -13,20 +13,12 @@ public class Character {
     private Long id; // id
 
     private String name; // 이름
-
     private String subtitle; // 수식언
-
     private String cv; // 성우
-
     private int grade; // 성급
-
     private String quote; // 한마디
-
     private String tmi; // tmi
-
     private String favorite; // 좋아하는 것
-
-
 
     @Enumerated(EnumType.STRING) // 문자열로 구분하도록
     private Race race; // 종족 ENUM [FAIRY, WITCH, FURRY, DRAGON, GHOST, SPIRIT, ELF]
@@ -48,9 +40,11 @@ public class Character {
     private CharacterStat stat;
 
     @Embedded
+    @AttributeOverride(name = "description", column = @Column(name = "normal_attack_description"))
     private Attack normalAttack; // 기본 공격
 
     @Embedded
+    @AttributeOverride(name = "description", column = @Column(name = "enhanced_attack_description"))
     private Attack enhancedAttack; // 강화 공격
 
     @Embedded

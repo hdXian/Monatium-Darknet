@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import java.util.Map;
 
-@Entity
+//@Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "card_type")
 @Getter @Setter

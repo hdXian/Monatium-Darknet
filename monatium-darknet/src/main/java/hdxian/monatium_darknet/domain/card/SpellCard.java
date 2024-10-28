@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
+//@Entity
 @DiscriminatorValue("S")
 @Getter @Setter
 public class SpellCard extends Card{

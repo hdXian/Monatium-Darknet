@@ -1,13 +1,10 @@
 package hdxian.monatium_darknet.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.MapKey;
+import jakarta.persistence.*;
 import lombok.Getter;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.ArrayList;
+import java.util.List;
 
 @Embeddable
 @Getter
@@ -16,9 +13,12 @@ public class Attack {
     private String description;
 
     @ElementCollection
-    @MapKey(name = "attribute_key")
-    @Column(name = "attribute_value")
-    private final Map<String, String> attributes = new ConcurrentSkipListMap<>();
+    @CollectionTable(name = "attack_attributes", joinColumns = @JoinColumn(name = "character_id"))
+    @AttributeOverrides({
+            @AttributeOverride(name = "name", column = @Column(name = "attribute_name")),
+            @AttributeOverride(name = "value", column = @Column(name = "attribute_value"))
+    })
+    private List<Attribute> attributes = new ArrayList<>();
 
     // for JPA spec
     protected Attack() {
@@ -29,7 +29,7 @@ public class Attack {
     }
 
     public void addAttribute(String key, String val) {
-        this.attributes.put(key, val);
+        this.attributes.add(new Attribute(key, val));
     }
 
 }

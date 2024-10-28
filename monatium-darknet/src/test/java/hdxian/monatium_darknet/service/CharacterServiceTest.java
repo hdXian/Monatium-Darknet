@@ -3,10 +3,12 @@ package hdxian.monatium_darknet.service;
 import hdxian.monatium_darknet.domain.*;
 import hdxian.monatium_darknet.domain.Character;
 import hdxian.monatium_darknet.repository.CharacterRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,6 +26,7 @@ class CharacterServiceTest {
     // 캐릭터 추가
     @Test
     @DisplayName("캐릭터 추가")
+    @Rollback(value = false)
     void addCharacter() {
         // given
         CharacterStat stat = new CharacterStat(7, 3, 4);
@@ -46,13 +49,12 @@ class CharacterServiceTest {
                 "달달한 음식/여왕 직위", Race.FAIRY, Personality.PURE, Role.DEALER, AttackType.MAGICAL, Position.BACK, stat,
                 normalAttack, enhancedAttack, lowSkill, highSkill, urls);
 
-//         when
+        // when
         Long savedId = service.addCharacter(erpin);
 
-
         // then
-
-
+        Character findCharacter = service.findOne(savedId);
+        Assertions.assertThat(findCharacter.getName()).isEqualTo("에르핀");
     }
 
     // 전체 캐릭터 검색
