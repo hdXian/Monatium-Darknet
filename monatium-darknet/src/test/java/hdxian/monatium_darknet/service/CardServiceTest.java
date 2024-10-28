@@ -117,6 +117,7 @@ class CardServiceTest {
         spellCard.setDescription("모든 아군의 공격속도가 24% 증가한다.");
         spellCard.setStory("먹을 것이 눈 앞에 보이니 마음이 설레고 사기가 오른다. 후후.. 끝나면 맛있는 것 줄게! 자, 가자~!");
         spellCard.setCost(14);
+        spellCard.setImageUrl("spell_image_url");
 
         spellCard.addAttribute("치명타", "+5.64%");
 
@@ -132,6 +133,7 @@ class CardServiceTest {
         artifactCard.setDescription("착용자의 일반 공격 적중 시, 공격한 적의 현재 HP가 18% 이하일 경우 대상을 즉시 처치한다.(해당 효과는 일반 몬스터만 적용된다.)");
         artifactCard.setStory("감당하기 힘든 개그를 하는 유령에게 말동무가 되어주는 낫. 마지막 한 방을 날리는 데 특별한 재능이 있다고 한다.");
         artifactCard.setCost(24);
+        artifactCard.setImageUrl("artifact_image_url");
 
         artifactCard.addAttribute("물리 공격력", "+22.47%");
         artifactCard.addAttribute("치명타", "+27.66%");
