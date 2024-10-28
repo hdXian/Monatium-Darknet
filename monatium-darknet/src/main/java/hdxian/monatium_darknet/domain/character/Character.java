@@ -1,5 +1,6 @@
-package hdxian.monatium_darknet.domain;
+package hdxian.monatium_darknet.domain.character;
 
+import hdxian.monatium_darknet.domain.*;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

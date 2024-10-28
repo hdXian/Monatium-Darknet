@@ -1,6 +1,6 @@
 package hdxian.monatium_darknet.repository;
 
-import hdxian.monatium_darknet.domain.Character;
+import hdxian.monatium_darknet.domain.character.Character;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

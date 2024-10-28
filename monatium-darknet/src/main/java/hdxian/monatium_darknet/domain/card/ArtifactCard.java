@@ -1,9 +1,8 @@
 package hdxian.monatium_darknet.domain.card;
 
-import hdxian.monatium_darknet.domain.Character;
+import hdxian.monatium_darknet.domain.character.Character;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 

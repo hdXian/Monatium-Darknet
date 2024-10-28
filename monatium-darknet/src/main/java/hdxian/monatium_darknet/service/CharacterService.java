@@ -1,6 +1,6 @@
 package hdxian.monatium_darknet.service;
 
-import hdxian.monatium_darknet.domain.Character;
+import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.repository.CharacterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
