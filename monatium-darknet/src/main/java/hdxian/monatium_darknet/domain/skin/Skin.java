@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.domain.skin;
 
+import hdxian.monatium_darknet.domain.character.Character;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +24,10 @@ public class Skin {
 
     @OneToMany(mappedBy = "skin") // SkinCategoryMapping 엔티티의 skin 필드에 의해 수동적으로 매핑
     private List<SkinCategoryMapping> mappings = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "character_id")
+    private Character character;
 
     // 연관관계 메서드
     public void addSkinCategoryMapping(SkinCategoryMapping mapping) {
