@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.domain.skin;
 
+import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.character.Character;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -38,6 +39,22 @@ public class Skin {
     public void removeMapping(SkinCategoryMapping mapping) {
         mappings.remove(mapping);
         mapping.setSkin(null);
+    }
+
+    // for JPA spec - 비즈니스 로직에서 사용 x
+    protected Skin() {
+    }
+
+    // 생성 메서드
+    public static Skin createSkin(Character character, String name, SkinGrade skinGrade, String description) {
+        Skin skin = new Skin();
+
+        skin.setName(name);
+        skin.setGrade(skinGrade);
+        skin.setDescription(description);
+        skin.setCharacter(character);
+
+        return skin;
     }
 
 }
