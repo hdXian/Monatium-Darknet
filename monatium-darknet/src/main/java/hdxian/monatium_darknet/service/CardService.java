@@ -22,6 +22,7 @@ public class CardService {
     private final CardRepository cardRepository;
 
     // 카드 저장 기능
+    // TODO - 인자 Card 타입이 아니라 Dto로 만들어서 넣기
     @Transactional
     public Long addSpellCard(SpellCard card) {
         return cardRepository.save(card);
