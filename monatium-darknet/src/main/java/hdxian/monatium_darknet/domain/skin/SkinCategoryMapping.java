@@ -10,7 +10,7 @@ import lombok.Setter;
  */
 
 @Entity
-@Getter
+@Getter @Setter
 public class SkinCategoryMapping {
 
     @Id @GeneratedValue
@@ -24,5 +24,18 @@ public class SkinCategoryMapping {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "skin_category_id")
     private SkinCategory skinCategory;
+
+    // for JPA spec (일반 비즈니스 로직에서 사용 x)
+    protected SkinCategoryMapping() {
+    }
+
+    // 생성 메서드
+    public static SkinCategoryMapping createMapping(Skin skin, SkinCategory category) {
+        SkinCategoryMapping mapping = new SkinCategoryMapping();
+        mapping.setSkin(skin);
+        mapping.setSkinCategory(category);
+
+        return mapping;
+    }
 
 }

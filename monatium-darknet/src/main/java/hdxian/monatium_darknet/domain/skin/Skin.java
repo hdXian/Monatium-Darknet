@@ -24,6 +24,15 @@ public class Skin {
     @OneToMany(mappedBy = "skin") // SkinCategoryMapping 엔티티의 skin 필드에 의해 수동적으로 매핑
     private List<SkinCategoryMapping> mappings = new ArrayList<>();
 
-    // TODO - 연관관계 메서드 추가 (Character 엔티티에도 필요할수도)
+    // 연관관계 메서드
+    public void addSkinCategoryMapping(SkinCategoryMapping mapping) {
+        mappings.add(mapping);
+        mapping.setSkin(this);
+    }
+
+    public void removeSkinCategoryMapping(SkinCategoryMapping mapping) {
+        mappings.remove(mapping);
+        mapping.setSkin(null);
+    }
 
 }
