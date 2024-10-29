@@ -21,12 +21,12 @@ public class SkinCategory {
     private List<SkinCategoryMapping> mappings = new ArrayList<>();
 
     // 연관관계 메서드
-    public void addSkinCategoryMapping(SkinCategoryMapping mapping) {
+    public void addMapping(SkinCategoryMapping mapping) {
         mappings.add(mapping);
         mapping.setSkinCategory(this);
     }
 
-    public void removeSkinCategoryMapping(SkinCategoryMapping mapping) {
+    public void removeMapping(SkinCategoryMapping mapping) {
         mappings.remove(mapping);
         mapping.setSkinCategory(null);
     }
