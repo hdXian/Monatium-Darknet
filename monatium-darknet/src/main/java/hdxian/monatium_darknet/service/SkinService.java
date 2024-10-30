@@ -44,6 +44,24 @@ public class SkinService {
         return skinRepository.save(skin);
     }
 
+    // 스킨에 카테고리 추가
+    @Transactional
+    public Long addCategory(Long skinId, Long skinCategoryId) {
+        Skin skin = skinRepository.findOne(skinId);
+        SkinCategory skinCategory = categoryRepository.findOne(skinCategoryId);
+
+        // 이미 스킨에 해당 카테고리가 있으면 예외
+        List<SkinCategory> categoryList = categoryRepository.findBySkin(skinId);
+        if (categoryList.contains(skinCategory)) {
+            throw new IllegalStateException("이미 존재하는 카테고리입니다.");
+        }
+
+        // 카테고리가 없을 경우 정상 추가 (비즈니스 로직이 도메인에 있음)
+        skin.addCategory(skinCategory);
+
+        return skinRepository.save(skin);
+    }
+
     // 스킨 검색
     public Skin findOne(Long skinId) {
         return skinRepository.findOne(skinId);

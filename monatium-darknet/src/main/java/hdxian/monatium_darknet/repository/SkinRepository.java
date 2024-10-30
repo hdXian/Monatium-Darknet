@@ -16,8 +16,14 @@ public class SkinRepository {
     // 스킨 저장 기능
     // TODO - persist, merge 동작 구분해야 함 (업데이트 기능 개발 이후)
     public Long save(Skin skin) {
-        em.persist(skin);
-        return skin.getId();
+        if(skin.getId() == null) {
+            em.persist(skin);
+            return skin.getId();
+        }
+        else {
+            Skin merged = em.merge(skin);
+            return merged.getId();
+        }
     }
 
     // 스킨 조회 기능

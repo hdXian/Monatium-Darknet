@@ -64,4 +64,16 @@ public class Skin {
         return skin;
     }
 
+    // 비즈니스 로직
+    public void addCategory(SkinCategory category) {
+        SkinCategoryMapping mapping = SkinCategoryMapping.createSkinCategoryMapping(this, category);
+
+        this.addMapping(mapping);
+        category.addMapping(mapping);
+    }
+
+    public void removeCategory(SkinCategory category) {
+        // TODO
+    }
+
 }
