@@ -25,16 +25,15 @@ public class SkinCategoryMapping {
     @JoinColumn(name = "skin_category_id")
     private SkinCategory skinCategory;
 
-    // for JPA spec (일반 비즈니스 로직에서 사용 x)
+    // for JPA spec
     protected SkinCategoryMapping() {
     }
 
-    // 생성 메서드
-    public static SkinCategoryMapping createMapping(Skin skin, SkinCategory category) {
+    public static SkinCategoryMapping createSkinCategoryMapping(Skin skin, SkinCategory category) {
+        // mapping->skin, mapping->category 연관관계를 설정한 mapping 객체 리턴
         SkinCategoryMapping mapping = new SkinCategoryMapping();
         mapping.setSkin(skin);
         mapping.setSkinCategory(category);
-
         return mapping;
     }
 

@@ -4,8 +4,6 @@ import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinGrade;
 import hdxian.monatium_darknet.repository.CharacterRepository;
-import hdxian.monatium_darknet.repository.SkinRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -38,7 +35,7 @@ class SkinServiceTest {
         Long rim_id = characterRepository.save(rim);
 
         // when
-        Long saved_skin_id = service.addSkin(rim_id, "라크로스 림크로스", SkinGrade.NORMAL, "라크로스 림크로스 설명");
+        Long saved_skin_id = service.createSkin(rim_id, "라크로스 림크로스", SkinGrade.NORMAL, "라크로스 림크로스 설명");
 
         // then
         Skin find_skin = service.findOne(saved_skin_id);

@@ -25,6 +25,7 @@ public class SkinRepository {
         return em.find(Skin.class, id);
     }
 
+    // TODO - 페이징 고려
     public List<Skin> findAll() {
         String jpql = "select s from Skin s";
         return em.createQuery(jpql, Skin.class).getResultList();
@@ -39,6 +40,7 @@ public class SkinRepository {
     }
 
     public List<Skin> findBySkinCategory(Long skinCategoryId) {
+        // TODO - 성능 최적화를 위해 fetch join 도입 고려
         String jpql = "select s from Skin s" + " " +
                 "join s.mappings sm" + " " + // on s.id = sm.skin_id 등 조인 조건 필요 x. 엔티티 관계에 따라 자동으로 조인을 수행함.
                 "where sm.skinCategory.id = :skinCategoryId"; // 객체지향적 jpql 작성
