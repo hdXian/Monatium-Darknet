@@ -34,7 +34,7 @@ class SkinServiceTest {
     // 스킨 추가
     @Test
     @DisplayName("스킨 추가")
-    @Rollback(value = false)
+//    @Rollback(value = false)
     void createNewSkin() {
         // given
         Character rim = generateMockChar("림");
@@ -62,7 +62,7 @@ class SkinServiceTest {
 
     @Test
     @DisplayName("단일 카테고리 추가")
-    @Rollback(value = false)
+//    @Rollback(value = false)
     void addCategory() {
         // given
         Character rim = generateMockChar("림");
@@ -84,7 +84,7 @@ class SkinServiceTest {
 
     @Test
     @DisplayName("여러 카테고리, 여러 스킨 추가")
-    @Rollback(value = false)
+//    @Rollback(value = false)
     void addCategories() {
         // given
         Character rim = generateMockChar("림");
@@ -136,7 +136,7 @@ class SkinServiceTest {
     // 캐릭터 기반 스킨 검색
     @Test
     @DisplayName("캐릭터 기반 스킨 검색")
-    @Rollback(value = false)
+//    @Rollback(value = false)
     void findByCharacter() {
         // given
         Character rim = generateMockChar("림");
