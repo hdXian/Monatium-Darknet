@@ -31,4 +31,15 @@ public class SkinCategory {
         mapping.setSkinCategory(null);
     }
 
+    // for JPA spec
+    protected SkinCategory() {
+    }
+
+    // 생성 메서드
+    public static SkinCategory createSkinCategory(String name) {
+        SkinCategory skinCategory = new SkinCategory();
+        skinCategory.setName(name);
+
+        return skinCategory;
+    }
 }

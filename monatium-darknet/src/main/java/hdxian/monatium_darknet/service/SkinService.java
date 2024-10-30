@@ -45,8 +45,8 @@ public class SkinService {
     }
 
     // 스킨 검색
-    public Skin findOne(Long id) {
-        return skinRepository.findOne(id);
+    public Skin findOne(Long skinId) {
+        return skinRepository.findOne(skinId);
     }
 
     public List<Skin> findByCategory(Long categoryId) {

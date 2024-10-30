@@ -26,6 +26,7 @@ public class SkinCategoryRepository {
         return em.find(SkinCategory.class, id);
     }
 
+    // Skin이 속하는 카테고리 검색
     public List<SkinCategory> findBySkin(Long skinId) {
         // TODO - 성능 최적화를 위해 fetch join 도입 고려
         String jpql = "select sc from SkinCategory sc" + " "
