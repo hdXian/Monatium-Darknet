@@ -13,6 +13,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SkinCategoryService {
 
+    // 지금 SkinCategory에는 별도의 SKin 추가 등의 기능이 없음
+
     private final SkinCategoryRepository categoryRepository;
 
     // 카테고리 추가

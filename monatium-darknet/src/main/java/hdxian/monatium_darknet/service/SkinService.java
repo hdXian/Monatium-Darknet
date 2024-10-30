@@ -28,7 +28,7 @@ public class SkinService {
     // 추후 Dto 등으로 바꿔야 함
     // Skin은 여러 개의 SkinCategory를 가질 수 있음
     @Transactional
-    public Long createNewSkin(String name, SkinGrade grade, String description, Long characterId, List<Long> skinCategoryIds) {
+    public Long createNewSkin(Long characterId, String name, SkinGrade grade, String description, Long... skinCategoryIds) {
 
         // 필요 엔티티 조회
         Character character = characterRepository.findOne(characterId);
@@ -45,6 +45,7 @@ public class SkinService {
     }
 
     // 스킨에 카테고리 추가
+    // 생성 단계에서 카테고리 안 넣는걸로 해도 될것 같음.
     @Transactional
     public Long addCategory(Long skinId, Long skinCategoryId) {
         Skin skin = skinRepository.findOne(skinId);
@@ -67,12 +68,16 @@ public class SkinService {
         return skinRepository.findOne(skinId);
     }
 
-    public List<Skin> findByCategory(Long categoryId) {
+    public List<Skin> findByCategoryId(Long categoryId) {
         return skinRepository.findBySkinCategory(categoryId);
     }
 
-    public List<Skin> findByCharacter(Long characterId) {
+    public List<Skin> findByCharacterId(Long characterId) {
         return skinRepository.findByCharacter(characterId);
+    }
+
+    public List<Skin> findAll() {
+        return skinRepository.findAll();
     }
 
 }

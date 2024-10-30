@@ -42,4 +42,5 @@ public class SkinCategory {
 
         return skinCategory;
     }
+
 }
