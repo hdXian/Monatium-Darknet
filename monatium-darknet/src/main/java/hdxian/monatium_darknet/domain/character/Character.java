@@ -68,10 +68,15 @@ public class Character {
     protected Character() {
     }
 
-    // 연관관계 메서드
+    // 연관관계 메서드 (nulls allowed)
     public void setAside(Aside aside) {
-        this.aside = aside; // setAside() 호출하면 안됨. 무한재귀임.
-        aside.setCharacter(this);
+        if (aside != null) {
+            this.aside = aside; // setAside() 호출하면 안됨. 무한재귀임.
+            aside.setCharacter(this);
+        }
+        else {
+            this.aside = null;
+        }
     }
 
     // Attack, Skill와도 연관관계를 가지고 있지만, 단방향 연관관계이기 때문에 별도의 연관관계 메서드 x

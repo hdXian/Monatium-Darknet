@@ -22,7 +22,8 @@ public class SkinService {
 
     private final SkinRepository skinRepository;
     private final SkinCategoryRepository categoryRepository;
-    private final CharacterRepository characterRepository;
+
+    private final CharacterService characterService;
 
     // 스킨 추가
     // 추후 Dto 등으로 바꿔야 함
@@ -31,7 +32,7 @@ public class SkinService {
     public Long createNewSkin(Long characterId, String name, SkinGrade grade, String description, Long... skinCategoryIds) {
 
         // 필요 엔티티 조회
-        Character character = characterRepository.findOne(characterId);
+        Character character = characterService.findOne(characterId);
         List<SkinCategory> categories = new ArrayList<>();
 
         for (Long categoryId : skinCategoryIds) {

@@ -19,7 +19,7 @@ public class CardRepository {
     // 카드 저장
     public Long save(Card card) {
         // 새로운 Card 추가 시 persist
-        if (card.getId() != null) {
+        if (card.getId() == null) {
             em.persist(card);
             return card.getId();
         }
