@@ -74,6 +74,8 @@ public class Character {
         aside.setCharacter(this);
     }
 
+    // Attack, Skill와도 연관관계를 가지고 있지만, 단방향 연관관계이기 때문에 별도의 연관관계 메서드 x
+
     // 생성 메서드
     public static Character createCharacter(String name, String subtitle, String cv,
                                             int grade, String quote, String tmi, String favorite,
