@@ -19,6 +19,7 @@ public class CharacterService {
     // 단순 위임 로직 (아직까지는)
 
     // 캐릭터 추가 기능
+    // 내가봤을때 얘도 Dto로 처리해야 함. 혹은 createCharacter...
     @Transactional
     public Long addCharacter(Character character) {
         return characterRepository.save(character);

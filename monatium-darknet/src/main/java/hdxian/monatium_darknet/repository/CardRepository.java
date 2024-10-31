@@ -1,11 +1,14 @@
 package hdxian.monatium_darknet.repository;
 
+import hdxian.monatium_darknet.domain.card.ArtifactCard;
 import hdxian.monatium_darknet.domain.card.Card;
+import hdxian.monatium_darknet.domain.card.SpellCard;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -15,13 +18,40 @@ public class CardRepository {
 
     // 카드 저장
     public Long save(Card card) {
-        em.persist(card);
-        return card.getId();
+        // 새로운 Card 추가 시 persist
+        if (card.getId() != null) {
+            em.persist(card);
+            return card.getId();
+        }
+        // 기존 Card 업데이트 시 merge
+        else {
+            Card merged = em.merge(card);
+            return merged.getId();
+        }
     }
 
     // 카드 조회
-    public Card findOne(Long id) {
-        return em.find(Card.class, id);
+    public Optional<Card> findOne(Long id) {
+        Card find = em.find(Card.class, id);
+        return Optional.ofNullable(find);
+    }
+
+    public Optional<ArtifactCard> findOneArtifact(Long id) {
+        String jpql = "select ac from ArtifactCard ac where ac.id = :id";
+        ArtifactCard artifactCard = em.createQuery(jpql, ArtifactCard.class)
+                .setParameter("id", id)
+                .getSingleResult();
+
+        return Optional.ofNullable(artifactCard);
+    }
+
+    public Optional<SpellCard> findOneSpellCard(Long id) {
+        String jpql = "select sc from SpellCard sc where sc.id = :id";
+        SpellCard spellCard = em.createQuery(jpql, SpellCard.class)
+                .setParameter("id", id)
+                .getSingleResult();
+
+        return Optional.ofNullable(spellCard);
     }
 
     public List<Card> findAll() {
@@ -29,6 +59,17 @@ public class CardRepository {
         return em.createQuery(jpql, Card.class).getResultList();
     }
 
+    public List<ArtifactCard> findAllArtifacts() {
+        String jpql = "select c from ArtifactCard c";
+        return em.createQuery(jpql, ArtifactCard.class).getResultList();
+    }
+
+    public List<SpellCard> findAllSpells() {
+        String jpql = "select sc from SpellCard sc";
+        return em.createQuery(jpql, SpellCard.class).getResultList();
+    }
+
     // TODO - 조건별 검색 기능 추가
+    // searchCond 등을 통해 하나로 관리하는게 훨씬 나아보임.
 
 }

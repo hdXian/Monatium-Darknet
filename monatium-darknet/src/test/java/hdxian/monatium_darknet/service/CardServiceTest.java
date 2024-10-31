@@ -1,7 +1,6 @@
 package hdxian.monatium_darknet.service;
 
 import hdxian.monatium_darknet.domain.Skill;
-import hdxian.monatium_darknet.domain.SkillCategory;
 import hdxian.monatium_darknet.domain.card.ArtifactCard;
 import hdxian.monatium_darknet.domain.card.Card;
 import hdxian.monatium_darknet.domain.card.CardGrade;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -104,7 +102,7 @@ class CardServiceTest {
         service.addArtifactCard(artifact_2);
 
         // then
-        List<Card> cards = service.findCards();
+        List<Card> cards = service.findAllCards();
         assertThat(cards.size()).isEqualTo(3);
         assertThat(cards).containsExactly(spellCard, artifact_1, artifact_2);
     }
