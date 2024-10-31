@@ -17,7 +17,9 @@ public class SkinCategory {
 
     private String name; // 카테고리 이름
 
-    @OneToMany(mappedBy = "skinCategory") // mapping들을 단순 조회 (연관관계 비주인)
+    // cascade 옵션을 끈다 -> 이 객체의 mappings가 변경되어도 DB에 업데이트 쿼리를 날리지 않는다.
+    // skin쪽에서 이미 insert 날리고 있기 때문에 여기서 mapping이 추가됐다고 insert를 또 날리면 안됨.
+    @OneToMany(mappedBy = "skinCategory")
     private List<SkinCategoryMapping> mappings = new ArrayList<>();
 
     // 연관관계 메서드 - Skin의 addSkinCategory() 쪽에서도 이걸 호출해야 돼서 public으로 따로 열어놔야 함.

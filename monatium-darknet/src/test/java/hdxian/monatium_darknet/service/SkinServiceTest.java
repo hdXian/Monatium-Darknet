@@ -107,9 +107,9 @@ class SkinServiceTest {
         List<SkinCategory> result5 = skinService.findCategoryBySkinId(erpin_skin_id);
         assertThat(result5).containsExactlyInAnyOrder(category2, category3);
 
-        System.out.println("category1 = " + category1.getMappings());
-        System.out.println("category2 = " + category2.getMappings());
-        System.out.println("category3 = " + category3.getMappings());
+//        System.out.println("category1 = " + category1.getMappings());
+//        System.out.println("category2 = " + category2.getMappings());
+//        System.out.println("category3 = " + category3.getMappings());
     }
 
     // 캐릭터 기반 스킨 검색
