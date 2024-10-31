@@ -10,10 +10,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -28,7 +30,25 @@ class CardServiceTest {
     CardService cardService;
 
     @Test
-    @DisplayName("아티팩트 카드 추가")
+    @DisplayName("아티팩트 카드 추가(애착사도 X)")
+//    @Rollback(value = false)
+    void addArtifactNon() {
+        // given
+        ArtifactCard card = ArtifactCard.createArtifactCard("아티팩트카드", CardGrade.ADVANCED, "아티팩트카드 설명",
+                "아티팩트카드 이야기", 15, "아티팩트url", null, null);
+        card.addAttribute("치명타", "+5.33%");
+
+        // when
+        Long saved_id = cardService.addArtifactCard(card);
+
+        // then
+        ArtifactCard find_card = cardService.findOneArtifact(saved_id);
+        assertThat(find_card.getName()).isEqualTo("아티팩트카드");
+        assertThat(find_card).isEqualTo(card);
+    }
+
+    @Test
+    @DisplayName("아티팩트 카드 추가(애착사도 O)")
 //    @Rollback(value = false)
     void addArtifact() {
         // given
@@ -37,7 +57,7 @@ class CardServiceTest {
         Character rim = generateMockChar("림");
         Long id_rim = characterService.addCharacter(rim);
 
-        ArtifactCard artifactCard = generateArtifact("림의 낫", rim, attachmentSkill);
+        ArtifactCard artifactCard = generateArtifact("림의 낫"); // character, attachmentSkill 설정 안된 Card (Dto로 대체해야 함. skin처럼)
 
         // when
         Long savedId = cardService.addArtifactCard(artifactCard, id_rim, attachmentSkill);
@@ -71,7 +91,7 @@ class CardServiceTest {
     }
 
     @Test
-    @DisplayName("전체 카드 조회")
+    @DisplayName("전체 카드 추가 및 조회")
 //    @Rollback(value = false)
     void findAll() {
         // given
@@ -82,22 +102,49 @@ class CardServiceTest {
         // 아티팩트 카드 (애착 사도 O)
         Character levi = generateMockChar("레비");
         Skill attachmentSkill = generateAttachmentSkill("레비드 더 섀도우");
-        ArtifactCard artifact_1 = generateArtifact("레비의 단도", levi, attachmentSkill);
+        ArtifactCard artifact_1 = generateArtifact("레비의 단도");
 
         // 아티팩트 카드 (애착 사도 X)
-        ArtifactCard artifact_2 = generateArtifact("30KG 케틀벨", null, null);
+        ArtifactCard artifact_2 = generateArtifact("30KG 케틀벨");
 
         // when
         Long levi_id = characterService.addCharacter(levi);
-        cardService.addArtifactCard(artifact_1, levi_id, attachmentSkill);
+        cardService.addArtifactCard(artifact_1, levi_id, attachmentSkill); // 애착사도 O
 
         cardService.addSpellCard(spellCard);
-        cardService.addArtifactCard(artifact_2);
+        cardService.addArtifactCard(artifact_2); // 애착사도 X
 
         // then
         List<Card> cards = cardService.findAllCards();
         assertThat(cards.size()).isEqualTo(3);
         assertThat(cards).containsExactlyInAnyOrder(spellCard, artifact_1, artifact_2); // 순서 상관 x
+    }
+
+    @Test
+    @DisplayName("없는 카드 조회")
+    void findNone() {
+        // given
+        SpellCard spellCard = generateSpell("사기진작");
+
+        Character rim = generateMockChar("림");
+        Skill attachmentSkill = generateAttachmentSkill("그림 스크래치");
+        ArtifactCard artifactCard = generateArtifact("림의 낫");
+
+        // when
+        Long saved_rim_id = characterService.addCharacter(rim);
+        Long saved_artifact_id = cardService.addArtifactCard(artifactCard, saved_rim_id, attachmentSkill);
+
+        Long saved_spell_id = cardService.addSpellCard(spellCard);
+
+        // then
+        // 아티팩트 카드 id로 스펠 카드를 검색
+        assertThatThrownBy(() -> cardService.findOneSpellCard(saved_artifact_id))
+                .isInstanceOf(NoSuchElementException.class);
+
+        // 스펠 카드 id로 아티팩트 카드를 검색
+        assertThatThrownBy(() -> cardService.findOneArtifact(saved_spell_id))
+                .isInstanceOf(NoSuchElementException.class);
+
     }
 
     static SpellCard generateSpell(String name) {
@@ -113,14 +160,14 @@ class CardServiceTest {
         return spellCard;
     }
 
-    static ArtifactCard generateArtifact(String name, Character character, Skill attachmentSkill) {
+    static ArtifactCard generateArtifact(String name) {
 
         String description = "착용자의 일반 공격 적중 시, 공격한 적의 현재 HP가 18% 이하일 경우 대상을 즉시 처치한다.(해당 효과는 일반 몬스터만 적용된다.)";
         String story = "감당하기 힘든 개그를 하는 유령에게 말동무가 되어주는 낫. 마지막 한 방을 날리는 데 특별한 재능이 있다고 한다.";
         Integer card_cost = 24;
         String imageUrl = "artifact_image_url";
 
-        ArtifactCard artifactCard = ArtifactCard.createArtifactCard(name, CardGrade.LEGENDARY, description, story, card_cost, imageUrl, character, attachmentSkill);
+        ArtifactCard artifactCard = ArtifactCard.createArtifactCard(name, CardGrade.LEGENDARY, description, story, card_cost, imageUrl, null, null);
         artifactCard.addAttribute("물리 공격력", "+22.47%");
         artifactCard.addAttribute("치명타", "+27.66%");
 

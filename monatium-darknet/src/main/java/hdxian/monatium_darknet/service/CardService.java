@@ -30,12 +30,14 @@ public class CardService {
     }
 
     // 애착 사도 없는 아티팩트 카드
+    // TODO - 인자 Card 타입이 아니라 Dto로 만들어서 넣기
     @Transactional
     public Long addArtifactCard(ArtifactCard card) {
         return cardRepository.save(card);
     }
 
     // 애착 사도가 있는 아티팩트 카드는 아티팩트 사도와 스킬을 추가해야 함.
+    // TODO - 인자 Card 타입이 아니라 Dto로 만들어서 넣기
     @Transactional
     public Long addArtifactCard(ArtifactCard card, Long characterId, Skill attachmentSkill) {
         Character character = characterService.findOne(characterId);
@@ -49,7 +51,7 @@ public class CardService {
 
     // 스펠카드 조회 기능
     public SpellCard findOneSpellCard(Long id) {
-        Optional<SpellCard> find = cardRepository.findOneSpellCard(id);
+        Optional<SpellCard> find = cardRepository.findOneSpell(id);
         if (find.isEmpty()) {
             throw new NoSuchElementException("해당 스펠 카드가 존재하지 않습니다.");
         }
