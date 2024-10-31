@@ -1,6 +1,7 @@
 package hdxian.monatium_darknet.domain.character;
 
 import hdxian.monatium_darknet.domain.*;
+import hdxian.monatium_darknet.domain.aside.Aside;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -56,13 +57,17 @@ public class Character {
     @JoinColumn(name = "high_skill_id")
     private Skill highSkill; // 고학년 스킬
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "aside_id")
+    private Aside aside; // 어사이드
+
     @Embedded
     private CharacterUrl urls; // 이미지 url
 
     public static Character createCharacter(String name, String subtitle, String cv,
                                             int grade, String quote, String tmi, String favorite,
                                             Race race, Personality personality, Role role, AttackType attackType, Position position, CharacterStat stat,
-                                            Attack normalAttack, Attack enhancedAttack, Skill lowSkill, Skill highSkill, CharacterUrl urls)
+                                            Attack normalAttack, Attack enhancedAttack, Skill lowSkill, Skill highSkill, Aside aside, CharacterUrl urls)
     {
         Character character = new Character();
         character.setName(name);
@@ -87,6 +92,7 @@ public class Character {
         character.setEnhancedAttack(enhancedAttack);
         character.setLowSkill(lowSkill);
         character.setHighSkill(highSkill);
+        character.setAside(aside);
         character.setUrls(urls);
         return character;
     }

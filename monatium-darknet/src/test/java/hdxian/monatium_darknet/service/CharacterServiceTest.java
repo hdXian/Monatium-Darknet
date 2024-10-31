@@ -124,7 +124,7 @@ class CharacterServiceTest {
 
         Character erpin = Character.createCharacter(name, "요정 여왕", "강은애", 3, "엘리아스의 수호자, 등장!", "야채는 싫어",
                 "달달한 음식/여왕 직위", Race.FAIRY, Personality.PURE, Role.DEALER, AttackType.MAGICAL, Position.BACK, stat,
-                normalAttack, enhancedAttack, lowSkill, highSkill, urls);
+                normalAttack, enhancedAttack, lowSkill, highSkill, null, urls);
 
         return erpin;
     }

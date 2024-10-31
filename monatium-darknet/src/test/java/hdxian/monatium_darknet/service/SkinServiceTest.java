@@ -178,7 +178,7 @@ class SkinServiceTest {
 
     static Character generateMockChar(String name) {
         return Character.createCharacter(name, null, null, 0, null, null, null,
-                null, null, null, null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     static SkinCategory generateMockSkinCategory(String name) {
