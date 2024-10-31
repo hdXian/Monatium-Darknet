@@ -54,7 +54,7 @@ class SkinServiceTest {
 
     @Test
     @DisplayName("스킨 검색, 카테고리 검색")
-    @Rollback(value = false)
+//    @Rollback(value = false)
     void addCategories() {
         // given
         Character rim = generateMockChar("림");

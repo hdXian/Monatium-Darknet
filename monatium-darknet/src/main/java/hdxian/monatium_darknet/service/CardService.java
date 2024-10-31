@@ -49,6 +49,58 @@ public class CardService {
         return cardRepository.save(card);
     }
 
+    @Transactional
+    public Long addSpellCard(SpellCardDto cardDto) {
+        SpellCard spellCard = SpellCard.createSpellCard(
+                cardDto.getName(),
+                cardDto.getGrade(),
+                cardDto.getDescription(),
+                cardDto.getStory(),
+                cardDto.getCost(), cardDto.getImageUrl()
+        );
+
+        spellCard.getAttributes().addAll(cardDto.getAttributes());
+
+        return cardRepository.save(spellCard);
+    }
+
+    @Transactional
+    public Long createNewArtifactNoAttach(ArtifactCardDto cardDto) {
+        ArtifactCard artifactCard = ArtifactCard.createArtifactCard(
+                cardDto.getName(),
+                cardDto.getGrade(),
+                cardDto.getDescription(),
+                cardDto.getStory(),
+                cardDto.getCost(),
+                cardDto.getImageUrl(),
+                null,
+                null
+        );
+        artifactCard.getAttributes().addAll(cardDto.getAttributes());
+
+        return cardRepository.save(artifactCard);
+    }
+
+    @Transactional
+    public Long createNewArtifactWithAttach(ArtifactCardDto cardDto, Long characterId, Skill attachmentSkill) {
+
+        Character character = characterService.findOne(characterId);
+
+        ArtifactCard artifactCard = ArtifactCard.createArtifactCard(
+                cardDto.getName(),
+                cardDto.getGrade(),
+                cardDto.getDescription(),
+                cardDto.getStory(),
+                cardDto.getCost(),
+                cardDto.getImageUrl(),
+                character,
+                attachmentSkill
+        );
+        artifactCard.getAttributes().addAll(cardDto.getAttributes());
+
+        return cardRepository.save(artifactCard);
+    }
+
     // 스펠카드 조회 기능
     public SpellCard findOneSpellCard(Long id) {
         Optional<SpellCard> find = cardRepository.findOneSpell(id);
