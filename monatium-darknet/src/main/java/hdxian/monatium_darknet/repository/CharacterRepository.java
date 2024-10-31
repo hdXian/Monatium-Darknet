@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -14,12 +15,21 @@ public class CharacterRepository {
     private final EntityManager em;
 
     public Long save(Character character) {
-        em.persist(character);
-        return character.getId();
+        // 새로운 Character 추가인 경우 persist
+        if (character.getId() == null) {
+            em.persist(character);
+            return character.getId();
+        }
+        // 기존에 존재하는 Character의 변경인 경우 merge
+        else {
+            Character merge = em.merge(character);
+            return merge.getId();
+        }
     }
 
-    public Character findOne(Long id) {
-        return em.find(Character.class, id);
+    public Optional<Character> findOne(Long id) {
+        Character find = em.find(Character.class, id);
+        return Optional.ofNullable(find);
     }
 
     public List<Character> findByName(String name) {
