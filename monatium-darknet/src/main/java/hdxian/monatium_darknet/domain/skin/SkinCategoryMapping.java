@@ -17,6 +17,7 @@ public class SkinCategoryMapping {
     @Column(name = "skin_category_mapping_id")
     private Long id;
 
+    // 중간 엔티티이므로 cascade 설정은 하지 않는다. (얘가 독자적으로 저장될 일은 없음. skin에 의해 추가되고, skin의 cascade ALL에 의해 함께 저장됨)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "skin_id")
     private Skin skin;

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -17,13 +18,20 @@ public class SkinCategoryRepository {
     // 카테고리 추가
     // TODO - persist, merge 구분해야 함
     public Long save(SkinCategory category) {
-        em.persist(category);
-        return category.getId();
+        if (category.getId() == null) {
+            em.persist(category);
+            return category.getId();
+        }
+        else {
+            SkinCategory merged = em.merge(category);
+            return merged.getId();
+        }
     }
 
     // 카테고리 검색
-    public SkinCategory findOne(Long id) {
-        return em.find(SkinCategory.class, id);
+    public Optional<SkinCategory> findOne(Long id) {
+        SkinCategory find = em.find(SkinCategory.class, id);
+        return Optional.ofNullable(find);
     }
 
     // Skin이 속하는 카테고리 검색
@@ -36,6 +44,11 @@ public class SkinCategoryRepository {
         return em.createQuery(jpql, SkinCategory.class)
                 .setParameter("skinId", skinId)
                 .getResultList();
+    }
+
+    public List<SkinCategory> findAll() {
+        String jpql = "select sc from SkinCategory sc";
+        return em.createQuery(jpql, SkinCategory.class).getResultList();
     }
 
 }

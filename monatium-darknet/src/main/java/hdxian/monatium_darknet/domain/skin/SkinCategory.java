@@ -17,13 +17,12 @@ public class SkinCategory {
 
     private String name; // 카테고리 이름
 
-    @OneToMany(mappedBy = "skinCategory") // SkinCategoryMapping 엔티티의 category 필드에 의해 수동적으로 매핑
+    @OneToMany(mappedBy = "skinCategory") // mapping들을 단순 조회 (연관관계 비주인)
     private List<SkinCategoryMapping> mappings = new ArrayList<>();
 
-    // 연관관계 메서드
+    // 연관관계 메서드 - Skin의 addSkinCategory() 쪽에서도 이걸 호출해야 돼서 public으로 따로 열어놔야 함.
     public void addMapping(SkinCategoryMapping mapping) {
-        mappings.add(mapping);
-        mapping.setSkinCategory(this);
+        this.mappings.add(mapping);
     }
 
     public void removeMapping(SkinCategoryMapping mapping) {
@@ -36,9 +35,13 @@ public class SkinCategory {
     }
 
     // 생성 메서드
-    public static SkinCategory createSkinCategory(String name) {
+    public static SkinCategory createSkinCategory(String name, List<Skin> skins) {
         SkinCategory skinCategory = new SkinCategory();
         skinCategory.setName(name);
+
+        for (Skin skin : skins) {
+            skin.addCategory(skinCategory);
+        }
 
         return skinCategory;
     }

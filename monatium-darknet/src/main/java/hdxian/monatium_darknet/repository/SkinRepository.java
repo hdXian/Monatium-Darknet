@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -14,7 +15,6 @@ public class SkinRepository {
     private final EntityManager em;
 
     // 스킨 저장 기능
-    // TODO - persist, merge 동작 구분해야 함 (업데이트 기능 개발 이후)
     public Long save(Skin skin) {
         if(skin.getId() == null) {
             em.persist(skin);
@@ -27,8 +27,9 @@ public class SkinRepository {
     }
 
     // 스킨 조회 기능
-    public Skin findOne(Long id) {
-        return em.find(Skin.class, id);
+    public Optional<Skin> findOne(Long id) {
+        Skin find = em.find(Skin.class, id);
+        return Optional.ofNullable(find);
     }
 
     // TODO - 페이징 고려
@@ -37,6 +38,7 @@ public class SkinRepository {
         return em.createQuery(jpql, Skin.class).getResultList();
     }
 
+    // 해당 캐릭터의 스킨 검색
     public List<Skin> findByCharacter(Long characterId) {
         String jpql = "select s from Skin s where s.character.id = :characterId";
 
@@ -45,6 +47,7 @@ public class SkinRepository {
                 .getResultList();
     }
 
+    // 카테고리에 속하는 스킨 검색
     public List<Skin> findBySkinCategory(Long skinCategoryId) {
         // TODO - 성능 최적화를 위해 fetch join 도입 고려
         String jpql = "select s from Skin s" + " " +
