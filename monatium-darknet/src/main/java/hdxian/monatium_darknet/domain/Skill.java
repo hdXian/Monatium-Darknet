@@ -41,7 +41,7 @@ public class Skill {
     public static Skill createLowSkill(String name, String description, String imageUrl, Attribute... attributes) {
         Skill skill = new Skill();
         skill.setName(name);
-        skill.setCategory(SkillCategory.LOW);
+        skill.setCategory(SkillCategory.LOW); // 저학년 스킬 설정
         skill.setDescription(description);
         skill.setCooldown(null);
         skill.setImageUrl(imageUrl);
@@ -54,9 +54,22 @@ public class Skill {
     public static Skill createHighSkill(String name, String description, Integer cooldown, String imageUrl, Attribute... attributes) {
         Skill skill = new Skill();
         skill.setName(name);
-        skill.setCategory(SkillCategory.HIGH);
+        skill.setCategory(SkillCategory.HIGH); // 고학년 스킬 설정
         skill.setDescription(description);
         skill.setCooldown(cooldown);
+        skill.setImageUrl(imageUrl);
+
+        skill.attributes.addAll(Arrays.asList(attributes));
+        return skill;
+    }
+
+    // 생성 메서드 (애착 아티팩트 스킬)
+    public static Skill createAttachmentSkill(String name, String description, String imageUrl, Attribute... attributes) {
+        Skill skill = new Skill();
+        skill.setName(name);
+        skill.setCategory(SkillCategory.ATTACHMENT); // 고학년 스킬 설정
+        skill.setDescription(description);
+        skill.setCooldown(null);
         skill.setImageUrl(imageUrl);
 
         skill.attributes.addAll(Arrays.asList(attributes));
