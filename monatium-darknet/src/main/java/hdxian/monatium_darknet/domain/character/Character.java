@@ -64,6 +64,17 @@ public class Character {
     @Embedded
     private CharacterUrl urls; // 이미지 url
 
+    // for JPA spec (일반 비즈니스 로직에서 사용 x)
+    protected Character() {
+    }
+
+    // 연관관계 메서드
+    public void setAside(Aside aside) {
+        this.aside = aside; // setAside() 호출하면 안됨. 무한재귀임.
+        aside.setCharacter(this);
+    }
+
+    // 생성 메서드
     public static Character createCharacter(String name, String subtitle, String cv,
                                             int grade, String quote, String tmi, String favorite,
                                             Race race, Personality personality, Role role, AttackType attackType, Position position, CharacterStat stat,

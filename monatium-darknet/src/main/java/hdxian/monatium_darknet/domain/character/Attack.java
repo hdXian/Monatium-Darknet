@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -29,5 +30,31 @@ public class Attack {
     public void addAttribute(String name, String value) {
         this.attributes.add(new Attribute(name, value));
     }
+
+    // for JPA spec (일반 비즈니스 로직에서 사용 x)
+    protected Attack() {
+    }
+
+    // 생성 메서드
+    public static Attack createNormalAttack(String description, Attribute... attributes) {
+        Attack normalAttack = new Attack();
+        normalAttack.setCategory(AttackCategory.NORMAL);
+        normalAttack.setDescription(description);
+
+        normalAttack.attributes.addAll(Arrays.asList(attributes));
+
+        return normalAttack;
+    }
+
+    public static Attack createEnhancedAttack(String description, Attribute... attributes) {
+        Attack enhancedAttack = new Attack();
+        enhancedAttack.setCategory(AttackCategory.ENHANCED);
+        enhancedAttack.setDescription(description);
+
+        enhancedAttack.attributes.addAll(Arrays.asList(attributes));
+
+        return enhancedAttack;
+    }
+
 
 }

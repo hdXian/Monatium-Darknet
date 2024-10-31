@@ -1,6 +1,8 @@
 package hdxian.monatium_darknet.service;
 
 import hdxian.monatium_darknet.domain.*;
+import hdxian.monatium_darknet.domain.aside.Aside;
+import hdxian.monatium_darknet.domain.aside.AsideSpec;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.repository.CharacterRepository;
@@ -9,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -26,10 +29,10 @@ class CharacterServiceTest {
     // 캐릭터 추가
     @Test
     @DisplayName("캐릭터 추가")
-//    @Rollback(value = false)
+    @Rollback(value = false)
     void addCharacter() {
         // given
-        Character erpin = generateCharacter("에르핀");
+        Character erpin = generateMockChar("에르핀");
 
         // when
         Long savedId = service.addCharacter(erpin);
@@ -40,7 +43,6 @@ class CharacterServiceTest {
         Assertions.assertThat(findCharacter).isEqualTo(erpin);
     }
 
-
     // 이름 검색
     @Test
     @DisplayName("이름 검색")
@@ -48,9 +50,9 @@ class CharacterServiceTest {
 //    @Rollback(value = false)
     void findName() {
         // given
-        Character erpin = generateCharacter("에르핀");
-        Character ashur = generateCharacter("에슈르");
-        Character tig = generateCharacter("티그");
+        Character erpin = generateMockChar("에르핀");
+        Character ashur = generateMockChar("에슈르");
+        Character tig = generateMockChar("티그");
 
         // when
         Long id_erpin = service.addCharacter(erpin);
@@ -68,12 +70,12 @@ class CharacterServiceTest {
     @Test
     @DisplayName("전체 캐릭터 검색")
     @Transactional
-//    @Rollback(value = false)
+    @Rollback(value = false)
     void findAll() {
         // given
-        Character erpin = generateCharacter("에르핀");
-        Character ashur = generateCharacter("에슈르");
-        Character tig = generateCharacter("티그");
+        Character erpin = generateMockChar("에르핀");
+        Character ashur = generateMockChar("에슈르");
+        Character tig = generateMockChar("티그");
 
         // when
         Long id_erpin = service.addCharacter(erpin);
@@ -88,35 +90,46 @@ class CharacterServiceTest {
         Assertions.assertThat(findResult).containsExactly(erpin, ashur, tig);
     }
 
+    static Character generateMockChar(String name) {
 
-
-    static Character generateCharacter(String name) {
+        // 능력치 (하드코딩)
         CharacterStat stat = new CharacterStat(7, 3, 4);
 
-        Attack normalAttack = new Attack();
-        normalAttack.setCategory(AttackCategory.NORMAL);
-        normalAttack.setDescription("마력탄을 날려 적에게 마법 피해를 입힌다.");
-        normalAttack.addAttribute("마법 피해", "55%");
+        // 일반공격
+        Attack normalAttack = Attack.createNormalAttack(name+" 일반공격설명");
+        normalAttack.addAttribute(name+" 일반공격 속성", "50%");
 
-        Attack enhancedAttack = new Attack();
-        enhancedAttack.setCategory(AttackCategory.ENHANCED);
-        enhancedAttack.setDescription("일정 확률로 친구 몰래 케이크를 꺼내 먹어 SP를 회복한다.");
-        enhancedAttack.addAttribute("SP 회복", "50%");
-        enhancedAttack.addAttribute("마나 회복", "15%");
+        // 강화 공격
+        Attack enhancedAttack = Attack.createEnhancedAttack(name+" 강화공격설명");
+        enhancedAttack.addAttribute(name+" 강화공격 속성", "15%");
+        enhancedAttack.addAttribute(name+" 강화공격 속성2", "40%");
 
-        Skill lowSkill = Skill.createLowSkill("마력탄 폭주", "폭주하는 마력탄을 4개 발사해 무작위 적들에게 범위 마법 피해를 입힌다.", "lowSkill_image_url");
-        lowSkill.addAttribute("총 마법 피해", "350%");
+        // 저학년 스킬
+        Skill lowSkill = Skill.createLowSkill(name+" 저학년스킬", name + "저학년스킬 설명", name + "저학년스킬 이미지 url");
+        lowSkill.addAttribute(name+" 저학년스킬 속성", "350%");
 
-        Skill highSkill = Skill.createHighSkill("돌겨어어어!!!억..?", "지팡이에 마력을 가득 담아 돌격해 적들에게 범위 마법 피해를 입힌다.", 15, "highSkill_image_url");
-        highSkill.addAttribute("마법 피해", "525%");
+        // 고학년 스킬
+        Skill highSkill = Skill.createHighSkill(name+" 고학년스킬", name+" 고학년스킬 설명", 15, "고학년스킬 이미지 url");
+        highSkill.addAttribute(name+"고학년스킬 속성", "525%");
 
-        CharacterUrl urls = new CharacterUrl("portrait_url", "profile_url", "body_url");
+        // 이미지 url들
+        CharacterUrl urls = new CharacterUrl(name+"portrait_url", name+"profile_url", name+"body_url");
 
-        Character erpin = Character.createCharacter(name, "요정 여왕", "강은애", 3, "엘리아스의 수호자, 등장!", "야채는 싫어",
-                "달달한 음식/여왕 직위", Race.FAIRY, Personality.PURE, Role.DEALER, AttackType.MAGICAL, Position.BACK, stat,
-                normalAttack, enhancedAttack, lowSkill, highSkill, null, urls);
+        // 어사이드
+        AsideSpec level1 = AsideSpec.createAsideSpec(name + "어사이드1레벨", name + "어사이드1레벨 설명");
+        level1.addAttribute("어사이드 1단계 속성", "111%");
 
-        return erpin;
+        AsideSpec level2 = AsideSpec.createAsideSpec(name + "어사이드2레벨", name + "어사이드2레벨 설명");
+        level2.addAttribute("어사이드 2단계 속성", "222%");
+
+        AsideSpec level3 = AsideSpec.createAsideSpec(name + "어사이드3레벨", name + "어사이드3레벨 설명");
+        level3.addAttribute("어사이드 3단계 속성", "333%");
+
+        Aside aside = Aside.createAside(name + "어사이드", name + "어사이드 설명", level1, level2, level3);
+
+        return Character.createCharacter(name, name+" 수식언", name+" 성우", 3, name+" 한마디", name+" tmi",
+                name+" 좋아하는것1/좋아하는것2", Race.FAIRY, Personality.PURE, Role.DEALER, AttackType.MAGICAL, Position.BACK, stat,
+                normalAttack, enhancedAttack, lowSkill, highSkill, aside, urls);
     }
 
 }
