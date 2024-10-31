@@ -142,14 +142,9 @@ class CardServiceTest {
     }
 
     static Skill generateAttachmentSkill(String name) {
+        String description = "지정된 사거리 내에서 가장 멀리 있는 적에게 회전하는 그림을 던져 주변 적들에게 범위 물리 피해를 입힌다.";
 
-        Skill attachmentSkill = new Skill();
-
-        attachmentSkill.setName(name);
-        attachmentSkill.setCategory(SkillCategory.ATTACHMENT);
-        attachmentSkill.setDescription("지정된 사거리 내에서 가장 멀리 있는 적에게 회전하는 그림을 던져 주변 적들에게 범위 물리 피해를 입힌다.");
-        attachmentSkill.setCooldown(null);
-
+        Skill attachmentSkill = Skill.createAttachmentSkill(name, description, "attachment image url");
         attachmentSkill.addAttribute("타수당 물리 피해", "164%");
         attachmentSkill.addAttribute("HP 회복", "입힌 피해량의 15%");
 
