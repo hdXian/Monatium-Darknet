@@ -6,6 +6,7 @@ import hdxian.monatium_darknet.domain.aside.AsideSpec;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.repository.CharacterRepository;
+import hdxian.monatium_darknet.service.dto.CharacterDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

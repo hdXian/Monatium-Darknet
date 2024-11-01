@@ -1,4 +1,4 @@
-package hdxian.monatium_darknet.service;
+package hdxian.monatium_darknet.service.dto;
 
 import hdxian.monatium_darknet.domain.Attribute;
 import hdxian.monatium_darknet.domain.card.CardGrade;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class SpellCardDto {
+public class ArtifactCardDto {
 
     private String name;
     private CardGrade grade;

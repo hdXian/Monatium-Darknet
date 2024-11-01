@@ -1,4 +1,4 @@
-package hdxian.monatium_darknet.service;
+package hdxian.monatium_darknet.service.dto;
 
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.aside.Aside;

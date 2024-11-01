@@ -6,6 +6,8 @@ import hdxian.monatium_darknet.domain.card.Card;
 import hdxian.monatium_darknet.domain.card.SpellCard;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.repository.CardRepository;
+import hdxian.monatium_darknet.service.dto.ArtifactCardDto;
+import hdxian.monatium_darknet.service.dto.SpellCardDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
