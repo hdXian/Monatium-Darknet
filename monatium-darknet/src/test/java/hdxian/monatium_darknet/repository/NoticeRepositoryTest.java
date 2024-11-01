@@ -142,9 +142,11 @@ class NoticeRepositoryTest {
         List<Notice> devList = noticeRepository.findByNoticeCategory(NoticeCategory.DEV);
         assertThat(devList).containsExactlyInAnyOrder(dev1);
 
+        // 전체 검색
+        List<Notice> all = noticeRepository.findAll();
+        assertThat(all).containsExactlyInAnyOrder(notice1, notice2, event1, event2, update1, update2, update3, dev1);
     }
 
-    // 전체 검색
 
 
     static MemberDto generateMemberDto(String loginId, String password, String nickName) {
