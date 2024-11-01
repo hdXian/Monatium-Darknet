@@ -4,12 +4,10 @@ import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinGrade;
-import hdxian.monatium_darknet.repository.CharacterRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -33,7 +31,7 @@ class SkinServiceTest {
     void createNewSkin() {
         // given
         Character rim = generateMockChar("림");
-        Long rim_id = characterService.addCharacter(rim);
+        Long rim_id = characterService.createNewCharacter(rim);
 
         // when
         Long saved_skin_id = skinService.createNewSkin(rim_id, "라크로스 림크로스", SkinGrade.NORMAL, "라크로스 림크로스 설명");
@@ -58,10 +56,10 @@ class SkinServiceTest {
     void addCategories() {
         // given
         Character rim = generateMockChar("림");
-        Long rim_id = characterService.addCharacter(rim);
+        Long rim_id = characterService.createNewCharacter(rim);
 
         Character erpin = generateMockChar("에르핀");
-        Long erpin_id = characterService.addCharacter(erpin);
+        Long erpin_id = characterService.createNewCharacter(erpin);
 
         // 카테고리 3개
         Long category_id_1 = skinService.createNewCategory("상시판매");
@@ -121,8 +119,8 @@ class SkinServiceTest {
         Character rim = generateMockChar("림");
         Character erpin = generateMockChar("에르핀");
 
-        Long rim_id = characterService.addCharacter(rim);
-        Long erpin_id = characterService.addCharacter(erpin);
+        Long rim_id = characterService.createNewCharacter(rim);
+        Long erpin_id = characterService.createNewCharacter(erpin);
 
         Long category_id = skinService.createNewCategory("상시판매");
 

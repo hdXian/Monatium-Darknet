@@ -6,12 +6,10 @@ import hdxian.monatium_darknet.domain.aside.AsideSpec;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.repository.CharacterRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -40,7 +38,7 @@ class CharacterServiceTest {
         Character erpin = generateMockChar("에르핀");
 
         // when
-        Long savedId = service.addCharacter(erpin);
+        Long savedId = service.createNewCharacter(erpin);
 
         // then
         Character findCharacter = service.findOne(savedId);
@@ -76,9 +74,9 @@ class CharacterServiceTest {
         Character tig = generateMockChar("티그");
 
         // when
-        Long id_erpin = service.addCharacter(erpin);
-        Long id_ashur = service.addCharacter(ashur);
-        Long id_tig = service.addCharacter(tig);
+        Long id_erpin = service.createNewCharacter(erpin);
+        Long id_ashur = service.createNewCharacter(ashur);
+        Long id_tig = service.createNewCharacter(tig);
 
         // then
         // "에"를 검색했을 때 "에르핀", "에슈르"가 검색되어야 한다.
@@ -120,9 +118,9 @@ class CharacterServiceTest {
         Character tig = generateMockChar("티그");
 
         // when
-        Long id_erpin = service.addCharacter(erpin);
-        Long id_ashur = service.addCharacter(ashur);
-        Long id_tig = service.addCharacter(tig);
+        Long id_erpin = service.createNewCharacter(erpin);
+        Long id_ashur = service.createNewCharacter(ashur);
+        Long id_tig = service.createNewCharacter(tig);
 
         // then
         // 전체 캐릭터를 검색했을 때 3명의 캐릭터, 그리고 에르핀, 에슈르, 티그가 정확히 포함되어 있어야 한다.

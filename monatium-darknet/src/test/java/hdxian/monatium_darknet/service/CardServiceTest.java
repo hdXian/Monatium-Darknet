@@ -54,7 +54,7 @@ class CardServiceTest {
         // 애착 사도와 애착 아티팩트 스킬 생성
         Skill attachmentSkill = generateAttachmentSkill("그림 스크래치");
         Character rim = generateMockChar("림");
-        Long id_rim = characterService.addCharacter(rim);
+        Long id_rim = characterService.createNewCharacter(rim);
 
         ArtifactCard artifactCard = generateArtifact("림의 낫"); // character, attachmentSkill 설정 안된 Card (Dto로 대체해야 함. skin처럼)
 
@@ -107,7 +107,7 @@ class CardServiceTest {
         ArtifactCard artifact_2 = generateArtifact("30KG 케틀벨");
 
         // when
-        Long levi_id = characterService.addCharacter(levi);
+        Long levi_id = characterService.createNewCharacter(levi);
         cardService.addArtifactCard(artifact_1, levi_id, attachmentSkill); // 애착사도 O
 
         cardService.addSpellCard(spellCard);
@@ -130,7 +130,7 @@ class CardServiceTest {
         ArtifactCard artifactCard = generateArtifact("림의 낫");
 
         // when
-        Long saved_rim_id = characterService.addCharacter(rim);
+        Long saved_rim_id = characterService.createNewCharacter(rim);
         Long saved_artifact_id = cardService.addArtifactCard(artifactCard, saved_rim_id, attachmentSkill);
 
         Long saved_spell_id = cardService.addSpellCard(spellCard);

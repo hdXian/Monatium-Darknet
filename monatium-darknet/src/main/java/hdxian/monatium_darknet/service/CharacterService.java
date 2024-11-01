@@ -22,7 +22,7 @@ public class CharacterService {
     // 캐릭터 추가 기능
     // 내가봤을때 얘도 Dto로 처리해야 함. 혹은 createCharacter...
     @Transactional
-    public Long addCharacter(Character character) {
+    public Long createNewCharacter(Character character) {
         return characterRepository.save(character);
     }
 
