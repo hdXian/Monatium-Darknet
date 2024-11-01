@@ -14,6 +14,7 @@ public class Notice {
     @Column(name = "notice_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private NoticeCategory category;
 
     private String title;
@@ -42,6 +43,9 @@ public class Notice {
         notice.setCategory(category);
         notice.setTitle(title);
         notice.setContent(content);
+
+        notice.setDate(LocalDateTime.now());
+        notice.setViews(0L);
 
         notice.setMember(member);
 
