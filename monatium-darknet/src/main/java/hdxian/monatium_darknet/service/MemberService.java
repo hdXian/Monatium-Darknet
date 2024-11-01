@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional(readOnly = true)
@@ -20,7 +21,7 @@ public class MemberService {
     @Transactional
     public Long createNewMember(Member member) {
 
-        checkMemberId(member.getMemberId());
+        checkLoginId(member.getLoginId());
         checkNickname(member.getNickName());
 
         return memberRepository.save(member);
@@ -29,11 +30,11 @@ public class MemberService {
     @Transactional
     public Long createNewMember(MemberDto memberDto) {
 
-        checkMemberId(memberDto.getMemberId());
+        checkLoginId(memberDto.getLoginId());
         checkNickname(memberDto.getNickName());
 
         Member member = Member.createMember(
-                memberDto.getMemberId(),
+                memberDto.getLoginId(),
                 memberDto.getPassword(),
                 memberDto.getNickName()
         );
@@ -52,6 +53,22 @@ public class MemberService {
         return memberRepository.findOne(id);
     }
 
+    public Member findByLoginId(String loginId) {
+        List<Member> find = memberRepository.findByLoginId(loginId);
+        if (find.isEmpty()) {
+            throw new NoSuchElementException("해당 아이디로 회원을 찾을 수 없습니다.");
+        }
+        return find.get(0);
+    }
+
+    public Member findByNickname(String nickName) {
+        List<Member> find = memberRepository.findByNickname(nickName);
+        if (find.isEmpty()) {
+            throw new NoSuchElementException("해당 닉네임으로 회원을 찾을 수 없습니다.");
+        }
+        return find.get(0);
+    }
+
     public List<Member> findAll() {
         return memberRepository.findAll();
     }
@@ -63,8 +80,8 @@ public class MemberService {
         }
     }
 
-    private void checkMemberId(String memberId) {
-        List<Member> find = memberRepository.findByMemberId(memberId);
+    private void checkLoginId(String loginId) {
+        List<Member> find = memberRepository.findByLoginId(loginId);
         if (!find.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 ID입니다.");
         }

@@ -28,15 +28,15 @@ public class MemberRepository {
         return em.find(Member.class, id);
     }
 
-    public List<Member> findByMemberId(String memberId) {
-        String jpql = "select m from Member m where m.memberId = :memberId";
+    public List<Member> findByLoginId(String loginId) {
+        String jpql = "select m from Member m where m.loginId = :loginId";
         return em.createQuery(jpql, Member.class)
-                .setParameter("memberId", memberId)
+                .setParameter("loginId", loginId)
                 .getResultList();
     }
 
     public List<Member> findByNickname(String nickName) {
-        String jpql = "select m from Member m where m.nickName like concat('%', :nickName, '%')";
+        String jpql = "select m from Member m where m.nickName = :nickName";
         return em.createQuery(jpql, Member.class)
                 .setParameter("nickName", nickName)
                 .getResultList();

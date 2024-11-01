@@ -15,7 +15,7 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-    private String memberId;
+    private String loginId;
     private String password;
     private String nickName;
 
@@ -27,9 +27,9 @@ public class Member {
     }
 
     // 생성 메서드
-    public static Member createMember(String memberId, String password, String nickName) {
+    public static Member createMember(String loginId, String password, String nickName) {
         Member member = new Member();
-        member.setMemberId(memberId);
+        member.setLoginId(loginId);
         member.setPassword(password);
         member.setNickName(nickName);
 
