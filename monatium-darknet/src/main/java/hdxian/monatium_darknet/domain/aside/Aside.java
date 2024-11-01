@@ -22,17 +22,17 @@ public class Aside {
 
     // 어사이드 1단계
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "level_1_id")
+    @JoinColumn(name = "level_1_spec_id")
     private AsideSpec level1;
 
     // 어사이드 2단계
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "level_2_id")
+    @JoinColumn(name = "level_2_spec_id")
     private AsideSpec level2;
 
     // 어사이드 3단계
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "level_3_id")
+    @JoinColumn(name = "level_3_spec_id")
     private AsideSpec level3;
 
     // for JPA spec (일반 비즈니스 로직에서 사용 x)

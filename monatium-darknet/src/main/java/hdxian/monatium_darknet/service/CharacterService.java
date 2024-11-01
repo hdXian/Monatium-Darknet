@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -25,12 +26,38 @@ public class CharacterService {
         return characterRepository.save(character);
     }
 
+    @Transactional
+    public Long createNewCharacter(CharacterDto chDto) {
+        Character ch = Character.createCharacter(
+                chDto.getName(),
+                chDto.getSubtitle(),
+                chDto.getCv(),
+                chDto.getGrade(),
+                chDto.getQuote(),
+                chDto.getTmi(),
+                chDto.getFavorite(),
+                chDto.getRace(),
+                chDto.getPersonality(),
+                chDto.getRole(),
+                chDto.getAttackType(),
+                chDto.getPosition(),
+                chDto.getStat(),
+                chDto.getNormalAttack(),
+                chDto.getEnhancedAttack(),
+                chDto.getLowSKill(),
+                chDto.getHighSkill(),
+                chDto.getAside(),
+                chDto.getUrls()
+        );
+        return characterRepository.save(ch);
+    }
+
     // 캐릭터 검색 기능
     public Character findOne(Long id) {
         Optional<Character> find = characterRepository.findOne(id);
         // TODO - null일 때 예외 던지는 로직 추가
         if(find.isEmpty()) {
-            throw new RuntimeException("해당 캐릭터가 없습니다.");
+            throw new NoSuchElementException("해당 캐릭터가 없습니다.");
         }
         return find.get();
     }

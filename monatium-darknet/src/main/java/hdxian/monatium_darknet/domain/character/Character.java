@@ -17,7 +17,7 @@ public class Character {
     private String name; // 이름
     private String subtitle; // 수식언
     private String cv; // 성우
-    private int grade; // 성급
+    private Integer grade; // 성급
     private String quote; // 한마디
     private String tmi; // tmi
     private String favorite; // 좋아하는 것
@@ -83,7 +83,7 @@ public class Character {
 
     // 생성 메서드
     public static Character createCharacter(String name, String subtitle, String cv,
-                                            int grade, String quote, String tmi, String favorite,
+                                            Integer grade, String quote, String tmi, String favorite,
                                             Race race, Personality personality, Role role, AttackType attackType, Position position, CharacterStat stat,
                                             Attack normalAttack, Attack enhancedAttack, Skill lowSkill, Skill highSkill, Aside aside, CharacterUrl urls)
     {
@@ -92,9 +92,6 @@ public class Character {
         character.setSubtitle(subtitle);
         character.setCv(cv);
 
-        if (grade < 0 || grade > 3) {
-            throw new IllegalArgumentException("유효하지 않은 성급입니다.");
-        }
         character.setGrade(grade);
 
         character.setQuote(quote);

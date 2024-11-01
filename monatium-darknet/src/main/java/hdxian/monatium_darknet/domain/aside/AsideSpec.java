@@ -20,6 +20,10 @@ public class AsideSpec {
     private String name;
     private String description;
 
+//    @OneToOne // AsideSpec 테이블에도 Aside 외래 키를 가지도록 구성 가능하기는 함
+//    @JoinColumn(name = "aside_id")
+//    private Aside aside;
+
     @ElementCollection
     @CollectionTable(name = "aside_attributes", joinColumns = @JoinColumn(name = "aside_spec_id"))
     private List<Attribute> attributes = new ArrayList<>(); // 어사이드 효과들 (추가 능력치)
