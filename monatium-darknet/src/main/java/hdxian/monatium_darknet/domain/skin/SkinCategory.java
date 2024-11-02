@@ -28,11 +28,6 @@ public class SkinCategory {
         mappings.add(mapping);
     }
 
-    public void removeMapping(SkinCategoryMapping mapping) {
-        mappings.remove(mapping);
-        mapping.setSkinCategory(null);
-    }
-
     // for JPA spec
     protected SkinCategory() {
     }
@@ -54,7 +49,8 @@ public class SkinCategory {
     }
 
     public void removeSkin(Skin skin) {
-        // TODO
+        mappings.removeIf(mapping -> mapping.getSkin().equals(skin));
+        skin.getMappings().removeIf(mapping -> mapping.getSkinCategory().equals(this));
     }
 
 }
