@@ -26,32 +26,6 @@ public class CardService {
     private final CardRepository cardRepository;
 
     // 카드 저장 기능
-    // TODO - 인자 Card 타입이 아니라 Dto로 만들어서 넣기
-    @Transactional
-    public Long createNewSpellCard(SpellCard card) {
-        return cardRepository.save(card);
-    }
-
-    // 애착 사도 없는 아티팩트 카드
-    // TODO - 인자 Card 타입이 아니라 Dto로 만들어서 넣기
-    @Transactional
-    public Long createNewArtifactCard(ArtifactCard card) {
-        return cardRepository.save(card);
-    }
-
-    // 애착 사도가 있는 아티팩트 카드는 아티팩트 사도와 스킬을 추가해야 함.
-    // TODO - 인자 Card 타입이 아니라 Dto로 만들어서 넣기
-    @Transactional
-    public Long createNewArtifactCard(ArtifactCard card, Long characterId, Skill attachmentSkill) {
-        Character character = characterService.findOne(characterId);
-
-        // 애착 사도와 아티팩트 추가
-        card.setCharacter(character);
-        card.setAttachmentSkill(attachmentSkill);
-
-        return cardRepository.save(card);
-    }
-
     @Transactional
     public Long createNewSpellCard(SpellCardDto cardDto) {
         SpellCard spellCard = SpellCard.createSpellCard(
