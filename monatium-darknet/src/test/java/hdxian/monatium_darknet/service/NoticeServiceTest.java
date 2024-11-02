@@ -5,17 +5,17 @@ import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import hdxian.monatium_darknet.service.dto.MemberDto;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -27,7 +27,6 @@ class NoticeServiceTest {
     @Autowired
     NoticeService noticeService;
 
-    // TODO
     // TODO 2 - member, notice repo의 findOne() Optional로 바꾸고 null 들어있으면 service에서 예외 터뜨리는 로직 추가, 해당 로직 테스트 추가
 
     // 공지사항 저장
@@ -51,6 +50,29 @@ class NoticeServiceTest {
         assertThat(findNotice.getTitle()).isEqualTo(noticeDto.getTitle());
         assertThat(findNotice.getCategory()).isEqualTo(noticeDto.getCategory());
         assertThat(findNotice.getContent()).isEqualTo(noticeDto.getContent());
+    }
+
+    @Test
+    @DisplayName("없는 공지사항 조회")
+    void findNone() {
+        // given
+        MemberDto lilyDto = generateMemberDto("lily", "1234", "GM릴1리");
+        Long lily_id = memberService.createNewMember(lilyDto);
+        Member lily = memberService.findOne(lily_id);
+
+        // when
+        NoticeDto noticeDto = generateNoticeDto("공지사항제목1", NoticeCategory.NOTICE, "공지사항본문1");
+        Long noticeId = noticeService.createNewNotice(lily_id, noticeDto);
+
+        // then
+        // 있는 공지사항은 정상 조회
+        Notice findNotice = noticeService.findOne(noticeId);
+        assertThat(findNotice.getTitle()).isEqualTo(noticeDto.getTitle());
+
+        Long noneExistNoticeId = -1L;
+        assertThatThrownBy(() -> noticeService.findOne(noneExistNoticeId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 공지사항이 없습니다. id=" + noneExistNoticeId);
     }
 
     // 회원별 공지사항 조회
@@ -93,6 +115,7 @@ class NoticeServiceTest {
     // 카테고리별 공지사항 조회
     @Test
     @DisplayName("카테고리별 조회")
+//    @Rollback(value = false)
     void findByCategory() {
         // given
         MemberDto lily_dto = generateMemberDto("lily", "1234", "GM릴1리");

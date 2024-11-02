@@ -13,6 +13,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -42,8 +43,11 @@ class NoticeRepositoryTest {
 
         // then
         // 저장하고 다시 찾은 Notice가 같은지 확인
-        Notice findNotice = noticeRepository.findOne(notice_id);
-
+        Optional<Notice> find = noticeRepository.findOne(notice_id);
+        if (find.isEmpty()) {
+            fail("공지사항 조회에 실패했습니다.");
+        }
+        Notice findNotice = find.get();
         assertThat(findNotice.getId()).isEqualTo(notice_id);
         assertThat(findNotice.getMember()).isEqualTo(lily);
         assertThat(findNotice.getCategory()).isEqualTo(NoticeCategory.NOTICE);

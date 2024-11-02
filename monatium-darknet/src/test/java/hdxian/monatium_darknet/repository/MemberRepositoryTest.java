@@ -1,7 +1,6 @@
 package hdxian.monatium_darknet.repository;
 
 import hdxian.monatium_darknet.domain.notice.Member;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -32,10 +32,11 @@ class MemberRepositoryTest {
         Long savedId = repository.save(member);
 
         // then
-        Member findMember = repository.findOne(savedId);
-        assertThat(findMember.getLoginId()).isEqualTo(member.getLoginId());
-        assertThat(findMember.getPassword()).isEqualTo(member.getPassword());
-        assertThat(findMember.getNickName()).isEqualTo(member.getNickName());
+        Optional<Member> find = repository.findOne(savedId);
+        if (find.isEmpty()) {
+            fail("회원 조회에 실패했습니다.");
+        }
+        Member findMember = find.get();
         assertThat(findMember).isEqualTo(member);
     }
 

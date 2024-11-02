@@ -2,7 +2,6 @@ package hdxian.monatium_darknet.service;
 
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.service.dto.MemberDto;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -116,7 +114,7 @@ class MemberServiceTest {
 
     // 없는 회원 검색
     @Test
-    @DisplayName("없는 회원번호, 아이디, 닉네임 검색")
+    @DisplayName("없는 회원 검색")
     void findNone() {
         // given
         MemberDto dto1 = new MemberDto();
@@ -127,17 +125,21 @@ class MemberServiceTest {
         // when
         Long savedId = service.createNewMember(dto1);
 
+        Long noneMemberId = -1L;
         String nonLoginId = "없는로그인아이디";
         String nonNickname = "없는닉네임";
 
         // then
-
         // 있는 회원은 정상 조회되어야 함
         Member findLily1 = service.findByLoginId(dto1.getLoginId());
         Member findLily2 = service.findByNickname(dto1.getNickName());
 
         assertThat(findLily1).isEqualTo(findLily2);
         assertThat(findLily1.getId()).isEqualTo(savedId);
+
+        assertThatThrownBy(() -> service.findOne(noneMemberId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 회원이 존재하지 않습니다. id=" + noneMemberId);
 
         // 없는 조건으로 검색하면 예외가 발생해야 함
         assertThatThrownBy(() -> service.findByLoginId(nonLoginId))
