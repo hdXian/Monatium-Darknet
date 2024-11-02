@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,8 +28,9 @@ public class NoticeRepository {
     }
 
     // 공지사항 조회
-    public Notice findOne(Long id) {
-        return em.find(Notice.class, id);
+    public Optional<Notice> findOne(Long id) {
+        Notice find = em.find(Notice.class, id);
+        return Optional.ofNullable(find);
     }
 
     public List<Notice> findByMemberId(Long memberId) {

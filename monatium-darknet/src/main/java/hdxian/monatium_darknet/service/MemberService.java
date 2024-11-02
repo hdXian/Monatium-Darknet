@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -50,7 +51,11 @@ public class MemberService {
 
     // 회원 검색 기능
     public Member findOne(Long id) {
-        return memberRepository.findOne(id);
+        Optional<Member> find = memberRepository.findOne(id);
+        if (find.isEmpty()) {
+            throw new NoSuchElementException("해당 회원이 존재하지 않습니다. id=" + id);
+        }
+        return find.get();
     }
 
     public Member findByLoginId(String loginId) {

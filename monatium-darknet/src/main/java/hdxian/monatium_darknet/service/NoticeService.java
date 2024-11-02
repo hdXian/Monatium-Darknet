@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -36,7 +38,11 @@ public class NoticeService {
 
     // 공지사항 조회 기능
     public Notice findOne(Long id) {
-        return noticeRepository.findOne(id);
+        Optional<Notice> find = noticeRepository.findOne(id);
+        if (find.isEmpty()) {
+            throw new NoSuchElementException("해당 공지사항이 없습니다. id=" + id);
+        }
+        return find.get();
     }
 
     public List<Notice> findByMemberId(Long memberId) {

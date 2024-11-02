@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,8 +25,9 @@ public class MemberRepository {
         }
     }
 
-    public Member findOne(Long id) {
-        return em.find(Member.class, id);
+    public Optional<Member> findOne(Long id) {
+        Member find = em.find(Member.class, id);
+        return Optional.ofNullable(find);
     }
 
     public List<Member> findByLoginId(String loginId) {
