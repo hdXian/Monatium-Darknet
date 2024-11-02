@@ -86,7 +86,7 @@ class SkinServiceTest {
 
     @Test
     @DisplayName("스킨, 카테고리 복합 검색")
-    @Rollback(value = false)
+//    @Rollback(value = false)
     void addCategories() {
         // given
         CharacterDto rimDto = generateCharDto("림");
@@ -150,15 +150,15 @@ class SkinServiceTest {
         Long nonSkinId = -1L;
         Long nonCategoryId = -1L;
 
-//        // 없는 카테고리에 대해 스킨 추가
-//        assertThatThrownBy(() -> skinService.linkSkinAndCategory(rim_skin_id, nonCategoryId))
-//                .isInstanceOf(NoSuchElementException.class)
-//                .hasMessage("해당 스킨 카테고리가 존재하지 않습니다. categoryId=" + nonCategoryId);
-//
-//        // 없는 스킨에 대해 카테고리 추가
-//        assertThatThrownBy(() -> skinService.linkSkinAndCategory(nonSkinId, category_id_1))
-//                .isInstanceOf(NoSuchElementException.class)
-//                .hasMessage("해당 스킨이 존재하지 않습니다. skinId=" + nonSkinId);
+        // 없는 카테고리에 대해 스킨 추가
+        assertThatThrownBy(() -> skinService.linkSkinAndCategory(rim_skin_id, nonCategoryId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 스킨 카테고리가 존재하지 않습니다. categoryId=" + nonCategoryId);
+
+        // 없는 스킨에 대해 카테고리 추가
+        assertThatThrownBy(() -> skinService.linkSkinAndCategory(nonSkinId, category_id_1))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 스킨이 존재하지 않습니다. skinId=" + nonSkinId);
     }
 
     // 캐릭터 기반 스킨 검색
