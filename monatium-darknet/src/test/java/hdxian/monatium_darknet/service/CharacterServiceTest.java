@@ -121,7 +121,7 @@ class CharacterServiceTest {
 
     @Test
     @DisplayName("캐릭터 수정")
-    @Rollback(value = false)
+//    @Rollback(value = false)
     void updateCharacter() {
         // given
         CharacterDto erpinDto = generateCharDto("에르핀");
