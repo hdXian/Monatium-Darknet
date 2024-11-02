@@ -41,11 +41,13 @@ public class Character {
     @Embedded
     private CharacterStat stat;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @OneToOne(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY) // character와의 연관관계가 끊어진 Attack 객체는 자동 삭제
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "normal_attack_id")
     private Attack normalAttack; // 기본 공격
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @OneToOne(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "enhanced_attack_id")
     private Attack enhancedAttack; // 강화 공격
 
@@ -79,8 +81,6 @@ public class Character {
         }
     }
 
-    // Attack, Skill와도 연관관계를 가지고 있지만, 단방향 연관관계이기 때문에 별도의 연관관계 메서드 x
-
     // 생성 메서드
     public static Character createCharacter(String name, String subtitle, String cv,
                                             Integer grade, String quote, String tmi, String favorite,
@@ -91,9 +91,7 @@ public class Character {
         character.setName(name);
         character.setSubtitle(subtitle);
         character.setCv(cv);
-
         character.setGrade(grade);
-
         character.setQuote(quote);
         character.setTmi(tmi);
         character.setFavorite(favorite);
@@ -103,11 +101,15 @@ public class Character {
         character.setAttackType(attackType);
         character.setPosition(position);
         character.setStat(stat);
+
         character.setNormalAttack(normalAttack);
         character.setEnhancedAttack(enhancedAttack);
+
         character.setLowSkill(lowSkill);
         character.setHighSkill(highSkill);
+
         character.setAside(aside);
+
         character.setUrls(urls);
         return character;
     }

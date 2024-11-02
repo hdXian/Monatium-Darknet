@@ -36,6 +36,7 @@ public class Attack {
     }
 
     // 생성 메서드
+    // Character와의 연관관계는 Character의 생성 메서드에서 설정
     public static Attack createNormalAttack(String description, Attribute... attributes) {
         Attack normalAttack = new Attack();
         normalAttack.setCategory(AttackCategory.NORMAL);

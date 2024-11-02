@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -26,23 +27,6 @@ class CharacterServiceTest {
     CharacterService service;
 
     // TODO - 캐릭터 테스트에 스킨, 어사이드 추가 (그 외 각종 테스트 케이스 추가 필 (예외 등))
-
-    // 캐릭터 추가
-    @Test
-    @DisplayName("캐릭터 추가")
-//    @Rollback(value = false)
-    void addCharacter() {
-        // given
-        Character erpin = generateMockChar("에르핀");
-
-        // when
-        Long savedId = service.createNewCharacter(erpin);
-
-        // then
-        Character findCharacter = service.findOne(savedId);
-        assertThat(findCharacter.getName()).isEqualTo("에르핀");
-        assertThat(findCharacter).isEqualTo(erpin);
-    }
 
     @Test
     @DisplayName("캐릭터 추가(Dto)")
@@ -67,19 +51,25 @@ class CharacterServiceTest {
 //    @Rollback(value = false)
     void findName() {
         // given
-        Character erpin = generateMockChar("에르핀");
-        Character ashur = generateMockChar("에슈르");
-        Character tig = generateMockChar("티그");
+        CharacterDto erpinDto = generateCharDto("에르핀");
+        CharacterDto ashurDto = generateCharDto("에슈르");
+        CharacterDto tigDto = generateCharDto("티그");
 
         // when
-        Long id_erpin = service.createNewCharacter(erpin);
-        Long id_ashur = service.createNewCharacter(ashur);
-        Long id_tig = service.createNewCharacter(tig);
+        Long erpin_id = service.createNewCharacter(erpinDto);
+        Long ashur_id = service.createNewCharacter(ashurDto);
+        Long tig_id = service.createNewCharacter(tigDto);
+        Character erpin = service.findOne(erpin_id);
+        Character ashur = service.findOne(ashur_id);
+        Character tig = service.findOne(tig_id);
 
         // then
         // "에"를 검색했을 때 "에르핀", "에슈르"가 검색되어야 한다.
         List<Character> findResult = service.findByName("에");
         assertThat(findResult).containsExactlyInAnyOrder(erpin, ashur);
+
+        List<Character> find_tig = service.findByName("티그");
+        assertThat(find_tig).containsExactly(tig);
     }
 
     // 없는 캐릭터 검색
@@ -110,64 +100,92 @@ class CharacterServiceTest {
 //    @Rollback(value = false)
     void findAll() {
         // given
-        Character erpin = generateMockChar("에르핀");
-        Character ashur = generateMockChar("에슈르");
-        Character tig = generateMockChar("티그");
+        CharacterDto erpinDto = generateCharDto("에르핀");
+        CharacterDto ashurDto = generateCharDto("에슈르");
+        CharacterDto tigDto = generateCharDto("티그");
 
         // when
-        Long id_erpin = service.createNewCharacter(erpin);
-        Long id_ashur = service.createNewCharacter(ashur);
-        Long id_tig = service.createNewCharacter(tig);
+        Long erpin_id = service.createNewCharacter(erpinDto);
+        Long ashur_id = service.createNewCharacter(ashurDto);
+        Long tig_id = service.createNewCharacter(tigDto);
+        Character erpin = service.findOne(erpin_id);
+        Character ashur = service.findOne(ashur_id);
+        Character tig = service.findOne(tig_id);
 
         // then
         // 전체 캐릭터를 검색했을 때 3명의 캐릭터, 그리고 에르핀, 에슈르, 티그가 정확히 포함되어 있어야 한다.
-
         List<Character> findResult = service.findCharacters();
         assertThat(findResult.size()).isEqualTo(3);
         assertThat(findResult).containsExactlyInAnyOrder(erpin, ashur, tig);
     }
 
-    static Character generateMockChar(String name) {
+    @Test
+    @DisplayName("캐릭터 수정")
+    @Rollback(value = false)
+    void updateCharacter() {
+        // given
+        CharacterDto erpinDto = generateCharDto("에르핀");
+        erpinDto.setGrade(3);
+        erpinDto.setQuote("기존 소개");
 
-        // 능력치 (하드코딩)
-        CharacterStat stat = new CharacterStat(7, 3, 4);
+        Attack originNormalAttack = erpinDto.getNormalAttack();
+        originNormalAttack.getAttributes().clear();
+        originNormalAttack.addAttribute("기존속성1", "기존속성1 수치");
+        originNormalAttack.addAttribute("기존속성2", "기존속성2 수치");
 
-        // 일반공격
-        Attack normalAttack = Attack.createNormalAttack(name+" 일반공격설명");
-        normalAttack.addAttribute(name+" 일반공격 속성", "50%");
+        Skill originHighSkill = erpinDto.getHighSkill();
+        originHighSkill.setName("기존고학년스킬이름");
+        originHighSkill.getAttributes().clear();
+        originHighSkill.addAttribute("기존 고학년스킬 속성1", "기존고학년스킬 속성1 수치");
+        originHighSkill.addAttribute("기존 고학년스킬 속성2", "기존고학년스킬 속성2 수치");
 
-        // 강화 공격
-        Attack enhancedAttack = Attack.createEnhancedAttack(name+" 강화공격설명");
-        enhancedAttack.addAttribute(name+" 강화공격 속성", "15%");
-        enhancedAttack.addAttribute(name+" 강화공격 속성2", "40%");
+        Long erpin_id = service.createNewCharacter(erpinDto);
 
-        // 저학년 스킬
-        Skill lowSkill = Skill.createLowSkill(name+" 저학년스킬", name + "저학년스킬 설명", name + "저학년스킬 이미지 url");
-        lowSkill.addAttribute(name+" 저학년스킬 속성", "350%");
+        // 수정 전 정보 확인
+        Character erpin = service.findOne(erpin_id);
+        assertThat(erpin.getName()).isEqualTo("에르핀");
+        assertThat(erpin.getGrade()).isEqualTo(3);
+        assertThat(erpin.getQuote()).isEqualTo("기존 소개");
+        assertThat(erpin.getNormalAttack()).isEqualTo(originNormalAttack);
+        assertThat(erpin.getHighSkill()).isEqualTo(originHighSkill);
 
-        // 고학년 스킬
-        Skill highSkill = Skill.createHighSkill(name+" 고학년스킬", name+" 고학년스킬 설명", 15, "고학년스킬 이미지 url");
-        highSkill.addAttribute(name+"고학년스킬 속성", "525%");
+        // when
+        CharacterDto updateDto = generateCharDto("에르핀수정");
+        updateDto.setGrade(2);
+        updateDto.setQuote("수정 소개");
 
-        // 이미지 url들
-        CharacterUrl urls = new CharacterUrl(name+"portrait_url", name+"profile_url", name+"body_url");
+        Attack updateNormalAttack = updateDto.getNormalAttack();
+        updateNormalAttack.getAttributes().clear();
+        updateNormalAttack.addAttribute("수정속성1", "수정속성1 수치");
+        updateNormalAttack.addAttribute("수정속성2", "수정속성2 수치");
 
-        // 어사이드
-        AsideSpec level1 = AsideSpec.createAsideSpec(name + "어사이드1레벨", name + "어사이드1레벨 설명");
-        level1.addAttribute("어사이드 1단계 속성", "111%");
+        Skill updateHighSkill = updateDto.getHighSkill();
+        updateHighSkill.getAttributes().clear();
+        updateHighSkill.addAttribute("수정 고학년스킬 속성1", "수정 고학년스킬 속성1 수치");
+        updateHighSkill.addAttribute("수정 고학년스킬 속성2", "수정 고학년스킬 속성2 수치");
 
-        AsideSpec level2 = AsideSpec.createAsideSpec(name + "어사이드2레벨", name + "어사이드2레벨 설명");
-        level2.addAttribute("어사이드 2단계 속성", "222%");
+        Long updated_id = service.updateCharacter(erpin_id, updateDto);
 
-        AsideSpec level3 = AsideSpec.createAsideSpec(name + "어사이드3레벨", name + "어사이드3레벨 설명");
-        level3.addAttribute("어사이드 3단계 속성", "333%");
+        // 수정 후 정보 확인
+        Character updated_erpin = service.findOne(updated_id);
+        assertThat(updated_erpin.getName()).isEqualTo("에르핀수정");
+        assertThat(updated_erpin.getGrade()).isEqualTo(2);
+        assertThat(updated_erpin.getQuote()).isEqualTo("수정 소개");
 
-        Aside aside = Aside.createAside(name + "어사이드", name + "어사이드 설명", level1, level2, level3);
-
-        return Character.createCharacter(name, name+" 수식언", name+" 성우", 3, name+" 한마디", name+" tmi",
-                name+" 좋아하는것1/좋아하는것2", Race.FAIRY, Personality.PURE, Role.DEALER, AttackType.MAGICAL, Position.BACK, stat,
-                normalAttack, enhancedAttack, lowSkill, highSkill, aside, urls);
+        // 최종적으로 같은 엔티티가 변경된거여야 함
+        assertThat(erpin).isEqualTo(updated_erpin);
     }
+
+    /**
+     * originDto의 normalAttack = hdxian.monatium_darknet.domain.character.Attack@17c3e33
+     * 변경 전 erpin의 normalAttack = hdxian.monatium_darknet.domain.character.Attack@17c3e33
+     *
+     * updateDto의 normalAttack = hdxian.monatium_darknet.domain.character.Attack@16817bad
+     * 변경 후 erpin의 normalAttack = hdxian.monatium_darknet.domain.character.Attack@17c3e33
+     * 새로 추가한 경우 -> Dto의 Attack 객체가 그대로 엔티티로 들어감. (영속화)
+     * 변경한 경우 -> 기존 엔티티의 필드를 불러와 값만 변경함. -> 필드 객체가 변하지 않음. (updateDto의 normatAttack과 erpin 엔티티의 normalAttack이 달라야 함.)
+     */
+
 
     static CharacterDto generateCharDto(String name) {
         // 능력치 (하드코딩)

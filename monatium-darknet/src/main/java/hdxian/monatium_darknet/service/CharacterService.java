@@ -1,5 +1,9 @@
 package hdxian.monatium_darknet.service;
 
+import hdxian.monatium_darknet.domain.Attribute;
+import hdxian.monatium_darknet.domain.Skill;
+import hdxian.monatium_darknet.domain.SkillCategory;
+import hdxian.monatium_darknet.domain.character.Attack;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.repository.CharacterRepository;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
@@ -51,6 +55,67 @@ public class CharacterService {
                 chDto.getUrls()
         );
         return characterRepository.save(ch);
+    }
+
+    // 캐릭터 업데이트
+    @Transactional
+    public Long updateCharacter(Long characterId, CharacterDto updateParam) {
+        Optional<Character> find = characterRepository.findOne(characterId);
+        if (find.isEmpty()) {
+            throw new NoSuchElementException("해당 캐릭터가 존재하지 않습니다. id=" + characterId);
+        }
+
+        Character ch = find.get();
+
+        ch.setName(updateParam.getName());
+        ch.setSubtitle(updateParam.getSubtitle());
+        ch.setCv(updateParam.getCv());
+        ch.setGrade(updateParam.getGrade());
+        ch.setQuote(updateParam.getQuote());
+        ch.setTmi(updateParam.getTmi());
+        ch.setFavorite(updateParam.getFavorite());
+        ch.setRace(updateParam.getRace());
+        ch.setPersonality(updateParam.getPersonality());
+        ch.setRole(updateParam.getRole());
+        ch.setAttackType(updateParam.getAttackType());
+        ch.setPosition(updateParam.getPosition());
+        ch.setStat(updateParam.getStat());
+
+        // 기존 객체를 수정
+        updateAttack(ch.getNormalAttack(), updateParam.getNormalAttack());
+        updateAttack(ch.getEnhancedAttack(), updateParam.getEnhancedAttack());
+
+        updateSkill(ch.getLowSkill(), updateParam.getLowSKill());
+        updateSkill(ch.getHighSkill(), updateParam.getHighSkill());
+
+        ch.setAside(updateParam.getAside());
+        ch.setUrls(updateParam.getUrls());
+
+//        return characterRepository.save(ch);
+        return ch.getId(); // ***중요 -> em.find()를 통해 찾아온 엔티티는 merge로 업데이트하면 안됨. (이해는 안됨. 추가 학습 필요)
+    }
+
+    // 스킬 변경
+    private static void updateSkill(Skill skill, Skill updateParam) {
+        skill.setName(updateParam.getName());
+        skill.setDescription(updateParam.getDescription());
+        skill.setImageUrl(updateParam.getImageUrl());
+
+        if(skill.getCategory() == SkillCategory.HIGH) {
+            skill.setCooldown(updateParam.getCooldown());
+        }
+
+        List<Attribute> attributes = skill.getAttributes();
+        attributes.clear();
+        attributes.addAll(updateParam.getAttributes());
+    }
+
+    // 공격 변경
+    private static void updateAttack(Attack attack, Attack updateParam) {
+        attack.setDescription(updateParam.getDescription());
+        List<Attribute> attributes = attack.getAttributes();
+        attributes.clear();
+        attributes.addAll(updateParam.getAttributes());
     }
 
     // 캐릭터 검색 기능
