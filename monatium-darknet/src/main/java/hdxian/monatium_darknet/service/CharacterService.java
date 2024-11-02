@@ -88,6 +88,8 @@ public class CharacterService {
         updateSkill(ch.getLowSkill(), updateParam.getLowSKill());
         updateSkill(ch.getHighSkill(), updateParam.getHighSkill());
 
+        // 어사이드는 구조가 더 복잡해서 그냥 객체를 갈아끼운 다음 orphanRemoval = true로 기존 객체를 삭제하도록 설정함
+        // 기존 객체의 데이터들을 변경해서 업데이트 시키는 것 <-> 아예 새로운 객체로 갈아 끼우는 것 사이의 차이점 숙지해야 함
         ch.setAside(updateParam.getAside());
         ch.setUrls(updateParam.getUrls());
 

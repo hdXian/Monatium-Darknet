@@ -41,12 +41,10 @@ public class Character {
     @Embedded
     private CharacterStat stat;
 
-//    @OneToOne(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY) // character와의 연관관계가 끊어진 Attack 객체는 자동 삭제
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "normal_attack_id")
     private Attack normalAttack; // 기본 공격
 
-//    @OneToOne(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "enhanced_attack_id")
     private Attack enhancedAttack; // 강화 공격
@@ -59,7 +57,7 @@ public class Character {
     @JoinColumn(name = "high_skill_id")
     private Skill highSkill; // 고학년 스킬
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "aside_id")
     private Aside aside; // 어사이드
 

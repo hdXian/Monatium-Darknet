@@ -126,7 +126,6 @@ class CharacterServiceTest {
         // given
         CharacterDto erpinDto = generateCharDto("에르핀");
         erpinDto.setGrade(3);
-        erpinDto.setQuote("기존 소개");
 
         Attack originNormalAttack = erpinDto.getNormalAttack();
         originNormalAttack.getAttributes().clear();
@@ -145,14 +144,12 @@ class CharacterServiceTest {
         Character erpin = service.findOne(erpin_id);
         assertThat(erpin.getName()).isEqualTo("에르핀");
         assertThat(erpin.getGrade()).isEqualTo(3);
-        assertThat(erpin.getQuote()).isEqualTo("기존 소개");
         assertThat(erpin.getNormalAttack()).isEqualTo(originNormalAttack);
         assertThat(erpin.getHighSkill()).isEqualTo(originHighSkill);
 
         // when
         CharacterDto updateDto = generateCharDto("에르핀수정");
         updateDto.setGrade(2);
-        updateDto.setQuote("수정 소개");
 
         Attack updateNormalAttack = updateDto.getNormalAttack();
         updateNormalAttack.getAttributes().clear();
@@ -170,7 +167,6 @@ class CharacterServiceTest {
         Character updated_erpin = service.findOne(updated_id);
         assertThat(updated_erpin.getName()).isEqualTo("에르핀수정");
         assertThat(updated_erpin.getGrade()).isEqualTo(2);
-        assertThat(updated_erpin.getQuote()).isEqualTo("수정 소개");
 
         // 최종적으로 같은 엔티티가 변경된거여야 함
         assertThat(erpin).isEqualTo(updated_erpin);
@@ -225,7 +221,7 @@ class CharacterServiceTest {
 
         CharacterDto dto = new CharacterDto();
         dto.setName(name);
-        dto.setSubtitle("수식언");
+        dto.setSubtitle(name+"수식언");
         dto.setCv(name+"성우");
         dto.setGrade(3);
         dto.setQuote(name+"한마디");
