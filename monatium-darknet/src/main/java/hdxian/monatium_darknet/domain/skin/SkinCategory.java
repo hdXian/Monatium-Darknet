@@ -17,14 +17,15 @@ public class SkinCategory {
 
     private String name; // 카테고리 이름
 
-    // cascade 옵션을 끈다 -> 이 객체의 mappings가 변경되어도 DB에 업데이트 쿼리를 날리지 않는다.
-    // skin쪽에서 이미 insert 날리고 있기 때문에 여기서 mapping이 추가됐다고 insert를 또 날리면 안됨.
+    // cascade 옵션 x -> 이 객체의 mappings가 변경되어도 DB에 업데이트 쿼리를 날리지 않는다.
+    // skin쪽에서 이미 mapping을 추가하면서 category에도 mapping을 추가하고 있기 때문에 skinCategory는 그냥 읽기만 하면 됨.
     @OneToMany(mappedBy = "skinCategory")
     private List<SkinCategoryMapping> mappings = new ArrayList<>();
 
-    // 연관관계 메서드 - Skin의 addSkinCategory() 쪽에서도 이걸 호출해야 돼서 public으로 따로 열어놔야 함.
+    // 연관관계 메서드
+    // Skin의 addSkinCategory() 쪽에서도 이걸 호출해야 돼서 public으로 따로 열어놔야 함.
     public void addMapping(SkinCategoryMapping mapping) {
-        this.mappings.add(mapping);
+        mappings.add(mapping);
     }
 
     public void removeMapping(SkinCategoryMapping mapping) {
@@ -37,15 +38,23 @@ public class SkinCategory {
     }
 
     // 생성 메서드
-    public static SkinCategory createSkinCategory(String name, List<Skin> skins) {
+    public static SkinCategory createSkinCategory(String name) {
         SkinCategory skinCategory = new SkinCategory();
         skinCategory.setName(name);
 
-        for (Skin skin : skins) {
-            skin.addCategory(skinCategory);
-        }
-
         return skinCategory;
+    }
+
+    // 비즈니스 로직
+    public void addSkin(Skin skin) {
+        // mappings 변경에 따른 DB 반영은 Skin에서만 일어남. -> mapping을 어디서 추가하는지는 크게 중요하지 않음
+        SkinCategoryMapping mapping = SkinCategoryMapping.createSkinCategoryMapping(skin, this);
+        this.addMapping(mapping);
+        skin.addMapping(mapping);
+    }
+
+    public void removeSkin(Skin skin) {
+        // TODO
     }
 
 }

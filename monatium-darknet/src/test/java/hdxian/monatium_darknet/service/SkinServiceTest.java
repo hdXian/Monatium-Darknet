@@ -1,9 +1,14 @@
 package hdxian.monatium_darknet.service;
 
+import hdxian.monatium_darknet.domain.Skill;
+import hdxian.monatium_darknet.domain.aside.Aside;
+import hdxian.monatium_darknet.domain.aside.AsideSpec;
+import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinGrade;
+import hdxian.monatium_darknet.service.dto.CharacterDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,32 +82,32 @@ class SkinServiceTest {
 
         // when
         // 림 스킨은 1, 2번 카테고리에 속함
-        skinService.addCategoryOnSkin(rim_skin_id, category_id_1);
-        skinService.addCategoryOnSkin(rim_skin_id, category_id_2);
+        skinService.linkSkinAndCategory(rim_skin_id, category_id_1);
+        skinService.linkSkinAndCategory(rim_skin_id, category_id_2);
 
         // 에르핀 스킨은 2, 3번 카테고리에 속함
-        skinService.addCategoryOnSkin(erpin_skin_id, category_id_2);
-        skinService.addCategoryOnSkin(erpin_skin_id, category_id_3);
+        skinService.linkSkinAndCategory(erpin_skin_id, category_id_2);
+        skinService.linkSkinAndCategory(erpin_skin_id, category_id_3);
 
         // then
         // 1번 카테고리 검색 -> 림 스킨
-        List<Skin> result1 = skinService.findSkinByCategoryId(category_id_1);
+        List<Skin> result1 = skinService.findSkinsByCategory(category_id_1);
         assertThat(result1).containsExactly(rim_skin);
 
         // 2번 카테고리 검색 -> 림 스킨, 에르핀 스킨
-        List<Skin> result2 = skinService.findSkinByCategoryId(category_id_2);
+        List<Skin> result2 = skinService.findSkinsByCategory(category_id_2);
         assertThat(result2).containsExactlyInAnyOrder(rim_skin, erpin_skin);
 
         // 3번 카테고리 검색 -> 에르핀 스킨
-        List<Skin> result3 = skinService.findSkinByCategoryId(category_id_3);
+        List<Skin> result3 = skinService.findSkinsByCategory(category_id_3);
         assertThat(result3).containsExactly(erpin_skin);
 
         // 림 스킨 검색 -> 1번, 2번 카테고리
-        List<SkinCategory> result4 = skinService.findCategoryBySkinId(rim_skin_id);
+        List<SkinCategory> result4 = skinService.findCategoriesBySkin(rim_skin_id);
         assertThat(result4).containsExactlyInAnyOrder(category1, category2);
 
         // 에르핀 스킨 검색 -> 2번, 3번 카테고리
-        List<SkinCategory> result5 = skinService.findCategoryBySkinId(erpin_skin_id);
+        List<SkinCategory> result5 = skinService.findCategoriesBySkin(erpin_skin_id);
         assertThat(result5).containsExactlyInAnyOrder(category2, category3);
 
 //        System.out.println("category1 = " + category1.getMappings());
@@ -126,11 +131,11 @@ class SkinServiceTest {
 
         // when
         // 림 스킨 2개, 에르핀 스킨 2개를 추가
-        Long rim_skin_1_id = skinService.createNewSkin(rim_id, "림 스킨1", SkinGrade.NORMAL, "림 스킨1 설명", category_id);
-        Long rim_skin_2_id = skinService.createNewSkin(rim_id, "림 스킨2", SkinGrade.NORMAL, "림 스킨2 설명", category_id);
+        Long rim_skin_1_id = skinService.createNewSkin(rim_id, "림 스킨1", SkinGrade.NORMAL, "림 스킨1 설명");
+        Long rim_skin_2_id = skinService.createNewSkin(rim_id, "림 스킨2", SkinGrade.NORMAL, "림 스킨2 설명");
 
-        Long erpin_skin_1_id = skinService.createNewSkin(erpin_id, "에르핀 스킨1", SkinGrade.NORMAL, "에르핀 스킨1 설명", category_id);
-        Long erpin_skin_2_id = skinService.createNewSkin(erpin_id, "에르핀 스킨2", SkinGrade.NORMAL, "에르핀 스킨2 설명", category_id);
+        Long erpin_skin_1_id = skinService.createNewSkin(erpin_id, "에르핀 스킨1", SkinGrade.NORMAL, "에르핀 스킨1 설명");
+        Long erpin_skin_2_id = skinService.createNewSkin(erpin_id, "에르핀 스킨2", SkinGrade.NORMAL, "에르핀 스킨2 설명");
 
         Skin rim_skin_1 = skinService.findOneSkin(rim_skin_1_id);
         Skin rim_skin_2 = skinService.findOneSkin(rim_skin_2_id);
@@ -139,11 +144,11 @@ class SkinServiceTest {
 
         // then
         // 림 스킨 검색
-        List<Skin> rim_skins = skinService.findSkinByCharacterId(rim_id);
+        List<Skin> rim_skins = skinService.findSkinsByCharacter(rim_id);
         assertThat(rim_skins).containsExactlyInAnyOrder(rim_skin_1, rim_skin_2);
 
         // 에르핀 스킨 검색
-        List<Skin> erpin_skins = skinService.findSkinByCharacterId(erpin_id);
+        List<Skin> erpin_skins = skinService.findSkinsByCharacter(erpin_id);
         assertThat(erpin_skins).containsExactlyInAnyOrder(erpin_skin_1, erpin_skin_2);
 
         // 전체 스킨 검색
@@ -162,6 +167,66 @@ class SkinServiceTest {
         // then
         SkinCategory find_category = skinService.findOneCategory(saved_category_id);
         assertThat(find_category.getName()).isEqualTo("상시판매");
+    }
+
+    static CharacterDto generateCharDto(String name) {
+        // 능력치 (하드코딩)
+        CharacterStat stat = new CharacterStat(7, 3, 4);
+
+        // 일반공격
+        Attack normalAttack = Attack.createNormalAttack(name+" 일반공격설명");
+        normalAttack.addAttribute(name+" 일반공격 속성", "50%");
+
+        // 강화 공격
+        Attack enhancedAttack = Attack.createEnhancedAttack(name+" 강화공격설명");
+        enhancedAttack.addAttribute(name+" 강화공격 속성", "15%");
+        enhancedAttack.addAttribute(name+" 강화공격 속성2", "40%");
+
+        // 저학년 스킬
+        Skill lowSkill = Skill.createLowSkill(name+" 저학년스킬", name + "저학년스킬 설명", name + "저학년스킬 이미지 url");
+        lowSkill.addAttribute(name+" 저학년스킬 속성", "350%");
+
+        // 고학년 스킬
+        Skill highSkill = Skill.createHighSkill(name+" 고학년스킬", name+" 고학년스킬 설명", 15, "고학년스킬 이미지 url");
+        highSkill.addAttribute(name+"고학년스킬 속성", "525%");
+
+        // 이미지 url들
+        CharacterUrl urls = new CharacterUrl(name+"portrait_url", name+"profile_url", name+"body_url");
+
+        // 어사이드
+        AsideSpec level1 = AsideSpec.createAsideSpec(name + "어사이드1레벨", name + "어사이드1레벨 설명");
+        level1.addAttribute("어사이드 1단계 속성", "111%");
+
+        AsideSpec level2 = AsideSpec.createAsideSpec(name + "어사이드2레벨", name + "어사이드2레벨 설명");
+        level2.addAttribute("어사이드 2단계 속성", "222%");
+
+        AsideSpec level3 = AsideSpec.createAsideSpec(name + "어사이드3레벨", name + "어사이드3레벨 설명");
+        level3.addAttribute("어사이드 3단계 속성", "333%");
+
+        Aside aside = Aside.createAside(name + "어사이드", name + "어사이드 설명", level1, level2, level3);
+
+        CharacterDto dto = new CharacterDto();
+        dto.setName(name);
+        dto.setSubtitle(name+"수식언");
+        dto.setCv(name+"성우");
+        dto.setGrade(3);
+        dto.setQuote(name+"한마디");
+        dto.setTmi(name+"tmi");
+        dto.setFavorite(name+"최애");
+        dto.setRace(Race.FAIRY);
+        dto.setPersonality(Personality.PURE);
+        dto.setRole(Role.DEALER);
+        dto.setAttackType(AttackType.MAGICAL);
+        dto.setPosition(Position.BACK);
+        dto.setStat(stat);
+        dto.setNormalAttack(normalAttack);
+        dto.setEnhancedAttack(enhancedAttack);
+        dto.setLowSKill(lowSkill);
+        dto.setHighSkill(highSkill);
+        dto.setAside(aside);
+        dto.setUrls(urls);
+
+        return dto;
     }
 
     static Character generateMockChar(String name) {

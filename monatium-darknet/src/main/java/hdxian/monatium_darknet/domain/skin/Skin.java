@@ -26,18 +26,33 @@ public class Skin {
     @JoinColumn(name = "character_id")
     private Character character;
 
-    @OneToMany(mappedBy = "skin", cascade = CascadeType.ALL, orphanRemoval = true) // skin을 통해 mapping을 추가 (연관관계 비주인)
+    @OneToMany(mappedBy = "skin", cascade = CascadeType.ALL, orphanRemoval = true) // skin을 통해 추가한 mapping이 DB에 반영됨.
     private List<SkinCategoryMapping> mappings = new ArrayList<>();
 
     // 연관관계 메서드 - SkinCategory의 addSkin() 쪽에서도 이걸 호출해야 돼서 public으로 따로 열어놔야 함.
     public void addMapping(SkinCategoryMapping mapping) {
         // TODO - mapping이 null일 때에 대한 예외 로직 추가 검토
-        this.mappings.add(mapping);
+        mappings.add(mapping);
     }
 
     public void removeMapping(SkinCategoryMapping mapping) {
         mappings.remove(mapping);
         mapping.setSkin(null);
+    }
+
+    // for JPA spec (비즈니스 로직에서 사용 x)
+    protected Skin() {
+    }
+
+    // 생성 메서드
+    public static Skin createSkin(String name, SkinGrade grade, String description, Character character) {
+        Skin skin = new Skin();
+        skin.setName(name);
+        skin.setGrade(grade);
+        skin.setDescription(description);
+        skin.setCharacter(character);
+
+        return skin;
     }
 
     // 비즈니스 로직
@@ -50,26 +65,6 @@ public class Skin {
 
     public void removeCategory(SkinCategory category) {
         // TODO
-    }
-
-    // for JPA spec (비즈니스 로직에서 사용 x)
-    protected Skin() {
-    }
-
-    // 생성 메서드
-    public static Skin createSkin(String name, SkinGrade grade, String description, Character character, List<SkinCategory> categories) {
-        Skin skin = new Skin();
-        skin.setName(name);
-        skin.setGrade(grade);
-        skin.setDescription(description);
-        skin.setCharacter(character);
-
-        // 매핑 생성 및 연관관계 설정
-        for (SkinCategory category : categories) {
-            skin.addCategory(category);
-        }
-
-        return skin;
     }
 
 }
