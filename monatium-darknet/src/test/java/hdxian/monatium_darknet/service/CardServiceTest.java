@@ -41,7 +41,7 @@ class CardServiceTest {
         Long saved_id = cardService.addArtifactCard(card);
 
         // then
-        ArtifactCard find_card = cardService.findOneArtifact(saved_id);
+        ArtifactCard find_card = cardService.findOneArtifactCard(saved_id);
         assertThat(find_card.getName()).isEqualTo("아티팩트카드");
         assertThat(find_card).isEqualTo(card);
     }
@@ -62,7 +62,7 @@ class CardServiceTest {
         Long savedId = cardService.addArtifactCard(artifactCard, id_rim, attachmentSkill);
 
         // then
-        ArtifactCard card = cardService.findOneArtifact(savedId);
+        ArtifactCard card = cardService.findOneArtifactCard(savedId);
         assertThat(card.getName()).isEqualTo("림의 낫");
         assertThat(card).isEqualTo(artifactCard);
 
@@ -141,7 +141,7 @@ class CardServiceTest {
                 .isInstanceOf(NoSuchElementException.class);
 
         // 스펠 카드 id로 아티팩트 카드를 검색
-        assertThatThrownBy(() -> cardService.findOneArtifact(saved_spell_id))
+        assertThatThrownBy(() -> cardService.findOneArtifactCard(saved_spell_id))
                 .isInstanceOf(NoSuchElementException.class);
 
     }
