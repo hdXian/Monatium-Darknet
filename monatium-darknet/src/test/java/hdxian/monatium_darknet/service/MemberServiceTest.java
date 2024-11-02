@@ -151,6 +151,6 @@ class MemberServiceTest {
                 .hasMessage("해당 닉네임으로 회원을 찾을 수 없습니다.");
     }
 
-    // TODO - 수정, 삭제 기능 추가 시 해탕 기능 테스트 필요
+    // TODO - 수정, 삭제 기능 추가 시 해당 기능 테스트 필요
 
 }

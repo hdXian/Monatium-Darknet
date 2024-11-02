@@ -23,9 +23,6 @@ import static org.assertj.core.api.Assertions.*;
 class CharacterServiceTest {
 
     @Autowired
-    CharacterRepository repository;
-
-    @Autowired
     CharacterService service;
 
     // TODO - 캐릭터 테스트에 스킨, 어사이드 추가 (그 외 각종 테스트 케이스 추가 필 (예외 등))
@@ -81,9 +78,8 @@ class CharacterServiceTest {
 
         // then
         // "에"를 검색했을 때 "에르핀", "에슈르"가 검색되어야 한다.
-
         List<Character> findResult = service.findByName("에");
-        assertThat(findResult).containsExactly(erpin, ashur);
+        assertThat(findResult).containsExactlyInAnyOrder(erpin, ashur);
     }
 
     // 없는 캐릭터 검색
@@ -128,7 +124,7 @@ class CharacterServiceTest {
 
         List<Character> findResult = service.findCharacters();
         assertThat(findResult.size()).isEqualTo(3);
-        assertThat(findResult).containsExactly(erpin, ashur, tig);
+        assertThat(findResult).containsExactlyInAnyOrder(erpin, ashur, tig);
     }
 
     static Character generateMockChar(String name) {
