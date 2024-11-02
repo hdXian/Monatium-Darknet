@@ -57,6 +57,7 @@ public class Skin {
 
     // 비즈니스 로직
     // mapping 생성(내부적으로 skin, category 지정) -> 자신의 mappings에 mapping 추가 -> Category의 mappings에 mapping 추가
+    // 이 mapping이 skin에 추가되면 DB에 반영됨 (csacade), 트랜잭션 외부에서 이 메서드를 호출하는 것은 무의미함.
     public void addCategory(SkinCategory category) {
         SkinCategoryMapping mapping = SkinCategoryMapping.createSkinCategoryMapping(this, category);
         this.addMapping(mapping);

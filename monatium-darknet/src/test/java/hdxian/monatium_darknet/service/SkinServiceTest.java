@@ -13,9 +13,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -35,48 +37,81 @@ class SkinServiceTest {
 //    @Rollback(value = false)
     void createNewSkin() {
         // given
-        Character rim = generateMockChar("림");
-        Long rim_id = characterService.createNewCharacter(rim);
+        CharacterDto rimDto = generateCharDto("림");
+        Long rim_id = characterService.createNewCharacter(rimDto);
+        Character rim = characterService.findOne(rim_id);
 
         // when
-        Long saved_skin_id = skinService.createNewSkin(rim_id, "라크로스 림크로스", SkinGrade.NORMAL, "라크로스 림크로스 설명");
+        SkinDto skinDto = generateSkinDto("라크로스 림크로스", SkinGrade.NORMAL);
+        Long savedSkinId = skinService.createNewSkin(rim_id, skinDto);
 
         // then
-        Skin find_skin = skinService.findOneSkin(saved_skin_id);
-        Character findCharacter = find_skin.getCharacter();
+        Skin findSkin = skinService.findOneSkin(savedSkinId);
 
         // 림의 스킨이 맞는가?
-        assertThat(findCharacter).isEqualTo(rim);
-        assertThat(findCharacter.getName()).isEqualTo("림");
+        assertThat(findSkin.getCharacter().getName()).isEqualTo(rim.getName());
+        assertThat(findSkin.getCharacter()).isEqualTo(rim);
 
         // 스킨 정보는 맞는가?
-        assertThat(find_skin.getName()).isEqualTo("라크로스 림크로스");
-        assertThat(find_skin.getGrade()).isEqualTo(SkinGrade.NORMAL);
-        assertThat(find_skin.getDescription()).isEqualTo("라크로스 림크로스 설명");
+        assertThat(findSkin.getName()).isEqualTo(skinDto.getName());
+        assertThat(findSkin.getGrade()).isEqualTo(skinDto.getGrade());
+        assertThat(findSkin.getDescription()).isEqualTo(skinDto.getDescription());
+
+        // 없는 스킨 id에 대해 검색하면 예외 발생
+        Long noneSkinId = -1L;
+        assertThatThrownBy(() -> skinService.findOneSkin(noneSkinId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 스킨이 존재하지 않습니다. skinId=" + noneSkinId);
     }
 
     @Test
-    @DisplayName("스킨 검색, 카테고리 검색")
+    @DisplayName("스킨 카테고리 추가")
+//    @Rollback(value = false)
+    void newCategory() {
+        // given
+        Long saved_category_id = skinService.createNewSkinCategory("상시판매");
+
+        // when
+        SkinCategory find_category = skinService.findOneCategory(saved_category_id);
+
+        // then
+        assertThat(find_category.getName()).isEqualTo("상시판매");
+
+        // 없는 카테고리 id를 검색하면 예외 발생
+        Long noneCategoryId = -1L;
+        assertThatThrownBy(() -> skinService.findOneCategory(noneCategoryId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 스킨 카테고리가 존재하지 않습니다. categoryId=" + noneCategoryId);
+    }
+
+    @Test
+    @DisplayName("스킨, 카테고리 복합 검색")
 //    @Rollback(value = false)
     void addCategories() {
         // given
-        Character rim = generateMockChar("림");
-        Long rim_id = characterService.createNewCharacter(rim);
+        CharacterDto rimDto = generateCharDto("림");
+        Long rim_id = characterService.createNewCharacter(rimDto);
+        Character rim = characterService.findOne(rim_id);
 
-        Character erpin = generateMockChar("에르핀");
-        Long erpin_id = characterService.createNewCharacter(erpin);
+        CharacterDto erpinDto = generateCharDto("에르핀");
+        Long erpin_id = characterService.createNewCharacter(erpinDto);
+        Character erpin = characterService.findOne(erpin_id);
 
         // 카테고리 3개
-        Long category_id_1 = skinService.createNewCategory("상시판매");
-        Long category_id_2 = skinService.createNewCategory("할인중");
-        Long category_id_3 = skinService.createNewCategory("판매종료");
+        Long category_id_1 = skinService.createNewSkinCategory("상시판매");
+        Long category_id_2 = skinService.createNewSkinCategory("할인중");
+        Long category_id_3 = skinService.createNewSkinCategory("판매종료");
+
         SkinCategory category1 = skinService.findOneCategory(category_id_1);
         SkinCategory category2 = skinService.findOneCategory(category_id_2);
         SkinCategory category3 = skinService.findOneCategory(category_id_3);
 
         // 스킨 2개
-        Long rim_skin_id = skinService.createNewSkin(rim_id, "라크로스 림크로스", SkinGrade.NORMAL, "라크로스 림크로스 설명");
-        Long erpin_skin_id = skinService.createNewSkin(erpin_id, "하드워킹 홀리데이", SkinGrade.NORMAL, "하드워킹 홀리데이 설명");
+        SkinDto skinDto1 = generateSkinDto("라크로스 림크로스", SkinGrade.NORMAL);
+        SkinDto skinDto2 = generateSkinDto("하드워킹 홀리데이", SkinGrade.NORMAL);
+        Long rim_skin_id = skinService.createNewSkin(rim_id, skinDto1);
+        Long erpin_skin_id = skinService.createNewSkin(erpin_id, skinDto2);
+
         Skin rim_skin = skinService.findOneSkin(rim_skin_id);
         Skin erpin_skin = skinService.findOneSkin(erpin_skin_id);
 
@@ -110,9 +145,20 @@ class SkinServiceTest {
         List<SkinCategory> result5 = skinService.findCategoriesBySkin(erpin_skin_id);
         assertThat(result5).containsExactlyInAnyOrder(category2, category3);
 
-//        System.out.println("category1 = " + category1.getMappings());
-//        System.out.println("category2 = " + category2.getMappings());
-//        System.out.println("category3 = " + category3.getMappings());
+
+        // 없는 스킨, 없는 카테고리에 대한 관계 등록 시 예외 발생
+        Long nonSkinId = -1L;
+        Long nonCategoryId = -1L;
+
+        // 없는 카테고리에 대해 스킨 추가
+        assertThatThrownBy(() -> skinService.linkSkinAndCategory(rim_skin_id, nonCategoryId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 스킨 카테고리가 존재하지 않습니다. categoryId=" + nonCategoryId);
+
+        // 없는 스킨에 대해 카테고리 추가
+        assertThatThrownBy(() -> skinService.linkSkinAndCategory(nonSkinId, category_id_1))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 스킨이 존재하지 않습니다. skinId=" + nonSkinId);
     }
 
     // 캐릭터 기반 스킨 검색
@@ -121,26 +167,32 @@ class SkinServiceTest {
 //    @Rollback(value = false)
     void findByCharacter() {
         // given
-        Character rim = generateMockChar("림");
-        Character erpin = generateMockChar("에르핀");
+        CharacterDto rimDto = generateCharDto("림");
+        Long rim_id = characterService.createNewCharacter(rimDto);
+        Character rim = characterService.findOne(rim_id);
 
-        Long rim_id = characterService.createNewCharacter(rim);
-        Long erpin_id = characterService.createNewCharacter(erpin);
+        CharacterDto erpinDto = generateCharDto("에르핀");
+        Long erpin_id = characterService.createNewCharacter(erpinDto);
+        Character erpin = characterService.findOne(erpin_id);
 
-        Long category_id = skinService.createNewCategory("상시판매");
+        Long category_id = skinService.createNewSkinCategory("상시판매");
 
         // when
         // 림 스킨 2개, 에르핀 스킨 2개를 추가
-        Long rim_skin_1_id = skinService.createNewSkin(rim_id, "림 스킨1", SkinGrade.NORMAL, "림 스킨1 설명");
-        Long rim_skin_2_id = skinService.createNewSkin(rim_id, "림 스킨2", SkinGrade.NORMAL, "림 스킨2 설명");
+        SkinDto rimSkinDto1 = generateSkinDto("림 스킨1", SkinGrade.NORMAL);
+        SkinDto rimSkinDto2 = generateSkinDto("림 스킨2", SkinGrade.KKOGGA);
+        Long rimSkinId1 = skinService.createNewSkin(rim_id, rimSkinDto1);
+        Long rimSkinId2 = skinService.createNewSkin(rim_id, rimSkinDto2);
 
-        Long erpin_skin_1_id = skinService.createNewSkin(erpin_id, "에르핀 스킨1", SkinGrade.NORMAL, "에르핀 스킨1 설명");
-        Long erpin_skin_2_id = skinService.createNewSkin(erpin_id, "에르핀 스킨2", SkinGrade.NORMAL, "에르핀 스킨2 설명");
+        SkinDto erpinSkinDto1 = generateSkinDto("에르핀 스킨1", SkinGrade.NORMAL);
+        SkinDto erpinSkinDto2 = generateSkinDto("에르핀 스킨2", SkinGrade.KKOGGA);
+        Long erpinSkinId1 = skinService.createNewSkin(erpin_id, erpinSkinDto1);
+        Long erpinSkinId2 = skinService.createNewSkin(erpin_id, erpinSkinDto2);
 
-        Skin rim_skin_1 = skinService.findOneSkin(rim_skin_1_id);
-        Skin rim_skin_2 = skinService.findOneSkin(rim_skin_2_id);
-        Skin erpin_skin_1 = skinService.findOneSkin(erpin_skin_1_id);
-        Skin erpin_skin_2 = skinService.findOneSkin(erpin_skin_2_id);
+        Skin rim_skin_1 = skinService.findOneSkin(rimSkinId1);
+        Skin rim_skin_2 = skinService.findOneSkin(rimSkinId2);
+        Skin erpin_skin_1 = skinService.findOneSkin(erpinSkinId1);
+        Skin erpin_skin_2 = skinService.findOneSkin(erpinSkinId2);
 
         // then
         // 림 스킨 검색
@@ -156,17 +208,14 @@ class SkinServiceTest {
         assertThat(all).containsExactlyInAnyOrder(rim_skin_1, rim_skin_2, erpin_skin_1, erpin_skin_2);
     }
 
-    @Test
-    @DisplayName("스킨 카테고리 추가")
-//    @Rollback(value = false)
-    void addCategory() {
-        // given
-        // when
-        Long saved_category_id = skinService.createNewCategory("상시판매");
 
-        // then
-        SkinCategory find_category = skinService.findOneCategory(saved_category_id);
-        assertThat(find_category.getName()).isEqualTo("상시판매");
+    static SkinDto generateSkinDto(String name, SkinGrade grade) {
+        SkinDto dto = new SkinDto();
+        dto.setName(name);
+        dto.setGrade(grade);
+        dto.setDescription(name + " 스킨 설명");
+
+        return dto;
     }
 
     static CharacterDto generateCharDto(String name) {
@@ -227,11 +276,6 @@ class SkinServiceTest {
         dto.setUrls(urls);
 
         return dto;
-    }
-
-    static Character generateMockChar(String name) {
-        return Character.createCharacter(name, null, null, 0, null, null, null,
-                null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
 }

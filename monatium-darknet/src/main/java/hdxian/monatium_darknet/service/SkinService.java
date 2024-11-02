@@ -28,17 +28,6 @@ public class SkinService {
 
     // 스킨 추가
     @Transactional
-    public Long createNewSkin(Long characterId, String name, SkinGrade grade, String description) {
-
-        // 필요 엔티티 조회
-        Character character = characterService.findOne(characterId);
-
-        Skin skin = Skin.createSkin(name, grade, description, character);
-
-        return skinRepository.save(skin);
-    }
-
-    @Transactional
     public Long createNewSkin(Long characterId, SkinDto skinDto) {
         Character character = characterService.findOne(characterId);
 
@@ -56,7 +45,7 @@ public class SkinService {
 
     // 카테고리 추가
     @Transactional
-    public Long createNewCategory(String name) {
+    public Long createNewSkinCategory(String name) {
 
         SkinCategory skinCategory = SkinCategory.createSkinCategory(name);
 
