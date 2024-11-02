@@ -2,7 +2,6 @@ package hdxian.monatium_darknet.service;
 
 import hdxian.monatium_darknet.domain.Attribute;
 import hdxian.monatium_darknet.domain.Skill;
-import hdxian.monatium_darknet.domain.SkillCategory;
 import hdxian.monatium_darknet.domain.card.ArtifactCard;
 import hdxian.monatium_darknet.domain.card.Card;
 import hdxian.monatium_darknet.domain.card.SpellCard;
@@ -29,21 +28,21 @@ public class CardService {
     // 카드 저장 기능
     // TODO - 인자 Card 타입이 아니라 Dto로 만들어서 넣기
     @Transactional
-    public Long addSpellCard(SpellCard card) {
+    public Long createNewSpellCard(SpellCard card) {
         return cardRepository.save(card);
     }
 
     // 애착 사도 없는 아티팩트 카드
     // TODO - 인자 Card 타입이 아니라 Dto로 만들어서 넣기
     @Transactional
-    public Long addArtifactCard(ArtifactCard card) {
+    public Long createNewArtifactCard(ArtifactCard card) {
         return cardRepository.save(card);
     }
 
     // 애착 사도가 있는 아티팩트 카드는 아티팩트 사도와 스킬을 추가해야 함.
     // TODO - 인자 Card 타입이 아니라 Dto로 만들어서 넣기
     @Transactional
-    public Long addArtifactCard(ArtifactCard card, Long characterId, Skill attachmentSkill) {
+    public Long createNewArtifactCard(ArtifactCard card, Long characterId, Skill attachmentSkill) {
         Character character = characterService.findOne(characterId);
 
         // 애착 사도와 아티팩트 추가
@@ -54,7 +53,7 @@ public class CardService {
     }
 
     @Transactional
-    public Long addSpellCard(SpellCardDto cardDto) {
+    public Long createNewSpellCard(SpellCardDto cardDto) {
         SpellCard spellCard = SpellCard.createSpellCard(
                 cardDto.getName(),
                 cardDto.getGrade(),
@@ -69,7 +68,7 @@ public class CardService {
     }
 
     @Transactional
-    public Long createNewArtifact(ArtifactCardDto cardDto) {
+    public Long createNewArtifactCard(ArtifactCardDto cardDto) {
         ArtifactCard artifactCard = ArtifactCard.createArtifactCard(
                 cardDto.getName(),
                 cardDto.getGrade(),
@@ -86,7 +85,7 @@ public class CardService {
     }
 
     @Transactional
-    public Long createNewArtifact(ArtifactCardDto cardDto, Long characterId, Skill attachmentSkill) {
+    public Long createNewArtifactCard(ArtifactCardDto cardDto, Long characterId, Skill attachmentSkill) {
 
         Character character = characterService.findOne(characterId);
 
@@ -133,16 +132,16 @@ public class CardService {
     }
 
     @Transactional
-    public Long updateArtifactCard(Long cardId, ArtifactCardDto updateParam, Long characterId, Skill attachmentSkill) {
+    public Long updateArtifactCard(Long cardId, ArtifactCardDto updateParam, Long updateCharacterId, Skill updateSkill) {
         Optional<ArtifactCard> find = cardRepository.findOneArtifact(cardId);
         if (find.isEmpty()) {
             throw new NoSuchElementException("해당 아티팩트 카드가 존재하지 않습니다. id=" + cardId);
         }
 
-        Character character = characterService.findOne(characterId);
+        Character character = characterService.findOne(updateCharacterId);
 
         ArtifactCard artifactCard = find.get();
-        updateCard(artifactCard, updateParam, character, attachmentSkill);
+        updateCard(artifactCard, updateParam, character, updateSkill);
 
         return artifactCard.getId();
     }
