@@ -39,7 +39,7 @@ public class SkinRepository {
     }
 
     // 해당 캐릭터의 스킨 검색
-    public List<Skin> findByCharacter(Long characterId) {
+    public List<Skin> findByCharacterId(Long characterId) {
         String jpql = "select s from Skin s where s.character.id = :characterId";
 
         return em.createQuery(jpql, Skin.class)
@@ -48,7 +48,7 @@ public class SkinRepository {
     }
 
     // 카테고리에 속하는 스킨 검색
-    public List<Skin> findBySkinCategory(Long skinCategoryId) {
+    public List<Skin> findBySkinCategoryId(Long skinCategoryId) {
         // TODO - 성능 최적화를 위해 fetch join 도입 고려
         String jpql = "select s from Skin s" + " " +
                 "join s.mappings sm" + " " + // on s.id = sm.skin_id 등 조인 조건 필요 x. 엔티티 관계에 따라 자동으로 조인을 수행함.

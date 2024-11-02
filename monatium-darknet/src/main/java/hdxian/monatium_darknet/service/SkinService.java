@@ -49,22 +49,29 @@ public class SkinService {
         return skinRepository.save(skin);
     }
 
-    // 스킨에 카테고리 추가
     @Transactional
-    public void addCategoryOnSkin(Long skinId, Long categoryId) {
-        Optional<Skin> findSkin = skinRepository.findOne(skinId);
-        Optional<SkinCategory> findCategory = categoryRepository.findOne(categoryId);
-        if (findSkin.isEmpty()) {
-            throw new NoSuchElementException("해당 스킨이 존재하지 않습니다. skinId=" + skinId);
-        }
-        if (findCategory.isEmpty()) {
-            throw new NoSuchElementException("해당 스킨 카테고리가 존재하지 않습니다. categoryId=" + categoryId);
+    public Long createNewSkin(Long characterId, SkinDto skinDto, List<Long> skinCategoryIds) {
+        Character character = characterService.findOne(characterId);
+
+        List<SkinCategory> categories = new ArrayList<>();
+
+        for (Long categoryId : skinCategoryIds) {
+            Optional<SkinCategory> findCategory = categoryRepository.findOne(categoryId);
+            if (findCategory.isEmpty()) {
+                throw new NoSuchElementException("해당 스킨 카테고리가 존재하지 않습니다. id=" + categoryId);
+            }
+            categories.add(findCategory.get());
         }
 
-        Skin skin = findSkin.get();
-        SkinCategory category = findCategory.get();
-        skin.addCategory(category);
-        skinRepository.save(skin);
+        Skin skin = Skin.createSkin(
+                skinDto.getName(),
+                skinDto.getGrade(),
+                skinDto.getDescription(),
+                character,
+                categories
+        );
+
+        return skinRepository.save(skin);
     }
 
     // 카테고리 추가
@@ -86,6 +93,24 @@ public class SkinService {
         return categoryRepository.save(skinCategory);
     }
 
+    // 스킨에 카테고리 추가
+    @Transactional
+    public void addCategoryOnSkin(Long skinId, Long categoryId) {
+        Optional<Skin> findSkin = skinRepository.findOne(skinId);
+        Optional<SkinCategory> findCategory = categoryRepository.findOne(categoryId);
+        if (findSkin.isEmpty()) {
+            throw new NoSuchElementException("해당 스킨이 존재하지 않습니다. skinId=" + skinId);
+        }
+        if (findCategory.isEmpty()) {
+            throw new NoSuchElementException("해당 스킨 카테고리가 존재하지 않습니다. categoryId=" + categoryId);
+        }
+
+        Skin skin = findSkin.get();
+        SkinCategory category = findCategory.get();
+        skin.addCategory(category);
+        skinRepository.save(skin);
+    }
+
     // 스킨을 검색
     public Skin findOneSkin(Long skinId) {
         Optional<Skin> find = skinRepository.findOne(skinId);
@@ -97,11 +122,11 @@ public class SkinService {
     }
 
     public List<Skin> findSkinByCategoryId(Long categoryId) {
-        return skinRepository.findBySkinCategory(categoryId);
+        return skinRepository.findBySkinCategoryId(categoryId);
     }
 
     public List<Skin> findSkinByCharacterId(Long characterId) {
-        return skinRepository.findByCharacter(characterId);
+        return skinRepository.findByCharacterId(characterId);
     }
 
     public List<Skin> findAllSkin() {
@@ -119,7 +144,7 @@ public class SkinService {
 
     // 스킨 카테고리 여러개 검색
     public List<SkinCategory> findCategoryBySkinId(Long skinId) {
-        return categoryRepository.findBySkin(skinId);
+        return categoryRepository.findBySkinId(skinId);
     }
 
     public List<SkinCategory> findAllCategories() {

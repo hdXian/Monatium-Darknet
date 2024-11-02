@@ -16,7 +16,6 @@ public class SkinCategoryRepository {
     private final EntityManager em;
 
     // 카테고리 추가
-    // TODO - persist, merge 구분해야 함
     public Long save(SkinCategory category) {
         if (category.getId() == null) {
             em.persist(category);
@@ -35,7 +34,7 @@ public class SkinCategoryRepository {
     }
 
     // Skin이 속하는 카테고리 검색
-    public List<SkinCategory> findBySkin(Long skinId) {
+    public List<SkinCategory> findBySkinId(Long skinId) {
         // TODO - 성능 최적화를 위해 fetch join 도입 고려
         String jpql = "select sc from SkinCategory sc" + " "
                 + "join sc.mappings scm" + " "
