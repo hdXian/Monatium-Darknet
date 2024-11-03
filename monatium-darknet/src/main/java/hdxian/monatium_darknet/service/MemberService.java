@@ -20,15 +20,6 @@ public class MemberService {
 
     // 회원 추가 기능
     @Transactional
-    public Long createNewMember(Member member) {
-
-        checkLoginId(member.getLoginId());
-        checkNickname(member.getNickName());
-
-        return memberRepository.save(member);
-    }
-
-    @Transactional
     public Long createNewMember(MemberDto memberDto) {
 
         checkLoginId(memberDto.getLoginId());
