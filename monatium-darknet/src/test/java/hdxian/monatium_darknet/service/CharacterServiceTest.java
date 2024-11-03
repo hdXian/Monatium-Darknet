@@ -5,6 +5,7 @@ import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.aside.AsideSpec;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.domain.skin.SkinGrade;
 import hdxian.monatium_darknet.repository.CharacterRepository;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import org.junit.jupiter.api.DisplayName;
@@ -22,6 +23,9 @@ import static org.assertj.core.api.Assertions.*;
 @SpringBootTest
 @Transactional
 class CharacterServiceTest {
+
+    @Autowired
+    SkinService skinService;
 
     @Autowired
     CharacterService service;
@@ -178,9 +182,41 @@ class CharacterServiceTest {
      *
      * updateDto의 normalAttack = hdxian.monatium_darknet.domain.character.Attack@16817bad
      * 변경 후 erpin의 normalAttack = hdxian.monatium_darknet.domain.character.Attack@17c3e33
-     * 새로 추가한 경우 -> Dto의 Attack 객체가 그대로 엔티티로 들어감. (영속화)
-     * 변경한 경우 -> 기존 엔티티의 필드를 불러와 값만 변경함. -> 필드 객체가 변하지 않음. (updateDto의 normatAttack과 erpin 엔티티의 normalAttack이 달라야 함.)
+     * erpin을 새로 추가한 경우 -> Dto 안의 Attack 객체가 그대로 엔티티로 들어감. (영속화)
+     * erpin을 변경한 경우 -> 기존 엔티티의 필드를 불러와 값만 변경함. -> 필드 객체가 변하지 않음. (updateDto의 normatAttack과 erpin 엔티티의 normalAttack이 달라야 함.)
      */
+
+    // 캐릭터 삭제
+    // 어사이드, 공격, 스킬, 애착 아티팩트 카드, 스킨 데이터 어떻게 삭제되는지 확인 필요
+    @Test
+    @DisplayName("캐릭터 삭제")
+    @Rollback(value = false)
+    void delete() {
+        // given
+        CharacterDto charDto = generateCharDto("림");
+        Long rim_id = service.createNewCharacter(charDto);
+
+        SkinDto skinDto = generateSkinDto("라크로스 림크로스", SkinGrade.NORMAL);
+        Long skin_id = skinService.createNewSkin(rim_id, skinDto); // 림 스킨 추가
+
+        Long category_id = skinService.createNewSkinCategory("상시판매");
+        skinService.linkSkinAndCategory(skin_id, category_id);
+
+        // when
+        service.deleteCharacter(rim_id);
+
+        // then
+
+    }
+
+    static SkinDto generateSkinDto(String name, SkinGrade grade) {
+        SkinDto dto = new SkinDto();
+        dto.setName(name);
+        dto.setGrade(grade);
+        dto.setDescription(name + " 스킨 설명");
+
+        return dto;
+    }
 
 
     static CharacterDto generateCharDto(String name) {

@@ -211,7 +211,7 @@ class SkinServiceTest {
     // TODO - 스킨 업데이트 기능 테스트 추가
     @Test
     @DisplayName("스킨 업데이트")
-    @Rollback(value = false)
+//    @Rollback(value = false)
     void update() {
         // given
         CharacterDto rimDto = generateCharDto("림");
@@ -265,7 +265,7 @@ class SkinServiceTest {
 
     @Test
     @DisplayName("스킨 카테고리 변경")
-    @Rollback(value = false)
+//    @Rollback(value = false)
     void update3() {
         // given
         CharacterDto charDto1 = generateCharDto("사도1");

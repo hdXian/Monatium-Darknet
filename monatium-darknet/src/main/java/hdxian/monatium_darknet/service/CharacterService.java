@@ -22,15 +22,7 @@ public class CharacterService {
 
     private final CharacterRepository characterRepository;
 
-    // 단순 위임 로직 (아직까지는)
-
     // 캐릭터 추가 기능
-    // 내가봤을때 얘도 Dto로 처리해야 함. 혹은 createCharacter...
-    @Transactional
-    public Long createNewCharacter(Character character) {
-        return characterRepository.save(character);
-    }
-
     @Transactional
     public Long createNewCharacter(CharacterDto chDto) {
         Character ch = Character.createCharacter(
@@ -95,6 +87,11 @@ public class CharacterService {
 
 //        return characterRepository.save(ch);
         return ch.getId(); // ***중요 -> em.find()를 통해 찾아온 엔티티는 merge로 업데이트하면 안됨. (이해는 안됨. 추가 학습 필요)
+    }
+
+    @Transactional
+    public void deleteCharacter(Long characterId) {
+        characterRepository.delete(characterId);
     }
 
     // 스킬 변경

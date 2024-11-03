@@ -50,7 +50,8 @@ public class Skin {
         skin.setName(name);
         skin.setGrade(grade);
         skin.setDescription(description);
-        skin.setCharacter(character);
+//        skin.setCharacter(character);
+        character.addSkin(skin); // 연관관계 메서드
 
         return skin;
     }

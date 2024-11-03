@@ -2,9 +2,13 @@ package hdxian.monatium_darknet.domain.character;
 
 import hdxian.monatium_darknet.domain.*;
 import hdxian.monatium_darknet.domain.aside.Aside;
+import hdxian.monatium_darknet.domain.skin.Skin;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -61,6 +65,9 @@ public class Character {
     @JoinColumn(name = "aside_id")
     private Aside aside; // 어사이드
 
+    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Skin> skins = new ArrayList<>();
+
     @Embedded
     private CharacterUrl urls; // 이미지 url
 
@@ -69,6 +76,16 @@ public class Character {
     }
 
     // 연관관계 메서드 (nulls allowed)
+    public void addSkin(Skin skin) {
+        skins.add(skin);
+        skin.setCharacter(this);
+    }
+
+    public void removeSkin(Skin skin) {
+        skins.remove(skin);
+        skin.setCharacter(null);
+    }
+
     public void setAside(Aside aside) {
         if (aside != null) {
             this.aside = aside; // setAside() 호출하면 안됨. 무한재귀임.
