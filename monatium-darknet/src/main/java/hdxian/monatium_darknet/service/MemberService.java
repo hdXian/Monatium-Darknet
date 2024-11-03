@@ -41,10 +41,16 @@ public class MemberService {
             throw new NoSuchElementException("해당 회원을 찾을 수 없습니다. id=" + id);
         }
 
-        checkLoginId(updateParam.getLoginId());
-        checkNickname(updateParam.getNickName());
-
         Member member = find.get();
+
+        // 로그인 아이디, 닉네임을 변경하는 경우
+        if (!(member.getLoginId().equals(updateParam.getLoginId()))) {
+            checkLoginId(updateParam.getLoginId());
+        }
+        if (!(member.getNickName().equals(updateParam.getNickName()))) {
+            checkNickname(updateParam.getNickName());
+        }
+
         member.setLoginId(updateParam.getLoginId());
         member.setPassword(updateParam.getPassword());
         member.setNickName(updateParam.getNickName());
@@ -83,14 +89,14 @@ public class MemberService {
     private void checkNickname(String nickName) {
         List<Member> find = memberRepository.findByNickname(nickName);
         if (!find.isEmpty()) {
-            throw new IllegalStateException("이미 사용 중인 닉네임입니다.");
+            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다. nickname=" + nickName);
         }
     }
 
     private void checkLoginId(String loginId) {
         List<Member> find = memberRepository.findByLoginId(loginId);
         if (!find.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 ID입니다.");
+            throw new IllegalArgumentException("이미 존재하는 ID입니다. loginId=" + loginId);
         }
     }
 

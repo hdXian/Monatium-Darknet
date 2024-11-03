@@ -180,6 +180,50 @@ class MemberServiceTest {
         assertThat(updatedMember.getNickName()).isEqualTo(updateDto.getNickName());
     }
 
+    @Test
+    @DisplayName("중복 정보 회원 수정")
+    void update2() {
+        // given
+
+        // 기존 회원 amelia
+        MemberDto dto = new MemberDto();
+        dto.setLoginId("amelia");
+        dto.setPassword("4567");
+        dto.setNickName("CM아멜리아");
+
+        Long ameliaId = memberService.createNewMember(dto);
+
+        // 자신의 정보를 바꾸려는 회원 lily
+        MemberDto dto2 = new MemberDto();
+        dto2.setLoginId("lily");
+        dto2.setPassword("4567");
+        dto2.setNickName("GM릴1리");
+
+        Long lilyId = memberService.createNewMember(dto2);
+
+        // when
+        // 로그인 아이디가 중복되는 dto
+        MemberDto duplicateDto = new MemberDto();
+        duplicateDto.setLoginId("amelia"); // 중복
+        duplicateDto.setPassword("패스워드");
+        duplicateDto.setNickName("딴닉네임");
+
+        // 닉네임이 중복되는 dto
+        MemberDto duplicateDto2 = new MemberDto();
+        duplicateDto2.setLoginId("딴아이디");
+        duplicateDto2.setPassword("패스워드");
+        duplicateDto2.setNickName("CM아멜리아"); // 중복
+
+        // then
+        assertThatThrownBy(() -> memberService.updateMember(lilyId, duplicateDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미 존재하는 ID입니다. loginId=" + duplicateDto.getLoginId());
+
+        assertThatThrownBy(() -> memberService.updateMember(lilyId, duplicateDto2))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미 사용 중인 닉네임입니다. nickname=" + duplicateDto2.getNickName());
+    }
+
     // TODO - 삭제 기능 추가 시 해당 기능 테스트 필요
 
 }
