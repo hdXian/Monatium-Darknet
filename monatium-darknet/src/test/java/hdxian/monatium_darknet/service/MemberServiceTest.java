@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
@@ -17,7 +18,7 @@ import static org.assertj.core.api.Assertions.*;
 class MemberServiceTest {
 
     @Autowired
-    MemberService service;
+    MemberService memberService;
 
     // 회원 추가 기능
     @Test
@@ -30,10 +31,10 @@ class MemberServiceTest {
         memberDto.setNickName("GM릴1리");
 
         // when
-        Long savedId = service.createNewMember(memberDto);
+        Long savedId = memberService.createNewMember(memberDto);
 
         // then
-        Member lily = service.findOne(savedId);
+        Member lily = memberService.findOne(savedId);
 
         assertThat(lily.getId()).isEqualTo(savedId);
         assertThat(lily.getLoginId()).isEqualTo(memberDto.getLoginId());
@@ -59,15 +60,15 @@ class MemberServiceTest {
         dup_nickName.setNickName("GM릴1리");
 
         // when
-        Long savedId = service.createNewMember(dto1);
+        Long savedId = memberService.createNewMember(dto1);
 
         // then
         // 중복된 아이디나 닉네임으로 가입을 시도하면 예외가 발생해야 함
-        assertThatThrownBy(() -> service.createNewMember(dup_loginId))
+        assertThatThrownBy(() -> memberService.createNewMember(dup_loginId))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("이미 존재하는 ID입니다.");
 
-        assertThatThrownBy(() -> service.createNewMember(dup_nickName))
+        assertThatThrownBy(() -> memberService.createNewMember(dup_nickName))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("이미 사용 중인 닉네임입니다.");
 
@@ -89,20 +90,20 @@ class MemberServiceTest {
         dto2.setNickName("CM아멜리아");
 
         // when
-        Long lily_id = service.createNewMember(dto1);
-        Long amelia_id = service.createNewMember(dto2);
+        Long lily_id = memberService.createNewMember(dto1);
+        Long amelia_id = memberService.createNewMember(dto2);
 
         // then
         // 로그인 아이디 검색
-        Member find_loginId_lily = service.findByLoginId(dto1.getLoginId());
-        Member find_loginId_amelia = service.findByLoginId(dto2.getLoginId());
+        Member find_loginId_lily = memberService.findByLoginId(dto1.getLoginId());
+        Member find_loginId_amelia = memberService.findByLoginId(dto2.getLoginId());
 
         assertThat(find_loginId_lily.getId()).isEqualTo(lily_id);
         assertThat(find_loginId_amelia.getId()).isEqualTo(amelia_id);
 
         // 닉네임 검색
-        Member find_nickname_lily = service.findByNickname(dto1.getNickName());
-        Member find_nickname_amelia = service.findByNickname(dto2.getNickName());
+        Member find_nickname_lily = memberService.findByNickname(dto1.getNickName());
+        Member find_nickname_amelia = memberService.findByNickname(dto2.getNickName());
 
         assertThat(find_nickname_lily.getId()).isEqualTo(lily_id);
         assertThat(find_nickname_amelia.getId()).isEqualTo(amelia_id);
@@ -123,7 +124,7 @@ class MemberServiceTest {
         dto1.setNickName("GM릴1리");
 
         // when
-        Long savedId = service.createNewMember(dto1);
+        Long savedId = memberService.createNewMember(dto1);
 
         Long noneMemberId = -1L;
         String nonLoginId = "없는로그인아이디";
@@ -131,26 +132,54 @@ class MemberServiceTest {
 
         // then
         // 있는 회원은 정상 조회되어야 함
-        Member findLily1 = service.findByLoginId(dto1.getLoginId());
-        Member findLily2 = service.findByNickname(dto1.getNickName());
+        Member findLily1 = memberService.findByLoginId(dto1.getLoginId());
+        Member findLily2 = memberService.findByNickname(dto1.getNickName());
 
         assertThat(findLily1).isEqualTo(findLily2);
         assertThat(findLily1.getId()).isEqualTo(savedId);
 
-        assertThatThrownBy(() -> service.findOne(noneMemberId))
+        assertThatThrownBy(() -> memberService.findOne(noneMemberId))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("해당 회원이 존재하지 않습니다. id=" + noneMemberId);
 
         // 없는 조건으로 검색하면 예외가 발생해야 함
-        assertThatThrownBy(() -> service.findByLoginId(nonLoginId))
+        assertThatThrownBy(() -> memberService.findByLoginId(nonLoginId))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("해당 아이디로 회원을 찾을 수 없습니다.");
 
-        assertThatThrownBy(() -> service.findByNickname(nonNickname))
+        assertThatThrownBy(() -> memberService.findByNickname(nonNickname))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("해당 닉네임으로 회원을 찾을 수 없습니다.");
     }
 
-    // TODO - 수정, 삭제 기능 추가 시 해당 기능 테스트 필요
+
+    @Test
+    @DisplayName("회원 정보 수정")
+    @Rollback(value = false)
+    void update() {
+        // given
+        MemberDto dto = new MemberDto();
+        dto.setLoginId("lily");
+        dto.setPassword("1234");
+        dto.setNickName("GM릴1리");
+
+        Long savedId = memberService.createNewMember(dto);
+
+        // when
+        MemberDto updateDto = new MemberDto();
+        updateDto.setLoginId("수정lily");
+        updateDto.setPassword("9876");
+        updateDto.setNickName("수정GM릴1리");
+
+        Long updateId = memberService.updateMember(savedId, updateDto);
+
+        // then
+        Member updatedMember = memberService.findOne(updateId);
+        assertThat(updatedMember.getLoginId()).isEqualTo(updateDto.getLoginId());
+        assertThat(updatedMember.getPassword()).isEqualTo(updateDto.getPassword());
+        assertThat(updatedMember.getNickName()).isEqualTo(updateDto.getNickName());
+    }
+
+    // TODO - 삭제 기능 추가 시 해당 기능 테스트 필요
 
 }

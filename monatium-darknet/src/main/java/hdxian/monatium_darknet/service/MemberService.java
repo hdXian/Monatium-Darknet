@@ -43,10 +43,18 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    // TODO - 회원 수정 기능
     @Transactional
     public Long updateMember(Long id, MemberDto updateParam) {
-        return null;
+        Optional<Member> find = memberRepository.findOne(id);
+        if (find.isEmpty()) {
+            throw new NoSuchElementException("해당 회원을 찾을 수 없습니다. id=" + id);
+        }
+
+        Member member = find.get();
+        member.setLoginId(updateParam.getLoginId());
+        member.setPassword(updateParam.getPassword());
+        member.setNickName(updateParam.getNickName());
+        return member.getId();
     }
 
     // 회원 검색 기능
