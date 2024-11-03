@@ -31,8 +31,6 @@ public class SkinService {
     public Long createNewSkin(Long characterId, SkinDto skinDto) {
         Character character = characterService.findOne(characterId);
 
-        List<SkinCategory> categories = new ArrayList<>();
-
         Skin skin = Skin.createSkin(
                 skinDto.getName(),
                 skinDto.getGrade(),
