@@ -41,6 +41,9 @@ public class MemberService {
             throw new NoSuchElementException("해당 회원을 찾을 수 없습니다. id=" + id);
         }
 
+        checkLoginId(updateParam.getLoginId());
+        checkNickname(updateParam.getNickName());
+
         Member member = find.get();
         member.setLoginId(updateParam.getLoginId());
         member.setPassword(updateParam.getPassword());
