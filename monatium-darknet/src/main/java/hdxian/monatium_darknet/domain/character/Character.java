@@ -82,6 +82,7 @@ public class Character {
     }
 
     public void removeSkin(Skin skin) {
+        // TODO - 이건 skin 삭제기능 추가할 때 사용할 듯.
         skins.remove(skin);
         skin.setCharacter(null);
     }

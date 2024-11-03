@@ -6,7 +6,6 @@ import hdxian.monatium_darknet.domain.aside.AsideSpec;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.SkinGrade;
-import hdxian.monatium_darknet.repository.CharacterRepository;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,7 @@ class CharacterServiceTest {
     SkinService skinService;
 
     @Autowired
-    CharacterService service;
+    CharacterService characterService;
 
     // TODO - 캐릭터 테스트에 스킨, 어사이드 추가 (그 외 각종 테스트 케이스 추가 필 (예외 등))
 
@@ -40,10 +39,10 @@ class CharacterServiceTest {
         CharacterDto erpinDto = generateCharDto("에르핀");
 
         // when
-        Long erpin_id = service.createNewCharacter(erpinDto);
+        Long erpin_id = characterService.createNewCharacter(erpinDto);
 
         // then
-        Character find_erpin = service.findOne(erpin_id);
+        Character find_erpin = characterService.findOne(erpin_id);
         assertThat(find_erpin.getName()).isEqualTo("에르핀");
         assertThat(find_erpin.getAttackType()).isEqualTo(AttackType.MAGICAL);
         assertThat(find_erpin.getAside().getCharacter()).isEqualTo(find_erpin);
@@ -60,19 +59,19 @@ class CharacterServiceTest {
         CharacterDto tigDto = generateCharDto("티그");
 
         // when
-        Long erpin_id = service.createNewCharacter(erpinDto);
-        Long ashur_id = service.createNewCharacter(ashurDto);
-        Long tig_id = service.createNewCharacter(tigDto);
-        Character erpin = service.findOne(erpin_id);
-        Character ashur = service.findOne(ashur_id);
-        Character tig = service.findOne(tig_id);
+        Long erpin_id = characterService.createNewCharacter(erpinDto);
+        Long ashur_id = characterService.createNewCharacter(ashurDto);
+        Long tig_id = characterService.createNewCharacter(tigDto);
+        Character erpin = characterService.findOne(erpin_id);
+        Character ashur = characterService.findOne(ashur_id);
+        Character tig = characterService.findOne(tig_id);
 
         // then
         // "에"를 검색했을 때 "에르핀", "에슈르"가 검색되어야 한다.
-        List<Character> findResult = service.findByName("에");
+        List<Character> findResult = characterService.findByName("에");
         assertThat(findResult).containsExactlyInAnyOrder(erpin, ashur);
 
-        List<Character> find_tig = service.findByName("티그");
+        List<Character> find_tig = characterService.findByName("티그");
         assertThat(find_tig).containsExactly(tig);
     }
 
@@ -85,16 +84,16 @@ class CharacterServiceTest {
         CharacterDto butterDto = generateCharDto("버터");
 
         // when
-        Long butter_id = service.createNewCharacter(butterDto);
+        Long butter_id = characterService.createNewCharacter(butterDto);
         Long madeleine_id = -1L; // 없는 캐릭터 id
 
         // then
         // "마들렌"으로 검색한 결과가 없어야 한다.
-        List<Character> result = service.findByName("마들렌");
+        List<Character> result = characterService.findByName("마들렌");
         assertThat(result).isEmpty();
 
         // 없는 아이디로 검색하면 NoSuchElementException 예외가 터져나와야 함.
-        assertThatThrownBy(() -> service.findOne(madeleine_id))
+        assertThatThrownBy(() -> characterService.findOne(madeleine_id))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
@@ -109,16 +108,16 @@ class CharacterServiceTest {
         CharacterDto tigDto = generateCharDto("티그");
 
         // when
-        Long erpin_id = service.createNewCharacter(erpinDto);
-        Long ashur_id = service.createNewCharacter(ashurDto);
-        Long tig_id = service.createNewCharacter(tigDto);
-        Character erpin = service.findOne(erpin_id);
-        Character ashur = service.findOne(ashur_id);
-        Character tig = service.findOne(tig_id);
+        Long erpin_id = characterService.createNewCharacter(erpinDto);
+        Long ashur_id = characterService.createNewCharacter(ashurDto);
+        Long tig_id = characterService.createNewCharacter(tigDto);
+        Character erpin = characterService.findOne(erpin_id);
+        Character ashur = characterService.findOne(ashur_id);
+        Character tig = characterService.findOne(tig_id);
 
         // then
         // 전체 캐릭터를 검색했을 때 3명의 캐릭터, 그리고 에르핀, 에슈르, 티그가 정확히 포함되어 있어야 한다.
-        List<Character> findResult = service.findCharacters();
+        List<Character> findResult = characterService.findCharacters();
         assertThat(findResult.size()).isEqualTo(3);
         assertThat(findResult).containsExactlyInAnyOrder(erpin, ashur, tig);
     }
@@ -142,10 +141,10 @@ class CharacterServiceTest {
         originHighSkill.addAttribute("기존 고학년스킬 속성1", "기존고학년스킬 속성1 수치");
         originHighSkill.addAttribute("기존 고학년스킬 속성2", "기존고학년스킬 속성2 수치");
 
-        Long erpin_id = service.createNewCharacter(erpinDto);
+        Long erpin_id = characterService.createNewCharacter(erpinDto);
 
         // 수정 전 정보 확인
-        Character erpin = service.findOne(erpin_id);
+        Character erpin = characterService.findOne(erpin_id);
         assertThat(erpin.getName()).isEqualTo("에르핀");
         assertThat(erpin.getGrade()).isEqualTo(3);
         assertThat(erpin.getNormalAttack()).isEqualTo(originNormalAttack);
@@ -165,10 +164,10 @@ class CharacterServiceTest {
         updateHighSkill.addAttribute("수정 고학년스킬 속성1", "수정 고학년스킬 속성1 수치");
         updateHighSkill.addAttribute("수정 고학년스킬 속성2", "수정 고학년스킬 속성2 수치");
 
-        Long updated_id = service.updateCharacter(erpin_id, updateDto);
+        Long updated_id = characterService.updateCharacter(erpin_id, updateDto);
 
         // 수정 후 정보 확인
-        Character updated_erpin = service.findOne(updated_id);
+        Character updated_erpin = characterService.findOne(updated_id);
         assertThat(updated_erpin.getName()).isEqualTo("에르핀수정");
         assertThat(updated_erpin.getGrade()).isEqualTo(2);
 
@@ -190,11 +189,11 @@ class CharacterServiceTest {
     // 어사이드, 공격, 스킬, 애착 아티팩트 카드, 스킨 데이터 어떻게 삭제되는지 확인 필요
     @Test
     @DisplayName("캐릭터 삭제")
-    @Rollback(value = false)
+//    @Rollback(value = false)
     void delete() {
         // given
         CharacterDto charDto = generateCharDto("림");
-        Long rim_id = service.createNewCharacter(charDto);
+        Long rim_id = characterService.createNewCharacter(charDto);
 
         SkinDto skinDto = generateSkinDto("라크로스 림크로스", SkinGrade.NORMAL);
         Long skin_id = skinService.createNewSkin(rim_id, skinDto); // 림 스킨 추가
@@ -203,10 +202,18 @@ class CharacterServiceTest {
         skinService.linkSkinAndCategory(skin_id, category_id);
 
         // when
-        service.deleteCharacter(rim_id);
+        characterService.deleteCharacter(rim_id);
 
         // then
+        // 삭제된 캐릭터는 조회되지 않아야 함
+        assertThatThrownBy(() ->  characterService.findOne(rim_id))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 캐릭터가 없습니다. id=" + rim_id);
 
+        // 삭제된 캐릭터의 스킨도 함께 삭제되어야 함. (카테고리는 삭제 안됨. 이 부분은 skinService에 삭제기능 추가한 다음 테스트해야 할듯.)
+        assertThatThrownBy(() -> skinService.findOneSkin(skin_id))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 스킨이 존재하지 않습니다. skinId=" + skin_id);
     }
 
     static SkinDto generateSkinDto(String name, SkinGrade grade) {

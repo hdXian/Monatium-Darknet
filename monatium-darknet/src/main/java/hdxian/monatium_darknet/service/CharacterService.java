@@ -122,7 +122,7 @@ public class CharacterService {
         Optional<Character> find = characterRepository.findOne(id);
         // TODO - null일 때 예외 던지는 로직 추가
         if(find.isEmpty()) {
-            throw new NoSuchElementException("해당 캐릭터가 없습니다.");
+            throw new NoSuchElementException("해당 캐릭터가 없습니다. id=" + id);
         }
         return find.get();
     }
