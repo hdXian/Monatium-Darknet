@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.service;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
+import hdxian.monatium_darknet.domain.skin.SkinCategoryMapping;
 import hdxian.monatium_darknet.repository.SkinCategoryRepository;
 import hdxian.monatium_darknet.repository.SkinRepository;
 import lombok.RequiredArgsConstructor;
@@ -100,6 +101,7 @@ public class SkinService {
 //        category.addSkin(skin); // 동시 호출 금지
 
         skinRepository.save(skin);
+//        categoryRepository.save(category);
     }
 
     // 스킨-카테고리 간 관계 제거 (스킨 입장에서는 카테고리 제거, 카테고리 입장에서는 스킨 제거)
@@ -118,8 +120,10 @@ public class SkinService {
         SkinCategory category = findCategory.get();
 
         skin.removeCategory(category);
+//        category.removeSkin(skin); // 동시 호출 금지
 
         skinRepository.save(skin);
+//        categoryRepository.save(category);
     }
 
     // 스킨 검색

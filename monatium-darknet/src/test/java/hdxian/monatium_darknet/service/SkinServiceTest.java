@@ -208,6 +208,104 @@ class SkinServiceTest {
         assertThat(all).containsExactlyInAnyOrder(rim_skin_1, rim_skin_2, erpin_skin_1, erpin_skin_2);
     }
 
+    // TODO - 스킨 업데이트 기능 테스트 추가
+    @Test
+    @DisplayName("스킨 업데이트")
+    @Rollback(value = false)
+    void update() {
+        // given
+        CharacterDto rimDto = generateCharDto("림");
+        Long rim_id = characterService.createNewCharacter(rimDto);
+
+        Long categoryId = skinService.createNewSkinCategory("상시판매");
+
+        SkinDto skinDto = generateSkinDto("라크로스 림크로스", SkinGrade.NORMAL);
+        Long skinId = skinService.createNewSkin(rim_id, skinDto);
+
+        // 스킨에 카테고리 추가
+        skinService.linkSkinAndCategory(skinId, categoryId);
+
+        Skin originalSkin = skinService.findOneSkin(skinId);
+
+        // when
+        // 이름과 등급 변경
+        SkinDto updateDto = generateSkinDto("수정 라크로스 림크로스", SkinGrade.KKOGGA);
+        Long updateSKinId = skinService.updateSkin(skinId, updateDto);
+
+        // then
+        Skin updateSkin = skinService.findOneSkin(updateSKinId);
+
+        assertThat(updateSkin.getName()).isEqualTo(updateDto.getName());
+        assertThat(updateSkin.getGrade()).isEqualTo(updateDto.getGrade());
+        assertThat(updateSkin.getDescription()).isEqualTo(updateDto.getDescription());
+
+        // 스킨의 카테고리는 변경한 적 없음 -> 여전히 같은 카테고리에 있어야 함
+        List<Skin> skins = skinService.findSkinsByCategory(categoryId);
+        assertThat(skins).containsExactly(updateSkin);
+
+        // 같은 엔티티를 수정한 것이어야 함
+        assertThat(updateSkin).isEqualTo(originalSkin);
+    }
+
+    @Test
+    @DisplayName("카테고리 업데이트")
+    void update2() {
+        // given
+        Long savedId = skinService.createNewSkinCategory("상시판매");
+        SkinCategory originCategory = skinService.findOneCategory(savedId);
+
+        // when
+        Long updateId = skinService.updateSkinCategory(savedId, "할인중");
+
+        // then
+        SkinCategory category = skinService.findOneCategory(updateId);
+        assertThat(category.getName()).isEqualTo("할인중");
+        assertThat(originCategory.getName()).isEqualTo("할인중");
+    }
+
+    @Test
+    @DisplayName("스킨 카테고리 변경")
+    @Rollback(value = false)
+    void update3() {
+        // given
+        CharacterDto charDto1 = generateCharDto("사도1");
+        CharacterDto charDto2 = generateCharDto("사도2");
+        Long charId1 = characterService.createNewCharacter(charDto1);
+        Long charId2 = characterService.createNewCharacter(charDto2);
+
+        // 카테고리 2개
+        Long cateId1 = skinService.createNewSkinCategory("상시판매");
+        Long cateId2 = skinService.createNewSkinCategory("할인중");
+
+        // 스킨 2개
+        SkinDto skinDto1 = generateSkinDto("스킨1", SkinGrade.NORMAL);
+        SkinDto skinDto2 = generateSkinDto("스킨2", SkinGrade.KKOGGA);
+        Long skinId1 = skinService.createNewSkin(charId1, skinDto1); // 사도1의 스킨1
+        Long skinId2 = skinService.createNewSkin(charId2, skinDto2); // 사도2의 스킨2
+
+        skinService.linkSkinAndCategory(skinId1, cateId1); // 스킨1 -> 카테고리1
+        skinService.linkSkinAndCategory(skinId2, cateId2);// 스킨2 -> 카테고리2
+
+        // when
+        // 스킨 1은 카테고리2 추가 (스킨 1 -> 카테고리 1, 2에 속함)
+        skinService.linkSkinAndCategory(skinId1, cateId2);
+
+        // 스킨 2는 카테고리2 -> 카테고리1 로 변경 (스킨 2 -> 카테고리 1에 속함)
+        skinService.unLinkSkinAndCategory(skinId2, cateId2); // 카테고리 2 해제
+        skinService.linkSkinAndCategory(skinId2, cateId1); // 카테고리 1 추가
+
+        // then
+        Skin skin1 = skinService.findOneSkin(skinId1);
+        Skin skin2 = skinService.findOneSkin(skinId2);
+
+        // 키테고리 1에는 스킨 1, 2가 존재
+        List<Skin> result1 = skinService.findSkinsByCategory(cateId1);
+        assertThat(result1).containsExactlyInAnyOrder(skin1, skin2);
+
+        // 카테고리 2에는 스킨 1만 존재
+        List<Skin> result2 = skinService.findSkinsByCategory(cateId2);
+        assertThat(result2).containsExactly(skin1);
+    }
 
     static SkinDto generateSkinDto(String name, SkinGrade grade) {
         SkinDto dto = new SkinDto();

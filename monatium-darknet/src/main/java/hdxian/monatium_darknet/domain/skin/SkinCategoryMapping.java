@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 /**
  * Skin 엔티티와 SkinCategory를 매핑하는 중간 엔티티
  * Skin, SkinCategory 엔티티와 서로 일대다, 다대일 연관관계를 가짐.
@@ -38,4 +40,17 @@ public class SkinCategoryMapping {
         return mapping;
     }
 
+    // skin과 category에서 같은 mapping 객체를 가지게 하기 위해 필요
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SkinCategoryMapping mapping = (SkinCategoryMapping) o;
+        return Objects.equals(skin, mapping.skin) && Objects.equals(skinCategory, mapping.skinCategory);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(skin, skinCategory);
+    }
 }
