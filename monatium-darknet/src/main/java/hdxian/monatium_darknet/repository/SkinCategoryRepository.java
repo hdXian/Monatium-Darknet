@@ -27,6 +27,21 @@ public class SkinCategoryRepository {
         }
     }
 
+    public void delete(Long id) {
+        Optional<SkinCategory> find = findOne(id);
+        find.ifPresent(em::remove);
+    }
+
+    public void delete(SkinCategory category) {
+        if (em.contains(category)) {
+            em.remove(category);
+        }
+        else {
+            SkinCategory merged = em.merge(category);
+            em.remove(merged);
+        }
+    }
+
     // 카테고리 검색
     public Optional<SkinCategory> findOne(Long id) {
         SkinCategory find = em.find(SkinCategory.class, id);

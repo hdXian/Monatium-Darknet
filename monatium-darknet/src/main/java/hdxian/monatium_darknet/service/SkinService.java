@@ -124,6 +124,45 @@ public class SkinService {
 //        categoryRepository.save(category);
     }
 
+    @Transactional
+    public void deleteSkin(Long skinId) {
+        Optional<Skin> find = skinRepository.findOne(skinId);
+        if (find.isEmpty()) {
+            throw new NoSuchElementException("해당 스킨이 존재하지 않습니다. skinId=" + skinId);
+        }
+
+        Skin skin = find.get();
+        // 모든 mapping들을 고아 객체로 만들어 JPA가 자동으로 삭제하도록 함. (skin의 mappings의 orphanRemoval = true)
+        List<SkinCategory> categories = findCategoriesBySkin(skinId);
+        for (SkinCategory category : categories) {
+            skin.removeCategory(category);
+        }
+
+        // character와의 연관관계도 제거해야 함
+        Character skinCharacter = skin.getCharacter();
+        skinCharacter.removeSkin(skin);
+
+        skinRepository.delete(skinId);
+    }
+
+    @Transactional
+    public void deleteSkinCategory(Long categoryId) {
+        Optional<SkinCategory> find = categoryRepository.findOne(categoryId);
+        if (find.isEmpty()) {
+            throw new NoSuchElementException("해당 스킨 카테고리가 존재하지 않습니다. categoryId=" + categoryId);
+        }
+
+        // TODO
+        // 모든 스킨과의 연관관계를 제거 (연관관계, mapping 추가를 skin에서만 하기 때문)
+        SkinCategory categoryToRemove = find.get();
+        List<Skin> skins = findSkinsByCategory(categoryId);
+        for (Skin skin : skins) {
+            skin.removeCategory(categoryToRemove);
+        }
+
+        categoryRepository.delete(categoryId);
+    }
+
     // 스킨 검색
     public Skin findOneSkin(Long skinId) {
         Optional<Skin> find = skinRepository.findOne(skinId);

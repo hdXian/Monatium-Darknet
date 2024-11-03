@@ -26,6 +26,21 @@ public class SkinRepository {
         }
     }
 
+    public void delete(Skin skin) {
+        if (em.contains(skin)) {
+            em.remove(skin);
+        }
+        else {
+            Skin merged = em.merge(skin);
+            em.remove(merged);
+        }
+    }
+
+    public void delete(Long id) {
+        Optional<Skin> find = findOne(id);
+        find.ifPresent(em::remove);
+    }
+
     // 스킨 조회 기능
     public Optional<Skin> findOne(Long id) {
         Skin find = em.find(Skin.class, id);

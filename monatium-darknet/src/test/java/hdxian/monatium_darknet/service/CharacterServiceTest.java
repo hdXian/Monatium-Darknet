@@ -210,7 +210,7 @@ class CharacterServiceTest {
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("해당 캐릭터가 없습니다. id=" + rim_id);
 
-        // 삭제된 캐릭터의 스킨도 함께 삭제되어야 함. (카테고리는 삭제 안됨. 이 부분은 skinService에 삭제기능 추가한 다음 테스트해야 할듯.)
+        // 삭제된 캐릭터의 스킨도 함께 삭제되어야 함. (카테고리는 삭제 안됨)
         assertThatThrownBy(() -> skinService.findOneSkin(skin_id))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("해당 스킨이 존재하지 않습니다. skinId=" + skin_id);

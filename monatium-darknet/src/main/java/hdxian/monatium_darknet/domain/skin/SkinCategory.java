@@ -42,7 +42,7 @@ public class SkinCategory {
         return skinCategory;
     }
 
-    // 비즈니스 로직
+    // 비즈니스 로직 (보통 skin의 addCategory를 통해 함께 설정됨. 이 메서드를 호출할 일은 사실상 없음.)
     public void addSkin(Skin skin) {
         // mappings 변경에 따른 DB 반영은 Skin에서만 일어남. -> mapping을 어디서 추가하는지는 크게 중요하지 않음
         SkinCategoryMapping mapping = SkinCategoryMapping.createSkinCategoryMapping(skin, this);

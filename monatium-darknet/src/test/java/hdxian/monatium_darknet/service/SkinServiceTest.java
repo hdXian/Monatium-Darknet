@@ -307,6 +307,76 @@ class SkinServiceTest {
         assertThat(result2).containsExactly(skin1);
     }
 
+    @Test
+    @DisplayName("스킨 삭제")
+//    @Rollback(value = false)
+    void deleteSkin() {
+        // given
+        CharacterDto rimDto = generateCharDto("림");
+        Long rim_id = characterService.createNewCharacter(rimDto);
+
+        Long categoryId = skinService.createNewSkinCategory("상시판매");
+
+        SkinDto skinDto = generateSkinDto("사라질 운명", SkinGrade.NORMAL);
+        Long skinId = skinService.createNewSkin(rim_id, skinDto);
+
+        skinService.linkSkinAndCategory(skinId, categoryId);
+
+        // when
+        skinService.deleteSkin(skinId);
+
+        // then
+        // DB 테이블에서도 깨끗이 삭제되는지 확인 (rollback false -> 예외 터뜨리는 테스트코드 주석처리) (엔티티 간 연관관계를 모두 깔끔히 지워야 DB에서도 지워짐)
+        assertThatThrownBy(() -> skinService.findOneSkin(skinId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 스킨이 존재하지 않습니다. skinId=" + skinId);
+
+        // 스킨이 검색 결과에 나오지 않아야 함
+        List<Skin> result_cate = skinService.findSkinsByCategory(categoryId);
+        assertThat(result_cate).isEmpty();
+
+        List<Skin> result_char = skinService.findSkinsByCharacter(rim_id);
+        assertThat(result_char).isEmpty();
+
+        // 카테고리는 남아있어야 함
+        SkinCategory findCategory = skinService.findOneCategory(categoryId);
+        assertThat(findCategory.getName()).isEqualTo("상시판매");
+    }
+
+    @Test
+    @DisplayName("카테고리 삭제")
+//    @Rollback(value = false)
+    void deleteCategory() {
+        // given
+        CharacterDto rimDto = generateCharDto("림");
+        Long rim_id = characterService.createNewCharacter(rimDto);
+
+        Long categoryId = skinService.createNewSkinCategory("상시판매");
+
+        SkinDto skinDto = generateSkinDto("라크로스 림크로스", SkinGrade.NORMAL);
+        Long skinId = skinService.createNewSkin(rim_id, skinDto);
+
+        skinService.linkSkinAndCategory(skinId, categoryId);
+
+        // when
+        skinService.deleteSkinCategory(categoryId);
+
+        // then
+        // 삭제된 카테고리는 찾을 수 없어야 함
+        assertThatThrownBy(() -> skinService.findOneCategory(categoryId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 스킨 카테고리가 존재하지 않습니다. categoryId=" + categoryId);
+
+        // 검색결과 없어야 함
+        List<SkinCategory> res1 = skinService.findCategoriesBySkin(skinId);
+        assertThat(res1).isEmpty();
+
+        // 스킨은 남아있어야 함
+        Skin findSkin = skinService.findOneSkin(skinId);
+        assertThat(findSkin.getName()).isEqualTo("라크로스 림크로스");
+
+    }
+
     static SkinDto generateSkinDto(String name, SkinGrade grade) {
         SkinDto dto = new SkinDto();
         dto.setName(name);
