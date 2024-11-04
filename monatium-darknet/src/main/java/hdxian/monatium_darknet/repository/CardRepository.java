@@ -4,9 +4,7 @@ import hdxian.monatium_darknet.domain.card.ArtifactCard;
 import hdxian.monatium_darknet.domain.card.Card;
 import hdxian.monatium_darknet.domain.card.SpellCard;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -63,13 +61,21 @@ public class CardRepository {
         return Optional.ofNullable(find);
     }
 
+    public Optional<ArtifactCard> findOneArtifactByCharacterId(Long characterId) {
+        String jpql = "select ac from ArtifactCard ac where ac.character.id = :characterId";
+        return em.createQuery(jpql, ArtifactCard.class)
+                .setParameter("characterId", characterId)
+                .getResultStream()
+                .findFirst();
+    }
+
     public List<Card> findAll() {
         String jpql = "select c from Card c";
         return em.createQuery(jpql, Card.class).getResultList();
     }
 
     public List<ArtifactCard> findAllArtifacts() {
-        String jpql = "select c from ArtifactCard c";
+        String jpql = "select ac from ArtifactCard ac";
         return em.createQuery(jpql, ArtifactCard.class).getResultList();
     }
 

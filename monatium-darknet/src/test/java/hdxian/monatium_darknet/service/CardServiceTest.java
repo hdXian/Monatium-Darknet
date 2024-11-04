@@ -295,7 +295,7 @@ class CardServiceTest {
 
     @Test
     @DisplayName("아티팩트 카드 삭제 (애착 O)")
-    @Rollback(value = false)
+//    @Rollback(value = false)
     void deleteArtifact2() {
         // given
         CharacterDto charDto = generateCharDto("림");
@@ -315,9 +315,9 @@ class CardServiceTest {
         Character rim = characterService.findOne(rim_id);
         assertThat(rim).isNotNull();
 
-//        assertThatThrownBy(() -> cardService.findOneArtifactCard(savedId))
-//                .isInstanceOf(NoSuchElementException.class)
-//                .hasMessage("해당 아티팩트 카드가 존재하지 않습니다. id=" + savedId);
+        assertThatThrownBy(() -> cardService.findOneArtifactCard(savedId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 아티팩트 카드가 존재하지 않습니다. id=" + savedId);
     }
 
     // TODO - 캐릭터 삭제되면 아티팩트 카드의 애착 효과도 없애야 함.

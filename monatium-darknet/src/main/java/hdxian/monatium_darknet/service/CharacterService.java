@@ -92,11 +92,6 @@ public class CharacterService {
         return ch.getId(); // ***중요 -> em.find()를 통해 찾아온 엔티티는 merge로 업데이트하면 안됨. (이해는 안됨. 추가 학습 필요)
     }
 
-    @Transactional
-    public void deleteCharacter(Long characterId) {
-        characterRepository.delete(characterId);
-    }
-
     // 스킬 변경
     private static void updateSkill(Skill skill, Skill updateParam) {
         skill.setName(updateParam.getName());
@@ -120,10 +115,25 @@ public class CharacterService {
         attributes.addAll(updateParam.getAttributes());
     }
 
+    @Transactional
+    public void deleteCharacter(Long characterId) {
+        Optional<ArtifactCard> findCard = cardRepository.findOneArtifactByCharacterId(characterId);
+
+        // 그럼 아티팩트 카드 추가할 때도 이미 애착 사도가 있는지 확인해야 하나? 아티팩트 카드에 @OneToOne이 걸려있기는 함.
+
+        // 애착 아티팩트 카드가 있을 경우에만 제거
+        if (findCard.isPresent()) {
+            ArtifactCard artifactCard = findCard.get();
+            artifactCard.removeCharacter(); // 애착 사도, 애착 스킬 제거
+            cardRepository.save(artifactCard);
+        }
+
+        characterRepository.delete(characterId);
+    }
+
     // 캐릭터 검색 기능
     public Character findOne(Long id) {
         Optional<Character> find = characterRepository.findOne(id);
-        // TODO - null일 때 예외 던지는 로직 추가
         if(find.isEmpty()) {
             throw new NoSuchElementException("해당 캐릭터가 없습니다. id=" + id);
         }
