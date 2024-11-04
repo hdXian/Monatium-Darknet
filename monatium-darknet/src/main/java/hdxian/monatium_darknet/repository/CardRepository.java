@@ -32,6 +32,21 @@ public class CardRepository {
         }
     }
 
+    public void delete(Long id) {
+        Optional<Card> find = findOne(id);
+        find.ifPresent(em::remove);
+    }
+
+    public void delete(Card card) {
+        if (em.contains(card)) {
+            em.remove(card);
+        }
+        else {
+            Card merged = em.merge(card);
+            em.remove(merged);
+        }
+    }
+
     // 카드 조회
     public Optional<Card> findOne(Long id) {
         Card find = em.find(Card.class, id);

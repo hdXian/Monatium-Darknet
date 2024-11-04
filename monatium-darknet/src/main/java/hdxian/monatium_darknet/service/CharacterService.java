@@ -91,6 +91,8 @@ public class CharacterService {
 
     @Transactional
     public void deleteCharacter(Long characterId) {
+        Character character = findOne(characterId);
+
         characterRepository.delete(characterId);
     }
 

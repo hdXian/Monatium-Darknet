@@ -261,6 +261,68 @@ class CardServiceTest {
         assertThat(updatedCard).isEqualTo(originCard);
     }
 
+    @Test
+    @DisplayName("스펠 카드 삭제")
+    void deleteSpell() {
+        // given
+        SpellCardDto spellDto = generateSpellDto("사기진작", CardGrade.NORMAL);
+        Long savedId = cardService.createNewSpellCard(spellDto);
+
+        // when
+        cardService.deleteSpellCard(savedId);
+
+        // then
+        assertThatThrownBy(() -> cardService.findOneSpellCard(savedId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 스펠 카드가 존재하지 않습니다. id=" + savedId);
+    }
+
+    @Test
+    @DisplayName("아티팩트 카드 삭제 (애착 x)")
+    void deleteArtifact() {
+        // given
+        ArtifactCardDto artifactDto = generateArtifactDto("30GK 케틀벨", CardGrade.LEGENDARY);
+        Long savedId = cardService.createNewArtifactCard(artifactDto);
+
+        // when
+        cardService.deleteArtifactCard(savedId);
+
+        // then
+        assertThatThrownBy(() -> cardService.findOneArtifactCard(savedId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 아티팩트 카드가 존재하지 않습니다. id=" + savedId);
+    }
+
+    @Test
+    @DisplayName("아티팩트 카드 삭제 (애착 O)")
+//    @Rollback(value = false)
+    void deleteArtifact2() {
+        // given
+        CharacterDto charDto = generateCharDto("림");
+        Long rim_id = characterService.createNewCharacter(charDto);
+
+        Skill skill = generateAttachmentSkill("그림 스크래치");
+
+        ArtifactCardDto cardDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
+
+        Long savedId = cardService.createNewArtifactCard(cardDto, rim_id, skill);
+
+        // when
+        cardService.deleteArtifactCard(savedId);
+
+        // then
+        // 캐릭터는 남아있어야 함
+        Character rim = characterService.findOne(rim_id);
+        assertThat(rim).isNotNull();
+
+        assertThatThrownBy(() -> cardService.findOneArtifactCard(savedId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 아티팩트 카드가 존재하지 않습니다. id=" + savedId);
+    }
+
+    // TODO - 캐릭터 삭제되면 아티팩트 카드의 애착 효과도 없애야 함.
+
+
     static SpellCardDto generateSpellDto(String name, CardGrade grade) {
         SpellCardDto dto = new SpellCardDto();
         dto.setName(name);

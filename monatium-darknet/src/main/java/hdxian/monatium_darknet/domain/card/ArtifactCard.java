@@ -17,7 +17,7 @@ public class ArtifactCard extends Card{
 
     // 아티팩트 카드는 애착 아티팩트 효과를 가진 사도와 스킬이 추가로 있음
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attachment_character_id")
     private Character character; // 애착 사도
 

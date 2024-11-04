@@ -7,6 +7,7 @@ import hdxian.monatium_darknet.domain.card.Card;
 import hdxian.monatium_darknet.domain.card.SpellCard;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.repository.CardRepository;
+import hdxian.monatium_darknet.repository.CharacterRepository;
 import hdxian.monatium_darknet.service.dto.ArtifactCardDto;
 import hdxian.monatium_darknet.service.dto.SpellCardDto;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CardService {
 
-    private final CharacterService characterService;
+//    private final CharacterService characterService;
+
+    // Character 삭제되면 Card의 애착 사도, 스킬도 삭제해야 함. -> CharacterService에도 Card 참조가 필요함. -> 여기서 CharacterService 쓰기 난감함
+    private final CharacterRepository characterRepository;
     private final CardRepository cardRepository;
 
     // 카드 저장 기능
@@ -61,7 +65,12 @@ public class CardService {
     @Transactional
     public Long createNewArtifactCard(ArtifactCardDto cardDto, Long characterId, Skill attachmentSkill) {
 
-        Character character = characterService.findOne(characterId);
+        Optional<Character> findCharacter = characterRepository.findOne(characterId);
+        if (findCharacter.isEmpty()) {
+            throw new NoSuchElementException("해당 캐릭터가 존재하지 않습니다. characterId=" + characterId);
+        }
+
+        Character character = findCharacter.get();
 
         ArtifactCard artifactCard = ArtifactCard.createArtifactCard(
                 cardDto.getName(),
@@ -105,26 +114,44 @@ public class CardService {
         return artifactCard.getId();
     }
 
+    // 아티팩트 카드 업데이트 하는데 캐릭터까지 함께 받아야 하나? 이거 바뀔 일 사실상 없는데? TODO - 업데이트에 캐릭터 제외하기
     @Transactional
     public Long updateArtifactCard(Long cardId, ArtifactCardDto updateParam, Long updateCharacterId, Skill updateSkill) {
         Optional<ArtifactCard> find = cardRepository.findOneArtifact(cardId);
+        Optional<Character> findCharacter = characterRepository.findOne(updateCharacterId);
         if (find.isEmpty()) {
             throw new NoSuchElementException("해당 아티팩트 카드가 존재하지 않습니다. id=" + cardId);
         }
+        if (findCharacter.isEmpty()) {
+            throw new NoSuchElementException("해당 캐릭터가 존재하지 않습니다. updateCharacterId=" + updateCharacterId);
+        }
 
-        Character character = characterService.findOne(updateCharacterId);
-
+        Character updateCharacter = findCharacter.get();
         ArtifactCard artifactCard = find.get();
-        updateCard(artifactCard, updateParam, character, updateSkill);
+
+        updateCard(artifactCard, updateParam, updateCharacter, updateSkill);
 
         return artifactCard.getId();
+    }
+
+    // 카드 삭제 기능
+    @Transactional
+    public void deleteSpellCard(Long id) {
+        SpellCard spellCard = findOneSpellCard(id);
+        cardRepository.delete(spellCard);
+    }
+
+    @Transactional
+    public void deleteArtifactCard(Long id) {
+        ArtifactCard artifactCard = findOneArtifactCard(id);
+        cardRepository.delete(artifactCard);
     }
 
     // 스펠카드 조회 기능
     public SpellCard findOneSpellCard(Long id) {
         Optional<SpellCard> find = cardRepository.findOneSpell(id);
         if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 스펠 카드가 존재하지 않습니다.");
+            throw new NoSuchElementException("해당 스펠 카드가 존재하지 않습니다. id=" + id);
         }
         return find.get();
     }
@@ -132,7 +159,7 @@ public class CardService {
     public ArtifactCard findOneArtifactCard(Long id) {
         Optional<ArtifactCard> find = cardRepository.findOneArtifact(id);
         if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 아티팩트 카드가 존재하지 않습니다.");
+            throw new NoSuchElementException("해당 아티팩트 카드가 존재하지 않습니다. id=" + id);
         }
         return find.get();
     }
