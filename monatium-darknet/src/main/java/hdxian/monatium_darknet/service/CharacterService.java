@@ -55,12 +55,7 @@ public class CharacterService {
     // 캐릭터 업데이트
     @Transactional
     public Long updateCharacter(Long characterId, CharacterDto updateParam) {
-        Optional<Character> find = characterRepository.findOne(characterId);
-        if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 캐릭터가 존재하지 않습니다. id=" + characterId);
-        }
-
-        Character ch = find.get();
+        Character ch = findOne(characterId);
 
         ch.setName(updateParam.getName());
         ch.setSubtitle(updateParam.getSubtitle());
