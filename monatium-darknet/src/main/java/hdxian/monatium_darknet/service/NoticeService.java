@@ -39,12 +39,8 @@ public class NoticeService {
 
     @Transactional
     public Long updateNotice(Long noticeId, NoticeDto updateParam) {
-        Optional<Notice> find = noticeRepository.findOne(noticeId);
-        if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 공지사항이 없습니다. id=" + noticeId);
-        }
+        Notice notice = findOne(noticeId);
 
-        Notice notice = find.get();
         notice.setCategory(updateParam.getCategory());
         notice.setTitle(updateParam.getTitle());
         notice.setContent(updateParam.getContent());

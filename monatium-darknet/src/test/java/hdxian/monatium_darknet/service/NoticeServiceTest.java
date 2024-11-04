@@ -207,8 +207,6 @@ class NoticeServiceTest {
         assertThat(updatedNotice.getContent()).isEqualTo(updateDto.getContent());
     }
 
-    // TODO - 공지 삭제 테스트
-
     @Test
     @DisplayName("공지사항 삭제")
 //    @Rollback(value = false)
