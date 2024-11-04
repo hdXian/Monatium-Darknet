@@ -145,12 +145,4 @@ public class CharacterService {
 
     // TODO - 조건별 캐릭터 검색 기능 추가 필요
 
-    // TODO - 캐릭터 수정/삭제기능 추가 필요
-    //    // 캐릭터 변경 기능 (인자에 Dto 필요)
-//    public Long updateCharacter(Long characterId, CharacterUpdateDto updateParam) {
-//        Optional<Character> find = characterRepository.findOne(characterId);
-//
-//
-//    }
-
 }

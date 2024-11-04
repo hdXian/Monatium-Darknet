@@ -208,7 +208,6 @@ class SkinServiceTest {
         assertThat(all).containsExactlyInAnyOrder(rim_skin_1, rim_skin_2, erpin_skin_1, erpin_skin_2);
     }
 
-    // TODO - 스킨 업데이트 기능 테스트 추가
     @Test
     @DisplayName("스킨 업데이트")
 //    @Rollback(value = false)

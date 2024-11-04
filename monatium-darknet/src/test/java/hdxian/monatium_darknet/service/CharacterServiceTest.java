@@ -30,8 +30,6 @@ class CharacterServiceTest {
     @Autowired
     CharacterService characterService;
 
-    // TODO - 캐릭터 테스트에 스킨, 어사이드 추가 (그 외 각종 테스트 케이스 추가 필 (예외 등))
-
     @Test
     @DisplayName("캐릭터 추가(Dto)")
 //    @Rollback(value = false)

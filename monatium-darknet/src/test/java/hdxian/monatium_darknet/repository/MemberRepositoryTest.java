@@ -78,6 +78,4 @@ class MemberRepositoryTest {
         assertThat(all).containsExactlyInAnyOrder(lily, amelia);
     }
 
-    // TODO - 수정, 삭제 기능 추가 시 해당 테스트 코드 추가 필요
-
 }

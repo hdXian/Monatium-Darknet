@@ -28,8 +28,6 @@ class NoticeServiceTest {
     @Autowired
     NoticeService noticeService;
 
-    // TODO 2 - member, notice repo의 findOne() Optional로 바꾸고 null 들어있으면 service에서 예외 터뜨리는 로직 추가, 해당 로직 테스트 추가
-
     // 공지사항 저장
     @Test
     @DisplayName("공지사항 저장")
@@ -237,7 +235,6 @@ class NoticeServiceTest {
                 .hasMessage("해당 공지사항이 없습니다. id=" + savedNoticeId1);
     }
 
-    // TODO - 회원 삭제 시 해당 공지사항들 삭제 테스트
     @Test
     @DisplayName("회원 삭제 시 연관 공지사항 삭제")
 //    @Rollback(value = false)
