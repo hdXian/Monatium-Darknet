@@ -36,12 +36,7 @@ public class MemberService {
 
     @Transactional
     public Long updateMember(Long id, MemberDto updateParam) {
-        Optional<Member> find = memberRepository.findOne(id);
-        if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 회원을 찾을 수 없습니다. id=" + id);
-        }
-
-        Member member = find.get();
+        Member member = findOne(id);
 
         // 로그인 아이디, 닉네임을 변경하는 경우
         if (!(member.getLoginId().equals(updateParam.getLoginId()))) {
@@ -73,19 +68,19 @@ public class MemberService {
     }
 
     public Member findByLoginId(String loginId) {
-        List<Member> find = memberRepository.findByLoginId(loginId);
+        Optional<Member> find = memberRepository.findByLoginId(loginId);
         if (find.isEmpty()) {
             throw new NoSuchElementException("해당 아이디로 회원을 찾을 수 없습니다.");
         }
-        return find.get(0);
+        return find.get();
     }
 
     public Member findByNickname(String nickName) {
-        List<Member> find = memberRepository.findByNickname(nickName);
+        Optional<Member> find = memberRepository.findByNickname(nickName);
         if (find.isEmpty()) {
             throw new NoSuchElementException("해당 닉네임으로 회원을 찾을 수 없습니다.");
         }
-        return find.get(0);
+        return find.get();
     }
 
     public List<Member> findAll() {
@@ -93,15 +88,15 @@ public class MemberService {
     }
 
     private void checkNickname(String nickName) {
-        List<Member> find = memberRepository.findByNickname(nickName);
-        if (!find.isEmpty()) {
+        Optional<Member> find = memberRepository.findByNickname(nickName);
+        if (find.isPresent()) {
             throw new IllegalArgumentException("이미 사용 중인 닉네임입니다. nickname=" + nickName);
         }
     }
 
     private void checkLoginId(String loginId) {
-        List<Member> find = memberRepository.findByLoginId(loginId);
-        if (!find.isEmpty()) {
+        Optional<Member> find = memberRepository.findByLoginId(loginId);
+        if (find.isPresent()) {
             throw new IllegalArgumentException("이미 존재하는 ID입니다. loginId=" + loginId);
         }
     }

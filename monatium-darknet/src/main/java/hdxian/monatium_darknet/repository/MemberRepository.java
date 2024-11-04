@@ -45,18 +45,20 @@ public class MemberRepository {
         return Optional.ofNullable(find);
     }
 
-    public List<Member> findByLoginId(String loginId) {
+    public Optional<Member> findByLoginId(String loginId) {
         String jpql = "select m from Member m where m.loginId = :loginId";
         return em.createQuery(jpql, Member.class)
                 .setParameter("loginId", loginId)
-                .getResultList();
+                .getResultStream()
+                .findFirst();
     }
 
-    public List<Member> findByNickname(String nickName) {
+    public Optional<Member> findByNickname(String nickName) {
         String jpql = "select m from Member m where m.nickName = :nickName";
         return em.createQuery(jpql, Member.class)
                 .setParameter("nickName", nickName)
-                .getResultList();
+                .getResultStream()
+                .findFirst();
     }
 
     public List<Member> findAll() {

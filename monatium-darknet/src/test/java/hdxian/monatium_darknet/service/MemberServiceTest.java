@@ -65,13 +65,12 @@ class MemberServiceTest {
         // then
         // 중복된 아이디나 닉네임으로 가입을 시도하면 예외가 발생해야 함
         assertThatThrownBy(() -> memberService.createNewMember(dup_loginId))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("이미 존재하는 ID입니다.");
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미 존재하는 ID입니다. loginId=" + dup_loginId.getLoginId());
 
         assertThatThrownBy(() -> memberService.createNewMember(dup_nickName))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("이미 사용 중인 닉네임입니다.");
-
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미 사용 중인 닉네임입니다. nickname=" + dup_nickName.getNickName());
     }
 
     // 회원 검색 기능
@@ -154,7 +153,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("회원 정보 수정")
-    @Rollback(value = false)
+//    @Rollback(value = false)
     void update() {
         // given
         MemberDto dto = new MemberDto();

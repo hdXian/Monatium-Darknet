@@ -56,21 +56,21 @@ class MemberRepositoryTest {
 
         // then
         // 로그인 아이디로 검색
-        List<Member> find_login_lily = repository.findByLoginId("lily");
-        List<Member> find_login_amelia = repository.findByLoginId("amelia");
-        List<Member> find_login_none = repository.findByLoginId("nonExistId");
+        Optional<Member> find_login_lily = repository.findByLoginId("lily");
+        Optional<Member> find_login_amelia = repository.findByLoginId("amelia");
+        Optional<Member> find_login_none = repository.findByLoginId("nonExistId");
 
-        assertThat(find_login_lily).containsExactly(lily); // 릴리로 검색하면 릴리만 나와야 함
-        assertThat(find_login_amelia).containsExactly(amelia); // 아멜리아로 검색하면 아멜리아만 나와야 함
+        assertThat(find_login_lily.get()).isEqualTo(lily); // 릴리로 검색하면 릴리만 나와야 함
+        assertThat(find_login_amelia.get()).isEqualTo(amelia); // 아멜리아로 검색하면 아멜리아만 나와야 함
         assertThat(find_login_none).isEmpty(); // 없는 아이디로 찾으면 결과가 없어야 함.
 
         // 닉네임으로 검색
-        List<Member> find_nick_lily = repository.findByNickname("GM릴1리");
-        List<Member> find_nick_amelia = repository.findByNickname("CM아멜리아");
-        List<Member> find_nick_none = repository.findByNickname("없는닉네임");
+        Optional<Member> find_nick_lily = repository.findByNickname("GM릴1리");
+        Optional<Member> find_nick_amelia = repository.findByNickname("CM아멜리아");
+        Optional<Member> find_nick_none = repository.findByNickname("없는닉네임");
 
-        assertThat(find_nick_lily).containsExactly(lily);
-        assertThat(find_nick_amelia).containsExactly(amelia);
+        assertThat(find_nick_lily.get()).isEqualTo(lily);
+        assertThat(find_nick_amelia.get()).isEqualTo(amelia);
         assertThat(find_nick_none).isEmpty();
 
         // 전체 검색
