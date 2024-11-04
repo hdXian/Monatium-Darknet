@@ -3,8 +3,10 @@ package hdxian.monatium_darknet.service;
 import hdxian.monatium_darknet.domain.Attribute;
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.SkillCategory;
+import hdxian.monatium_darknet.domain.card.ArtifactCard;
 import hdxian.monatium_darknet.domain.character.Attack;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.repository.CardRepository;
 import hdxian.monatium_darknet.repository.CharacterRepository;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CharacterService {
 
+    private final CardRepository cardRepository;
     private final CharacterRepository characterRepository;
 
     // 캐릭터 추가 기능
@@ -91,8 +94,6 @@ public class CharacterService {
 
     @Transactional
     public void deleteCharacter(Long characterId) {
-        Character character = findOne(characterId);
-
         characterRepository.delete(characterId);
     }
 

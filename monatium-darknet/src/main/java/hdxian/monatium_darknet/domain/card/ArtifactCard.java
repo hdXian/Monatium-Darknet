@@ -29,6 +29,12 @@ public class ArtifactCard extends Card{
     protected ArtifactCard() {
     }
 
+    // 연관관계 메서드
+    public void removeCharacter() {
+        this.character = null;
+        this.attachmentSkill = null;
+    }
+
     public static ArtifactCard createArtifactCard(String name, CardGrade cardGrade, String description, String story, Integer cost, String imageUrl,
                                                   Character character, Skill attachmentSkill, Attribute... attributes)
     {
