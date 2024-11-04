@@ -57,6 +57,12 @@ public class MemberService {
         return member.getId();
     }
 
+    @Transactional
+    public void deleteMember(Long memberId) {
+        Member member = findOne(memberId);
+        memberRepository.delete(member); // notice들 cascade 걸려있어서 다 지워짐
+    }
+
     // 회원 검색 기능
     public Member findOne(Long id) {
         Optional<Member> find = memberRepository.findOne(id);

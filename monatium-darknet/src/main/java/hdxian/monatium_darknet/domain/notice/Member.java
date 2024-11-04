@@ -19,7 +19,7 @@ public class Member {
     private String password;
     private String nickName;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Notice> notices = new ArrayList<>();
 
     // for JPA spec (일반 비즈니스 로직에서 사용 x)

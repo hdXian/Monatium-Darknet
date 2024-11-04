@@ -152,7 +152,6 @@ class MemberServiceTest {
                 .hasMessage("해당 닉네임으로 회원을 찾을 수 없습니다.");
     }
 
-
     @Test
     @DisplayName("회원 정보 수정")
     @Rollback(value = false)
@@ -224,6 +223,33 @@ class MemberServiceTest {
                 .hasMessage("이미 사용 중인 닉네임입니다. nickname=" + duplicateDto2.getNickName());
     }
 
-    // TODO - 삭제 기능 추가 시 해당 기능 테스트 필요
+    @Test
+    @DisplayName("회원 삭제")
+    void delete() {
+        // given
+        MemberDto dto = new MemberDto();
+        dto.setLoginId("lily");
+        dto.setPassword("1234");
+        dto.setNickName("GM릴1리");
+
+        MemberDto dto2 = new MemberDto();
+        dto2.setLoginId("amelia");
+        dto2.setPassword("4567");
+        dto2.setNickName("CM아멜리아");
+
+        Long savedId = memberService.createNewMember(dto);
+        Long savedId2 = memberService.createNewMember(dto2);
+
+        // when
+        memberService.deleteMember(savedId);
+
+        // then
+        assertThatThrownBy(() -> memberService.findOne(savedId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 회원이 존재하지 않습니다. id=" + savedId);
+
+        Member findAmelia = memberService.findOne(savedId2);
+        assertThat(findAmelia).isNotNull();
+    }
 
 }

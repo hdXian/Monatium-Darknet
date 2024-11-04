@@ -25,6 +25,21 @@ public class MemberRepository {
         }
     }
 
+    public void delete(Member member) {
+        if (em.contains(member)) {
+            em.remove(member);
+        }
+        else {
+            Member merged = em.merge(member);
+            em.remove(merged);
+        }
+    }
+
+    public void delete(Long id) {
+        Optional<Member> find = findOne(id);
+        find.ifPresent(em::remove);
+    }
+
     public Optional<Member> findOne(Long id) {
         Member find = em.find(Member.class, id);
         return Optional.ofNullable(find);
