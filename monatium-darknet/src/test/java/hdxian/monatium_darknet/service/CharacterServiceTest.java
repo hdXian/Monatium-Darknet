@@ -5,6 +5,7 @@ import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.aside.AsideSpec;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinGrade;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import org.junit.jupiter.api.DisplayName;
@@ -214,6 +215,9 @@ class CharacterServiceTest {
         assertThatThrownBy(() -> skinService.findOneSkin(skin_id))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("해당 스킨이 존재하지 않습니다. skinId=" + skin_id);
+
+        SkinCategory category = skinService.findOneCategory(category_id);
+        assertThat(category).isNotNull();
     }
 
     static SkinDto generateSkinDto(String name, SkinGrade grade) {
