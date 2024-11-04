@@ -320,7 +320,27 @@ class CardServiceTest {
                 .hasMessage("해당 아티팩트 카드가 존재하지 않습니다. id=" + savedId);
     }
 
-    // TODO - 캐릭터 삭제되면 아티팩트 카드의 애착 효과도 없애야 함.
+    @Test
+    @DisplayName("캐릭터 삭제 시 아티팩트 데이터 업데이트")
+//    @Rollback(value = false)
+    void onDeleteCharacter() {
+        // given
+        CharacterDto charDto = generateCharDto("림");
+        Long rim_id = characterService.createNewCharacter(charDto);
+
+        Skill skill = generateAttachmentSkill("그림 스크래치");
+
+        ArtifactCardDto artifactDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
+        Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, skill);
+
+        // when
+        characterService.deleteCharacter(rim_id);
+
+        // then
+        ArtifactCard card = cardService.findOneArtifactCard(savedId);
+        assertThat(card.getCharacter()).isNull();
+        assertThat(card.getAttachmentSkill()).isNull();
+    }
 
 
     static SpellCardDto generateSpellDto(String name, CardGrade grade) {
