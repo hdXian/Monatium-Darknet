@@ -51,6 +51,14 @@ public class CardRepository {
         return Optional.ofNullable(find);
     }
 
+    public Optional<Card> findByName(String name) {
+        String jpql = "select c from Card c where c.name = :name";
+        return em.createQuery(jpql, Card.class)
+                .setParameter("name", name)
+                .getResultStream()
+                .findFirst();
+    }
+
     public Optional<SpellCard> findOneSpell(Long id) {
         SpellCard find = em.find(SpellCard.class, id);
         return Optional.ofNullable(find);

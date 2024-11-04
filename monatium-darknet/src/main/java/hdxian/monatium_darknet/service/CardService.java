@@ -34,6 +34,8 @@ public class CardService {
     // 카드 저장 기능
     @Transactional
     public Long createNewSpellCard(SpellCardDto cardDto) {
+        checkCardName(cardDto.getName());
+
         SpellCard spellCard = SpellCard.createSpellCard(
                 cardDto.getName(),
                 cardDto.getGrade(),
@@ -49,6 +51,8 @@ public class CardService {
 
     @Transactional
     public Long createNewArtifactCard(ArtifactCardDto cardDto) {
+        checkCardName(cardDto.getName());
+
         ArtifactCard artifactCard = ArtifactCard.createArtifactCard(
                 cardDto.getName(),
                 cardDto.getGrade(),
@@ -66,6 +70,7 @@ public class CardService {
 
     @Transactional
     public Long createNewArtifactCard(ArtifactCardDto cardDto, Long characterId, Skill attachmentSkill) {
+        checkCardName(cardDto.getName());
 
         Optional<Character> findCharacter = characterRepository.findOne(characterId);
         if (findCharacter.isEmpty()) {
@@ -93,6 +98,11 @@ public class CardService {
     public Long updateSpellCard(Long cardId, SpellCardDto updateParam) {
         SpellCard spellCard = findOneSpellCard(cardId);
 
+        // 이름을 변경하려고 한다면 기존에 같은 이름이 있는지 확인
+        if (!(spellCard.getName().equals(updateParam.getName()))) {
+            checkCardName(updateParam.getName());
+        }
+
         updateCard(spellCard, updateParam);
 
         return spellCard.getId();
@@ -101,6 +111,11 @@ public class CardService {
     @Transactional
     public Long updateArtifactCard(Long cardId, ArtifactCardDto updateParam) {
         ArtifactCard artifactCard = findOneArtifactCard(cardId);
+
+        // 이름을 변경하려고 한다면 기존에 같은 이름이 있는지 확인
+        if (!(artifactCard.getName().equals(updateParam.getName()))) {
+            checkCardName(updateParam.getName());
+        }
 
         updateCard(artifactCard, updateParam);
 
@@ -115,6 +130,11 @@ public class CardService {
         Optional<Character> findCharacter = characterRepository.findOne(updateCharacterId);
         if (findCharacter.isEmpty()) {
             throw new NoSuchElementException("해당 캐릭터가 존재하지 않습니다. updateCharacterId=" + updateCharacterId);
+        }
+
+        // 이름을 변경하려고 한다면 기존에 같은 이름이 있는지 확인
+        if (!(artifactCard.getName().equals(updateParam.getName()))) {
+            checkCardName(updateParam.getName());
         }
 
         Character updateCharacter = findCharacter.get();
@@ -213,6 +233,13 @@ public class CardService {
         List<Attribute> attributes = skill.getAttributes();
         attributes.clear();
         attributes.addAll(updateParam.getAttributes());
+    }
+
+    private void checkCardName(String cardName) {
+        Optional<Card> find = cardRepository.findByName(cardName);
+        if (find.isPresent()) {
+            throw new IllegalArgumentException("해당 이름의 카드가 이미 있습니다. cardName=" + cardName);
+        }
     }
 
 }
