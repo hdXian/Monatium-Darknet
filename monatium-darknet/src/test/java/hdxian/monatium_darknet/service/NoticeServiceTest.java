@@ -185,7 +185,7 @@ class NoticeServiceTest {
 
     @Test
     @DisplayName("공지사항 수정")
-    @Rollback(value = false)
+//    @Rollback(value = false)
     void update() {
         // given
         MemberDto lilyDto = generateMemberDto("lily", "1234", "GM릴1리");
@@ -205,6 +205,95 @@ class NoticeServiceTest {
         assertThat(updatedNotice.getTitle()).isEqualTo(updateDto.getTitle());
         assertThat(updatedNotice.getCategory()).isEqualTo(updateDto.getCategory());
         assertThat(updatedNotice.getContent()).isEqualTo(updateDto.getContent());
+    }
+
+    // TODO - 공지 삭제 테스트
+
+    @Test
+    @DisplayName("공지사항 삭제")
+//    @Rollback(value = false)
+    void delete() {
+        // given
+        MemberDto lilyDto = generateMemberDto("lily", "1234", "GM릴1리");
+        Long lilyId = memberService.createNewMember(lilyDto);
+
+        NoticeDto noticeDto = generateNoticeDto("공지사항제목", NoticeCategory.NOTICE, "공지사항본문");
+        Long savedNoticeId1 = noticeService.createNewNotice(lilyId, noticeDto);
+
+        NoticeDto noticeDto2 = generateNoticeDto("이벤트제목", NoticeCategory.EVENT, "이벤트본문");
+        Long savedNoticeId2 = noticeService.createNewNotice(lilyId, noticeDto2);
+
+        // when
+        // 1번 공지사항만 삭제
+        noticeService.deleteNotice(savedNoticeId1);
+
+        // then
+        // 2번 공지사항은 남아있어야 함
+        Notice notice2 = noticeService.findOne(savedNoticeId2);
+        List<Notice> all = noticeService.findAll();
+        assertThat(all).containsExactly(notice2);
+
+        // 1번 공지사항은 없어야 함
+        assertThatThrownBy(() -> noticeService.findOne(savedNoticeId1))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("해당 공지사항이 없습니다. id=" + savedNoticeId1);
+    }
+
+    // TODO - 회원 삭제 시 해당 공지사항들 삭제 테스트
+    @Test
+    @DisplayName("회원 삭제 시 연관 공지사항 삭제")
+//    @Rollback(value = false)
+    void onDeleteMember() {
+        // given
+        MemberDto lily_dto = generateMemberDto("lily", "1234", "GM릴1리");
+        Long lilyId = memberService.createNewMember(lily_dto);
+        Member lily = memberService.findOne(lilyId);
+
+        MemberDto amelia_dto = generateMemberDto("amelia", "9865", "CM아멜리아");
+        Long ameliaId = memberService.createNewMember(amelia_dto);
+        Member amelia = memberService.findOne(ameliaId);
+
+        // 공지 2개
+        NoticeDto noticeDto1 = generateNoticeDto("공지사항제목1", NoticeCategory.NOTICE, "공지사항본문1");
+        NoticeDto noticeDto2 = generateNoticeDto("공지사항제목2", NoticeCategory.NOTICE, "공지사항본문2");
+
+        // 이벤트 2개
+        NoticeDto eventDto1 = generateNoticeDto("이벤트제목1", NoticeCategory.EVENT, "이벤트본문1");
+
+        // 업데이트 3개
+        NoticeDto updateDto1 = generateNoticeDto("업데이트제목1", NoticeCategory.UPDATE, "업데이트본문1");
+        NoticeDto updateDto2 = generateNoticeDto("업데이트제목2", NoticeCategory.UPDATE, "업데이트본문2");
+
+        // 개발자노트 1개
+        NoticeDto devDto1 = generateNoticeDto("개발자노트제목1", NoticeCategory.DEV, "개발자노트제목2");
+
+        // 릴리 - 공지1, 업데이트2, 개발자노트1
+        // 아멜리아 - 공지2, 이벤트1, 업데이트1
+        Long noticeId1 = noticeService.createNewNotice(lilyId, noticeDto1);
+        Long noticeId2 = noticeService.createNewNotice(ameliaId, noticeDto2);
+
+        Long eventId1 = noticeService.createNewNotice(ameliaId, eventDto1);
+
+        Long updateId1 = noticeService.createNewNotice(ameliaId, updateDto1);
+        Long updateId2 = noticeService.createNewNotice(lilyId, updateDto2);
+
+        Long devId1 = noticeService.createNewNotice(lilyId, devDto1);
+
+        // when
+        memberService.deleteMember(lilyId); // 릴리 회원 삭제
+
+        // then
+        // 릴리가 작성한 공지들은 삭제됨
+        List<Notice> byLily = noticeService.findByMemberId(lilyId);
+        assertThat(byLily).isEmpty();
+
+        // 아멜리아가 작성한 공지들
+        Notice notice2 = noticeService.findOne(noticeId2);
+        Notice event1 = noticeService.findOne(eventId1);
+        Notice update1 = noticeService.findOne(updateId1);
+
+        List<Notice> byAmelia = noticeService.findByMemberId(ameliaId);
+        assertThat(byAmelia).containsExactlyInAnyOrder(notice2, event1, update1);
     }
 
     static NoticeDto generateNoticeDto(String title, NoticeCategory category, String content) {

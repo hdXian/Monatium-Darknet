@@ -27,12 +27,6 @@ public class Notice {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    // 연관관계 메서드
-    public void setMember(Member member) {
-        this.member = member;
-        member.getNotices().add(this);
-    }
-
     // for JPA spec (일반 비즈니스 로직에서 사용 x)
     protected Notice() {
     }
@@ -47,7 +41,7 @@ public class Notice {
         notice.setDate(LocalDateTime.now());
         notice.setViews(0L);
 
-        notice.setMember(member);
+        member.addNotice(notice); // 연관관계 추가 (setCharacter()도 여기서 설정됨)
 
         return notice;
     }

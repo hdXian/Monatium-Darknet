@@ -27,6 +27,21 @@ public class NoticeRepository {
         }
     }
 
+    public void delete(Notice notice) {
+        if (em.contains(notice)) {
+            em.remove(notice);
+        }
+        else {
+            Notice merged = em.merge(notice);
+            em.remove(merged);
+        }
+    }
+
+    public void delete(Long id) {
+        Optional<Notice> find = findOne(id);
+        find.ifPresent(em::remove);
+    }
+
     // 공지사항 조회
     public Optional<Notice> findOne(Long id) {
         Notice find = em.find(Notice.class, id);

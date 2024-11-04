@@ -55,6 +55,18 @@ public class NoticeService {
         return notice.getId();
     }
 
+    @Transactional
+    public void deleteNotice(Long noticeId) {
+        Notice notice = findOne(noticeId);
+
+        Member member = notice.getMember();
+        if (member != null) {
+            member.removeNotice(notice);
+        }
+
+        noticeRepository.delete(notice);
+    }
+
     // 공지사항 조회 기능
     public Notice findOne(Long noticeId) {
         Optional<Notice> find = noticeRepository.findOne(noticeId);

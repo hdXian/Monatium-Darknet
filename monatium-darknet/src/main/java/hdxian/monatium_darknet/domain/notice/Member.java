@@ -19,8 +19,19 @@ public class Member {
     private String password;
     private String nickName;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notice> notices = new ArrayList<>();
+
+    // 비즈니스 로직
+    public void addNotice(Notice notice) {
+        this.notices.add(notice);
+        notice.setMember(this);
+    }
+
+    public void removeNotice(Notice notice) {
+        this.notices.remove(notice);
+        notice.setMember(null);
+    }
 
     // for JPA spec (일반 비즈니스 로직에서 사용 x)
     protected Member() {
