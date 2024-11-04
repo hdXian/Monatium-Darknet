@@ -102,6 +102,67 @@ class CardServiceTest {
     }
 
     @Test
+    @DisplayName("중복 이름 스펠 카드 추가")
+    void duplicateSpell() {
+        // given
+        SpellCardDto spellDto = generateSpellDto("사기진작", CardGrade.RARE);
+        SpellCardDto dupDto = generateSpellDto("사기진작", CardGrade.NORMAL);
+
+        // when
+        Long savedId = cardService.createNewSpellCard(spellDto);
+
+        // then
+        assertThatThrownBy(() -> cardService.createNewSpellCard(dupDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("해당 이름의 카드가 이미 있습니다. cardName=" + dupDto.getName());
+    }
+
+    @Test
+    @DisplayName("중복 이름 아티팩트 카드 추가 (애착x)")
+    void dupArtifact() {
+        // given
+        ArtifactCardDto artifactDto = generateArtifactDto("날씨는 맑음 카드", CardGrade.LEGENDARY);
+        ArtifactCardDto dupDto = generateArtifactDto("날씨는 맑음 카드", CardGrade.LEGENDARY);
+
+        // when
+        // 카드 정보, 애착 사도, 애착 아티팩트 스킬
+        Long saved_id = cardService.createNewArtifactCard(artifactDto);
+
+        // then
+        assertThatThrownBy(() -> cardService.createNewArtifactCard(dupDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("해당 이름의 카드가 이미 있습니다. cardName=" + dupDto.getName());
+    }
+
+    @Test
+    @DisplayName("중복 이름 아티팩트 카드 추가 (애착O)")
+    void dupArtifact2() {
+        // 애착 사도 생성
+        CharacterDto charDto = generateCharDto("림");
+        Long rim_id = characterService.createNewCharacter(charDto);
+        Character rim = characterService.findOne(rim_id);
+
+        CharacterDto charDto2 = generateCharDto("레비");
+        Long levi_id = characterService.createNewCharacter(charDto2);
+        Character levi = characterService.findOne(levi_id);
+
+        // 애착 아티팩트 스킬 생성
+        Skill attachmentSkill = generateAttachmentSkill("그림 스크래치");
+
+        // Dto 생성
+        ArtifactCardDto artifactDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
+        ArtifactCardDto dupDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
+
+        // when
+        Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, attachmentSkill);
+
+        // then
+        assertThatThrownBy(() -> cardService.createNewArtifactCard(dupDto, levi_id, attachmentSkill))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("해당 이름의 카드가 이미 있습니다. cardName=" + dupDto.getName());
+    }
+
+    @Test
     @DisplayName("전체 카드 추가 및 조회")
 //    @Rollback(value = false)
     void findAll() {
