@@ -29,6 +29,8 @@ public class CardService {
     private final CharacterRepository characterRepository;
     private final CardRepository cardRepository;
 
+    // TODO - 카드 이름 중복 체크 필요할듯
+
     // 카드 저장 기능
     @Transactional
     public Long createNewSpellCard(SpellCardDto cardDto) {
@@ -89,13 +91,8 @@ public class CardService {
 
     @Transactional
     public Long updateSpellCard(Long cardId, SpellCardDto updateParam) {
+        SpellCard spellCard = findOneSpellCard(cardId);
 
-        Optional<SpellCard> find = cardRepository.findOneSpell(cardId);
-        if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 스펠 카드가 존재하지 않습니다. id=" + cardId);
-        }
-
-        SpellCard spellCard = find.get();
         updateCard(spellCard, updateParam);
 
         return spellCard.getId();
@@ -103,12 +100,8 @@ public class CardService {
 
     @Transactional
     public Long updateArtifactCard(Long cardId, ArtifactCardDto updateParam) {
-        Optional<ArtifactCard> find = cardRepository.findOneArtifact(cardId);
-        if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 아티팩트 카드가 존재하지 않습니다. id=" + cardId);
-        }
+        ArtifactCard artifactCard = findOneArtifactCard(cardId);
 
-        ArtifactCard artifactCard = find.get();
         updateCard(artifactCard, updateParam);
 
         return artifactCard.getId();
@@ -117,17 +110,14 @@ public class CardService {
     // 아티팩트 카드 업데이트 하는데 캐릭터까지 함께 받아야 하나? 이거 바뀔 일 사실상 없는데? TODO - 업데이트에 캐릭터 제외하기
     @Transactional
     public Long updateArtifactCard(Long cardId, ArtifactCardDto updateParam, Long updateCharacterId, Skill updateSkill) {
-        Optional<ArtifactCard> find = cardRepository.findOneArtifact(cardId);
+        ArtifactCard artifactCard = findOneArtifactCard(cardId);
+
         Optional<Character> findCharacter = characterRepository.findOne(updateCharacterId);
-        if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 아티팩트 카드가 존재하지 않습니다. id=" + cardId);
-        }
         if (findCharacter.isEmpty()) {
             throw new NoSuchElementException("해당 캐릭터가 존재하지 않습니다. updateCharacterId=" + updateCharacterId);
         }
 
         Character updateCharacter = findCharacter.get();
-        ArtifactCard artifactCard = find.get();
 
         updateCard(artifactCard, updateParam, updateCharacter, updateSkill);
 
