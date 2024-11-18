@@ -32,6 +32,9 @@ dependencies {
 	// add p6spy decorator (for test)
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.2'
 
+	// for RandomStringUtils (randomize fileName)
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
