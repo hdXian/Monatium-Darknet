@@ -12,6 +12,16 @@ spring:
       hibernate:
         format_sql: true
 
+  web:
+    resources:
+      encoding:
+        charset: UTF-8 # 정적 리소스 기본 인코딩 설정
+      chain:
+        enabled: true # 리소스 체인 기능 활성화
+        strategy:
+          content:
+            enabled: true # 캐시 무효화를 위해 쿼리 스트링에 버전 정보 추가
+
 logging.level:
   org.hibernate.SQL: debug # show executed SQL
   org.hibernate.resource.transaction: debug # show transaction (commit, rollback)
