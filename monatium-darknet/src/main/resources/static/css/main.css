@@ -1,10 +1,3 @@
-@font-face {
-    font-family: 'MobileGothicPOP';
-    src: url('/font/ONE_Mobile_POP_OTF.otf') format('opentype'), url('/font/ONE_Mobile_POP.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
 body {
     font-family: 'MobileGothicPOP', sans-serif;
     /* background: url('../images/bkg_worldtree.jpg') no-repeat center center; */

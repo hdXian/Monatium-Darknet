@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/header :: base_header(~{::title}, ~{::link})}">
+
+<head th:replace="~{fragments/header :: common_header(~{::title}, ~{::link})}">
     <title>짭릭컬 리리바이브</title>
-    <link rel="stylesheet" th:href="@{/css/main.css}">
     <link rel="stylesheet" th:href="@{/css/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
-    <!-- 네비게이션 바 스타일 따로 정의 후 추가 필요 -->
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <!-- 여기에 커스텀 css 추가 -->
 </head>
-<body>
 
+<body>
 <!-- 상단 네비게이션 바 -->
-<nav th:replace="~{fragments/navbar :: common_navbar}"> </nav>
+<nav th:replace="~{fragments/navbar :: common_navbar}">
+    상단 네비게이션 바 영역
+</nav>
 
 <!-- Hero Section -->
 <section id="hero" class="hero-section">
@@ -136,7 +140,7 @@
 
                 <!-- 더보기 버튼: 하단 우측 정렬 -->
                 <div class="w-100 d-flex justify-content-end">
-                    <button class="notice-button btn btn-custom btn-lg">공지사항 더보기</button>
+                    <a th:href="@{/notices}" class="notice-button btn btn-custom btn-lg"> 공지사항 더보기 </a>
                 </div>
             </div>
 
@@ -679,4 +683,5 @@
 <script th:src="@{/js/characters_main.js}"></script>
 
 </body>
+
 </html>

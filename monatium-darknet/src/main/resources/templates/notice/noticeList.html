@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!-- v13 -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: common_header(~{::title}, ~{::link})}">
+    <title>공지사항</title>
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/noticeList.css}">
+    <!-- 여기에 커스텀 css 추가 -->
+</head>
+
+<body>
+    <!-- 상단 네비게이션 바 -->
+    <nav th:replace="~{fragments/navbar :: common_navbar}">
+        상단 네비게이션 바 영역
+    </nav>
+
+    <!-- 표지 이미지 섹션 -->
+    <section class="cover-section"></section>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <div class="container container-main">
+
+        <!-- 카테고리 필터링 메뉴 -->
+        <div class="category-menu">
+            <h5>카테고리</h5>
+            <ul>
+                <li><a href="?category=latest">최신 소식</a></li>
+                <li><a href="?category=notice">공지사항</a></li>
+                <li><a href="?category=update">업데이트</a></li>
+                <li><a href="?category=event">이벤트</a></li>
+                <li><a href="?category=devnote">개발자 노트</a></li>
+            </ul>
+        </div>
+
+        <!-- 공지사항 리스트 섹션 -->
+        <div class="notice-list-section">
+
+            <!-- 공지사항 제목 -->
+            <h2 class="text-center mb-5">새소식 및 공지사항</h2>
+
+            <!-- 공지사항 목록 -->
+            <ul class="list-unstyled">
+                <li class="notice-item" th:each="notice : ${noticeList}">
+                    <a th:href="@{/news/{id}(id=${notice.id})}"
+                       class="notice-title"
+                       th:text="${notice.title}"> 공지사항 제목 1 </a>
+                    <div class="notice-date" th:text="${notice.date}">날짜</div>
+                </li>
+
+                <li class="notice-item" th:each="notice : ${noticeList}">
+                    <a th:href="@{/news/{id}(id=${notice.id})}"
+                       class="notice-title"
+                       th:text="${notice.title}"> 공지사항 제목 2 </a>
+                    <div class="notice-date" th:text="${notice.date}">날짜</div>
+                </li>
+
+                <li class="notice-item" th:each="notice : ${noticeList}">
+                    <a th:href="@{/news/{id}(id=${notice.id})}"
+                       class="notice-title"
+                       th:text="${notice.title}"> 공지사항 제목 3 </a>
+                    <div class="notice-date" th:text="${notice.date}">날짜</div>
+                </li>
+
+                <li class="notice-item" th:each="notice : ${noticeList}">
+                    <a th:href="@{/news/{id}(id=${notice.id})}"
+                       class="notice-title"
+                       th:text="${notice.title}"> 공지사항 제목 4 </a>
+                    <div class="notice-date" th:text="${notice.date}">날짜</div>
+                </li>
+            </ul>
+
+            <!-- 뒤로가기 버튼 -->
+            <div class="text-center">
+              <a href="/" class="btn btn-back">메인으로 돌아가기</a>
+            </div>
+        </div>
+
+    </div>
+
+    <footer th:replace="~{fragments/footer :: common_footer}"></footer>
+
+</body>
+
+</html>
