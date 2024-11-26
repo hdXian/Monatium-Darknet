@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/baseHeader :: base_header(~{::title}, ~{::link})}">
+<head th:replace="~{fragments/header :: base_header(~{::title}, ~{::link})}">
     <title>짭릭컬 리리바이브</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
     <!-- 네비게이션 바 스타일 따로 정의 후 추가 필요 -->
 </head>
 <body>
@@ -665,21 +666,7 @@
 </div>
 
 <!-- 푸터 -->
-<footer class="text-white py-4">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h5>회사 정보</h5>
-                <p>© 2024 Game Company. All rights reserved.</p>
-            </div>
-            <div class="col-md-6 text-end">
-                <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
-            </div>
-        </div>
-    </div>
-</footer>
+<footer th:replace="~{fragments/footer}"></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>

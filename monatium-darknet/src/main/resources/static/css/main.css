@@ -391,16 +391,14 @@ h2.section-title {
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
 }
+
 .remote-control h4 {
     margin-bottom: 15px;
     color: #4CAF50;
 }
+
 .remote-control .btn-custom {
     display: block;
     margin-bottom: 10px;
     text-align: center;
-}
-
-footer {
-    background-color: #121212;
 }
