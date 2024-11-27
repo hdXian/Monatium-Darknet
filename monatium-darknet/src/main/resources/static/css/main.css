@@ -185,7 +185,8 @@ h2.section-title {
 
 .worldview-content {
     width: 80%;
-    height: 45vw;
+    /* height: 45vw; */
+    height: 100%;
     background-color: #D3D3D3;
 }
 
