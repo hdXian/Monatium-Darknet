@@ -61,6 +61,7 @@ h2.section-title {
     transform: translate(-50%, -50%);
     min-width: 100vw;
     min-height: 56.25vw; /* 16:9 비율로 최소 높이 설정 */
+    border: none;
 }
 
 /* 영상 위에 검은색 오버레이 추가 */
