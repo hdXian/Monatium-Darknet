@@ -91,7 +91,7 @@ h2.section-title {
 
 /* 공지사항 섹션 스타일 */
 .notice-section {
-    background: url('../images/bkg/bkg_worldtree_blur.png') no-repeat center center;
+    background: url('/imgs/bkg/bkg1.png') no-repeat center center;
     background-size: cover;
     width: 100%; /* 섹션이 화면 전체 너비를 사용 */
     height: 56.25vw; /* 16:9 비율 유지 */
@@ -138,7 +138,6 @@ h2.section-title {
 }
 
 .slide-text .slide-date {
-    /* font-size: clamp(0rem, 0.9vw, 1.5rem); */
     font-size: 1.2vw;
     color: #6c757d; /* Bootstrap의 text-muted 색상 */
 }
@@ -154,7 +153,6 @@ h2.section-title {
 .notice-media .media-text {
     color: black;
     font-size: 1.2vw;
-    /* font-size: clamp(0, 1vw, 1.5rem); */
 }
 
 .notice-img-container {
@@ -173,7 +171,7 @@ h2.section-title {
 
 /* 세계관 섹션 스타일 */
 .worldview-section {
-    background: url('../images/bkg/bkg_theater.webp') no-repeat center center;
+    background: url('/imgs/bkg/bkg2.webp') no-repeat center center;
     background-size: cover;
     width: 100%; /* 섹션이 화면 전체 너비를 사용 */
     height: 56.25vw; /* 16:9 비율 유지 */
@@ -199,7 +197,7 @@ h2.section-title {
 
 /* 캐릭터 소개 섹션 스타일 */
 .characters-section {
-    background: url('../images/bkg/bkg_worldtree.jpg') no-repeat center center;
+    background: url('/imgs/bkg/bkg3.jpg') no-repeat center center;
     background-size: cover;
     width: 100%; /* 섹션이 화면 전체 너비를 사용 */
     height: 56.25vw; /* 16:9 비율 유지 */
@@ -214,7 +212,7 @@ h2.section-title {
     width: 80%;
     height: 45vw;
     /* background-color: #D3D3D3; */
-    background: url('../images/main_book.png') no-repeat center center;
+    background: url('/imgs/bkg/main_book.png') no-repeat center center;
     background-size: contain;
 
     margin: 0 auto; /* 중앙 정렬 */
@@ -314,7 +312,7 @@ h2.section-title {
 
 /* 포토존 섹션 스타일 */
 .photozone-section {
-    background: url('../images/bkg/bkg_monatium_blur.png') no-repeat center center;
+    background: url('/imgs/bkg/bkg4.png') no-repeat center center;
     background-size: cover;
     width: 100%; /* 섹션이 화면 전체 너비를 사용 */
     height: 56.25vw; /* 16:9 비율 유지 */
