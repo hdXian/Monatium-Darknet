@@ -22,6 +22,8 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final MemberService memberService;
 
+    // TODO - 공지사항 리스트 불러올 시 페이징 추가 필요
+
     // 공지사항 추가 기능
     @Transactional
     public Long createNewNotice(Long memberId, NoticeDto noticeDto) {

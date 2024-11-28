@@ -28,11 +28,11 @@
         <div class="category-menu">
             <h5>카테고리</h5>
             <ul>
-                <li><a href="?category=latest">최신 소식</a></li>
+                <li><a href="/notices">최신 소식</a></li>
                 <li><a href="?category=notice">공지사항</a></li>
                 <li><a href="?category=update">업데이트</a></li>
                 <li><a href="?category=event">이벤트</a></li>
-                <li><a href="?category=devnote">개발자 노트</a></li>
+                <li><a href="?category=dev">개발자 노트</a></li>
             </ul>
         </div>
 
@@ -45,15 +45,13 @@
             <!-- 공지사항 목록 -->
             <ul class="list-unstyled">
 
-                <li class="notice-item"
-                    th:each="notice : ${noticeList}"
-                    th:with="categoryName = ${notice.category.name()}">
-
+                <li class="notice-item" th:each="notice : ${noticeList}">
                     <!-- 썸네일 이미지 -->
-                    <div class="thumbnail-container me-3" th:switch="${categoryName}">
+                    <!-- !! ${{}} 를 사용해야 컨버전 서비스가 적용됨 -->
+                    <div class="thumbnail-container me-3" th:switch="${{notice.category}}">
                         <img th:case="'NOTICE'" th:src="@{/imgs/notice/CategoryThumbnail1.png}" alt="공지사항 썸네일" class="notice-thumbnail">
-                        <img th:case="'EVENT'" th:src="@{/imgs/notice/CategoryThumbnail2.png}" alt="공지사항 썸네일" class="notice-thumbnail">
-                        <img th:case="'UPDATE'" th:src="@{/imgs/notice/CategoryThumbnail3.png}" alt="공지사항 썸네일" class="notice-thumbnail">
+                        <img th:case="'UPDATE'" th:src="@{/imgs/notice/CategoryThumbnail2.png}" alt="공지사항 썸네일" class="notice-thumbnail">
+                        <img th:case="'EVENT'" th:src="@{/imgs/notice/CategoryThumbnail3.png}" alt="공지사항 썸네일" class="notice-thumbnail">
                         <img th:case="'DEV'" th:src="@{/imgs/notice/CategoryThumbnail4.png}" alt="공지사항 썸네일" class="notice-thumbnail">
                         <img th:case="*" th:src="@{/imgs/notice/CategoryThumbnail1.png}" alt="공지사항 썸네일" class="notice-thumbnail">
                     </div>
