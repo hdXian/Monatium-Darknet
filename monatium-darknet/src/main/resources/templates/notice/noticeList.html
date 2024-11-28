@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- v13 -->
+<!--공지사항별 이미지 경로 추가, 캐릭터 이미지 (초상화, 프로필, 스킨 등) 경로 설계-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: common_header(~{::title}, ~{::link})}">
@@ -50,26 +51,27 @@
                     <div class="notice-date" th:text="${notice.date}">날짜</div>
                 </li>
 
-                <li class="notice-item" th:each="notice : ${noticeList}">
-                    <a th:href="@{/news/{id}(id=${notice.id})}"
-                       class="notice-title"
-                       th:text="${notice.title}"> 공지사항 제목 2 </a>
-                    <div class="notice-date" th:text="${notice.date}">날짜</div>
-                </li>
+<!--                <li class="notice-item" th:each="notice : ${noticeList}">-->
+<!--                    <a th:href="@{/news/{id}(id=${notice.id})}"-->
+<!--                       class="notice-title"-->
+<!--                       th:text="${notice.title}"> 공지사항 제목 2 </a>-->
+<!--                    <div class="notice-date" th:text="${notice.date}">날짜</div>-->
+<!--                </li>-->
 
-                <li class="notice-item" th:each="notice : ${noticeList}">
-                    <a th:href="@{/news/{id}(id=${notice.id})}"
-                       class="notice-title"
-                       th:text="${notice.title}"> 공지사항 제목 3 </a>
-                    <div class="notice-date" th:text="${notice.date}">날짜</div>
-                </li>
+<!--                <li class="notice-item" th:each="notice : ${noticeList}">-->
+<!--                    <a th:href="@{/news/{id}(id=${notice.id})}"-->
+<!--                       class="notice-title"-->
+<!--                       th:text="${notice.title}"> 공지사항 제목 3 </a>-->
+<!--                    <div class="notice-date" th:text="${notice.date}">날짜</div>-->
+<!--                </li>-->
 
-                <li class="notice-item" th:each="notice : ${noticeList}">
-                    <a th:href="@{/news/{id}(id=${notice.id})}"
-                       class="notice-title"
-                       th:text="${notice.title}"> 공지사항 제목 4 </a>
-                    <div class="notice-date" th:text="${notice.date}">날짜</div>
-                </li>
+<!--                <li class="notice-item" th:each="notice : ${noticeList}">-->
+<!--                    <a th:href="@{/news/{id}(id=${notice.id})}"-->
+<!--                       class="notice-title"-->
+<!--                       th:text="${notice.title}"> 공지사항 제목 4 </a>-->
+<!--                    <div class="notice-date" th:text="${notice.date}">날짜</div>-->
+<!--                </li>-->
+
             </ul>
 
             <!-- 뒤로가기 버튼 -->

@@ -6,7 +6,7 @@ body {
 
 /* 표지 이미지 섹션 */
 .cover-section {
-    background: url("../images/notice_cover.png") no-repeat center center;
+    background: url("/imgs/notice/banner.png") no-repeat center center;
     background-size: cover;
     height: 300px;
     max-width: 80%;

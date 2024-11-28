@@ -76,30 +76,6 @@
 
                         </div>
 
-<!--                        <div class="carousel-item active">-->
-<!--                            <img src="../images/slide1.jpg" class="img-fluid rounded mb-3" alt="업데이트 이미지">-->
-<!--                            <div class="slide-text">-->
-<!--                                <div class="slide-title">업데이트 1.0 출시</div>-->
-<!--                                <div class="slide-date">2024-10-01</div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-<!--                        <div class="carousel-item">-->
-<!--                            <img src="../images/slide3.png" class="img-fluid rounded mb-3" alt="이벤트 이미지">-->
-<!--                            <div class="slide-text">-->
-<!--                                <div class="slide-title">10월 이벤트 안내</div>-->
-<!--                                <div class="slide-date">2024-10-05</div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-<!--                        <div class="carousel-item">-->
-<!--                            <img src="../images/slide4.jpg" class="img-fluid rounded mb-3" alt="서버 점검 이미지">-->
-<!--                            <div class="slide-text">-->
-<!--                                <div class="slide-title">서버 점검 안내</div>-->
-<!--                                <div class="slide-date">2024-10-10</div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
                     </div>
                 </div>
 
@@ -135,22 +111,30 @@
             <div class="notice-content-col d-flex flex-column gap-3" data-aos="fade-left">
                 <!-- 첫 번째 이미지 -->
                 <div class="notice-img-container position-relative">
-                    <img th:src="@{/imgs/main/notice_sc1.png}" class="img-fluid rounded shadow" alt="공지사항">
+                    <a th:href="@{/notices?category=notice}">
+                        <img th:src="@{/imgs/main/notice_sc1.png}" class="img-fluid rounded shadow" alt="공지사항">
+                    </a>
                 </div>
             
                 <!-- 두 번째 이미지 -->
                 <div class="notice-img-container position-relative">
-                    <img th:src="@{/imgs/main/notice_sc2.png}" class="img-fluid rounded shadow" alt="업데이트">
+                    <a th:href="@{/notices?category=update}">
+                        <img th:src="@{/imgs/main/notice_sc2.png}" class="img-fluid rounded shadow" alt="업데이트">
+                    </a>
                 </div>
             
                 <!-- 세 번째 이미지 -->
                 <div class="notice-img-container position-relative">
-                    <img th:src="@{/imgs/main/notice_sc3.png}" class="img-fluid rounded shadow" alt="이벤트">
+                    <a th:href="@{/notices?category=event}">
+                        <img th:src="@{/imgs/main/notice_sc3.png}" class="img-fluid rounded shadow" alt="이벤트">
+                    </a>
                 </div>
             
                 <!-- 네 번째 이미지 -->
                 <div class="notice-img-container position-relative">
-                    <img th:src="@{/imgs/main/notice_sc4.png}" class="img-fluid rounded shadow" alt="개발자 노트">
+                    <a th:href="@{/notices?category=devnote}">
+                        <img th:src="@{/imgs/main/notice_sc4.png}" class="img-fluid rounded shadow" alt="개발자 노트">
+                    </a>
                 </div>
 
                 <!-- 더보기 버튼: 하단 우측 정렬 -->
