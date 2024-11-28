@@ -46,4 +46,8 @@ public class Notice {
         return notice;
     }
 
+    public void incrementView() {
+        this.views++;
+    }
+
 }

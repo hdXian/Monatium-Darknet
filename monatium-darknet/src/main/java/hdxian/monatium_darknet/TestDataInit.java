@@ -36,8 +36,8 @@ public class TestDataInit {
 
         // 공지사항 추가
         NoticeDto noticeDto1 = generateNoticeDto("테스트 공지사항1 제목 (공지사항)", NoticeCategory.NOTICE, "테스트 공지사항1 본문");
-        NoticeDto noticeDto2 = generateNoticeDto("테스트 공지사항2 제목 (업데이트)", NoticeCategory.UPDATE, "테스트 공지사항2 본문");
-        NoticeDto noticeDto3 = generateNoticeDto("테스트 공지사항3 제목 (이벤트)", NoticeCategory.EVENT, "테스트 공지사항3 본문");
+        NoticeDto noticeDto2 = generateNoticeDto("테스트 공지사항2 제목 (업데이트)", NoticeCategory.EVENT, "테스트 공지사항2 본문");
+        NoticeDto noticeDto3 = generateNoticeDto("테스트 공지사항3 제목 (이벤트)", NoticeCategory.UPDATE, "테스트 공지사항3 본문");
         NoticeDto noticeDto4 = generateNoticeDto("테스트 공지사항4 제목 (개발자노트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
         Long noticeId1 = noticeService.createNewNotice(memberId, noticeDto1);
         Long noticeId2 = noticeService.createNewNotice(memberId, noticeDto2);

@@ -3,12 +3,14 @@ package hdxian.monatium_darknet.controller;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import hdxian.monatium_darknet.service.NoticeService;
+import hdxian.monatium_darknet.service.dto.NoticeDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDateTime;
@@ -29,6 +31,15 @@ public class NoticeController {
         model.addAttribute("noticeList", noticeList);
         
         return "notice/noticeList";
+    }
+
+    @GetMapping("/{id}")
+    public String content(@PathVariable("id") Long noticeId, Model model) {
+        Notice notice = noticeService.findOne(noticeId);
+
+        model.addAttribute("notice", notice);
+
+        return "notice/noticeDetail";
     }
 
 }

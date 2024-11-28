@@ -64,12 +64,15 @@ public class NoticeService {
     }
 
     // 공지사항 조회 기능
+    @Transactional
     public Notice findOne(Long noticeId) {
         Optional<Notice> find = noticeRepository.findOne(noticeId);
         if (find.isEmpty()) {
             throw new NoSuchElementException("해당 공지사항이 없습니다. id=" + noticeId);
         }
-        return find.get();
+        Notice notice = find.get();
+        notice.incrementView();
+        return notice;
     }
 
     public List<Notice> findByMemberId(Long memberId) {
