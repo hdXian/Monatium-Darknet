@@ -1,5 +1,5 @@
 body {
-    font-family: 'MobileGothicPOP', sans-serif;
+    font-family: 'MobileGothicPOP', 'Noto Sans JP', sans-serif;
     /* background: url('../images/bkg_worldtree.jpg') no-repeat center center; */
     background-size: cover; /* 이미지를 화면에 꽉 채우기 */
     background-attachment: fixed; /* 스크롤 시에도 배경 고정 */
