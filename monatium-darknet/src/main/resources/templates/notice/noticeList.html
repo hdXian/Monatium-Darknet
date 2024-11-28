@@ -44,33 +44,30 @@
 
             <!-- 공지사항 목록 -->
             <ul class="list-unstyled">
-                <li class="notice-item" th:each="notice : ${noticeList}">
-                    <a th:href="@{/news/{id}(id=${notice.id})}"
-                       class="notice-title"
-                       th:text="${notice.title}"> 공지사항 제목 1 </a>
-                    <div class="notice-date" th:text="${notice.date}">날짜</div>
+
+                <li class="notice-item"
+                    th:each="notice : ${noticeList}"
+                    th:with="categoryName = ${notice.category.name()}">
+
+                    <!-- 썸네일 이미지 -->
+                    <div class="thumbnail-container me-3" th:switch="${categoryName}">
+                        <img th:case="'NOTICE'" th:src="@{/imgs/notice/CategoryThumbnail1.png}" alt="공지사항 썸네일" class="notice-thumbnail">
+                        <img th:case="'EVENT'" th:src="@{/imgs/notice/CategoryThumbnail2.png}" alt="공지사항 썸네일" class="notice-thumbnail">
+                        <img th:case="'UPDATE'" th:src="@{/imgs/notice/CategoryThumbnail3.png}" alt="공지사항 썸네일" class="notice-thumbnail">
+                        <img th:case="'DEV'" th:src="@{/imgs/notice/CategoryThumbnail4.png}" alt="공지사항 썸네일" class="notice-thumbnail">
+                        <img th:case="*" th:src="@{/imgs/notice/CategoryThumbnail1.png}" alt="공지사항 썸네일" class="notice-thumbnail">
+                    </div>
+
+                    <!-- 제목 및 날짜 -->
+                    <div class="notice-content">
+                        <a th:href="@{ /notices/{id} (id=${notice.id}) }"
+                           class="notice-title"
+                           th:text="${notice.title}"> 공지사항 제목 </a>
+
+                        <div class="notice-date" th:text="${#temporals.format(notice.date, 'yyyy-MM-dd')}"> 날짜 </div>
+                    </div>
+
                 </li>
-
-<!--                <li class="notice-item" th:each="notice : ${noticeList}">-->
-<!--                    <a th:href="@{/news/{id}(id=${notice.id})}"-->
-<!--                       class="notice-title"-->
-<!--                       th:text="${notice.title}"> 공지사항 제목 2 </a>-->
-<!--                    <div class="notice-date" th:text="${notice.date}">날짜</div>-->
-<!--                </li>-->
-
-<!--                <li class="notice-item" th:each="notice : ${noticeList}">-->
-<!--                    <a th:href="@{/news/{id}(id=${notice.id})}"-->
-<!--                       class="notice-title"-->
-<!--                       th:text="${notice.title}"> 공지사항 제목 3 </a>-->
-<!--                    <div class="notice-date" th:text="${notice.date}">날짜</div>-->
-<!--                </li>-->
-
-<!--                <li class="notice-item" th:each="notice : ${noticeList}">-->
-<!--                    <a th:href="@{/news/{id}(id=${notice.id})}"-->
-<!--                       class="notice-title"-->
-<!--                       th:text="${notice.title}"> 공지사항 제목 4 </a>-->
-<!--                    <div class="notice-date" th:text="${notice.date}">날짜</div>-->
-<!--                </li>-->
 
             </ul>
 

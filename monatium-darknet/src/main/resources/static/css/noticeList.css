@@ -8,7 +8,7 @@ body {
 .cover-section {
     background: url("/imgs/notice/banner.png") no-repeat center center;
     background-size: cover;
-    height: 300px;
+    height: 20vh;
     max-width: 80%;
     margin: 0 auto;
     border-radius: 10px;
@@ -63,13 +63,42 @@ body {
     margin: 0 auto;
 }
 
+/*
 .notice-item {
-    border-bottom: 1px solid #ddd; /* 밝은 테두리 */
+    border-bottom: 1px solid #ddd;
     padding: 20px 0;
+}
+*/
+
+.notice-item {
+    display: flex; /* 썸네일과 텍스트를 수평 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    padding: 2vh 0; /* 화면 높이에 비례한 여백 */
+    border-bottom: 1px solid #ddd;
+    gap: 2%; /* 썸네일과 텍스트 간격 */
 }
 
 .notice-item:hover {
     background-color: #ffe4b5; /* 항목 호버 시 밝은 배경 */
+}
+
+.thumbnail-container {
+    width: 15%; /* 부모 컨테이너 너비의 15% */
+    aspect-ratio: 1; /* 정사각형 비율 유지 */
+    flex-shrink: 0; /* 크기 줄어들지 않도록 설정 */
+    border-radius: 0.5rem; /* 둥근 모서리 */
+    overflow: hidden; /* 이미지 넘침 방지 */
+}
+
+.notice-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 비율 유지하며 영역 채움 */
+}
+
+/* 썸네일을 제외한 공지사항 요소 컨텐츠*/
+.notice-content {
+    flex-grow: 1; /* 남은 공간을 차지 */
 }
 
 .notice-title {
@@ -85,6 +114,12 @@ body {
 .notice-date {
     color: #666666; /* 날짜를 회색으로 */
     font-size: 0.9rem;
+}
+
+.notice-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .btn-back {
