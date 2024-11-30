@@ -1,9 +1,6 @@
 package hdxian.monatium_darknet.config;
 
-import hdxian.monatium_darknet.config.converter.NoticeCategoryToStringConverter;
-import hdxian.monatium_darknet.config.converter.RaceToStringConverter;
-import hdxian.monatium_darknet.config.converter.StringToNoticeCategoryConverter;
-import hdxian.monatium_darknet.config.converter.StringToRaceConverter;
+import hdxian.monatium_darknet.config.converter.*;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -15,9 +12,10 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new StringToNoticeCategoryConverter());
-        registry.addConverter(new NoticeCategoryToStringConverter());
         registry.addConverter(new StringToRaceConverter());
-        registry.addConverter(new RaceToStringConverter());
+        registry.addConverter(new CustomEnumToStringConverter());
+//        registry.addConverter(new NoticeCategoryToStringConverter());
+//        registry.addConverter(new RaceToStringConverter());
     }
 
 }

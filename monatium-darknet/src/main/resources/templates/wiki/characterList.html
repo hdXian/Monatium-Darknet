@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<!-- v7  -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: common_header(~{::title}, ~{::link})}">
+    <title>기록소 - 캐릭터 목록</title>
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/characterList.css}">
+    <!-- 커스텀 css -->
+</head>
+
+<body>
+
+<!-- 상단 네비게이션 바 -->
+<nav th:replace="~{fragments/navbar :: common_navbar}">
+    상단 네비게이션 바 영역
+</nav>
+
+<!-- 배너 이미지 -->
+<div class="banner"></div>
+
+<!-- 전체 레이아웃 -->
+<div class="container-fluid">
+    <div class="row">
+        <!-- 좌측 탭 네비게이션 -->
+        <nav class="col-md-3 col-lg-2 side-nav">
+            <a th:href="@{/wiki/characters}" class="active">사도</a>
+            <a th:href="@{/wiki/card/artifact}">아티팩트 카드</a>
+            <a th:href="@{/wiki/card/spell}">스펠 카드</a>
+        </nav>
+
+        <!-- 우측 콘텐츠 -->
+        <main class="col-md-9 col-lg-10 content">
+
+            <!-- 캐릭터 목록 제목과 필터링 토글 버튼을 같은 줄에 배치 -->
+            <div class="container d-flex justify-content-between align-items-center mb-3">
+                <!-- 캐릭터 목록 제목 -->
+                <h2 class="section-title mb-0">사도 목록</h2>
+                <!-- 필터링 토글 버튼 -->
+                <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#filtering-options" aria-expanded="false" aria-controls="filtering-options">
+                    필터링 옵션 보기
+                </button>
+            </div>
+
+            <!-- 필터링 섹션 -->
+            <div class="container collapse" id="filtering-options">
+                <section class="p-3 bg-light rounded shadow-sm d-flex flex-wrap ms-auto">
+                        <!-- 성격 필터링 -->
+                        <div class="mb-3">
+                            <span class="form-label me-2 mb-0">성격:</span>
+                            <div class="form-check-group">
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="personalityPure" value="pure">
+                                    <label class="form-check-label" for="personalityPure">순수</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="personalityCool" value="cool">
+                                    <label class="form-check-label" for="personalityCool">냉정</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="personalityMadness" value="madness">
+                                    <label class="form-check-label" for="personalityMadness">광기</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="personalityLively" value="lively">
+                                    <label class="form-check-label" for="personalityLively">활발</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="personalityDepressed" value="depressed">
+                                    <label class="form-check-label" for="personalityDepressed">우울</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 줄바꿈 -->
+                        <div class="w-100"></div> <!-- 여기서 줄바꿈을 추가 -->
+                
+                        <!-- 역할군 필터링 -->
+                        <div class="mb-3">
+                            <span class="form-label me-2 mb-0">역할군:</span>
+                            <div class="form-check-group">
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="roleDealer" value="dealer">
+                                    <label class="form-check-label" for="roleDealer">딜러</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="roleTanker" value="tanker">
+                                    <label class="form-check-label" for="roleTanker">탱커</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="roleSupporter" value="supporter">
+                                    <label class="form-check-label" for="roleSupporter">서포터</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 줄바꿈 -->
+                        <div class="w-100"></div> <!-- 여기서 줄바꿈을 추가 -->
+                
+                        <!-- 배치 열 필터링 -->
+                        <div class="mb-3">
+                            <span class="form-label me-2 mb-0">배치 열:</span>
+                            <div class="form-check-group">
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="positionFront" value="front">
+                                    <label class="form-check-label" for="positionFront">전열</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="positionMiddle" value="middle">
+                                    <label class="form-check-label" for="positionMiddle">중열</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="positionBack" value="back">
+                                    <label class="form-check-label" for="positionBack">후열</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 줄바꿈 -->
+                        <div class="w-100"></div> <!-- 여기서 줄바꿈을 추가 -->
+                
+                        <!-- 종족 필터링 -->
+                        <div class="mb-3">
+                            <span class="form-label me-2 mb-0">종족:</span>
+                            <div class="form-check-group">
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="raceFairy" value="fairy">
+                                    <label class="form-check-label" for="raceFairy">요정</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="raceBeast" value="beast">
+                                    <label class="form-check-label" for="raceBeast">수인</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="raceElf" value="elf">
+                                    <label class="form-check-label" for="raceElf">엘프</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="raceSpirit" value="spirit">
+                                    <label class="form-check-label" for="raceSpirit">정령</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="raceGhost" value="ghost">
+                                    <label class="form-check-label" for="raceGhost">유령</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="raceDragon" value="dragon">
+                                    <label class="form-check-label" for="raceDragon">용족</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="raceWitch" value="witch">
+                                    <label class="form-check-label" for="raceWitch">마녀</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 줄바꿈 -->
+                        <div class="w-100"></div> <!-- 여기서 줄바꿈을 추가 -->
+                
+                        <!-- 공격 타입 필터링 -->
+                        <div class="mb-3">
+                            <span class="form-label me-2 mb-0">공격 타입:</span>
+                            <div class="form-check-group">
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="attackPhysical" value="physical">
+                                    <label class="form-check-label" for="attackPhysical">물리</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="attackMagical" value="magical">
+                                    <label class="form-check-label" for="attackMagical">마법</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    <!-- 줄바꿈 -->
+                    <div class="w-100"></div> <!-- 여기서 줄바꿈을 추가 -->
+            
+                    <!-- 검색 및 초기화 버튼 -->
+                    <div class="d-flex align-items-center mt-3">
+                        <button type="button" class="btn btn-primary me-2" onclick="filterCharacters()">검색</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetFilters()">초기화</button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 사도 목록 섹션 -->
+            <section id="characters" class="container mt-5">
+                <div class="row" id="characterList">
+
+                    <!-- 캐릭터 카드 -->
+                    <div th:each="character : ${characterList}"
+                         class="col-6 col-sm-4 col-lg-2 mb-4 character-item"
+                         th:classappend="| ${{character.race}} ${{character.personality}} ${{character.role}} ${{character.attackType}} ${{character.position}}| "> <!-- 모바일에서 2개, 데스크탑에서 6개 -->
+
+                        <a th:href="@{ /wiki/characters/{id} (id=${character.id}) }" class="card-link"> <!-- 누르면 넘어가는 이미지 -->
+                            <div class="card">
+                                <!-- 캐릭터 이미지 -->
+                                <img th:src="@{ ${character.urls.profile_url} }" class="card-img-top" alt="캐릭터 프로필 이미지">
+
+                                <!-- 캐릭터 이름, 종족 심볼, 성급 이미지 및 특성 -->
+                                <div class="card-body">
+                                    <!-- 캐릭터 이름과 종족 심볼 -->
+                                    <h5 class="card-title mb-2 d-inline-flex align-items-center">
+                                        <span th:text="${character.name}">캐릭터 이름</span>
+                                        <img th:src="@{|/imgs/wiki/icons/symbol_${{character.race}}.webp|}" class="symbol-image ms-2" alt="종족 심볼 이미지"> <!-- 종족 심볼 추가 -->
+                                    </h5>
+
+                                    <!-- 성급 이미지 (switch 사용) -->
+                                    <th:block th:switch="${character.grade}">
+                                        <img th:case="3" th:src="@{/imgs/wiki/icons/star_3.webp}" class="star-image mb-2" alt="성급 이미지">
+                                        <img th:case="2" th:src="@{/imgs/wiki/icons/star_2.webp}" class="star-image mb-2" alt="성급 이미지">
+                                        <img th:case="1" th:src="@{/imgs/wiki/icons/star_1.webp}" class="star-image mb-2" alt="성급 이미지">
+                                    </th:block>
+
+                                    <!-- 작은 이미지 4개 (특성) (|..| 구문으로 url 렌더링) -->
+                                    <div class="small-images-container">
+                                        <img th:src="@{ |/imgs/wiki/icons/personality_${{character.personality}}.webp| }" class="small-image" alt="성격 이미지">
+                                        <img th:src="@{ |/imgs/wiki/icons/class_${{character.role}}.webp| }" class="small-image" alt="역할 이미지">
+                                        <img th:src="@{ |/imgs/wiki/icons/attackType_${{character.attackType}}.webp| }" class="small-image" alt="공격 방식 이미지">
+                                        <img th:src="@{ |/imgs/wiki/icons/position_${{character.position}}.webp| }" class="small-image" alt="위치 이미지">
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+<!-- 푸터 -->
+<footer th:replace="~{fragments/footer :: common_footer}"></footer>
+
+<script th:src="@{/js/characters_wiki.js}" defer></script>
+
+</body>
+</html>
