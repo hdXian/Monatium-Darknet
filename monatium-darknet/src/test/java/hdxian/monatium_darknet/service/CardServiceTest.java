@@ -489,7 +489,7 @@ class CardServiceTest {
         dto.setLowSKill(lowSkill);
         dto.setHighSkill(highSkill);
         dto.setAside(aside);
-        dto.setUrls(urls);
+//        dto.setUrls(urls);
 
         return dto;
     }

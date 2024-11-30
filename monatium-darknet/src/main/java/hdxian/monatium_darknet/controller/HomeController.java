@@ -19,6 +19,8 @@ public class HomeController {
     private final NoticeService noticeService;
     private final CharacterService characterService;
 
+    // 메인 화면에 캐릭터 정보도 뿌려야 함
+    
     @GetMapping("/")
     public String home(Model model) {
 

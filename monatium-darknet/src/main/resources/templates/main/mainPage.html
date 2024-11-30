@@ -176,7 +176,7 @@
             <!-- 왼쪽: 캐릭터 이미지 영역 -->
             <div class="characters-content-col d-flex justify-content-center align-items-center">
                 <div class="image-container d-flex justify-content-center align-items-center">
-                    <img id="main-character-img" src="../images/characters/character_erpin_2.webp" alt="캐릭터 이미지" class="character-img rounded">
+                    <img id="main-character-img" th:src="@{/imgs/wiki/characters/1/bodyShot.webp}" alt="캐릭터 이미지" class="character-img rounded">
                 </div>
             </div>
 
@@ -185,301 +185,81 @@
 
                 <!-- 초상화 목록 -->
                 <div class="character-portraits d-flex flex-wrap justify-content-center g-3"> <!-- 자동 줄바꿈 -->
-                    <div class="portrait-container">
-                        <img src="../images/characters/portrait_1.webp" alt="캐릭터 1" class="character-portrait"
-                        data-target="character-info-1"
-                        data-img="../images/characters/character_erpin_2.webp"
-                        data-portrait="../images/characters/portrait_1.webp">
-                    </div>
-                    <div class="portrait-container">
-                        <img src="../images/characters/portrait_2.webp" alt="캐릭터 2" class="character-portrait"
-                        data-target="character-info-2"
-                        data-img="../images/characters/character_belita.webp"
-                        data-portrait="../images/characters/portrait_2.webp">
-                    </div>
-                    <div class="portrait-container">
-                        <img src="../images/characters/portrait_3.webp" alt="캐릭터 3" class="character-portrait"
-                        data-target="character-info-3"
-                        data-img="../images/characters/character_butter_2.webp"
-                        data-portrait="../images/characters/portrait_3.webp">
-                    </div>
-                    <div class="portrait-container">
-                        <img src="../images/characters/portrait_4.webp" alt="캐릭터 4" class="character-portrait"
-                        data-target="character-info-4"
-                        data-img="../images/characters/charecter_daya_2.webp"
-                        data-portrait="../images/characters/portrait_4.webp">
-                    </div>
-                    <div class="portrait-container">
-                        <img src="../images/characters/portrait_5.webp" alt="캐릭터 5" class="character-portrait"
-                        data-target="character-info-5"
-                        data-img="../images/characters/character_naia_2.webp"
-                        data-portrait="../images/characters/portrait_5.webp">
-                    </div>
-                    <div class="portrait-container">
-                        <img src="../images/characters/portrait_6.webp" alt="캐릭터 6" class="character-portrait"
-                        data-target="character-info-6"
-                        data-img="../images/characters/character_selline.webp"
-                        data-portrait="../images/characters/portrait_6.webp">
-                    </div>
-                    <div class="portrait-container">
-                        <img src="../images/characters/portrait_7.webp" alt="캐릭터 7" class="character-portrait"
-                        data-target="character-info-7"
-                        data-img="../images/characters/character_elena_2.webp"
-                        data-portrait="../images/characters/portrait_7.webp">
+                    <div th:each="character: ${characterList}" class="portrait-container">
+                        <img th:src="${character.urls.portrait_url}" alt="캐릭터 1" class="character-portrait"
+                        th:data-target="|character-info-${character.id}|"
+                        th:data-img="${character.urls.body_url}"
+                        th:data-portrait="${character.urls.portrait_url}">
                     </div>
                 </div>
 
-                <!-- 캐릭터 1 정보 -->
-                <div id="character-info-1" class="character-info mx-auto d-flex flex-column align-items-center justify-content-center">
+                <!-- 캐릭터 정보 -->
+                <div th:each="character: ${characterList}" th:id="|character-info-${character.id}|"
+                     class="character-info mx-auto d-flex flex-column align-items-center justify-content-center"
+                     th:classappend=" ${character.id == 1} ? '' : 'd-none' ">
 
                     <!-- 초상화 이미지와 이름, 수식어 -->
                     <div class="character-title d-flex align-items-center justify-content-center">
                         <div class="portrait-container">
-                            <img src="../images/characters/portrait_1.webp" alt="캐릭터 1" class="info-portrait">
+                            <img th:src="${character.urls.portrait_url}" alt="캐릭터 1" class="info-portrait">
                         </div>
                         <div>
-                            <div class="character-info-text mb-1">에르핀 <span class="character-subtitle">요정 여왕</span></div>
-                            <div class="character-info-text">CV. <span class="character-cv">강은애</span></div>
+                            <div th:text="${character.name}" class="character-info-text mb-1"> 캐릭터 이름 <span th:text="${character.subtitle}" class="character-subtitle"> 캐릭터 수식언 </span></div>
+                            <div class="character-info-text">CV. <span th:text="${character.cv}" class="character-cv"> 캐릭터 성우 </span></div>
                         </div>
                     </div>
 
                     <!-- 한마디와 TMI를 묶고, 가운데 정렬 -->
                     <div class="character-info-text text-center">
 
-                        <!-- 종족: 심볼과 텍스트 -->
-                        <div class="d-flex align-items-center justify-content-center gap-2">
-                            종족: 
-                            <span class="character-race">요정</span>
-                            <img src="../images/symbol_fairy.webp" alt="요정 심볼" class="symbol-icon">
-                            
+                        <!-- 종족명 및 심볼 -->
+                        <div th:switch="${{character.race}}" class="d-flex align-items-center justify-content-center gap-2">
+                            종족:
+                            <th:block th:case="'FAIRY'">
+                                <span th:text="요정" class="character-race">종족명</span>
+                                <img th:src="@{/imgs/wiki/icons/symbol_fairy.webp}" class="symbol-icon" alt="종족 심볼">
+                            </th:block>
+
+                            <th:block th:case="'WITCH'">
+                                <span th:text="마녀" class="character-race">종족명</span>
+                                <img th:src="@{/imgs/wiki/icons/symbol_witch.webp}" class="symbol-icon" alt="종족 심볼">
+                            </th:block>
+
+                            <th:block th:case="'FURRY'">
+                                <span th:text="수인" class="character-race">종족명</span>
+                                <img th:src="@{/imgs/wiki/icons/symbol_furry.webp}" class="symbol-icon" alt="종족 심볼">
+                            </th:block>
+
+                            <th:block th:case="'DRAGON'">
+                                <span th:text="용족" class="character-race">종족명</span>
+                                <img th:src="@{/imgs/wiki/icons/symbol_dragon.webp}" class="symbol-icon" alt="종족 심볼">
+                            </th:block>
+
+                            <th:block th:case="'GHOST'">
+                                <span th:text="유령" class="character-race">종족명</span>
+                                <img th:src="@{/imgs/wiki/icons/symbol_ghost.webp}" class="symbol-icon" alt="종족 심볼">
+                            </th:block>
+
+                            <th:block th:case="'SPIRIT'">
+                                <span th:text="정령" class="character-race">종족명</span>
+                                <img th:src="@{/imgs/wiki/icons/symbol_spirit.webp}" class="symbol-icon" alt="종족 심볼">
+                            </th:block>
+
+                            <th:block th:case="'ELF'">
+                                <span th:text="엘프" class="character-race">종족명</span>
+                                <img th:src="@{/imgs/wiki/icons/symbol_elf.webp}" class="symbol-icon" alt="종족 심볼">
+                            </th:block>
+
                         </div>
 
                         <!-- 캐릭터 한마디 -->
                         <div class="info-subtitle">한마디</div> <!-- 소제목 -->
-                        <div>"엘리아스의 수호자, 등장!"</div>
+                        <div th:text="${character.quote}">캐릭터 한 마디</div>
 
                         <!-- 캐릭터 TMI -->
                         <div class="info-subtitle">좋아하는 것</div> <!-- 소제목 -->
-                        <div>초콜릿을 비롯한 달달한 음식</div>
-                        <div>여왕으로서의 직위</div>
+                        <div th:text="${character.favorite}">캐릭터 좋아하는 것</div>
 
-                    </div>
-                </div>
-
-                <!-- 캐릭터 2 정보 -->
-                <div id="character-info-2" class="character-info mx-auto d-flex flex-column align-items-center justify-content-center d-none">
-
-                    <!-- 초상화 이미지와 이름, 수식어 -->
-                    <div class="character-title d-flex align-items-center justify-content-center">
-                        <div class="portrait-container">
-                            <img src="../images/characters/portrait_2.webp" alt="캐릭터 2" class="info-portrait">
-                        </div>
-                        <div>
-                            <div class="character-info-text mb-1">벨리타 <span class="character-subtitle">최고위 마녀</span></div>
-                            <div class="character-info-text">CV. <span class="character-cv">이다은</span></div>
-                        </div>
-                    </div>
-
-                    <!-- 한마디와 TMI를 묶고, 가운데 정렬 -->
-                    <div class="character-info-text text-center">
-
-                        <!-- 종족: 심볼과 텍스트 -->
-                        <div class="d-flex align-items-center justify-content-center gap-2">
-                            종족: 
-                            <span class="character-race">마녀</span>
-                            <img src="../images/symbol_witch.webp" alt="요정 심볼" class="symbol-icon">
-                            
-                        </div>
-
-                        <!-- 캐릭터 한마디 -->
-                        <div class="info-subtitle">한마디</div> <!-- 소제목 -->
-                        <div>"뿌리의 수호자, 마녀 여왕이다."</div>
-
-                        <!-- 캐릭터 TMI -->
-                        <div class="info-subtitle">좋아하는 것</div> <!-- 소제목 -->
-                        <div>초콜릿</div>
-                        <div>강력한 리더십</div>
-
-                    </div>
-                </div>
-
-                <!-- 캐릭터 3 정보 (여기부터 w-100 적용해보기) -->
-                <div id="character-info-3" class="character-info mx-auto d-flex flex-column align-items-center justify-content-center d-none">
-
-                    <!-- 초상화 이미지와 이름, 수식어 -->
-                    <div class="character-title d-flex align-items-center justify-content-center">
-                        <div class="portrait-container">
-                            <img src="../images/characters/portrait_3.webp" alt="캐릭터 3" class="info-portrait">
-                        </div>
-                        <div>
-                            <div class="character-info-text mb-1">버터 <span class="character-subtitle">친구 좋아 좋아</span></div>
-                            <div class="character-info-text">CV. <span class="character-cv">강새봄</span></div>
-                        </div>
-                    </div>
-
-                    <!-- 한마디와 TMI를 묶고, 가운데 정렬 -->
-                    <div class="character-info-text text-center">
-
-                        <!-- 종족: 심볼과 텍스트 -->
-                        <div class="d-flex align-items-center justify-content-center gap-2">
-                            종족: 
-                            <span class="character-race">수인</span>
-                            <img src="../images/symbol_furry.webp" alt="수인 심볼" class="symbol-icon">
-                            
-                        </div>
-
-                        <!-- 캐릭터 한마디 -->
-                        <div class="info-subtitle">한마디</div> <!-- 소제목 -->
-                        <div>"우리 같이 놀아요! 무슨 놀이 할까요?"</div>
-
-                        <!-- 캐릭터 TMI -->
-                        <div class="info-subtitle">좋아하는 것</div> <!-- 소제목 -->
-                        <div>새 친구 사귀기</div>
-                        <div>부드러운 과자</div>
-                    </div>
-                </div>
-
-                <!-- 캐릭터 4 정보 -->
-                <div id="character-info-4" class="character-info mx-auto d-flex flex-column align-items-center justify-content-center d-none">
-
-                    <!-- 초상화 이미지와 이름, 수식어 -->
-                    <div class="character-title d-flex align-items-center justify-content-center">
-                        <div class="portrait-container">
-                            <img src="../images/characters/portrait_4.webp" alt="캐릭터 4" class="info-portrait">
-                        </div>
-                        <div>
-                            <div class="character-info-text mb-1">다야 <span class="character-subtitle">용족의 수장</span></div>
-                            <div class="character-info-text">CV. <span class="character-cv">민아</span></div>
-                        </div>
-                    </div>
-
-                    <!-- 한마디와 TMI를 묶고, 가운데 정렬 -->
-                    <div class="character-info-text text-center">
-
-                        <!-- 종족: 심볼과 텍스트 -->
-                        <div class="d-flex align-items-center justify-content-center gap-2">
-                            종족: 
-                            <span class="character-race">용족</span>
-                            <img src="../images/symbol_dragon.webp" alt="용족 심볼" class="symbol-icon">
-                            
-                        </div>
-
-                        <!-- 캐릭터 한마디 -->
-                        <div class="info-subtitle">한마디</div> <!-- 소제목 -->
-                        <div>"용족 중에 가장 강한 자가 왔다!"</div>
-
-                        <!-- 캐릭터 TMI -->
-                        <div class="info-subtitle">좋아하는 것</div> <!-- 소제목 -->
-                        <div>다이아몬드</div>
-                        <div>자기 관리</div>
-                    </div>
-                </div>
-
-                <!-- 캐릭터 5 정보 -->
-                <div id="character-info-5" class="character-info mx-auto d-flex flex-column align-items-center justify-content-center d-none">
-
-                    <!-- 초상화 이미지와 이름, 수식어 -->
-                    <div class="character-title d-flex align-items-center justify-content-center">
-                        <div class="portrait-container">
-                            <img src="../images/characters/portrait_5.webp" alt="캐릭터 5" class="info-portrait">
-                        </div>
-                        <div>
-                            <div class="character-info-text mb-1">나이아 <span class="character-subtitle">사교성은 내가 최고!</span></div>
-                            <div class="character-info-text">CV. <span class="character-cv">정혜원</span></div>
-                        </div>
-                    </div>
-
-                    <!-- 한마디와 TMI를 묶고, 가운데 정렬 -->
-                    <div class="character-info-text text-center">
-
-                        <!-- 종족: 심볼과 텍스트 -->
-                        <div class="d-flex align-items-center justify-content-center gap-2">
-                            종족: 
-                            <span class="character-race">정령</span>
-                            <img src="../images/symbol_spirit.webp" alt="정령 심볼" class="symbol-icon">
-                            
-                        </div>
-
-                        <!-- 캐릭터 한마디 -->
-                        <div class="info-subtitle">한마디</div> <!-- 소제목 -->
-                        <div>"세상의 필수요소 물의 정령 나이아 등장!"</div>
-
-                        <!-- 캐릭터 TMI -->
-                        <div class="info-subtitle">좋아하는 것</div> <!-- 소제목 -->
-                        <div>돌고래 물총</div>
-                        <div>작은 장난</div>
-                    </div>
-                </div>
-
-                <!-- 캐릭터 6 정보 -->
-                <div id="character-info-6" class="character-info mx-auto d-flex flex-column align-items-center justify-content-center d-none">
-
-                    <!-- 초상화 이미지와 이름, 수식어 -->
-                    <div class="character-title d-flex align-items-center justify-content-center">
-                        <div class="portrait-container">
-                            <img src="../images/characters/portrait_6.webp" alt="캐릭터 6" class="info-portrait">
-                        </div>
-                        <div>
-                            <div class="character-info-text mb-1">셀리네 <span class="character-subtitle">도발의 여왕</span></div>
-                            <div class="character-info-text">CV. <span class="character-cv">김윤채</span></div>
-                        </div>
-                    </div>
-
-                    <!-- 한마디와 TMI를 묶고, 가운데 정렬 -->
-                    <div class="character-info-text text-center">
-
-                        <!-- 종족: 심볼과 텍스트 -->
-                        <div class="d-flex align-items-center justify-content-center gap-2">
-                            종족: 
-                            <span class="character-race">유령</span>
-                            <img src="../images/symbol_ghost.webp" alt="유령 심볼" class="symbol-icon">
-                            
-                        </div>
-
-                        <!-- 캐릭터 한마디 -->
-                        <div class="info-subtitle">한마디</div> <!-- 소제목 -->
-                        <div>"방금 그 표정, 몹시 좋았어."</div>
-
-                        <!-- 캐릭터 TMI -->
-                        <div class="info-subtitle">좋아하는 것</div> <!-- 소제목 -->
-                        <div>모욕을 참지 못하는 상대방의 표정</div>
-                        <div>무한 일회용 카메라</div>
-                    </div>
-                </div>
-
-                <!-- 캐릭터 7 정보 -->
-                <div id="character-info-7" class="character-info mx-auto d-flex flex-column align-items-center justify-content-center d-none">
-
-                    <!-- 초상화 이미지와 이름, 수식어 -->
-                    <div class="character-title d-flex align-items-center justify-content-center">
-                        <div class="portrait-container">
-                            <img src="../images/characters/portrait_7.webp" alt="캐릭터 7" class="info-portrait">
-                        </div>
-                        <div>
-                            <div class="character-info-text mb-1">엘레나 <span class="character-subtitle">엘프의 참리더</span></div>
-                            <div class="character-info-text">CV. <span class="character-cv">김도영</span></div>
-                        </div>
-                    </div>
-
-                    <!-- 한마디와 TMI를 묶고, 가운데 정렬 -->
-                    <div class="character-info-text text-center">
-
-                        <!-- 종족: 심볼과 텍스트 -->
-                        <div class="d-flex align-items-center justify-content-center gap-2">
-                            종족: 
-                            <span class="character-race">엘프</span>
-                            <img src="../images/symbol_elf.webp" alt="엘프 심볼" class="symbol-icon">
-                            
-                        </div>
-
-                        <!-- 캐릭터 한마디 -->
-                        <div class="info-subtitle">한마디</div> <!-- 소제목 -->
-                        <div>"필요하다면 공정 계약도 맺어야지."</div>
-
-                        <!-- 캐릭터 TMI -->
-                        <div class="info-subtitle">좋아하는 것</div> <!-- 소제목 -->
-                        <div>커피</div>
-                        <div>자신의 발명품</div>
                     </div>
                 </div>
 

@@ -16,6 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 public class TestDataInit {
@@ -45,12 +48,27 @@ public class TestDataInit {
         Long noticeId4 = noticeService.createNewNotice(memberId, noticeDto4);
 
         // 캐릭터 추가
-        CharacterDto chDto1 = generateCharDto("에르핀");
-        CharacterDto chDto2 = generateCharDto("림");
-        CharacterDto chDto3 = generateCharDto("다야");
-        Long chId1 = characterService.createNewCharacter(chDto1);
-        Long chId2 = characterService.createNewCharacter(chDto2);
-        Long chId3 = characterService.createNewCharacter(chDto3);
+        List<CharacterDto> dtos = new ArrayList<>();
+        dtos.add(generateCharDto("에르핀"));
+        dtos.add(generateCharDto("벨리타"));
+        dtos.add(generateCharDto("버터"));
+        dtos.add(generateCharDto("다야"));
+        dtos.add(generateCharDto("나이아"));
+        dtos.add(generateCharDto("셀리네"));
+        dtos.add(generateCharDto("엘레나"));
+
+        List<Long> Ids = new ArrayList<>();
+        for (CharacterDto dto : dtos) {
+            Long chId = characterService.createNewCharacter(dto);
+            Ids.add(chId);
+        }
+
+        String baseUrl = "/imgs/wiki/characters/";
+        CharacterUrl url;
+        for (Long id : Ids) {
+            url = new CharacterUrl(baseUrl + id + "/portrait.webp",baseUrl + id + "/profile.webp", baseUrl + id + "/bodyShot.webp");
+            characterService.updateCharacterUrls(id, url);
+        }
 
     }
 
@@ -117,7 +135,7 @@ public class TestDataInit {
         dto.setLowSKill(lowSkill);
         dto.setHighSkill(highSkill);
         dto.setAside(aside);
-        dto.setUrls(urls);
+//        dto.setUrls(urls);
 
         return dto;
     }
