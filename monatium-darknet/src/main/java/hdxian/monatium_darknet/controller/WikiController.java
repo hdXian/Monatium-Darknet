@@ -1,7 +1,9 @@
 package hdxian.monatium_darknet.controller;
 
+import hdxian.monatium_darknet.domain.card.ArtifactCard;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
+import hdxian.monatium_darknet.service.CardService;
 import hdxian.monatium_darknet.service.CharacterService;
 import hdxian.monatium_darknet.service.SkinService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class WikiController {
 
     private final CharacterService characterService;
     private final SkinService skinService;
+    private final CardService cardService;
 
     @GetMapping("/characters")
     public String characterList(Model model) {
@@ -41,7 +44,16 @@ public class WikiController {
         model.addAttribute("skinList", skinList);
 
         return "wiki/characterDetail";
-
     }
+
+    @GetMapping("/cards/artifact")
+    public String artifactList(Model model) {
+        List<ArtifactCard> cardList = cardService.findAllArtifactCards();
+
+        model.addAttribute("cardList", cardList);
+
+        return "wiki/artifactCardList";
+    }
+
 
 }
