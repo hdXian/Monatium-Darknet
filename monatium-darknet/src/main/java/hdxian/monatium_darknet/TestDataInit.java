@@ -5,9 +5,8 @@ import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.aside.AsideSpec;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
-import hdxian.monatium_darknet.service.CharacterService;
-import hdxian.monatium_darknet.service.MemberService;
-import hdxian.monatium_darknet.service.NoticeService;
+import hdxian.monatium_darknet.domain.skin.SkinGrade;
+import hdxian.monatium_darknet.service.*;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.MemberDto;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
@@ -26,6 +25,7 @@ public class TestDataInit {
     private final MemberService memberService;
     private final NoticeService noticeService;
     private final CharacterService characterService;
+    private final SkinService skinService;
 
     @EventListener(ApplicationReadyEvent.class)
     public void initData() {
@@ -70,6 +70,21 @@ public class TestDataInit {
             characterService.updateCharacterUrls(id, url);
         }
 
+        SkinDto skinDto1 = generateSkinDto("하드워킹 홀리데이", SkinGrade.NORMAL);
+        Long skinId = skinService.createNewSkin(1L, skinDto1);
+
+        String skinBaseUrl = "/imgs/wiki/skin/";
+        skinService.updateImageUrl(skinId, skinBaseUrl + 1L + "/" + skinId + ".webp");
+
+    }
+
+    private static SkinDto generateSkinDto(String name, SkinGrade grade) {
+        SkinDto dto = new SkinDto();
+        dto.setName(name);
+        dto.setGrade(grade);
+        dto.setDescription(name + " 스킨 설명");
+
+        return dto;
     }
 
     private static NoticeDto generateNoticeDto(String title, NoticeCategory category, String content) {
@@ -94,6 +109,7 @@ public class TestDataInit {
         enhancedAttack.addAttribute(name+" 강화공격 속성2", "40%");
 
         // 저학년 스킬
+        // TODO - 캐릭터 이미지 url처럼 이미지 경로 관리 방식을 업데이트 해야함 (현재 thymeleaf로 반쯤 하드코딩 중)
         Skill lowSkill = Skill.createLowSkill(name+" 저학년스킬", name + "저학년스킬 설명", name + "저학년스킬 이미지 url");
         lowSkill.addAttribute(name+" 저학년스킬 속성", "350%");
 
