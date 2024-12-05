@@ -22,6 +22,8 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final MemberService memberService;
 
+    // TODO - 공지사항 리스트 불러올 시 페이징 추가 필요
+
     // 공지사항 추가 기능
     @Transactional
     public Long createNewNotice(Long memberId, NoticeDto noticeDto) {
@@ -64,12 +66,15 @@ public class NoticeService {
     }
 
     // 공지사항 조회 기능
+    @Transactional
     public Notice findOne(Long noticeId) {
         Optional<Notice> find = noticeRepository.findOne(noticeId);
         if (find.isEmpty()) {
             throw new NoSuchElementException("해당 공지사항이 없습니다. id=" + noticeId);
         }
-        return find.get();
+        Notice notice = find.get();
+        notice.incrementView();
+        return notice;
     }
 
     public List<Notice> findByMemberId(Long memberId) {

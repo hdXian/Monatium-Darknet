@@ -20,8 +20,7 @@ public class SpellCard extends Card{
     protected SpellCard() {
     }
 
-    public static SpellCard createSpellCard(String name, CardGrade cardGrade, String description, String story, Integer cost,
-                                            String imageUrl, Attribute... attributes)
+    public static SpellCard createSpellCard(String name, CardGrade cardGrade, String description, String story, Integer cost, Attribute... attributes)
     {
 
         SpellCard card = new SpellCard();
@@ -30,7 +29,7 @@ public class SpellCard extends Card{
         card.setDescription(description);
         card.setStory(story);
         card.setCost(cost);
-        card.setImageUrl(imageUrl);
+//        card.setImageUrl(imageUrl);
 
         List<Attribute> cardAttributes = card.getAttributes();
         cardAttributes.addAll(Arrays.asList(attributes));

@@ -39,6 +39,12 @@ public class SkinService {
         return skinRepository.save(skin);
     }
 
+    @Transactional
+    public void updateImageUrl(Long skinId, String imageUrl) {
+        Skin skin = findOneSkin(skinId);
+        skin.setImageUrl(imageUrl);
+    }
+
     // 스킨 업데이트
     @Transactional
     public Long updateSkin(Long skinId, SkinDto updateParam) {

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<!-- v2 -->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: common_header(~{::title}, ~{::link})}">
+    <title>기록소 - 스펠 카드</title>
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/spellCardList.css}">
+    <!-- 커스텀 css -->
+</head>
+
+<body>
+
+<!-- 상단 네비게이션 바 -->
+<nav th:replace="~{fragments/navbar :: common_navbar}">
+    상단 네비게이션 바 영역
+</nav>
+
+<!-- 배너 이미지 -->
+<div class="banner"></div>
+
+<!-- 전체 레이아웃 -->
+<div class="container-fluid">
+    <div class="row">
+        <!-- 좌측 탭 네비게이션 -->
+        <nav class="col-md-3 col-lg-2 side-nav">
+            <a th:href="@{/wiki/characters}">사도</a>
+            <a th:href="@{/wiki/cards/artifact}">아티팩트 카드</a>
+            <a th:href="@{/wiki/cards/spell}" class="active">스펠 카드</a>
+        </nav>
+
+        <!-- 우측 콘텐츠 -->
+        <main class="col-md-9 col-lg-10 content">
+
+            <!-- 필터링 섹션 -->
+            <section id="filtering-options" class="d-flex justify-content-end align-items-center mb-3">
+                <!-- 등급 필터링 (체크박스) -->
+                <div class="me-3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="legendaryFilter" value="legendary">
+                        <label class="form-check-label" for="legendaryFilter">전설</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="rareFilter" value="rare">
+                        <label class="form-check-label" for="rareFilter">희귀</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="advancedFilter" value="advanced">
+                        <label class="form-check-label" for="advancedFilter">고급</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="normalFilter" value="normal">
+                        <label class="form-check-label" for="normalFilter">일반</label>
+                    </div>
+                </div>
+        
+                <!-- 이름 검색창 -->
+                <div class="me-3">
+                    <label for="searchName" class="form-label visually-hidden">이름 검색</label>
+                    <input type="text" class="form-control form-control-sm" id="searchName" placeholder="이름 검색" onkeyup="handleEnter(event)">
+                </div>
+        
+                <!-- 검색 버튼 -->
+                <button type="button" class="btn btn-primary btn-sm" onclick="filterItems()">검색</button>
+            </section>
+
+            <!-- 스펠 카드 목록 -->
+            <section id="items" class="container mt-5">
+
+                <h2 class="section-title">스펠 카드</h2>
+                
+                <div class="row" id="artifactList">
+
+                    <!-- 스펠 카드 -->
+                    <div th:each="card: ${cardList}" class="col-md-6 my-3 spell-item" th:data-grade="${{card.grade}}" th:data-name="${card.name}">
+                        <div class="card card-custom">
+                            <div class="card-body d-flex align-items-start">
+                                <img th:src="@{/imgs/wiki/card/spell/{id}.webp (id=${card.id})}"
+                                     th:classappend="| ${{card.grade}}-border |"
+                                     class="card-img-top spell-image"
+                                     alt="아이템 1">
+                                <div class="spell-content">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5 th:text="${card.name}" class="card-title">전술 교본</h5>
+                                        <div th:switch="${{card.grade}}" class="spell-info">
+                                            등급:
+                                            <span th:case="'legendary'" th:text="전설" th:classappend="| ${{card.grade}}-text |" class="me-3">카드 등급</span>
+                                            <span th:case="'rare'" th:text="희귀" th:classappend="| ${{card.grade}}-text |" class="me-3">카드 등급</span>
+                                            <span th:case="'advanced'" th:text="고급" th:classappend="| ${{card.grade}}-text |" class="me-3">카드 등급</span>
+                                            <span th:case="'normal'" th:text="일반" th:classappend="| ${{card.grade}}-text |" class="me-3">카드 등급</span>
+
+                                            코스트: <span th:text="${card.cost}" class="green-text">카드 비용</span>
+                                        </div>
+                                    </div>
+                                    <p class="spell-stats">
+                                        <th:block th:each="attribute: ${card.attributes}">
+                                            <span th:text="|${attribute.attrName} ${attribute.attrValue}|" class="me-2">카드 능력치</span>
+                                        </th:block>
+                                    </p>
+
+                                    <hr>
+
+                                    <div th:text="${card.description}" class="spell-effect mb-3">카드 설명</div>
+                                    <div th:text="${card.story}" class="spell-story">카드 이야기</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+<!--                    &lt;!&ndash; 스펠 카드 1 &ndash;&gt;-->
+<!--                    <div class="col-md-6 my-3 spell-item" data-grade="legendary" data-name="전술 교본">-->
+<!--                        <div class="card card-custom">-->
+<!--                            <div class="card-body d-flex align-items-start">-->
+<!--                                <img src="../../images/wiki/card/spell/card_spell_1.webp" class="card-img-top spell-image legendary-border" alt="아이템 1">-->
+<!--                                <div class="spell-content">-->
+<!--                                    <div class="d-flex justify-content-between align-items-center">-->
+<!--                                        <h5 class="card-title">전술 교본</h5>-->
+<!--                                        <div class="spell-info">-->
+<!--                                            등급: <span class="legendary-text me-3">전설</span>-->
+<!--                                            코스트: <span class="green-text">19</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <p class="spell-stats">-->
+<!--                                        <span class="me-2">치명타 +5.96%</span>-->
+<!--                                        <span>치명 피해 +5.96%</span>-->
+<!--                                    </p>-->
+<!--                                    <hr>-->
+<!--                                    <div class="spell-effect mb-3">모든 아군의 피해량이 <span class="green-text">25</span>% 증가한다.</div>-->
+<!--                                    <div class="spell-story">전술 교본을 참고하면 전투를 할 때 유용하다. 이 교본에 따르면... 어쩌구 저쩌구.</div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; 스펠 카드 2 &ndash;&gt;-->
+<!--                    <div class="col-md-6 my-3 spell-item" data-grade="legendary" data-name="수상한 물약">-->
+<!--                        <div class="card card-custom">-->
+<!--                            <div class="card-body d-flex align-items-start">-->
+<!--                                <img src="../../images/wiki/card/spell/card_spell_5.webp" class="card-img-top spell-image legendary-border" alt="아이템 1">-->
+<!--                                <div class="spell-content">-->
+<!--                                    <div class="d-flex justify-content-between align-items-center">-->
+<!--                                        <h5 class="card-title">수상한 물약</h5>-->
+<!--                                        <div class="spell-info">-->
+<!--                                            등급: <span class="legendary-text me-3">전설</span>-->
+<!--                                            코스트: <span class="green-text">23</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    &lt;!&ndash; 없으면 태그도 지우는게 나은듯? &ndash;&gt;-->
+<!--                                    &lt;!&ndash; <p class="spell-stats">-->
+<!--                                        <span class="me-2"></span>-->
+<!--                                        <span></span>-->
+<!--                                    </p> &ndash;&gt;-->
+<!--                                    <hr>-->
+<!--                                    <div class="spell-effect mb-3">웨이브 시작 시 물약이 터지며 독 안개가 뿌려진다. 모든 적들에게 <span class="green-text">9</span>초간 중독을 건다.</div>-->
+<!--                                    <div class="spell-story">포셔가 만든 수상한 물약이다. 색이 좀 그렇지만 효과 하나만큼은 보장을 한다.</div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; 스펠 카드 3 &ndash;&gt;-->
+<!--                    <div class="col-md-6 my-3 spell-item" data-grade="rare" data-name="사기 진작">-->
+<!--                        <div class="card card-custom">-->
+<!--                            <div class="card-body d-flex align-items-start">-->
+<!--                                <img src="../../images/wiki/card/spell/card_spell_2.webp" class="card-img-top spell-image rare-border" alt="아이템 2">-->
+<!--                                <div class="spell-content">-->
+<!--                                    <div class="d-flex justify-content-between align-items-center">-->
+<!--                                        <h5 class="card-title">사기 진작</h5>-->
+<!--                                        <div class="spell-info">-->
+<!--                                            등급: <span class="rare-text me-3">희귀</span>-->
+<!--                                            코스트: <span class="green-text">14</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <p class="spell-stats">-->
+<!--                                        <span class="me-2">치명타 +5.64%</span>-->
+<!--                                    </p>-->
+<!--                                    <hr>-->
+<!--                                    <div class="spell-effect mb-3">모든 아군의 공격 속도가 <span class="green-text">24</span>% 증가한다.</div>-->
+<!--                                    <div class="spell-story">먹을 것이 눈 앞에 보이니 마음이 설레고 사기가 오른다. 후후...끝나면 맛있는 것 줄게! 자, 가자~!</div>-->
+
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; 스펠 카드 4 &ndash;&gt;-->
+<!--                    <div class="col-md-6 my-3 spell-item" data-grade="advanced" data-name="성격의 카드[광기]">-->
+<!--                        <div class="card card-custom">-->
+<!--                            <div class="card-body d-flex align-items-start">-->
+<!--                                <img src="../../images/wiki/card/spell/card_spell_3.webp" class="card-img-top spell-image advanced-border" alt="아이템 3">-->
+<!--                                <div class="spell-content">-->
+<!--                                    <div class="d-flex justify-content-between align-items-center">-->
+<!--                                        <h5 class="card-title">성격의 카드[광기]</h5>-->
+<!--                                        <div class="spell-info">-->
+<!--                                            등급: <span class="advanced-text me-3">고급</span>-->
+<!--                                            코스트: <span class="green-text">14</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <p class="spell-stats">-->
+<!--                                        <span class="me-2">물리 공격력 +2.24%</span>-->
+<!--                                        <span>마법 공격력 +2.24%</span>-->
+<!--                                    </p>-->
+<!--                                    <hr>-->
+<!--                                    <div class="spell-effect mb-3"><span class="green-text">광기 성격</span>이 1개 더 있는 것으로 간주한다.</div>-->
+<!--                                    <div class="spell-story">한 아이가 광기에 빠졌다. 그리고 그 광기는 또 다른 광기를 깨웠다. 광기는 전염되는 거야!</div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; 스펠 카드 5 &ndash;&gt;-->
+<!--                    <div class="col-md-6 my-3 spell-item" data-grade="normal" data-name="견습 마법사">-->
+<!--                        <div class="card card-custom">-->
+<!--                            <div class="card-body d-flex align-items-start">-->
+<!--                                <img src="../../images/wiki/card/spell/card_spell_4.webp" class="card-img-top spell-image normal-border" alt="아이템 1">-->
+<!--                                <div class="spell-content">-->
+<!--                                    <div class="d-flex justify-content-between align-items-center">-->
+<!--                                        <h5 class="card-title">견습 마법사</h5>-->
+<!--                                        <div class="spell-info">-->
+<!--                                            등급: <span class="normal-text me-3">일반</span>-->
+<!--                                            코스트: <span class="green-text">9</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <p class="spell-stats">-->
+<!--                                        <span class="me-2">마법 공격력 +3.49%</span>-->
+<!--                                        <span>치명타 저항 +3.12%</span>-->
+<!--                                    </p>-->
+<!--                                    <hr>-->
+<!--                                    <div class="spell-effect mb-3">특별한 기능이 존재하지는 않지만 기본에 충실하다.</div>-->
+<!--                                    <div class="spell-story">견습 마법사의 열의에 찬 어설픈 마법은 의외의 효과를 냈다. 주변이 불바다가 된 것 또한 의외의 결과다.</div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+                    <!-- 추가 스펠 카드들 -->
+                </div>
+
+            </section>
+
+        </main>
+        
+    </div>
+</div>
+
+<!-- 푸터 -->
+<footer th:replace="~{fragments/footer :: common_footer}"></footer>
+
+<script th:src="@{/js/spellCardList_wiki.js}" defer></script>
+
+</body>
+</html>

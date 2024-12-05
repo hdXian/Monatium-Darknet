@@ -21,7 +21,7 @@ public class LocalFileStorageService implements FileStorageService {
     private String fileDir;
 
     @Override
-    public FileDto uploadFile(MultipartFile multipartFile) throws IOException {
+    public void uploadFile(MultipartFile multipartFile, String filePath) throws IOException {
 
         if (multipartFile.isEmpty()) {
             log.error("[LocalFileStorageService.uploadFile()] multipartFile is empty");
@@ -29,29 +29,27 @@ public class LocalFileStorageService implements FileStorageService {
         }
 
         // 사용자 업로드 파일명 추출
-        String originalFilename = multipartFile.getOriginalFilename();
+//        String originalFilename = multipartFile.getOriginalFilename();
 
         // 저장할 파일명 생성 (랜덤 문자열 + 확장자)
-        String storeFileName = generateFileName(originalFilename);
+//        String storeFileName = generateFileName(originalFilename);
 
         // 최종적으로 저장할 파일명 (경로 + 파일명)
-        String fullPath = getFullPath(storeFileName);
+//        String fullPath = getFullPath(storeFileName);
+        String savePath = getFullPath(filePath);
 
         // 파일 저장
-        multipartFile.transferTo(new File(fullPath));
+        multipartFile.transferTo(new File(savePath));
 
-        return new FileDto(originalFilename, storeFileName);
     }
 
     @Override
-    public List<FileDto> uploadFiles(List<MultipartFile> multipartFiles) throws IOException {
-        List<FileDto> files = new ArrayList<>();
+    public void uploadFiles(List<MultipartFile> multipartFiles, String filePath) throws IOException {
 
         for (MultipartFile multipartFile : multipartFiles) {
-            files.add(uploadFile(multipartFile));
+            uploadFile(multipartFile, filePath);
         }
 
-        return files;
     }
 
     @Override

@@ -6,6 +6,8 @@ import hdxian.monatium_darknet.domain.SkillCategory;
 import hdxian.monatium_darknet.domain.card.ArtifactCard;
 import hdxian.monatium_darknet.domain.character.Attack;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.domain.character.CharacterUrl;
+import hdxian.monatium_darknet.file.FileStorageService;
 import hdxian.monatium_darknet.repository.CardRepository;
 import hdxian.monatium_darknet.repository.CharacterRepository;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
@@ -46,9 +48,9 @@ public class CharacterService {
                 chDto.getEnhancedAttack(),
                 chDto.getLowSKill(),
                 chDto.getHighSkill(),
-                chDto.getAside(),
-                chDto.getUrls()
+                chDto.getAside()
         );
+
         return characterRepository.save(ch);
     }
 
@@ -78,13 +80,19 @@ public class CharacterService {
         updateSkill(ch.getLowSkill(), updateParam.getLowSKill());
         updateSkill(ch.getHighSkill(), updateParam.getHighSkill());
 
-        // 어사이드는 구조가 더 복잡해서 그냥 객체를 갈아끼운 다음 orphanRemoval = true로 기존 객체를 삭제하도록 설정함
+        // 어사이드는 구조가 더 복잡해서 그냥 객체를 갈아끼운 다음 orphanRemoval = true로 고아가 된 기존 객체를 삭제하도록 설정함
         // 기존 객체의 데이터들을 변경해서 업데이트 시키는 것 <-> 아예 새로운 객체로 갈아 끼우는 것 사이의 차이점 숙지해야 함
         ch.setAside(updateParam.getAside());
-        ch.setUrls(updateParam.getUrls());
+//        ch.setUrls(updateParam.getUrls());
 
 //        return characterRepository.save(ch);
         return ch.getId(); // ***중요 -> em.find()를 통해 찾아온 엔티티는 merge로 업데이트하면 안됨. (이해는 안됨. 추가 학습 필요)
+    }
+
+    @Transactional
+    public void updateCharacterUrls(Long characterId, CharacterUrl urls) {
+        Character ch = findOne(characterId);
+        ch.setUrls(urls);
     }
 
     // 스킬 변경

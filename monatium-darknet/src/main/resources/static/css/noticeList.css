@@ -1,0 +1,142 @@
+body {
+    font-family: 'MobileGothicPOP', 'Noto Sans JP', sans-serif;
+    background-color: #f0f8ff; /* 밝은 파스텔톤 배경 */
+    color: #000000; /* 텍스트를 어두운 색으로 */
+}
+
+/* 표지 이미지 섹션 */
+.cover-section {
+    background: url("/imgs/notice/banner.png") no-repeat center center;
+    background-size: cover;
+    height: 20vh;
+    max-width: 80%;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+
+/* 레이아웃 설정 */
+.container-main {
+    display: flex;
+    margin-top: 30px;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 카테고리 메뉴 (왼쪽) */
+.category-menu {
+    flex: 0 0 200px;
+    padding: 20px;
+    background-color: #ffe4b5; /* 부드러운 파스텔톤 배경 */
+    border-radius: 10px;
+    align-self: flex-start;
+}
+
+.category-menu h5 {
+    color: #ff7043; /* 카테고리 제목을 밝은 색으로 */
+    margin-bottom: 20px;
+}
+
+.category-menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.category-menu ul li {
+    margin-bottom: 10px;
+}
+
+.category-menu ul li a {
+    color: #000000; /* 링크는 검은색으로 */
+    text-decoration: none;
+}
+
+.category-menu ul li a:hover {
+    color: #ff9800; /* 링크 호버 시 밝은 색 */
+}
+
+/* 공지사항 리스트 (오른쪽) */
+.notice-list-section {
+    flex: 1 0 auto;
+    margin-left: 20px;
+    max-width: 70%;
+    margin: 0 auto;
+}
+
+/*
+.notice-item {
+    border-bottom: 1px solid #ddd;
+    padding: 20px 0;
+}
+*/
+
+.notice-item {
+    display: flex; /* 썸네일과 텍스트를 수평 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    padding: 2vh 0; /* 화면 높이에 비례한 여백 */
+    border-bottom: 1px solid #ddd;
+    gap: 2%; /* 썸네일과 텍스트 간격 */
+}
+
+.notice-item:hover {
+    background-color: #ffe4b5; /* 항목 호버 시 밝은 배경 */
+}
+
+.thumbnail-container {
+    width: 15%; /* 부모 컨테이너 너비의 15% */
+    aspect-ratio: 1; /* 정사각형 비율 유지 */
+    flex-shrink: 0; /* 크기 줄어들지 않도록 설정 */
+    border-radius: 0.5rem; /* 둥근 모서리 */
+    overflow: hidden; /* 이미지 넘침 방지 */
+}
+
+.notice-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 비율 유지하며 영역 채움 */
+}
+
+/* 썸네일을 제외한 공지사항 요소 컨텐츠*/
+.notice-content {
+    flex-grow: 1; /* 남은 공간을 차지 */
+}
+
+.notice-title {
+    font-size: 1.2rem;
+    color: #ff7043; /* 제목을 밝은 코랄색으로 */
+}
+
+.notice-title:hover {
+    text-decoration: underline;
+    color: #ff9800;
+}
+
+.notice-date {
+    color: #666666; /* 날짜를 회색으로 */
+    font-size: 0.9rem;
+}
+
+.notice-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn-back {
+    background-color: #4caf50; /* 버튼 색상 초록색 */
+    color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 30px;
+}
+
+.btn-back:hover {
+    background-color: #45a049;
+}
+
+/*
+footer {
+    background-color: #121212;
+    margin-top: 50px;
+}
+*/

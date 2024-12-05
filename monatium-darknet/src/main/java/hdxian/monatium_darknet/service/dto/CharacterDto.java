@@ -33,6 +33,6 @@ public class CharacterDto {
 
     private Aside aside; // 어사이드
 
-    private CharacterUrl urls; // 초상화, 프로필, 전신 이미지 url
+//    private CharacterUrl urls; // 초상화, 프로필, 전신 이미지 url
 
 }

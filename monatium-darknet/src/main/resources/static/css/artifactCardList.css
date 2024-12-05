@@ -1,0 +1,186 @@
+body {
+    background-color: #F0F8FF; /* 밝은 파스텔톤 배경 */
+    font-family: 'MobileGothicPOP', sans-serif;
+}
+
+/* 배너 이미지 스타일 */
+.banner {
+    min-height: 300px; /* 최소 높이 고정 */
+    width: 100%;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    background-image: url('/imgs/wiki/banner.webp'); /* 배너 이미지 경로 */
+    margin-bottom: 20px;
+}
+
+/* 좌측 네비게이션 스타일 */
+.side-nav {
+    height: 100vh; /* 전체 높이 */
+    background-color: #F8F9FA; /* 연한 회색 배경 */
+    padding-top: 20px; /* 위쪽 여백 */
+}
+
+.side-nav a {
+    color: #333;
+    font-size: 1.2rem;
+    padding: 15px 20px;
+    display: block;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.side-nav a:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.side-nav .active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* 카드 커스텀 스타일 */
+.card-custom {
+    margin: auto;
+}
+
+.card-custom .card-body {
+    display: flex;
+    align-items: center;
+}
+
+.artifact-image {
+    width: auto;
+    max-width: 120px;
+    margin-right: 15px; /* 이미지와 텍스트 사이 간격 */
+    border: 5px solid #D3D3D3; /* 기본적으로 투명 테두리 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    object-fit: contain;
+}
+
+/* 카드 이미지 우측의 모든 콘텐츠 내용 */
+.artifact-content {
+    flex-grow: 1;
+}
+
+.card-title {
+    font-size: 1.5rem; /* 아이템 이름의 글씨 크기 */
+    margin: 0;
+}
+
+/* 카드 등급, 코스트 묶음 */
+.artifact-info {
+    font-size: 0.9em; /* 코스트 정보의 글씨 크기 */
+    margin-left: 10px; /* 아이템 이름과 간격 조절 */
+}
+
+/* 카드 능력치 */
+.artifact-stats {
+    font-size: 1rem; /* 능력치 설명의 글씨 크기 */
+    color: #333; /* 기본 텍스트 색상 */
+    margin-top: 5px; /* 등급과 능력치 사이의 간격 */
+}
+
+/* 카드 효과 */
+.artifact-effect {
+    font-size: 1rem; /* 효과 설명의 글씨 크기 */
+    margin-top: 5px; /* 등급과 효과 사이의 간격 */
+}
+
+/* 카드 설명 */
+.artifact-story {
+    color: #555; /* 효과 설명 텍스트 색상 */
+}
+
+/* 애착 아티팩트 스타일 */
+.attachment-artifact {
+    background-color: #F9F9F9; /* 연한 배경색 */
+    padding: 10px;
+    border-radius: 8px; /* 모서리를 둥글게 */
+    border: 1px solid #D3D3D3; /* 연한 회색 테두리 */
+}
+
+/* 애착 아티팩트 제목 (xx의 애착 아티팩트) */
+.attachment-title {
+    text-align: center;
+    color: brown; /* 레벨 제목 강조 */
+    background-color: #FFEB3B; /* 옅은 노란색 배경 (LemonChiffon 색상) */
+    border-radius: 5px; /* 모서리를 약간 둥글게 처리 */
+}
+
+/* 아티팩트 제목 좌측 초상화 */
+.attachment-title-icon {
+    width: 1.7em; /* 텍스트 크기의 1.2배 너비 */
+    height: 1.7em; /* 텍스트 크기의 1.2배 높이 */
+    border-radius: 50%; /* 둥근 모양으로 만들기 */
+    margin-right: 10px; /* 텍스트와 이미지 간격 조정 */
+    object-fit: cover; /* 이미지 비율을 유지하면서 영역 채우기 */
+    vertical-align: middle; /* 텍스트와 이미지 세로 중앙 정렬 */
+    border: 2px solid white; /* 하얀 테두리 추가 */
+}
+
+/* 애착 아티팩트 효과 */
+.attachment-info {
+    font-size: 1rem;
+    color: #333;
+    display: block; /* 각 설명을 새로운 줄에서 시작 */
+    margin-top: 5px; /* 레벨 간 간격 추가 */
+}
+
+/* 아티팩트 레벨 (1, 3) */
+.attachment-level {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.attachment-stat {
+    color: #555; /* 효과 설명 텍스트 색상 */
+}
+
+/* 아티팩트 스킬 이름 */
+.attachment-skill-name {
+    color: #968c07;
+}
+
+/* 콘텐츠 스타일 */
+.content {
+    padding: 20px;
+}
+
+.green-text {
+    color: #4CAF50;
+}
+
+.legendary-border {
+    border-color: #800080; /* 전설 등급의 보라색 테두리 */
+}
+
+.legendary-text {
+    color: #800080;
+}
+
+.rare-border {
+    border-color: skyblue;
+}
+
+.rare-text {
+    color: skyblue;
+}
+
+.advanced-border {
+    border-color: #4CAF50;
+}
+
+.advanced-text {
+    color: #4CAF50;
+}
+
+.normal-border {
+    border-color: #D3D3D3;
+}
+
+.normal-text {
+    color: #808080;
+}
+

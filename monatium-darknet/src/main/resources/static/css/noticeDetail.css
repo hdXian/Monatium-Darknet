@@ -1,0 +1,66 @@
+/* 푸터가 하단에 위치하도록 본문 차지 영역을 100%로 설정 */
+html, body {
+    height: 100%; /* 페이지가 항상 전체 화면을 차지하도록 설정 */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: 'MobileGothicPOP', 'Noto Sans JP', sans-serif;
+    background-color: #f0f8ff;
+    color: #000;
+}
+
+.container {
+    flex: 1; /* 본문이 공간을 유연하게 차지하도록 설정 */
+}
+/* v10 적용범위 */
+
+/* 공지사항 스타일 */
+.notice-section {
+    background-color: rgba(255, 255, 255, 0.8); /* 기존 제목 배경색 사용 */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.notice-title {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #333; /* 어두운 텍스트 색상 */
+}
+
+.notice-meta {
+    font-size: 0.9rem;
+    color: #666; /* 메타 정보 회색 */
+}
+
+.notice-banner {
+    max-width: 70%; /* 이미지 최대 너비를 80%로 제한 */
+    height: auto; /* 자동으로 높이를 조정 */
+    border-radius: 10px; /* 배너에도 둥근 모서리 적용 */
+    margin: 0 auto; /* 가운데 정렬 */
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #ddd; /* 얇은 가로선 */
+    margin: 20px 0;
+}
+
+.notice-content p {
+    line-height: 1.8;
+}
+
+.btn-back {
+    background-color: #4caf50;
+    color: white;
+    margin-top: 40px;
+    margin-bottom: 50px;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.btn-back:hover {
+    background-color: #45a049;
+}

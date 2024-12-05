@@ -41,7 +41,7 @@ public class CardService {
                 cardDto.getGrade(),
                 cardDto.getDescription(),
                 cardDto.getStory(),
-                cardDto.getCost(), cardDto.getImageUrl()
+                cardDto.getCost()
         );
 
         spellCard.getAttributes().addAll(cardDto.getAttributes());
@@ -59,13 +59,18 @@ public class CardService {
                 cardDto.getDescription(),
                 cardDto.getStory(),
                 cardDto.getCost(),
-                cardDto.getImageUrl(),
                 null,
                 null
         );
         artifactCard.getAttributes().addAll(cardDto.getAttributes());
 
         return cardRepository.save(artifactCard);
+    }
+
+    @Transactional
+    public void updateImageUrl(Long cardId, String imageUrl) {
+        Card card = findOneCard(cardId);
+        card.setImageUrl(imageUrl);
     }
 
     @Transactional
@@ -85,7 +90,6 @@ public class CardService {
                 cardDto.getDescription(),
                 cardDto.getStory(),
                 cardDto.getCost(),
-                cardDto.getImageUrl(),
                 character,
                 attachmentSkill
         );
@@ -168,6 +172,14 @@ public class CardService {
 
     public ArtifactCard findOneArtifactCard(Long id) {
         Optional<ArtifactCard> find = cardRepository.findOneArtifact(id);
+        if (find.isEmpty()) {
+            throw new NoSuchElementException("해당 아티팩트 카드가 존재하지 않습니다. id=" + id);
+        }
+        return find.get();
+    }
+
+    public Card findOneCard(Long id) {
+        Optional<Card> find = cardRepository.findOne(id);
         if (find.isEmpty()) {
             throw new NoSuchElementException("해당 아티팩트 카드가 존재하지 않습니다. id=" + id);
         }

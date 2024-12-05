@@ -35,7 +35,7 @@ public class ArtifactCard extends Card{
         this.attachmentSkill = null;
     }
 
-    public static ArtifactCard createArtifactCard(String name, CardGrade cardGrade, String description, String story, Integer cost, String imageUrl,
+    public static ArtifactCard createArtifactCard(String name, CardGrade cardGrade, String description, String story, Integer cost,
                                                   Character character, Skill attachmentSkill, Attribute... attributes)
     {
 
@@ -45,7 +45,7 @@ public class ArtifactCard extends Card{
         card.setDescription(description);
         card.setStory(story);
         card.setCost(cost);
-        card.setImageUrl(imageUrl);
+//        card.setImageUrl(imageUrl);
         card.setCharacter(character);
         card.setAttachmentSkill(attachmentSkill);
 

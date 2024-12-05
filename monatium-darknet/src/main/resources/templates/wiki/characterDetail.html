@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<!-- v24 -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: common_header(~{::title}, ~{::link})}">
+    <title th:text="|사도 정보 - ${character.name}|">캐릭터 정보창 제목</title>
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/characterDetail.css}">
+    <!-- 커스텀 css -->
+</head>
+
+<body>
+
+<!-- 상단 네비게이션 바 -->
+<nav th:replace="~{fragments/navbar :: common_navbar}">
+    상단 네비게이션 바 영역
+</nav>
+
+<!-- 배너 이미지 -->
+<div class="banner"></div>
+
+<!-- 전체 레이아웃 -->
+<div class="container-fluid">
+    <div class="row">
+        <!-- 좌측 탭 네비게이션 -->
+        <nav class="col-md-3 col-lg-2 side-nav">
+            <a th:href="@{/wiki/characters}" class="active">사도</a>
+            <a th:href="@{/wiki/cards/artifact}">아티팩트 카드</a>
+            <a th:href="@{/wiki/cards/spell}">스펠 카드</a>
+        </nav>
+
+        <!-- 본문 콘텐츠 섹션 -->
+        <main th:object="${character}" class="col-md-9 col-lg-10 content">
+            <!-- 프로필 섹션 -->
+            <section id="profile" class="mb-5 container">
+                <h2 class="mb-4">프로필</h2>
+                <hr class="title-underline">
+                <div class="row align-items-center">
+                    <!-- 좌측: 프로필 이미지와 정보 -->
+                    <div class="col-md-6 d-flex">
+                        <div class="character-image me-4 d-flex align-items-center">
+                            <img th:src="@{ *{urls.profile_url} }" alt="캐릭터 프로필 이미지" class="img-fluid rounded">
+                        </div>
+                        <div class="character-profile d-flex flex-column justify-content-between">
+                            <div>
+                                <!-- 이름, 수식어, 등급 이미지 -->
+                                <div class="d-flex align-items-start">
+                                    <div class="d-flex flex-column">
+                                        <h3 th:text="*{name}" class="mb-1">캐릭터 이름</h3>
+                                        <p th:text="*{subtitle}" class="character-subtitle mb-0">캐릭터 수식언</p>
+                                    </div>
+                                    <img th:src="@{ |/imgs/wiki/icons/star_*{grade}.webp| }" alt="등급 이미지" class="img-fluid grade-image ms-3">
+                                </div>
+                                <hr class="my-2">
+                                <!-- 한마디와 TMI -->
+                                <div class="character-extras mt-4">
+                                    <!-- 종족 정보 -->
+                                    <div class="mb-3">
+                                        <h4 class="mb-1">종족</h4>
+                                        <div th:switch="*{{race}}" class="d-flex align-items-center justify-content-center">
+                                            <p th:case="'fairy'" th:text="요정" class="character-race mb-0 me-2">종족명</p>
+                                            <p th:case="'witch'" th:text="마녀" class="character-race mb-0 me-2">종족명</p>
+                                            <p th:case="'furry'" th:text="수인" class="character-race mb-0 me-2">종족명</p>
+                                            <p th:case="'dragon'" th:text="용족" class="character-race mb-0 me-2">종족명</p>
+                                            <p th:case="'ghost'" th:text="유령" class="character-race mb-0 me-2">종족명</p>
+                                            <p th:case="'spirit'" th:text="정령" class="character-race mb-0 me-2">종족명</p>
+                                            <p th:case="'elf'" th:text="엘프" class="character-race mb-0 me-2">종족명</p>
+                                            <img th:src=" @{ |/imgs/wiki/icons/symbol_*{{race}}.webp| }" alt="종족 심볼" class="race-symbol">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h4 class="mb-1">한마디</h4>
+                                        <p th:text="|&quot;*{quote}&quot;|" class="character-quote">"캐릭터 한마디 내용"</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="mb-1">TMI</h4>
+                                        <p th:text="*{tmi}" class="character-tmi">캐릭터 tmi</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 우측: 특성 정보 -->
+                    <div class="col-md-6">
+                        <div class="traits-section">
+                            <h4 class="mb-3 mt-3">특성 정보</h4>
+                            <!-- 성격, 역할, 공격 방식, 배치: 아이콘과 수평 정렬 -->
+                            <div class="traits-icons d-flex justify-content-between mb-4">
+                                <!-- 성격 -->
+                                <div th:switch="*{{personality}}" class="trait">
+                                    <th:block th:case="'gloomy'">
+                                        <img th:src=" @{/imgs/wikiicons//personality_gloomy.webp}" alt="성격 아이콘" class="img-fluid">
+                                        <p class="trait-label"><span class="trait-category">성격:</span> <span class="trait-value">우울</span></p>
+                                    </th:block>
+
+                                    <th:block th:case="'activity'">
+                                        <img th:src=" @{/imgs/wiki/icons/personality_activity.webp}" alt="성격 아이콘" class="img-fluid">
+                                        <p class="trait-label"><span class="trait-category">성격:</span> <span class="trait-value">활발</span></p>
+                                    </th:block>
+
+                                    <th:block th:case="'pure'">
+                                        <img th:src=" @{/imgs/wiki/icons/personality_pure.webp}" alt="성격 아이콘" class="img-fluid">
+                                        <p class="trait-label"><span class="trait-category">성격:</span> <span class="trait-value">순수</span></p>
+                                    </th:block>
+
+                                    <th:block th:case="'madness'">
+                                        <img th:src=" @{/imgs/wiki/icons/personality_madness.webp}" alt="성격 아이콘" class="img-fluid">
+                                        <p class="trait-label"><span class="trait-category">성격:</span> <span class="trait-value">광기</span></p>
+                                    </th:block>
+
+                                    <th:block th:case="'cool'">
+                                        <img th:src=" @{/imgs/wiki/icons/personality_cool.webp}" alt="성격 아이콘" class="img-fluid">
+                                        <p class="trait-label"><span class="trait-category">성격:</span> <span class="trait-value">냉정</span></p>
+                                    </th:block>
+                                </div>
+
+                                <!-- 역할 -->
+                                <div th:switch="*{{role}}" class="trait">
+                                    <th:block th:case="'dealer'">
+                                        <img th:src="@{/imgs/wiki/icons/class_dealer.webp}" alt="역할 아이콘" class="img-fluid">
+                                        <p class="trait-label"><span class="trait-category">역할:</span> <span class="trait-value">딜러</span></p>
+                                    </th:block>
+
+                                    <th:block th:case="'tanker'">
+                                        <img th:src="@{/imgs/wiki/icons/class_tanker.webp}" alt="역할 아이콘" class="img-fluid">
+                                        <p class="trait-label"><span class="trait-category">역할:</span> <span class="trait-value">탱커</span></p>
+                                    </th:block>
+
+                                    <th:block th:case="'supporter'">
+                                        <img th:src="@{/imgs/wiki/icons/class_supporter.webp}" alt="역할 아이콘" class="img-fluid">
+                                        <p class="trait-label"><span class="trait-category">역할:</span> <span class="trait-value">서포터</span></p>
+                                    </th:block>
+                                </div>
+
+                                <!-- 공격 방식 -->
+                                <div th:switch="*{{attackType}}" class="trait">
+                                    <th:block th:case="'physical'">
+                                        <img th:src="@{/imgs/wiki/icons/attackType_physical.webp}" alt="공격 방식 아이콘" class="img-fluid">
+                                        <p class="trait-label"><span class="trait-category">공격 방식:</span> <span class="trait-value">물리</span></p>
+                                    </th:block>
+
+                                    <th:block th:case="'magical'">
+                                        <img th:src="@{/imgs/wiki/icons/attackType_magical.webp}" alt="공격 방식 아이콘" class="img-fluid">
+                                        <p class="trait-label"><span class="trait-category">공격 방식:</span> <span class="trait-value">마법</span></p>
+                                    </th:block>
+                                </div>
+
+                                <!-- 배치 -->
+                                <div th:switch="*{{position}}" class="trait">
+                                    <th:block th:case="'front'">
+                                        <img th:src="@{/imgs/wiki/icons/position_front.webp}" alt="배치 아이콘" class="img-fluid">
+                                        <p class="trait-label"><span class="trait-category">배치:</span> <span class="trait-value">전열</span></p>
+                                    </th:block>
+
+                                    <th:block th:case="'middle'">
+                                        <img th:src="@{/imgs/wiki/icons/position_middle.webp}" alt="배치 아이콘" class="img-fluid">
+                                        <p class="trait-label"><span class="trait-category">배치:</span> <span class="trait-value">중열</span></p>
+                                    </th:block>
+
+                                    <th:block th:case="'back'">
+                                        <img th:src="@{/imgs/wiki/icons/position_back.webp}" alt="배치 아이콘" class="img-fluid">
+                                        <p class="trait-label"><span class="trait-category">배치:</span> <span class="trait-value">후열</span></p>
+                                    </th:block>
+
+                                    <th:block th:case="'all'">
+                                        <img th:src="@{/imgs/wiki/icons/position_all.webp}" alt="배치 아이콘" class="img-fluid">
+                                        <p class="trait-label"><span class="trait-category">배치:</span> <span class="trait-value">전체</span></p>
+                                    </th:block>
+                                </div>
+                            </div>
+
+                            <!-- 스테이터스 게이지 -->
+                            <div class="status-bars">
+                                <div class="status-bar mb-3">
+                                    <label for="status-aggressive">깡</label>
+                                    <div class="progress" id="status-aggressive">
+                                        <div class="progress-bar strength-bar" role="progressbar"
+                                             th:style="|width: *{stat.aggressive * 10}%|"
+                                             th:aria-valuenow="*{stat.aggressive * 10}" aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="status-bar mb-3">
+                                    <label for="status-endurance">맷집</label>
+                                    <div class="progress" id="status-endurance">
+                                        <div class="progress-bar endurance-bar" role="progressbar"
+                                             th:style="|width: *{stat.endurance * 10}%|"
+                                             th:aria-valuenow="*{stat.endurance * 10}" aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="status-bar mb-3">
+                                    <label for="status-trick">재주</label>
+                                    <div class="progress" id="status-trick">
+                                        <div class="progress-bar skill-bar" role="progressbar"
+                                             th:style="|width: *{stat.trick * 10}%|"
+                                             th:aria-valuenow="*{stat.trick * 10}" aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>                      
+
+            <!-- 스킬 섹션 -->
+            <section id="skills" class="mb-5 container">
+                <h2 class="mb-4">스킬</h2>
+                <hr class="title-underline">
+                <div class="row">
+                    <!-- 일반 공격 -->
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <!-- 이미지가 카드 내부의 상단에 위치 -->
+                                <div th:switch="*{{attackType}}" class="d-flex justify-content-center mb-4">
+                                    <img th:case="'physical'" th:src="@{/imgs/wiki/icons/normalAttack_physical.webp}" alt="일반 공격 이미지" class="img-fluid rounded skill-image">
+                                    <img th:case="'magical'" th:src="@{/imgs/wiki/icons/normalAttack_magical.webp}" alt="일반 공격 이미지" class="img-fluid rounded skill-image">
+                                    <img th:case="*" th:src="@{/imgs/wiki/icons/normalAttack_physical.webp}" alt="일반 공격 이미지" class="img-fluid rounded skill-image">
+                                </div>
+                                
+                                <h4 class="card-title text-center">
+                                    일반 공격
+                                </h4>
+                                <hr class="my-2"> <!-- 구분선 추가 -->
+
+                                <!-- 기본 공격 설명 -->
+                                <div class="mb-3">
+                                    <h5 class="skill-subtitle">기본</h5>
+                                    <p th:text="*{normalAttack.description}" class="card-text">기본공격 설명</p>
+                                    <ul class="list-unstyled">
+                                        <li th:each="attribute: *{normalAttack.attributes}">
+                                            <strong th:text="${attribute.attrName}">일반공격 속성 이름</strong>
+                                            <span th:text="${attribute.attrValue}">일반공격 속성 수치</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- 강화 공격 설명 (있을 때만 렌더링) -->
+                                <div th:if="*{enhancedAttack != null}">
+                                    <hr class="my-2"> <!-- 기본 공격과 강화 공격 사이의 구분선 -->
+                                    <h5 class="skill-subtitle">강화</h5>
+                                    <p th:text="*{enhancedAttack.description}" class="card-text">강화공격 설명</p>
+                                    <ul class="list-unstyled">
+                                        <li th:each="attribute: *{enhancedAttack.attributes}">
+                                            <strong th:text="${attribute.attrName}">강화공격 속성 이름</strong>
+                                            <span th:text="${attribute.attrValue}">강화공격 속성 수치</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 저학년 스킬 -->
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <!-- 이미지가 카드 내부의 상단에 위치 -->
+                                <div class="d-flex justify-content-center mb-4">
+                                    <img th:src=" @{ /imgs/wiki/characters/{id}/lowSkill.webp (id=*{id}) }" alt="저학년 스킬 이미지" class="img-fluid rounded skill-image">
+                                </div>
+                                
+                                <h4 class="card-title text-center">
+                                    <span class="skill-title-prefix">저학년 스킬:</span>
+                                    <span th:text="*{lowSkill.name}">저학년 스킬 이름</span>
+                                </h4>
+                                <hr class="my-2">
+                                <p th:text="*{lowSkill.description}" class="card-text">저학년 스킬 설명</p>
+                                <ul class="list-unstyled">
+                                    <li th:each="attribute: *{lowSkill.attributes}">
+                                        <strong th:text="${attribute.attrName}">저학년 스킬 속성 이름</strong>
+                                        <span th:text="${attribute.attrValue}">저학년 스킬 속성 수치</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 고학년 스킬 -->
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <!-- 이미지가 카드 내부의 상단에 위치 -->
+                                <div class="d-flex justify-content-center mb-4">
+                                    <img th:src="@{ *{urls.portrait_url} }" alt="고학년 스킬 이미지" class="img-fluid rounded skill-image">
+                                </div>
+                                
+                                <h4 class="card-title text-center">
+                                    <span class="skill-title-prefix">고학년 스킬:</span>
+                                    <span th:text="*{highSkill.name}">고학년 스킬 이름</span>
+                                </h4>
+                                <hr class="my-2">
+                                <p th:text="*{highSkill.description}" class="card-text">지팡이에 마력을 가득 담아 돌격해 적들에게 범위 마법 피해를 입힌다.</p>
+                                <ul class="list-unstyled">
+                                    <li th:each="attribute: *{highSkill.attributes}">
+                                        <strong th:text="${attribute.attrName}">고학년 스킬 속성 이름</strong>
+                                        <span th:text="${attribute.attrValue}">고학년 스킬 속성 수치</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 어사이드 섹션 -->
+            <section id="aside" class="mt-5 container">
+                <h2 class="mb-4">어사이드</h2>
+                <hr class="title-underline">
+
+                <div class="container aside-content">
+                    <!-- 어사이드의 전체 이름, 설명, 그리고 이미지 -->
+                    <div class="mb-4">
+                        <div class="row g-0">
+                            <!-- 이미지 영역 -->
+                            <div class="col-md-5 d-flex justify-content-center align-items-center">
+                                <img th:src=" @{/imgs/wiki/aside/{id}/aside.webp (id=*{id}) }" alt="어사이드 개요 이미지" class="img-fluid rounded aside-image">
+                            </div>
+                            <!-- 설명 영역 -->
+                            <div class="col-md-7">
+                                <div class="px-3">
+                                    <h3 th:text="*{aside.name}" class="mb-2">어사이드 이름</h3>
+                                    <p th:text="*{aside.description}">어사이드 설명</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 어사이드 1단계 -->
+                    <div class="card mb-4">
+                        <div class="row g-0">
+                            <!-- 이미지 영역 -->
+                            <div class="col-md-5 d-flex justify-content-center align-items-center">
+                                <img th:src="@{/imgs/wiki/aside/{id}/Lv1.webp (id=*{id})}" alt="어사이드 1단계 이미지" class="img-fluid aside-image">
+                            </div>
+                            <!-- 설명 및 효과 영역 -->
+                            <div class="col-md-7">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <!-- 카드 타이틀 -->
+                                        <h4 th:text="*{aside.level1.name}" class="card-title mb-0">어사이드 1단계 이름</h4>
+                                        <!-- 작은 이미지 3개를 가로로 배치 -->
+                                        <div class="d-flex ms-2 bg-light ms-auto">
+                                            <img th:src="@{/imgs/wiki/icons/star_filled.webp}" alt="아이콘 1" class="img-fluid ms-1 aside-star-img">
+                                            <img th:src="@{/imgs/wiki/icons/star_empty.webp}" alt="아이콘 2" class="img-fluid ms-1 aside-star-img">
+                                            <img th:src="@{/imgs/wiki/icons/star_empty.webp}" alt="아이콘 3" class="img-fluid ms-1 aside-star-img">
+                                        </div>
+                                    </div>
+                                    <p th:text="*{aside.level1.description}" class="card-text">어사이드 1단계 설명</p>
+                                    
+                                    <hr class="my-2">
+
+                                    <!-- 효과 설명 -->
+                                    <ul class="list-unstyled">
+                                        <li th:each="attribute: *{aside.level1.attributes}">
+                                            <strong th:text="${attribute.attrName}" class="stat-value">어사이드 1단계 효과 이름</strong>
+                                            <span th:text="${attribute.attrValue}">어사이드 1단계 효과 설명</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 어사이드 2단계 -->
+                    <div class="card mb-4">
+                        <div class="row g-0">
+                            <!-- 이미지 영역 -->
+                            <div class="col-md-5 d-flex justify-content-center align-items-center">
+                                <img th:src="@{/imgs/wiki/aside/{id}/Lv2.webp (id=*{id})}" alt="어사이드 2단계 이미지" class="img-fluid aside-image">
+                            </div>
+                            <!-- 설명 및 효과 영역 -->
+                            <div class="col-md-7">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <!-- 카드 타이틀 -->
+                                        <h4 th:text="*{aside.level2.name}" class="card-title mb-0">어사이드 2단계 이름</h4>
+                                        <!-- 작은 이미지 3개를 가로로 배치 -->
+                                        <div class="d-flex ms-2 bg-light ms-auto">
+                                            <img th:src="@{/imgs/wiki/icons/star_filled.webp}" alt="아이콘 1" class="img-fluid ms-1 aside-star-img">
+                                            <img th:src="@{/imgs/wiki/icons/star_filled.webp}" alt="아이콘 2" class="img-fluid ms-1 aside-star-img">
+                                            <img th:src="@{/imgs/wiki/icons/star_empty.webp}" alt="아이콘 3" class="img-fluid ms-1 aside-star-img">
+                                        </div>
+                                    </div>
+                                    <p th:text="*{aside.level2.description}" class="card-text">어사이드 2단계 설명</p>
+                                    
+                                    <hr class="my-2">
+
+                                    <!-- 효과 설명 -->
+                                    <ul class="list-unstyled">
+                                        <li th:each="attribute: *{aside.level2.attributes}">
+                                            <strong th:text="${attribute.attrName}" class="stat-value">어사이드 2단계 효과 이름</strong>
+                                            <span th:text="${attribute.attrValue}">어사이드 2단계 효과 수치</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 어사이드 3단계 -->
+                    <div class="card mb-4">
+                        <div class="row g-0">
+                            <!-- 이미지 영역 -->
+                            <div class="col-md-5 d-flex justify-content-center align-items-center">
+                                <img th:src="@{/imgs/wiki/aside/{id}/Lv3.webp (id=*{id})}" alt="어사이드 3단계 이미지" class="img-fluid aside-image">
+                            </div>
+                            <!-- 설명 및 효과 영역 -->
+                            <div class="col-md-7">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <!-- 카드 타이틀 -->
+                                        <h4 th:text="*{aside.level3.name}" class="card-title mb-0">어사이드 3단계 이름</h4>
+                                        <!-- 작은 이미지 3개를 가로로 배치 -->
+                                        <div class="d-flex ms-2 bg-light ms-auto">
+                                            <img th:src="@{/imgs/wiki/icons/star_filled.webp}" alt="아이콘 1" class="img-fluid ms-1 aside-star-img">
+                                            <img th:src="@{/imgs/wiki/icons/star_filled.webp}" alt="아이콘 2" class="img-fluid ms-1 aside-star-img">
+                                            <img th:src="@{/imgs/wiki/icons/star_filled.webp}" alt="아이콘 3" class="img-fluid ms-1 aside-star-img">
+                                        </div>
+                                    </div>
+                                    <p th:text="*{aside.level3.description}" class="card-text">어사이드 3단계 설명</p>
+                                    
+                                    <hr class="my-2">
+
+                                    <!-- 효과 설명 -->
+                                    <ul class="list-unstyled">
+                                        <li th:each="attribute: *{aside.level3.attributes}">
+                                            <strong th:text="${attribute.attrName}" class="stat-value">어사이드 3단계 효과 이름</strong>
+                                            <span th:text="${attribute.attrValue}">어사이드 3단계 효과 수치</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 사복 섹션 -->
+            <section id="skins" class="mt-5 container">
+                <h2 class="mb-4">사복</h2>
+                <hr class="title-underline">
+                <div class="skin-row">
+
+                    <!-- 사복 정보 -->
+                    <div th:each="skin: ${skinList}" class="card skin-card-container">
+                        <div class="skin-card">
+                            <img th:src="@{${skin.imageUrl}}" alt="사복 이미지" class="img-fluid">
+                        </div>
+                        <div class="card-body">
+                            <h5 th:text="${skin.name}" class="card-title">스킨 이름</h5>
+                            <p th:text="${skin.description}" class="card-text">스킨 설명</p>
+                        </div>
+                    </div>
+
+                    <!-- 더미 데이터 -->
+                    <!-- 사복 2 -->
+                    <div class="card skin-card-container">
+                        <div class="skin-card">
+                            <img src="../../images/wiki/joanne_skin_1.webp" alt="에르핀 사복 2" class="img-fluid">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">동화 속 요정</h5>
+                            <p class="card-text">에르핀이 마법의 숲에서 영감을 얻은 사복으로, 신비한 요정의 모습으로 변신합니다.</p>
+                        </div>
+                    </div>
+
+                    <!-- 사복 3 -->
+                    <div class="card skin-card-container">
+                        <div class="skin-card">
+                            <img src="../../images/wiki/erpin_skin3.webp" alt="에르핀 사복 3" class="img-fluid">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">할로윈 파티</h5>
+                            <p class="card-text">할로윈 이벤트를 위한 특별 사복! 에르핀이 귀여운 마녀로 변신했습니다.</p>
+                        </div>
+                    </div>
+
+                    <!-- 사복 3 -->
+                    <div class="card skin-card-container">
+                        <div class="skin-card">
+                            <img src="../../images/wiki/erpin_skin3.webp" alt="에르핀 사복 3" class="img-fluid">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">할로윈 파티</h5>
+                            <p class="card-text">할로윈 이벤트를 위한 특별 사복! 에르핀이 귀여운 마녀로 변신했습니다.</p>
+                        </div>
+                    </div>
+
+                    <!-- 사복 3 -->
+                    <div class="card skin-card-container">
+                        <div class="skin-card">
+                            <img src="../../images/wiki/erpin_skin3.webp" alt="에르핀 사복 3" class="img-fluid">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">할로윈 파티</h5>
+                            <p class="card-text">할로윈 이벤트를 위한 특별 사복! 에르핀이 귀여운 마녀로 변신했습니다.</p>
+                        </div>
+                    </div>
+
+                    <!-- 사복 3 -->
+                    <div class="card skin-card-container">
+                        <div class="skin-card">
+                            <img src="../../images/wiki/erpin_skin3.webp" alt="에르핀 사복 3" class="img-fluid">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">할로윈 파티</h5>
+                            <p class="card-text">할로윈 이벤트를 위한 특별 사복! 에르핀이 귀여운 마녀로 변신했습니다.</p>
+                        </div>
+                    </div>
+
+                    <!-- 사복 3 -->
+                    <div class="card skin-card-container">
+                        <div class="skin-card">
+                            <img src="../../images/wiki/erpin_skin3.webp" alt="에르핀 사복 3" class="img-fluid">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">할로윈 파티</h5>
+                            <p class="card-text">할로윈 이벤트를 위한 특별 사복! 에르핀이 귀여운 마녀로 변신했습니다.</p>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+</div>
+
+<!-- 푸터 -->
+<footer th:replace="~{fragments/footer :: common_footer}"></footer>
+
+<script th:src="@{/js/skinCarousel_chDetail.js}" defer></script>
+
+</body>
+
+</html>

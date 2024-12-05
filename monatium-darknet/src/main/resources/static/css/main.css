@@ -1,0 +1,397 @@
+body {
+    font-family: 'MobileGothicPOP', 'Noto Sans JP', sans-serif;
+    /* background: url('../images/bkg_worldtree.jpg') no-repeat center center; */
+    background-size: cover; /* 이미지를 화면에 꽉 채우기 */
+    background-attachment: fixed; /* 스크롤 시에도 배경 고정 */
+    background-color: #F0F8FF; /* 밝은 파스텔톤 배경 */
+    color: #000000; /* 텍스트 색상 어두운 톤 */
+    scroll-behavior: smooth;
+}
+
+/* 상단 네비게이션 스타일 (이동) */
+
+/* 각 섹션 스타일 */
+/* 섹션이 네비게이션 바에 가려지지 않도록 여백을 설정 */
+
+/* 섹션 공통 스타일 */
+/* section { */
+    /* 네비게이션 바 높이에 맞춰 조정 (예: 80px) */
+    /* scroll-margin-top: 80px;  */
+/* } */
+
+h2.section-title {
+    position: relative;
+    color: #FFFFFF;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 2rem; /* 폰트 크기 확대 */
+}
+
+/* 히어로 섹션 스타일 */
+.hero-section {
+    position: relative;
+
+    width: 100%; /* 섹션이 화면 전체 너비를 사용 */
+    height: 56.25vw; /* 16:9 비율 유지 */
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* 비디오가 화면 밖으로 나가는 것을 방지 */
+}
+
+.video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* 콘텐츠 뒤로 비디오 배경 배치 */
+    overflow: hidden;
+}
+
+/* 비디오의 크기 맞추기 */
+.video-background iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80vw; /* 너비를 기준으로 */
+    height: 80vw; /* 16:9 비율 */
+    transform: translate(-50%, -50%);
+    min-width: 100vw;
+    min-height: 56.25vw; /* 16:9 비율로 최소 높이 설정 */
+    border: none;
+}
+
+/* 영상 위에 검은색 오버레이 추가 */
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 50% 투명도 검정색 */
+    z-index: 0; /* 콘텐츠 뒤에 배치 */
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: #FFF;
+}
+
+/* 모바일 환경에서 글자 크기 축소 */
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2rem; /* 모바일에서 텍스트 크기 줄이기 */
+    }
+}
+
+/* 공지사항 섹션 스타일 */
+.notice-section {
+    background: url('/imgs/bkg/bkg1.png') no-repeat center center;
+    background-size: cover;
+    width: 100%; /* 섹션이 화면 전체 너비를 사용 */
+    height: 56.25vw; /* 16:9 비율 유지 */
+    padding: 5rem 0;
+    display: flex; /* Flexbox 적용 */
+    align-items: center; /* 세로 중앙 정렬 */
+    justify-content: center;
+}
+
+.notice-content {
+    width: 100%;
+    max-width: 1500px;
+    height: 40vw;
+    margin: 0 auto;
+    background-color: #D3D3D3;
+}
+
+.notice-content-col {
+    width: 45%;
+    background-color: #45A049;
+}
+
+/* 슬라이드 이미지 크기 일관성 유지 */
+.notice-content .carousel-item {
+    height: 30%;
+}
+
+.notice-content .carousel-item img {
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.notice-content .carousel-item .slide-text {
+    width: 100%;
+    text-align: start;
+}
+
+.slide-text .slide-title {
+    font-size: 1.3vw;
+    line-height: 1.2;
+}
+
+.slide-text .slide-date {
+    font-size: 1.2vw;
+    color: #6c757d; /* Bootstrap의 text-muted 색상 */
+}
+
+/* 공지사항 미디어 */
+.notice-media {
+    height: 30%;
+    max-width: 100%;
+    background-color: #333;
+}
+
+/* 공식 x, 라운지, ... */
+.notice-media .media-text {
+    color: black;
+    font-size: 1.2vw;
+}
+
+.notice-img-container {
+    transition: transform 0.5s ease;
+}
+
+.notice-img-container:hover {
+    transform: scale(1.05); /* 마우스 오버 시 확대 */
+}
+
+.notice-button {
+    font-size: clamp(0.5rem, 1vw, 2rem);
+}
+
+/* 공지사항 섹션 스타일 끝 */
+
+/* 세계관 섹션 스타일 */
+.worldview-section {
+    background: url('/imgs/bkg/bkg2.webp') no-repeat center center;
+    background-size: cover;
+    width: 100%; /* 섹션이 화면 전체 너비를 사용 */
+    height: 56.25vw; /* 16:9 비율 유지 */
+    padding: 5rem 0;
+
+    display: flex;
+    align-items: center;
+}
+
+.worldview-content {
+    width: 80%;
+    /* height: 45vw; */
+    height: 100%;
+    background-color: #D3D3D3;
+}
+
+.worldview-content .video-container {
+    width: 80%;
+}
+
+/* 세계관 섹션 스타일 끝 */
+
+
+/* 캐릭터 소개 섹션 스타일 */
+.characters-section {
+    background: url('/imgs/bkg/bkg3.jpg') no-repeat center center;
+    background-size: cover;
+    width: 100%; /* 섹션이 화면 전체 너비를 사용 */
+    height: 56.25vw; /* 16:9 비율 유지 */
+    padding: 5rem 0;
+
+    display: flex;
+    align-items: center;
+}
+
+/* 캐릭터 섹션 컨텐츠 */
+.characters-content {
+    width: 80%;
+    height: 45vw;
+    /* background-color: #D3D3D3; */
+    background: url('/imgs/bkg/main_book.png') no-repeat center center;
+    background-size: contain;
+
+    margin: 0 auto; /* 중앙 정렬 */
+}
+
+/* 양쪽 컨텐츠 영역 */
+.characters-content .characters-content-col {
+    width: 45%;
+    /* background-color: #333; */
+}
+
+/* 이미지 컨테이너 스타일 */
+.characters-content .image-container {
+    width: 70%;
+    margin-left: 5%;
+    /* background-color: #D3D3D3; */
+}
+
+/* 캐릭터 섹션 좌측 이미지 */
+.character-img {
+    width: 100%;         /* 이미지가 컨테이너를 채움 */
+    object-fit: contain;
+}
+
+.character-portraits {
+    width: 90%;
+    max-height: 30%;
+    margin-bottom: 5%;
+
+    /* background-color: #4682B4; */
+}
+
+/* 캐릭터 섹션 우측 초상화 컨테이너 */
+.character-portraits .portrait-container {
+    width: 20%;
+    margin: 2%;    /* 이미지 사이의 간격 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: #45A049; */
+}
+
+.character-info {
+    width: 100%;
+    margin-top: 5%;
+
+    /* background-color: #D3D3D3; */
+}
+
+/* 캐릭터 소개 섹션 초상화 */
+.character-info .portrait-container {
+    width: 20%;
+
+    display: flex;
+    justify-content: center;
+    /* background-color: #45A049; */
+    margin: 0 5%;
+}
+
+/* 캐릭터 섹션 우측 초상화 이미지 */
+.character-portrait,
+.info-portrait {
+    width: 75%;  /* 원하는 이미지 너비 */
+    object-fit: cover; /* 이미지 비율 유지하며 잘라내기 */
+    border-radius: 10px; /* 모서리 둥글게 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 가벼운 그림자 */
+}
+
+.character-title {
+    width: 100%;
+    margin-right: 5%;
+    margin-bottom: 5%;
+}
+
+.characters-content .character-info-text {
+    font-size: clamp(0rem, 1vw, 1.5rem); /* 최소 1rem, 최대 2rem */
+}
+
+.character-title .character-subtitle {
+    font-size: clamp(0rem, 1vw, 1rem); /* 최소 1rem, 최대 2rem */
+    color: #6c757d;
+}
+
+.character-info-text .info-subtitle {
+    margin-top: 5%;
+    margin-bottom: 3%;
+}
+
+/* 캐릭터 소개 섹션의 종족 심볼 */
+.symbol-icon {
+    width: 12%;    /* 적절한 크기로 조절 */
+    height: 12%;   /* 이미지의 정사각형 비율 유지 */
+    object-fit: contain;  /* 원본 비율 유지 */
+}
+
+/* 캐릭터 소개 섹션 스타일 끝 */
+
+/* 포토존 섹션 스타일 */
+.photozone-section {
+    background: url('/imgs/bkg/bkg4.png') no-repeat center center;
+    background-size: cover;
+    width: 100%; /* 섹션이 화면 전체 너비를 사용 */
+    height: 56.25vw; /* 16:9 비율 유지 */
+    padding: 5rem 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photozone-content {
+    width: 80%;
+    height: 40vw;
+    background-color: #D3D3D3;
+}
+
+.photozone-tab {
+    width: 30%;
+    height: 70%;
+    align-items: start;
+    /* background-color: #45A049; */
+}
+
+.photozone-tab-content {
+    width: 70%;
+    height: 70%;
+    /* background-color: #4682B4; */
+}
+
+.photozone-content .carousel-image-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9; /* 고정된 16:9 비율 */
+    overflow: hidden; /* 이미지가 컨테이너를 벗어나지 않도록 */
+    border-radius: 10px; /* 둥근 모서리 */
+}
+
+.photozone-content .carousel-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 비율에 맞춰 잘라내기 */
+}
+
+.photozone-text {
+    font-size: 1.5vw;
+}
+
+/* 더보기 버튼 (공지사항, 게임소개, 캐릭터 소개별) */
+.btn-custom {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    /* text-decoration: none; */
+}
+
+.btn-custom:hover {
+    background-color: #45A049;
+}
+
+/* 리모컨 섹션 스타일 */
+.remote-control {
+    position: fixed;
+    top: 150px;
+    right: 20px;
+    z-index: 1000;
+    background-color: #2C2C2C;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.remote-control h4 {
+    margin-bottom: 15px;
+    color: #4CAF50;
+}
+
+.remote-control .btn-custom {
+    display: block;
+    margin-bottom: 10px;
+    text-align: center;
+}

@@ -101,7 +101,7 @@ public class Character {
     public static Character createCharacter(String name, String subtitle, String cv,
                                             Integer grade, String quote, String tmi, String favorite,
                                             Race race, Personality personality, Role role, AttackType attackType, Position position, CharacterStat stat,
-                                            Attack normalAttack, Attack enhancedAttack, Skill lowSkill, Skill highSkill, Aside aside, CharacterUrl urls)
+                                            Attack normalAttack, Attack enhancedAttack, Skill lowSkill, Skill highSkill, Aside aside)
     {
         Character character = new Character();
         character.setName(name);
@@ -126,7 +126,7 @@ public class Character {
 
         character.setAside(aside);
 
-        character.setUrls(urls);
+//        character.setUrls(urls);
         return character;
     }
 
