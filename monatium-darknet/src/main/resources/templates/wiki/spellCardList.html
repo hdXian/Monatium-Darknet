@@ -87,9 +87,9 @@
                                         <div th:switch="${{card.grade}}" class="spell-info">
                                             등급:
                                             <span th:case="'legendary'" th:text="전설" th:classappend="| ${{card.grade}}-text |" class="me-3">카드 등급</span>
-                                            <span th:case="'rare'" th:text="희귀" class="legendary-text me-3">카드 등급</span>
-                                            <span th:case="'advanced'" th:text="고급" class="legendary-text me-3">카드 등급</span>
-                                            <span th:case="'normal'" th:text="일반" class="legendary-text me-3">카드 등급</span>
+                                            <span th:case="'rare'" th:text="희귀" th:classappend="| ${{card.grade}}-text |" class="me-3">카드 등급</span>
+                                            <span th:case="'advanced'" th:text="고급" th:classappend="| ${{card.grade}}-text |" class="me-3">카드 등급</span>
+                                            <span th:case="'normal'" th:text="일반" th:classappend="| ${{card.grade}}-text |" class="me-3">카드 등급</span>
 
                                             코스트: <span th:text="${card.cost}" class="green-text">카드 비용</span>
                                         </div>
