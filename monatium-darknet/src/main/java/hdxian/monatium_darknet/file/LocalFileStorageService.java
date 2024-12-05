@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -20,6 +19,7 @@ public class LocalFileStorageService implements FileStorageService {
     @Value("${file.dir}")
     private String fileDir;
 
+    // multipartFile과 경로만 전달받아서 파일을 저장
     @Override
     public void uploadFile(MultipartFile multipartFile, String filePath) throws IOException {
 
@@ -40,7 +40,6 @@ public class LocalFileStorageService implements FileStorageService {
 
         // 파일 저장
         multipartFile.transferTo(new File(savePath));
-
     }
 
     @Override
@@ -73,7 +72,8 @@ public class LocalFileStorageService implements FileStorageService {
 //        TODO if (!Files.exists(fileDir)) ...
     }
 
-    private String getFullPath(String path) {
+    @Override
+    public String getFullPath(String path) {
         return fileDir + path;
     }
 

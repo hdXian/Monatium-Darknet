@@ -26,4 +26,6 @@ public interface FileStorageService {
     // 저장소 초기화 (디렉터리 생성 등)
     void init() throws IOException;
 
+    String getFullPath(String path);
+
 }

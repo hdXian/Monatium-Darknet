@@ -51,4 +51,9 @@ public class NoticeController {
         return "notice/noticeDetail";
     }
 
+    @GetMapping("/new")
+    public String noticeForm() {
+        return "/notice/management/noticeForm";
+    }
+
 }
