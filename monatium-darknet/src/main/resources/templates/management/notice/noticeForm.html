@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- v3 -->
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,31 +13,32 @@
     }
   </style>
 </head>
+
 <body>
 <div class="container mt-4">
-  <h1>공지사항 작성</h1>
-  <form action="/notices/create" method="post" enctype="multipart/form-data">
-    <div class="mb-3">
-      <label for="title" class="form-label">제목</label>
-      <input type="text" id="title" name="title" class="form-control" required>
-    </div>
-    <div class="mb-3">
-      <label for="category" class="form-label">카테고리</label>
-      <select id="category" name="category" class="form-select" required>
-        <option value="notice">공지사항</option>
-        <option value="event">이벤트</option>
-        <option value="update">업데이트</option>
-        <option value="devnote">개발자 노트</option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <label for="editor" class="form-label">내용</label>
-      <div id="editor"></div>
-      <textarea id="content" name="content" class="d-none"></textarea>
-      <input type="hidden" id="imageUrls" name="imageUrls" />
-    </div>
-    <button type="submit" class="btn btn-primary">등록</button>
-    <a href="/notices" class="btn btn-secondary">취소</a>
+    <h1>공지사항 작성</h1>
+    <form th:action="@{/management/notices/new}" th:object="${noticeForm}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="title" class="form-label">제목</label>
+            <input th:field="*{title}" type="text" id="title" name="title" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="category" class="form-label">카테고리</label>
+            <select th:field="*{category}" id="category" name="category" class="form-select" required>
+                <option value="notice">공지사항</option>
+                <option value="event">이벤트</option>
+                <option value="update">업데이트</option>
+                <option value="dev">개발자 노트</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="editor" class="form-label">내용</label>
+            <div id="editor"></div>
+            <textarea th:field="*{content}" id="content" name="content" class="d-none"></textarea>
+            <input type="hidden" id="imageUrls" name="imageUrls" />
+        </div>
+        <button type="submit" class="btn btn-primary">등록</button>
+        <a href="/notices" class="btn btn-secondary">취소</a>
   </form>
 </div>
 
@@ -122,4 +123,5 @@
 
 </script>
 </body>
+
 </html>
