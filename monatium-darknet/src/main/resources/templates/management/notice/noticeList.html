@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 관리</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* 버튼 색상 정의 */
+        .btn-update {
+            background-color: #5bc0de; /* 밝은 하늘색 */
+            color: white;
+            border: none;
+            transition: background-color 0.3s ease; /* 부드러운 전환 효과 */
+        }
+        /* 호버 효과 */
+        .btn-update:hover {
+            background-color: #31a2c4; /* 진한 하늘색으로 변경 */
+        }
+        /* 버튼 크기를 조절하고 더 둥글게 만들기 */
+        .btn-update {
+            border-radius: 8px; /* 둥근 모서리 */
+        }
+    </style>
+
+</head>
+<body>
+<div class="container mt-4">
+    <h1 class="mb-4">공지사항 관리</h1>
+
+    <!-- 탭 네비게이션 -->
+    <ul class="nav nav-tabs mb-3" id="noticeTab" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab">전체</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="notice-tab" data-bs-toggle="tab" data-bs-target="#notice" type="button" role="tab">공지사항</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="event-tab" data-bs-toggle="tab" data-bs-target="#event" type="button" role="tab">이벤트</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="update-tab" data-bs-toggle="tab" data-bs-target="#update" type="button" role="tab">업데이트</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="devnote-tab" data-bs-toggle="tab" data-bs-target="#devnote" type="button" role="tab">개발자노트</button>
+        </li>
+    </ul>
+
+    <!-- 탭 콘텐츠 -->
+    <div class="tab-content">
+        <!-- 전체 목록 -->
+        <div class="tab-pane fade show active" id="all" role="tabpanel">
+            <div class="d-flex justify-content-between mb-3">
+                <button class="btn btn-primary">공지사항 추가</button>
+                <input type="text" class="form-control w-25" placeholder="검색">
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th>카테고리</th>
+                    <th>상태</th>
+                    <th>조작</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>서비스 점검 안내</td>
+                    <td>관리자</td>
+                    <td>2024-12-01</td>
+                    <td>공지사항</td>
+                    <td><span class="badge bg-success">공개</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-update">수정</button>
+                        <button class="btn btn-sm btn-danger">삭제</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>크리스마스 한정 이벤트</td>
+                    <td>관리자</td>
+                    <td>2024-12-03</td>
+                    <td>이벤트</td>
+                    <td><span class="badge bg-success">공개</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-update">수정</button>
+                        <button class="btn btn-sm btn-danger">삭제</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>1.2.0 버전 릴리즈</td>
+                    <td>관리자</td>
+                    <td>2024-12-02</td>
+                    <td>업데이트</td>
+                    <td><span class="badge bg-success">공개</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-update">수정</button>
+                        <button class="btn btn-sm btn-danger">삭제</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>게임 밸런스 조정 이야기</td>
+                    <td>개발팀</td>
+                    <td>2024-12-01</td>
+                    <td>개발자노트</td>
+                    <td><span class="badge bg-success">공개</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-update">수정</button>
+                        <button class="btn btn-sm btn-danger">삭제</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 공지사항 목록 -->
+        <div class="tab-pane fade" id="notice" role="tabpanel">
+            <div class="d-flex justify-content-between mb-3">
+                <button class="btn btn-primary">공지사항 추가</button>
+                <input type="text" class="form-control w-25" placeholder="검색">
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th>상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>서비스 점검 안내</td>
+                    <td>관리자</td>
+                    <td>2024-12-01</td>
+                    <td><span class="badge bg-success">공개</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-update">수정</button>
+                        <button class="btn btn-sm btn-danger">삭제</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>새로운 기능 추가</td>
+                    <td>관리자</td>
+                    <td>2024-11-28</td>
+                    <td><span class="badge bg-secondary">비공개</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-update">수정</button>
+                        <button class="btn btn-sm btn-danger">삭제</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 이벤트 목록 -->
+        <div class="tab-pane fade" id="event" role="tabpanel">
+            <div class="d-flex justify-content-between mb-3">
+                <button class="btn btn-primary">공지사항 추가</button>
+                <input type="text" class="form-control w-25" placeholder="검색">
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th>상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>크리스마스 한정 이벤트</td>
+                    <td>관리자</td>
+                    <td>2024-12-03</td>
+                    <td><span class="badge bg-success">공개</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-update">수정</button>
+                        <button class="btn btn-sm btn-danger">삭제</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>신규 유저 혜택 이벤트</td>
+                    <td>관리자</td>
+                    <td>2024-11-20</td>
+                    <td><span class="badge bg-secondary">비공개</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-update">수정</button>
+                        <button class="btn btn-sm btn-danger">삭제</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 업데이트 목록 -->
+        <div class="tab-pane fade" id="update" role="tabpanel">
+            <div class="d-flex justify-content-between mb-3">
+                <button class="btn btn-primary">공지사항 추가</button>
+                <input type="text" class="form-control w-25" placeholder="검색">
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th>상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>1.2.0 버전 릴리즈</td>
+                    <td>관리자</td>
+                    <td>2024-12-02</td>
+                    <td><span class="badge bg-success">공개</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-update">수정</button>
+                        <button class="btn btn-sm btn-danger">삭제</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 개발자노트 목록 -->
+        <div class="tab-pane fade" id="devnote" role="tabpanel">
+            <div class="d-flex justify-content-between mb-3">
+                <button class="btn btn-primary">공지사항 추가</button>
+                <input type="text" class="form-control w-25" placeholder="검색">
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th>상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>게임 밸런스 조정 이야기</td>
+                    <td>개발팀</td>
+                    <td>2024-12-01</td>
+                    <td><span class="badge bg-success">공개</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-update">수정</button>
+                        <button class="btn btn-sm btn-danger">삭제</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

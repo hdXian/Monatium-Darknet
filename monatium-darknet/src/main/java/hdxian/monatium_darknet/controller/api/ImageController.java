@@ -31,7 +31,7 @@ public class ImageController {
 
     // 파일 이름으로 서버에 이미지를 요청
     @GetMapping("/temp/{fileName}")
-    public ResponseEntity<Resource> getImage(@PathVariable("fileName") String fileName) throws IOException {
+    public ResponseEntity<Resource> getImageFromTemp(@PathVariable("fileName") String fileName) throws IOException {
 
         // 파일 저장 및 로드 정책을 먼저 설계해야 할듯. 예제와 다름.
         System.out.println("fileName = " + fileName);
@@ -42,7 +42,7 @@ public class ImageController {
 
     // 서버에 이미지를 업로드
     @PostMapping("/upload")
-    public UploadImageResponseDto uploadImage(@RequestParam("file") MultipartFile multipartFile) throws MalformedURLException {
+    public UploadImageResponseDto uploadImageToTemp(@RequestParam("file") MultipartFile multipartFile) throws MalformedURLException {
 
         System.out.println("multipartFile = " + multipartFile);
         System.out.println("multipartFile.getOriginalFilename() = " + multipartFile.getOriginalFilename());
