@@ -72,7 +72,9 @@
     </ul>
 
     <div class="d-flex justify-content-between mb-3">
-        <button class="btn btn-primary">공지사항 추가</button>
+        <a th:href="@{/management/notices/new}">
+            <button class="btn btn-primary">공지사항 작성</button>
+        </a>
         <input type="text" class="form-control w-25" placeholder="검색">
     </div>
 
