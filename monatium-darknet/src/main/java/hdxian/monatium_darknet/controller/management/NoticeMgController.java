@@ -8,13 +8,11 @@ import hdxian.monatium_darknet.service.NoticeService;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 // 공지사항 관리 기능 관련 요청 처리
@@ -29,13 +27,7 @@ public class NoticeMgController {
     private final NoticeService noticeService;
     private final FileStorageService fileStorageService;
 
-    private final HtmlContentParser htmlContentParser;
-
-    @Value("${file.noticeDir}")
-    private String noticeBaseDir;
-
-    @Value("${file.tempDir}")
-    private String tempDir;
+    private final HtmlContentUtil htmlContentUtil;
 
     // 공지사항 목록 (대시보드 -> 공지사항 관리)
     @GetMapping
@@ -65,18 +57,27 @@ public class NoticeMgController {
     @PostMapping("/new")
     public String createNotice(@ModelAttribute("noticeForm") NoticeForm form) throws IOException {
 
-        // 1. 전달받은 내용으로 새로운 공지사항을 생성한다.
         NoticeCategory category = form.getCategory();
         String title = form.getTitle();
         String htmlContent = form.getContent();
 
+        // 전달받은 내용으로 공지사항 생성 (공지사항 Id 리턴)
         NoticeDto noticeDto = new NoticeDto(category, title, htmlContent);
-        Long noticeId = noticeService.createNewNotice(1L, noticeDto);
+        Long noticeId = noticeService.createNewNotice(1L, noticeDto); // TODO - 로그인 처리 후 memberId 설정 필요
 
-        // 2. html 콘텐츠로부터 img src들을 추출한다.
-        List<String> imgSrcs = htmlContentParser.getImgSrc(htmlContent);
+        // 공지사항 본문에서 img 태그들의 src 속성들을 추출
+        List<String> imgSrcs = htmlContentUtil.getImgSrc(htmlContent);
 
-        Long updatedNoticeId = noticeService.moveImagesFromTemp(noticeId, imgSrcs);
+        // 추출한 src를 바탕으로 이미지 파일을 이동
+        List<String> changedImgSrcs = noticeService.moveImagesFromTemp(noticeId, imgSrcs);
+
+        // 이동한 이미지에 대한 새로운 url 생성 및 html 본문 업데이트 (src 속성 변경)
+        String baseUrl = "/notices/" + noticeId + "/images/";
+        String updatedContent = htmlContentUtil.updateImgSrc(htmlContent, baseUrl, changedImgSrcs);
+
+        // 업데이트 한 본문 내용으로 공지사항 내용 업데이트
+        NoticeDto updateDto = new NoticeDto(category, title, updatedContent);
+        Long updatedId = noticeService.updateNotice(noticeId, updateDto);
 
         return "redirect:/management/notices";
     }

@@ -9,6 +9,7 @@ import hdxian.monatium_darknet.repository.NoticeRepository;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,21 +68,27 @@ public class NoticeService {
 
     // 임시 저장 경로에 있던 공지사항 이미지들을 정식 경로에 저장
     @Transactional
-    public Long moveImagesFromTemp(Long noticeId, List<String> imgSrcs) throws IOException {
+    public List<String> moveImagesFromTemp(Long noticeId, List<String> imgSrcs) throws IOException {
+
+        List<String> changedFileNames = new ArrayList<>();
 
         String targetDir = noticeBaseDir + (noticeId + "/");
 
         // imgSrc = /api/images/o2p2aRmhWArow8cHh5x9_awsec2_logo.png
+        // noticeId로 폴더를 만들고, 해당 폴더에 이미지 저장
         int seq = 1;
         for (String src : imgSrcs) {
             String fileName = fileStorageService.extractFileName(src);
             String ext = fileStorageService.extractExt(fileName);
+
             FileDto from = new FileDto(tempDir, fileName);
             FileDto to = new FileDto(targetDir, String.format("img_%02d%s", seq++, ext));
+            changedFileNames.add(to.getFileName());
+
             fileStorageService.moveFile(from, to);
         }
 
-        return null;
+        return changedFileNames;
     }
 
     @Transactional
@@ -120,5 +127,8 @@ public class NoticeService {
         return noticeRepository.findAll();
     }
 
+    public String getNoticeImageUrl(Long noticeId, String imageName) {
+        return fileStorageService.getFullPath(noticeBaseDir + (noticeId + "/" + imageName));
+    }
 
 }

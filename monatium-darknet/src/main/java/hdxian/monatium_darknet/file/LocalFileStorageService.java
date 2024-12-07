@@ -68,32 +68,6 @@ public class LocalFileStorageService implements FileStorageService {
         return files;
     }
 
-//    @Override
-//    public void moveFile(String fileName, String dst) throws IOException {
-//
-//        System.out.println("dst = " + dst);
-//
-//        File file = loadFile(fileName);
-//        System.out.println("file = " + file);
-//
-//        Path sourcePath = file.toPath();
-//        Path targetDir = Paths.get(baseDir + extractPath(dst));
-//        Path extractedFileName = Paths.get(extractFileName(dst));
-//
-//        log.info("sourcePath = {}", sourcePath);
-//        log.info("targetDir = {}", targetDir);
-//
-//        System.out.println("Files.exists(targetDir) = " + Files.exists(targetDir));
-//        if (!Files.exists(targetDir)) {
-//            log.info("dir {} created", targetDir);
-//            String createDir = baseDir + extractPath(dst);
-//            System.out.println("createDir = " + createDir);
-//            Files.createDirectories(Paths.get(createDir));
-//        }
-//
-//        Files.move(sourcePath, Paths.get(baseDir + dst));
-//    }
-
     @Override
     public void moveFile(FileDto from, FileDto to) throws IOException {
 

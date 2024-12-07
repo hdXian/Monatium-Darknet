@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class HtmlContentParser {
+public class HtmlContentUtil {
     // based on jsoup
 
     public List<String> getImgSrc(String content) {
@@ -27,6 +27,20 @@ public class HtmlContentParser {
         }
 
         return srcList;
+    }
+
+    public String updateImgSrc(String htmlContent, String baseUrl, List<String> changeSrcs) {
+        Document document = Jsoup.parse(htmlContent);
+
+        Elements imgs = document.select("img");
+
+        for (int i=0; i< changeSrcs.size(); i++) {
+            Element imgTag = imgs.get(i);
+            String changeUrl = baseUrl + changeSrcs.get(i);
+            imgTag.attr("src", changeUrl);
+        }
+
+        return document.body().html();
     }
 
 

@@ -60,11 +60,8 @@
         </div>
 
         <!-- 공지사항 본문 -->
-        <div class="notice-content">
-            <p th:text="${notice.content}">
-                공지사항 본문
-            </p>
-<!--            <img src="../images/notice-detail-sample.jpg" alt="공지사항 이미지" class="img-fluid mt-4" />-->
+        <div th:utext="${notice.content}" class="notice-content">
+            공지사항 본문
         </div>
 
         <!-- 공지사항 목록으로 돌아가는 버튼 -->
