@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.file;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -18,7 +19,13 @@ public interface FileStorageService {
     void uploadFiles(List<MultipartFile> multipartFiles, String filePath) throws IOException;
 
     // 파일 가져오기
-    Resource loadFile(String fileName) throws IOException;
+    File loadFile(String fileName) throws IOException;
+
+    List<File> loadFiles(List<String> fileNames) throws IOException;
+
+    void moveFile(String fileName, String dst) throws IOException;
+
+    void moveFiles(List<String> fileNames, String dst) throws IOException;
 
     // 파일 삭제
     void deleteFile(String fileName) throws IOException;

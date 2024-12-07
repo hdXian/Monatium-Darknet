@@ -30,6 +30,7 @@ logging.level:
 
 # file path (local, for test)
 file:
-  dir: D:\Dev\trickcal_unofficial\files\
-  tempDir: temp\
+  dir: D:/Dev/trickcal_unofficial/files/
+  tempDir: temp/
+  noticeDir: imgs/notice/
 

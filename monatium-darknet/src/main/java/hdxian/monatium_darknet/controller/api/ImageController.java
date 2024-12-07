@@ -27,34 +27,41 @@ public class ImageController {
     @Value("${file.tempDir}")
     private String tempDir;
 
-    // 파일 이름으로 서버에 이미지를 요청
-    @GetMapping("/temp/{fileName}")
-    public ResponseEntity<Resource> getImageFromTemp(@PathVariable("fileName") String fileName) throws IOException {
+    // 파일 이름과 타입으로 서버에 이미지 요청
+    @GetMapping("/{fileName}")
+    public ResponseEntity<Resource> getImage(@PathVariable("fileName") String fileName, @RequestParam("t") String type) throws IOException {
+        String basePath = setBasePath(type);
 
-        // 파일 저장 및 로드 정책을 먼저 설계해야 할듯. 예제와 다름.
-        System.out.println("fileName = " + fileName);
-        UrlResource urlResource = new UrlResource("file:" + fileStorageService.getFullPath(tempDir + fileName));
+        UrlResource urlResource = new UrlResource("file:" + fileStorageService.getFullPath(basePath + fileName));
 
         return ResponseEntity.ok(urlResource);
     }
 
     // 서버에 이미지를 업로드
     @PostMapping("/upload")
-    public UploadImageResponseDto uploadImageToTemp(@RequestParam("file") MultipartFile multipartFile) throws MalformedURLException {
-
-        System.out.println("multipartFile = " + multipartFile);
-        System.out.println("multipartFile.getOriginalFilename() = " + multipartFile.getOriginalFilename());
+    public UploadImageResponseDto uploadImage(@RequestParam("file") MultipartFile multipartFile, @RequestParam("t") String type) throws MalformedURLException {
+        String basePath = setBasePath(type);
 
         String saveFileName = generateFileName(multipartFile.getOriginalFilename());
+        String savePath = basePath + saveFileName;
+
         try {
-            String tempPath = tempDir + saveFileName;
-            fileStorageService.uploadFile(multipartFile, tempPath);
+            fileStorageService.uploadFile(multipartFile, savePath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        String imageUrl = "/api/images/temp/" + saveFileName;
+        String imageUrl = "/api/images/" + saveFileName + "?t=tmp";
         return new UploadImageResponseDto(true, imageUrl);
+    }
+
+    private String setBasePath(String type) {
+        switch (type) {
+            case "tmp":
+                return tempDir;
+            default:
+                return tempDir;
+        }
     }
 
     private static String generateFileName(String OriginalFileName) {

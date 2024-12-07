@@ -20,7 +20,9 @@ public class HtmlContentParser {
         Elements imgs = document.select("img");
 
         for (Element imgTags : imgs) {
-            String src = imgTags.attr("src");
+            String attr = imgTags.attr("src");
+            int idx = attr.indexOf("?"); // 쿼리 파라미터 제거
+            String src = attr.substring(0, idx);
             srcList.add(src);
         }
 
