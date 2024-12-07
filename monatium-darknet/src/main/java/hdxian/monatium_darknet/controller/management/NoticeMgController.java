@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,6 @@ public class NoticeMgController {
     private final FileStorageService fileStorageService;
 
     private final HtmlContentParser htmlContentParser;
-    private final ImageProcessor imageProcessor;
 
     @Value("${file.noticeDir}")
     private String noticeBaseDir;
@@ -78,38 +76,9 @@ public class NoticeMgController {
         // 2. html 콘텐츠로부터 img src들을 추출한다.
         List<String> imgSrcs = htmlContentParser.getImgSrc(htmlContent);
 
-        // 3. img src들은 url이고, 파일명을 포함하고 있다. 우선 파일명을 추출한다.
-        List<String> fileNames = new ArrayList<>();
-        for (String imgSrc : imgSrcs) {
-            // 파일명에 임시 파일 경로를 추가해서 저장한다.
-            // ex. temp/image01.png
-            fileNames.add(tempDir + extractFileName(imgSrc));
-        }
-
-        // 4. 공지사항 Id를 바탕으로 공지사항 이미지들을 저장할 중간 경로를 생성한다.
-        String targetDir = noticeBaseDir + noticeId + "/";
-
-        // 5. 이미지들의 파일명을 img_01.png 등으로 변경하고, 경로도 변경하여 저장한다.
-        int seq = 1;
-        for (String fileName : fileNames) {
-            String ext = extractExt(fileName);
-            String savedFileName = String.format("img_%02d", seq++) + ext;
-            System.out.println("img will saved at " + targetDir + savedFileName);
-            fileStorageService.moveFile(fileName, targetDir + savedFileName);
-        }
+        Long updatedNoticeId = noticeService.moveImagesFromTemp(noticeId, imgSrcs);
 
         return "redirect:/management/notices";
     }
-
-    public static String extractExt(String fileName) {
-        int idx = fileName.lastIndexOf(".");
-        return fileName.substring(idx);
-    }
-
-    public static String extractFileName(String src) {
-        int idx = src.lastIndexOf("/");
-        return src.substring(idx+1);
-    }
-
 
 }

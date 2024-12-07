@@ -3,7 +3,6 @@ package hdxian.monatium_darknet.file;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,54 +52,67 @@ public class LocalFileStorageService implements FileStorageService {
     }
 
     @Override
-    public File loadFile(String fileName) throws IOException {
-        log.info("[LocalFileStorageService.loadFile()] get file {}", baseDir + fileName);
+    public File loadFile(FileDto target) throws IOException {
+        log.info("[LocalFileStorageService.loadFile()] get file {}", baseDir + target.getTotalPath());
 
-        return new File(baseDir, fileName);
+        return new File(baseDir, target.getTotalPath());
     }
 
     @Override
-    public List<File> loadFiles(List<String> fileNames) throws IOException {
+    public List<File> loadFiles(List<FileDto> targets) throws IOException {
         List<File> files = new ArrayList<>();
-        for (String fileName : fileNames) {
-            files.add(loadFile(fileName));
+        for (FileDto target : targets) {
+            files.add(loadFile(target));
         }
 
         return files;
     }
 
+//    @Override
+//    public void moveFile(String fileName, String dst) throws IOException {
+//
+//        System.out.println("dst = " + dst);
+//
+//        File file = loadFile(fileName);
+//        System.out.println("file = " + file);
+//
+//        Path sourcePath = file.toPath();
+//        Path targetDir = Paths.get(baseDir + extractPath(dst));
+//        Path extractedFileName = Paths.get(extractFileName(dst));
+//
+//        log.info("sourcePath = {}", sourcePath);
+//        log.info("targetDir = {}", targetDir);
+//
+//        System.out.println("Files.exists(targetDir) = " + Files.exists(targetDir));
+//        if (!Files.exists(targetDir)) {
+//            log.info("dir {} created", targetDir);
+//            String createDir = baseDir + extractPath(dst);
+//            System.out.println("createDir = " + createDir);
+//            Files.createDirectories(Paths.get(createDir));
+//        }
+//
+//        Files.move(sourcePath, Paths.get(baseDir + dst));
+//    }
+
     @Override
-    public void moveFile(String fileName, String dst) throws IOException {
+    public void moveFile(FileDto from, FileDto to) throws IOException {
 
-        System.out.println("dst = " + dst);
+        File fromFile = loadFile(from);
+        // 이동시킬 파일의 전체 경로 (file.toPath)
+        Path sourcePath = fromFile.toPath();
 
-        File file = loadFile(fileName);
-        System.out.println("file = " + file);
+        // 파일을 저장할 경로 (디렉터리 경로까지만, base + dto.path)
+        Path targetDir = Paths.get(baseDir + to.getPath());
 
-        Path sourcePath = file.toPath();
-        Path targetDir = Paths.get(baseDir + extractPath(dst));
-        Path extractedFileName = Paths.get(extractFileName(dst));
-
-        log.info("sourcePath = {}", sourcePath);
-        log.info("targetDir = {}", targetDir);
-
-        System.out.println("Files.exists(targetDir) = " + Files.exists(targetDir));
-        // 왜 디렉터리가 안 만들어지지..
-        if (!Files.exists(targetDir)) {
-            log.info("dir {} created", targetDir);
-            String createDir = baseDir + extractPath(dst);
-            System.out.println("createDir = " + createDir);
-            Files.createDirectories(Paths.get(createDir));
+        // 파일을 저장할 경로가 없으면 디렉터리를 새로 생성
+        if(!Files.exists(targetDir)) {
+            Files.createDirectories(targetDir);
         }
 
-        Files.move(sourcePath, Paths.get(baseDir + dst));
-    }
+        // 목적지의 전체 경로 (경로 + 이름)
+        Path targetPath = Paths.get(baseDir + to.getTotalPath());
 
-    @Override
-    public void moveFiles(List<String> fileNames, String dst) throws IOException {
-        for (String fileName : fileNames) {
-            moveFile(fileName, dst);
-        }
+        Files.move(sourcePath, targetPath);
     }
 
     @Override
@@ -118,7 +130,24 @@ public class LocalFileStorageService implements FileStorageService {
         return baseDir + path;
     }
 
-    private static String generateFileName(String originalFileName) {
+    @Override
+    public String extractFileName(String src) {
+        int idx = src.lastIndexOf("/");
+        return src.substring(idx+1);
+    }
+
+    @Override
+    public String extractExt(String fileName) {
+        int idx = fileName.lastIndexOf(".");
+
+        // 확장자 없을 경우 TODO - 파일 확장자 없을 시 예외처리 고려
+        if (idx == -1)
+            return "";
+
+        return fileName.substring(idx);
+    }
+
+    private String generateFileName(String originalFileName) {
         String ext = extractExt(originalFileName);
 
         // 랜덤 문자열 생성 (난독화)
@@ -130,21 +159,6 @@ public class LocalFileStorageService implements FileStorageService {
     public static String extractPath(String filePath) {
         int idx = filePath.lastIndexOf("/");
         return filePath.substring(0, idx+1);
-    }
-
-    public static String extractFileName(String src) {
-        int idx = src.lastIndexOf("/");
-        return src.substring(idx+1);
-    }
-
-    private static String extractExt(String fileName) {
-        int idx = fileName.lastIndexOf(".");
-
-        // 확장자 없을 경우 TODO - 파일 확장자 없을 시 예외처리 고려
-        if (idx == -1)
-            return "";
-
-        return fileName.substring(idx);
     }
 
 }

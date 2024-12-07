@@ -19,13 +19,11 @@ public interface FileStorageService {
     void uploadFiles(List<MultipartFile> multipartFiles, String filePath) throws IOException;
 
     // 파일 가져오기
-    File loadFile(String fileName) throws IOException;
+    File loadFile(FileDto target) throws IOException;
 
-    List<File> loadFiles(List<String> fileNames) throws IOException;
+    List<File> loadFiles(List<FileDto> targets) throws IOException;
 
-    void moveFile(String fileName, String dst) throws IOException;
-
-    void moveFiles(List<String> fileNames, String dst) throws IOException;
+    void moveFile(FileDto from, FileDto to) throws IOException;
 
     // 파일 삭제
     void deleteFile(String fileName) throws IOException;
@@ -34,5 +32,9 @@ public interface FileStorageService {
     void init() throws IOException;
 
     String getFullPath(String path);
+
+    String extractExt(String fileName);
+
+    String extractFileName(String url);
 
 }

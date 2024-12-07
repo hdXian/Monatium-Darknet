@@ -3,13 +3,18 @@ package hdxian.monatium_darknet.service;
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
+import hdxian.monatium_darknet.file.FileDto;
+import hdxian.monatium_darknet.file.FileStorageService;
 import hdxian.monatium_darknet.repository.NoticeRepository;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -21,6 +26,13 @@ public class NoticeService {
 
     private final NoticeRepository noticeRepository;
     private final MemberService memberService;
+    private final FileStorageService fileStorageService;
+
+    @Value("${file.tempDir}")
+    private String tempDir;
+
+    @Value("${file.noticeDir}")
+    private String noticeBaseDir;
 
     // TODO - 공지사항 리스트 불러올 시 페이징 추가 필요
 
@@ -51,6 +63,25 @@ public class NoticeService {
         notice.setDate(LocalDateTime.now());
 
         return notice.getId();
+    }
+
+    // 임시 저장 경로에 있던 공지사항 이미지들을 정식 경로에 저장
+    @Transactional
+    public Long moveImagesFromTemp(Long noticeId, List<String> imgSrcs) throws IOException {
+
+        String targetDir = noticeBaseDir + (noticeId + "/");
+
+        // imgSrc = /api/images/o2p2aRmhWArow8cHh5x9_awsec2_logo.png
+        int seq = 1;
+        for (String src : imgSrcs) {
+            String fileName = fileStorageService.extractFileName(src);
+            String ext = fileStorageService.extractExt(fileName);
+            FileDto from = new FileDto(tempDir, fileName);
+            FileDto to = new FileDto(targetDir, String.format("img_%02d%s", seq++, ext));
+            fileStorageService.moveFile(from, to);
+        }
+
+        return null;
     }
 
     @Transactional
@@ -88,5 +119,6 @@ public class NoticeService {
     public List<Notice> findAll() {
         return noticeRepository.findAll();
     }
+
 
 }
