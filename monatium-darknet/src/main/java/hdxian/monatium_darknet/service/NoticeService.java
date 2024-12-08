@@ -47,7 +47,8 @@ public class NoticeService {
         Member member = memberService.findOne(memberId);
         String title = noticeDto.getTitle();
         NoticeCategory category = noticeDto.getCategory();
-        String htmlContent = noticeDto.getContent();
+        String htmlContent = htmlContentUtil.cleanHtmlContent(noticeDto.getContent());
+//        String htmlContent = noticeDto.getContent();
 
         // 1. 우선 공지사항을 저장해 ID 획득
         Notice notice = Notice.createNotice(member, category, title, htmlContent);
@@ -67,8 +68,8 @@ public class NoticeService {
                 throw new IllegalArgumentException(e);
             }
 
-            String baseUrl = "/notices/" + noticeId + "/images/";
-            String updatedContent = htmlContentUtil.updateImgSrc(htmlContent, baseUrl, changedImgSrcs);
+            String baseSrc = "/notices/" + noticeId + "/images/";
+            String updatedContent = htmlContentUtil.updateImgSrc(htmlContent, baseSrc, changedImgSrcs);
 
             notice.setContent(updatedContent);
         }
@@ -84,7 +85,8 @@ public class NoticeService {
         notice.setTitle(updateParam.getTitle());
 
         // 업데이트할 html 콘텐츠. notice에 저장된 경로, temp에 저장된 경로 모두 있음
-        String htmlContent = updateParam.getContent();
+        String htmlContent = htmlContentUtil.cleanHtmlContent(updateParam.getContent());
+//        String htmlContent = updateParam.getContent();
 
         // 공지사항 본문에서 temp 경로의 src 속성들 추출
         List<String> imgSrcs = htmlContentUtil.getImgSrc(htmlContent);
@@ -98,8 +100,8 @@ public class NoticeService {
                 throw new IllegalArgumentException(e);
             }
 
-            String baseUrl = "/notices/" + noticeId + "/images/";
-            String updatedContent = htmlContentUtil.updateImgSrc(htmlContent, baseUrl, changedFileNames);
+            String baseSrc = "/notices/" + noticeId + "/images/";
+            String updatedContent = htmlContentUtil.updateImgSrc(htmlContent, baseSrc, changedFileNames);
             notice.setContent(updatedContent);
         }
         else {

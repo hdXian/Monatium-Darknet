@@ -26,9 +26,6 @@ public class NoticeMgController {
 
     private final MemberService memberService;
     private final NoticeService noticeService;
-    private final FileStorageService fileStorageService;
-
-    private final HtmlContentUtil htmlContentUtil;
 
     // 공지사항 목록 (대시보드 -> 공지사항 관리)
     @GetMapping
