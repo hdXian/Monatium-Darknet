@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.service;
 
+import hdxian.monatium_darknet.controller.management.HtmlContentUtil;
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
@@ -29,6 +30,8 @@ public class NoticeService {
     private final MemberService memberService;
     private final FileStorageService fileStorageService;
 
+    private final HtmlContentUtil htmlContentUtil;
+
     @Value("${file.tempDir}")
     private String tempDir;
 
@@ -42,14 +45,35 @@ public class NoticeService {
     public Long createNewNotice(Long memberId, NoticeDto noticeDto) {
 
         Member member = memberService.findOne(memberId);
-        Notice notice = Notice.createNotice(
-                member,
-                noticeDto.getCategory(),
-                noticeDto.getTitle(),
-                noticeDto.getContent()
-        );
+        String title = noticeDto.getTitle();
+        NoticeCategory category = noticeDto.getCategory();
+        String htmlContent = noticeDto.getContent();
 
-        return noticeRepository.save(notice);
+        // 1. 우선 공지사항을 저장해 ID 획득
+        Notice notice = Notice.createNotice(member, category, title, htmlContent);
+        Long noticeId = noticeRepository.save(notice);
+
+        // 2. 공지사항 본문에서 img 태그들의 src 속성들을 추출 ("/api/images/abcdef.png")
+        List<String> imgSrcs = htmlContentUtil.getImgSrc(htmlContent);
+
+        // 3. 이미지 속성이 있을 경우에만 파일 수정 작업을 수행
+        if (!imgSrcs.isEmpty()) {
+            // 3. 추출한 src를 바탕으로 이미지 파일명 수정 및 경로 변경 (서버 내 경로)
+            // {basePath}/temp/abcdef.png -> {basePath}}/notice/{noticeId}/img_01.png
+            List<String> changedImgSrcs;
+            try {
+                changedImgSrcs = moveImagesFromTemp(noticeId, imgSrcs);
+            } catch (IOException e) { // 파일 작업 중에 예외 터지면 롤백
+                throw new IllegalArgumentException(e);
+            }
+
+            String baseUrl = "/notices/" + noticeId + "/images/";
+            String updatedContent = htmlContentUtil.updateImgSrc(htmlContent, baseUrl, changedImgSrcs);
+
+            notice.setContent(updatedContent);
+        }
+
+        return notice.getId();
     }
 
     @Transactional

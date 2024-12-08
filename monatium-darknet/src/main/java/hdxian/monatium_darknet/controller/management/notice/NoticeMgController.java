@@ -64,24 +64,7 @@ public class NoticeMgController {
 
         // 전달받은 내용으로 공지사항 생성 (공지사항 Id 리턴)
         NoticeDto noticeDto = new NoticeDto(category, title, htmlContent);
-        Long noticeId = noticeService.createNewNotice(1L, noticeDto); // TODO - 로그인 처리 후 memberId 설정 필요
-
-        // 공지사항 본문에서 img 태그들의 src 속성들을 추출
-        // 1. "/api/images/abcdef.png"
-        List<String> imgSrcs = htmlContentUtil.getImgSrc(htmlContent);
-
-        // 추출한 src를 바탕으로 이미지 파일명 수정 및 경로 변경 (서버 내 경로)
-        // 2. {basePath}/temp/abcdef.png -> {basePath}}/notice/{noticeId}/img_01.png
-        List<String> changedImgSrcs = noticeService.moveImagesFromTemp(noticeId, imgSrcs);
-
-        // 이동한 이미지에 대한 새로운 url 생성 및 html 본문 업데이트 (src 속성 변경, url 경로)
-        // 3. th:src="@{/notices/{noticeId}/images/img_01.png}"
-        String baseUrl = "/notices/" + noticeId + "/images/";
-        String updatedContent = htmlContentUtil.updateImgSrc(htmlContent, baseUrl, changedImgSrcs);
-
-        // 업데이트 한 본문 내용으로 공지사항 내용 업데이트
-        NoticeDto updateDto = new NoticeDto(category, title, updatedContent);
-        Long updatedId = noticeService.updateNotice(noticeId, updateDto);
+        noticeService.createNewNotice(1L, noticeDto); // TODO - 로그인 처리 후 memberId 설정 필요
 
         return "redirect:/management/notices";
     }
