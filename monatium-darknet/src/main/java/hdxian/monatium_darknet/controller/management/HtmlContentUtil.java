@@ -12,6 +12,7 @@ import java.util.List;
 @Component
 public class HtmlContentUtil {
     // based on jsoup
+    // TODO - html XSS 필터링 로직 추가 필요
 
     public List<String> getImgSrc(String content) {
         List<String> srcList = new ArrayList<>();

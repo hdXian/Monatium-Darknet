@@ -19,9 +19,6 @@
 
     <!-- 공지사항 수정 폼 -->
     <form th:action="@{/management/notices/{id}/edit (id=${noticeId})}" th:object="${noticeForm}" method="post" enctype="multipart/form-data">
-        <!-- Thymeleaf 메서드 오버라이드로 PUT 요청 -->
-        <input type="hidden" name="_method" value="put">
-
         <!-- 제목 입력 -->
         <div class="mb-3">
             <label for="title" class="form-label">제목</label>
@@ -42,7 +39,7 @@
         <!-- Quill 에디터 -->
         <div class="mb-3">
             <label for="editor" class="form-label">내용</label>
-            <div id="editor" th:utext="*{content}"></div>
+            <div id="editor"></div>
             <textarea th:field="*{content}" id="content" name="content" class="d-none"></textarea>
         </div>
 
@@ -105,16 +102,17 @@
         }
     });
 
-    // 기존 공지사항의 내용을 Quill 에디터에 설정
+    // Quill 에디터에 서버에서 받은 HTML 본문을 안전하게 삽입
     window.onload = function() {
         const content = document.querySelector('#content').value;
-        quill.root.innerHTML = content;
+        quill.clipboard.dangerouslyPasteHTML(content);
     };
 
-    // 폼 제출 시 데이터 전송
-    document.querySelector('form').addEventListener('submit', function (event) {
+    // 폼 제출 전 에디터의 HTML을 숨겨진 textarea에 복사
+    document.querySelector('form').addEventListener('submit', function() {
         document.querySelector('#content').value = quill.root.innerHTML;
     });
+
 </script>
 
 </body>
