@@ -34,7 +34,7 @@ public class HtmlContentUtil {
 
         Elements imgs = document.select("img");
 
-        for (int i=0; i< changeSrcs.size(); i++) {
+        for (int i=0; i< changeSrcs.size() && i<imgs.size(); i++) {
             Element imgTag = imgs.get(i);
             String changeUrl = baseUrl + changeSrcs.get(i);
             imgTag.attr("src", changeUrl);

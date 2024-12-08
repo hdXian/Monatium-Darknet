@@ -67,7 +67,6 @@ public class NoticeService {
     }
 
     // 임시 저장 경로에 있던 공지사항 이미지들을 정식 경로에 저장
-    @Transactional
     public List<String> moveImagesFromTemp(Long noticeId, List<String> imgSrcs) throws IOException {
 
         List<String> changedFileNames = new ArrayList<>();
@@ -83,7 +82,7 @@ public class NoticeService {
 
             FileDto from = new FileDto(tempDir, fileName);
             FileDto to = new FileDto(targetDir, String.format("img_%02d%s", seq++, ext));
-            changedFileNames.add(to.getFileName());
+            changedFileNames.add(to.getFileName()); // add("img_01.png")
 
             fileStorageService.moveFile(from, to);
         }
