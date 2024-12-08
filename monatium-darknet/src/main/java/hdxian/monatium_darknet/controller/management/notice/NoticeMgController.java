@@ -69,4 +69,30 @@ public class NoticeMgController {
         return "redirect:/management/notices";
     }
 
+    @GetMapping("/{noticeId}/edit")
+    public String editForm(@PathVariable("noticeId")Long noticeId, Model model) {
+
+        Notice notice = noticeService.findOne(noticeId);
+        NoticeForm noticeForm = new NoticeForm(notice.getTitle(), notice.getCategory(), notice.getContent());
+
+        model.addAttribute("noticeId", noticeId);
+        model.addAttribute("noticeForm", noticeForm);
+
+        return "management/notice/editForm";
+    }
+
+    @PostMapping("/{noticeId}/edit")
+    public String edit(@PathVariable("noticeId")Long noticeId, @ModelAttribute("noticeForm") NoticeForm form) {
+
+        System.out.println("post edit request received");
+        System.out.println("form.getTitle() = " + form.getTitle());
+        System.out.println("form.getCategory() = " + form.getCategory());
+        System.out.println("form.getContent() = " + form.getContent());
+
+        NoticeDto updateParam = new NoticeDto(form.getCategory(), form.getTitle(), form.getContent());
+        noticeService.updateNotice(noticeId, updateParam);
+
+        return "redirect:/management/notices";
+    }
+
 }

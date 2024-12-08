@@ -82,7 +82,30 @@ public class NoticeService {
 
         notice.setCategory(updateParam.getCategory());
         notice.setTitle(updateParam.getTitle());
-        notice.setContent(updateParam.getContent());
+
+        // 업데이트할 html 콘텐츠. notice에 저장된 경로, temp에 저장된 경로 모두 있음
+        String htmlContent = updateParam.getContent();
+
+        // 공지사항 본문에서 temp 경로의 src 속성들 추출
+        List<String> imgSrcs = htmlContentUtil.getImgSrc(htmlContent);
+
+        if (!imgSrcs.isEmpty()) {
+            List<String> changedFileNames;
+
+            try {
+                changedFileNames = moveImagesFromTemp(noticeId, imgSrcs);
+            } catch (IOException e) { // 파일 작업 중에 예외 터지면 롤백
+                throw new IllegalArgumentException(e);
+            }
+
+            String baseUrl = "/notices/" + noticeId + "/images/";
+            String updatedContent = htmlContentUtil.updateImgSrc(htmlContent, baseUrl, changedFileNames);
+            notice.setContent(updatedContent);
+        }
+        else {
+            // 변경할 이미지가 없으면 그대로 html 본문만 업데이트
+            notice.setContent(htmlContent);
+        }
 
         // 업데이트 시간으로 변경
         notice.setDate(LocalDateTime.now());
@@ -101,14 +124,19 @@ public class NoticeService {
         // noticeId로 폴더를 만들고, 해당 폴더에 이미지 저장
         int seq = 1;
         for (String src : imgSrcs) {
-            String fileName = fileStorageService.extractFileName(src);
-            String ext = fileStorageService.extractExt(fileName);
+            // temp 경로인 파일만 이동하고 changedFileNames에 추가
+            if (src.startsWith("/api")) {
+                String fileName = fileStorageService.extractFileName(src);
+                String ext = fileStorageService.extractExt(fileName);
 
-            FileDto from = new FileDto(tempDir, fileName);
-            FileDto to = new FileDto(targetDir, String.format("img_%02d%s", seq++, ext));
-            changedFileNames.add(to.getFileName()); // add("img_01.png")
+                FileDto from = new FileDto(tempDir, fileName);
+                FileDto to = new FileDto(targetDir, String.format("img_%02d%s", seq, ext));
 
-            fileStorageService.moveFile(from, to);
+                changedFileNames.add(to.getFileName()); // add("img_01.png")
+
+                fileStorageService.moveFile(from, to);
+            }
+            seq++;
         }
 
         return changedFileNames;

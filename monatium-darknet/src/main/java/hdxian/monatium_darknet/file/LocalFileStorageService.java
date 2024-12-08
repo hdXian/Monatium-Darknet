@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +87,8 @@ public class LocalFileStorageService implements FileStorageService {
         // 목적지의 전체 경로 (경로 + 이름)
         Path targetPath = Paths.get(baseDir + to.getTotalPath());
 
-        Files.move(sourcePath, targetPath);
+        // 기존 파일이 존재하면 덮어쓰도록 설정
+        Files.move(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
     }
 
     @Override
