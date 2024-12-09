@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -67,6 +68,7 @@ public class NoticeMgController {
         return "redirect:/management/notices";
     }
 
+    // 공지사항 수정 페이지
     @GetMapping("/{noticeId}/edit")
     public String editForm(@PathVariable("noticeId")Long noticeId, Model model) {
 
@@ -79,6 +81,7 @@ public class NoticeMgController {
         return "management/notice/editForm";
     }
 
+    // 공지사항 수정
     @PostMapping("/{noticeId}/edit")
     public String edit(@PathVariable("noticeId")Long noticeId, @ModelAttribute("noticeForm") NoticeForm form) {
 
@@ -93,6 +96,7 @@ public class NoticeMgController {
         return "redirect:/management/notices";
     }
 
+    // 공지사항 공개/비공개 변경
     @PostMapping("/{noticeId}/update-status")
     @ResponseBody // http body로 응답
     public NoticeStatusResponseDto updateStatus(@PathVariable("noticeId")Long noticeId, @RequestParam("t") NoticeStatus status) {
@@ -105,6 +109,13 @@ public class NoticeMgController {
     static class NoticeStatusResponseDto {
         private boolean success;
         private NoticeStatus newStatus;
+    }
+
+    // 공지사항 삭제 요청 -> 페이지 쪽에서 delete 메서드로 요청 보내도록 구현할 것
+    @DeleteMapping("/{noticeId}")
+    public ResponseEntity<Void> deleteNotice(@PathVariable("noticeId")Long noticeId) {
+        noticeService.deleteNotice(noticeId);
+        return ResponseEntity.ok().build();
     }
 
 }
