@@ -48,16 +48,16 @@ public class HtmlContentUtil {
 
         Elements imgs = document.select("img");
 
-        int idx = 0;
-        for (int i=0; i< changeSrcs.size() || i<imgs.size(); i++) {
+        for (int i=0; i<imgs.size() || i< changeSrcs.size(); i++) {
             Element imgTag = imgs.get(i);
-            String srcValue = imgTag.attr("src");
+            String changeUrl = baseUrl + changeSrcs.get(i);
+            imgTag.attr("src", changeUrl);
 
-            // "/api"로 시작하는 src -> 임시 저장소에 저장돼있는 이미지
-            if (srcValue.startsWith("/api")) {
-                String changeUrl = baseUrl + changeSrcs.get(idx++);
-                imgTag.attr("src", changeUrl);
-            }
+//            // "/api"로 시작하는 src -> 임시 저장소에 저장돼있는 이미지
+//            if (srcValue.startsWith("/api")) {
+//                String changeUrl = baseUrl + changeSrcs.get(idx++);
+//                imgTag.attr("src", changeUrl);
+//            }
 
         }
 

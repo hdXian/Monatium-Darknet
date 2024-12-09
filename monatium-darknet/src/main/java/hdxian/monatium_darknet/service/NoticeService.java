@@ -88,7 +88,7 @@ public class NoticeService {
         String htmlContent = htmlContentUtil.cleanHtmlContent(updateParam.getContent());
 //        String htmlContent = updateParam.getContent();
 
-        // 공지사항 본문에서 temp 경로의 src 속성들 추출
+        // 공지사항 본문에서 src 속성들 추출
         List<String> imgSrcs = htmlContentUtil.getImgSrc(htmlContent);
 
         if (!imgSrcs.isEmpty()) {
@@ -100,6 +100,7 @@ public class NoticeService {
                 throw new IllegalArgumentException(e);
             }
 
+            // img 태그의 src에 사용할 url. 서버 스토리지에 저장되는 경로와 다름.
             String baseSrc = "/notices/" + noticeId + "/images/";
             String updatedContent = htmlContentUtil.updateImgSrc(htmlContent, baseSrc, changedFileNames);
             notice.setContent(updatedContent);
@@ -120,24 +121,31 @@ public class NoticeService {
 
         List<String> changedFileNames = new ArrayList<>();
 
+        // noticeId로 폴더를 만들고, 해당 폴더에 이미지 저장
         String targetDir = noticeBaseDir + (noticeId + "/");
 
-        // imgSrc = /api/images/o2p2aRmhWArow8cHh5x9_awsec2_logo.png
-        // noticeId로 폴더를 만들고, 해당 폴더에 이미지 저장
         int seq = 1;
+        String fileName, ext, saveFileName;
+        FileDto from, to;
+
         for (String src : imgSrcs) {
-            // temp 경로인 파일만 이동하고 changedFileNames에 추가
+            // imgSrc = /api/images/o2p2aRmhWArow8cHh5x9_awsec2_logo.png
+            fileName = fileStorageService.extractFileName(src);
+            ext = fileStorageService.extractExt(fileName);
+            saveFileName = String.format("img_%02d%s", seq, ext);
+
+            // url이 /api로 시작하면 temp 경로에 있는 파일임
             if (src.startsWith("/api")) {
-                String fileName = fileStorageService.extractFileName(src);
-                String ext = fileStorageService.extractExt(fileName);
-
-                FileDto from = new FileDto(tempDir, fileName);
-                FileDto to = new FileDto(targetDir, String.format("img_%02d%s", seq, ext));
-
-                changedFileNames.add(to.getFileName()); // add("img_01.png")
-
-                fileStorageService.moveFile(from, to);
+                from = new FileDto(tempDir, fileName);
+                to = new FileDto(targetDir, saveFileName);
             }
+            else { // 그 외에는 기존 공지사항 폴더에 있던 파일. 파일명 변경해야 함.
+                from = new FileDto(targetDir, fileName);
+                to = new FileDto(targetDir, saveFileName);
+            }
+
+            changedFileNames.add(to.getFileName()); // add("img_#.ext")
+            fileStorageService.moveFile(from, to);
             seq++;
         }
 
