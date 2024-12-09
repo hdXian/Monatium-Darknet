@@ -1,12 +1,13 @@
 package hdxian.monatium_darknet.controller.management.notice;
 
-import hdxian.monatium_darknet.controller.management.HtmlContentUtil;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
-import hdxian.monatium_darknet.file.FileStorageService;
+import hdxian.monatium_darknet.domain.notice.NoticeStatus;
 import hdxian.monatium_darknet.service.MemberService;
 import hdxian.monatium_darknet.service.NoticeService;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -90,6 +91,20 @@ public class NoticeMgController {
         noticeService.updateNotice(noticeId, updateParam);
 
         return "redirect:/management/notices";
+    }
+
+    @PostMapping("/{noticeId}/update-status")
+    @ResponseBody // http body로 응답
+    public NoticeStatusResponseDto updateStatus(@PathVariable("noticeId")Long noticeId, @RequestParam("t") NoticeStatus status) {
+        NoticeStatus updatedStatus = noticeService.updateNoticeStatus(noticeId, status);
+        return new NoticeStatusResponseDto(true, updatedStatus);
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class NoticeStatusResponseDto {
+        private boolean success;
+        private NoticeStatus newStatus;
     }
 
 }

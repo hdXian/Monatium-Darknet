@@ -4,6 +4,7 @@ import hdxian.monatium_darknet.controller.management.HtmlContentUtil;
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
+import hdxian.monatium_darknet.domain.notice.NoticeStatus;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.FileStorageService;
 import hdxian.monatium_darknet.repository.NoticeRepository;
@@ -77,6 +78,7 @@ public class NoticeService {
         return notice.getId();
     }
 
+    // TODO - 공지사항 업데이트 로직 개선 필요 - dto에서 null인 필드는 건너뛰기, content 업데이트하는 작업은 분리하기..
     @Transactional
     public Long updateNotice(Long noticeId, NoticeDto updateParam) {
         Notice notice = findOne(noticeId);
@@ -153,15 +155,23 @@ public class NoticeService {
     }
 
     @Transactional
+    public NoticeStatus updateNoticeStatus(Long noticeId, NoticeStatus status) {
+        Notice notice = findOne(noticeId);
+        notice.updateStatus(status);
+        return notice.getStatus();
+    }
+
+    @Transactional
     public void deleteNotice(Long noticeId) {
         Notice notice = findOne(noticeId);
 
-        Member member = notice.getMember();
-        if (member != null) {
-            member.removeNotice(notice);
-        }
+//        Member member = notice.getMember();
+//        if (member != null) {
+//            member.removeNotice(notice);
+//        }
+        notice.updateStatus(NoticeStatus.DELETED);
 
-        noticeRepository.delete(notice);
+//        noticeRepository.delete(notice);
     }
 
     // 공지사항 조회 기능

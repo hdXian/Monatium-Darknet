@@ -37,10 +37,12 @@
             border: none;
             transition: background-color 0.3s ease; /* 부드러운 전환 효과 */
         }
+
         /* 호버 효과 */
         .btn-update:hover {
             background-color: #31a2c4; /* 진한 하늘색으로 변경 */
         }
+
         /* 버튼 크기를 조절하고 더 둥글게 만들기 */
         .btn-update {
             border-radius: 8px; /* 둥근 모서리 */
@@ -105,16 +107,22 @@
                     <td class="col5" th:case="*" th:text="해당없음"></td> <!-- 있어서는 안 될 분류이긴 함 -->
                 </th:block>
                 <td class="col6">
-                    <span class="badge bg-success">공개</span>
+                    <button
+                            class="btn btn-sm"
+                            th:data-id="${notice.id}"
+                            th:data-status="${notice.status}"
+                            th:classappend="${notice.status == 'PUBLIC'} ? 'btn-success' : 'btn-secondary'"
+                            th:text="${notice.status == 'PUBLIC'} ? '공개 중' : '비공개'"
+                            th:onclick="|updateStatus(${notice.id});|">
+                    </button>
                 </td>
+                <!--                <td class="col6">-->
+<!--                    <span class="badge bg-success">공개</span>-->
+<!--                </td>-->
                 <td class="col7">
                     <a th:href="@{/management/notices/{id}/edit (id=${notice.id})}"> <button class="btn btn-sm btn-update">수정</button> </a>
                     <a th:href="@{/management/notices/{id}/delete (id=${notice.id})}"> <button class="btn btn-sm btn-danger">삭제</button> </a>
                 </td>
-    <!--            <td>--> <!-- notice 도메인에 공개 여부 상태 추가 이후 렌더링 -->
-    <!--            <span th:classappend="${notice.status == '공개'} ? 'badge bg-success' : 'badge bg-secondary'"-->
-    <!--                  th:text="${notice.status}"></span>-->
-    <!--            </td>-->
             </tr>
         </tbody>
     </table>
@@ -122,5 +130,47 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function updateStatus(noticeId) {
+    // 버튼 찾기
+    const button = document.querySelector(`button[data-id="${noticeId}"]`);
+    if (!button) {
+        console.error(`버튼을 찾을 수 없습니다. Notice ID: ${noticeId}`);
+        return;
+    }
+
+    // 현재 상태 가져오기
+    const currentStatus = button.getAttribute('data-status');
+    const newStatus = (currentStatus === 'PUBLIC') ? 'PRIVATE' : 'PUBLIC';
+
+    // 서버에 상태 변경 요청
+    fetch(`/management/notices/${noticeId}/update-status?t=${newStatus}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // ✅ 버튼 텍스트 업데이트
+            button.textContent = (data.newStatus === 'PUBLIC') ? '공개 중' : '비공개';
+
+            // ✅ 버튼 클래스 업데이트
+            button.classList.remove('btn-success', 'btn-secondary');
+            button.classList.add(data.newStatus === 'PUBLIC' ? 'btn-success' : 'btn-secondary');
+
+            // ✅ 버튼의 data-status 속성 업데이트
+            button.setAttribute('data-status', data.newStatus);
+        } else {
+            alert('상태 변경에 실패했습니다.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+</script>
+
 </body>
 </html>
