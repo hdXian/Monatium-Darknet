@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 관리</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/management/noticeList.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h1 class="mb-4">공지사항 관리</h1>
+
+    <!-- 탭 네비게이션 -->
+    <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${category == null} ? 'active'" th:href="@{/management/notices}">전체</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${category == 'notice'} ? 'active'" th:href="@{/management/notices?category=notice}">공지사항</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${category == 'event'} ? 'active'" th:href="@{/management/notices?category=event}">이벤트</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${category == 'update'} ? 'active'" th:href="@{/management/notices?category=update}">업데이트</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${category == 'devnote'} ? 'active'" th:href="@{/management/notices?category=dev}">개발자노트</a>
+        </li>
+    </ul>
+
+    <div class="d-flex justify-content-between mb-3">
+        <a th:href="@{/management/notices/new}">
+            <button class="btn btn-primary">공지사항 작성</button>
+        </a>
+        <input type="text" class="form-control w-25" placeholder="검색">
+    </div>
+
+    <!-- 공지사항 목록 테이블 -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="col1">#</th>
+                <th class="col2">제목</th>
+                <th class="col3">작성자</th>
+                <th class="col4">작성일</th>
+                <th class="col5">카테고리</th>
+                <th class="col6">상태</th>
+                <th class="col7">조작</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="notice, stat : ${noticeList}">
+                <td class="col1" th:text="${stat.count}" ></td> <!-- 페이징 도입 시 페이징 카운트와 조합해야 함 -->
+                <td class="col2" th:text="${notice.title}"></td>
+                <td class="col3" th:text="${notice.member.nickName}"></td>
+                <td class="col4" th:text="${#temporals.format(notice.date, 'yyyy-MM-dd')}"></td>
+                <th:block th:switch="${{notice.category}}">
+                    <td class="col5" th:case="'NOTICE'" th:text="공지사항"></td>
+                    <td class="col5" th:case="'EVENT'" th:text="이벤트"></td>
+                    <td class="col5" th:case="'UPDATE'" th:text="업데이트"></td>
+                    <td class="col5" th:case="'DEV'" th:text="개발자노트"></td>
+                    <td class="col5" th:case="*" th:text="해당없음"></td> <!-- 있어서는 안 될 분류이긴 함 -->
+                </th:block>
+                <td class="col6">
+                    <button
+                            class="btn btn-sm"
+                            th:data-id="${notice.id}"
+                            th:data-status="${notice.status}"
+                            th:classappend="${notice.status == 'PUBLIC'} ? 'btn-success' : 'btn-secondary'"
+                            th:text="${notice.status == 'PUBLIC'} ? '공개 중' : '비공개'"
+                            th:onclick="|updateStatus(${notice.id});|">
+                    </button>
+                </td>
+                <td class="col7">
+                    <a th:href="@{/management/notices/{id}/edit (id=${notice.id})}"> <button class="btn btn-sm btn-update">수정</button> </a>
+                    <button
+                            class="btn btn-sm btn-danger btn-delete"
+                            th:data-id="${notice.id}"
+                            th:data-title="${notice.title}">
+                        삭제
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script th:src="@{/js/management/noticeList.js}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // 모든 삭제 버튼에 클릭 이벤트 추가
+    const deleteButtons = document.querySelectorAll('.btn-delete');
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const noticeId = this.getAttribute('data-id'); // 삭제할 공지사항의 ID
+            const noticeTitle = this.getAttribute('data-title'); // 공지사항 제목
+
+            if (!confirm(`공지사항을 삭제하시겠습니까?\n제목: ${noticeTitle}`)) {
+                return;
+            }
+
+            fetch(`/management/notices/${noticeId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('삭제가 완료되었습니다.');
+                    location.reload(); // 페이지 새로고침
+                    // this.closest('tr').remove(); // 또는 테이블에서 해당 행 삭제
+                } else {
+                    alert('삭제에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('삭제 중 오류 발생:', error);
+                alert('삭제에 실패했습니다.');
+            });
+        });
+    });
+});
+
+</script>
+
+</body>
+</html>

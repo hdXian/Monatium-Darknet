@@ -17,6 +17,9 @@ public class Notice {
     @Enumerated(EnumType.STRING)
     private NoticeCategory category;
 
+    @Enumerated(EnumType.STRING)
+    private NoticeStatus status; // [PUBLIC, PRIVATE, DELETED]
+
     private String title;
     private LocalDateTime date;
     private Long views;
@@ -40,14 +43,20 @@ public class Notice {
 
         notice.setDate(LocalDateTime.now());
         notice.setViews(0L);
+        notice.setStatus(NoticeStatus.PRIVATE); // 처음 상태는 비공개
 
         member.addNotice(notice); // 연관관계 추가 (setCharacter()도 여기서 설정됨)
 
         return notice;
     }
 
+    // 비즈니스 로직
     public void incrementView() {
         this.views++;
+    }
+
+    public void updateStatus(NoticeStatus status) {
+        this.status = status;
     }
 
 }

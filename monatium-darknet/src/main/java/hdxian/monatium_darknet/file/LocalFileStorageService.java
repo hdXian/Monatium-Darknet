@@ -3,13 +3,15 @@ package hdxian.monatium_darknet.file;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +20,9 @@ import java.util.List;
 public class LocalFileStorageService implements FileStorageService {
 
     @Value("${file.dir}")
-    private String fileDir;
+    private String baseDir;
 
+    // multipartFile과 경로만 전달받아서 파일을 저장
     @Override
     public void uploadFile(MultipartFile multipartFile, String filePath) throws IOException {
 
@@ -40,27 +43,52 @@ public class LocalFileStorageService implements FileStorageService {
 
         // 파일 저장
         multipartFile.transferTo(new File(savePath));
-
     }
 
     @Override
     public void uploadFiles(List<MultipartFile> multipartFiles, String filePath) throws IOException {
-
         for (MultipartFile multipartFile : multipartFiles) {
             uploadFile(multipartFile, filePath);
         }
-
     }
 
     @Override
-    public Resource loadFile(String fileName) throws IOException {
+    public File loadFile(FileDto target) throws IOException {
+        log.info("[LocalFileStorageService.loadFile()] get file {}", baseDir + target.getTotalPath());
 
-        String fileUrl = "file:" + fileName;
-        UrlResource resource = new UrlResource(fileUrl);
+        return new File(baseDir, target.getTotalPath());
+    }
 
-        log.info("[LocalFileStorageService.loadFile()] UrlResource created: {}", resource.getFilename());
+    @Override
+    public List<File> loadFiles(List<FileDto> targets) throws IOException {
+        List<File> files = new ArrayList<>();
+        for (FileDto target : targets) {
+            files.add(loadFile(target));
+        }
 
-        return resource;
+        return files;
+    }
+
+    @Override
+    public void moveFile(FileDto from, FileDto to) throws IOException {
+
+        File fromFile = loadFile(from);
+        // 이동시킬 파일의 전체 경로 (file.toPath)
+        Path sourcePath = fromFile.toPath();
+
+        // 파일을 저장할 경로 (디렉터리 경로까지만, base + dto.path)
+        Path targetDir = Paths.get(baseDir + to.getPath());
+
+        // 파일을 저장할 경로가 없으면 디렉터리를 새로 생성
+        if(!Files.exists(targetDir)) {
+            Files.createDirectories(targetDir);
+        }
+
+        // 목적지의 전체 경로 (경로 + 이름)
+        Path targetPath = Paths.get(baseDir + to.getTotalPath());
+
+        // 기존 파일이 존재하면 덮어쓰도록 설정
+        Files.move(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
     }
 
     @Override
@@ -73,11 +101,29 @@ public class LocalFileStorageService implements FileStorageService {
 //        TODO if (!Files.exists(fileDir)) ...
     }
 
-    private String getFullPath(String path) {
-        return fileDir + path;
+    @Override
+    public String getFullPath(String path) {
+        return baseDir + path;
     }
 
-    private static String generateFileName(String originalFileName) {
+    @Override
+    public String extractFileName(String src) {
+        int idx = src.lastIndexOf("/");
+        return src.substring(idx+1);
+    }
+
+    @Override
+    public String extractExt(String fileName) {
+        int idx = fileName.lastIndexOf(".");
+
+        // 확장자 없을 경우 TODO - 파일 확장자 없을 시 예외처리 고려
+        if (idx == -1)
+            return "";
+
+        return fileName.substring(idx);
+    }
+
+    private String generateFileName(String originalFileName) {
         String ext = extractExt(originalFileName);
 
         // 랜덤 문자열 생성 (난독화)
@@ -86,14 +132,9 @@ public class LocalFileStorageService implements FileStorageService {
         return randomName + ext;
     }
 
-    private static String extractExt(String originalFileName) {
-        int idx = originalFileName.lastIndexOf(".");
-
-        // 확장자 없을 경우 TODO - 파일 확장자 없을 시 예외처리 고려
-        if (idx == -1)
-            return "";
-
-        return originalFileName.substring(idx+1);
+    public static String extractPath(String filePath) {
+        int idx = filePath.lastIndexOf("/");
+        return filePath.substring(0, idx+1);
     }
 
 }
