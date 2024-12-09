@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.repository;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import jakarta.persistence.EntityManager;
@@ -14,6 +15,7 @@ import java.util.Optional;
 public class NoticeRepository {
 
     private final EntityManager em;
+    private final JPAQueryFactory queryFactory;
 
     // 공지사항 저장
     public Long save(Notice notice) {
