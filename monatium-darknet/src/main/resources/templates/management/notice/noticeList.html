@@ -15,19 +15,19 @@
     <!-- 탭 네비게이션 -->
     <ul class="nav nav-tabs mb-3">
         <li class="nav-item">
-            <a class="nav-link" th:classappend="${category == null} ? 'active'" th:href="@{/management/notices}">전체</a>
+            <a class="nav-link" th:classappend="${curCategory == null} ? 'active'" th:href="@{/management/notices}">전체</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" th:classappend="${category == 'notice'} ? 'active'" th:href="@{/management/notices?category=notice}">공지사항</a>
+            <a class="nav-link" th:classappend="${curCategory?.name() == 'notice'} ? 'active'" th:href="@{/management/notices?category=notice}">공지사항</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" th:classappend="${category == 'event'} ? 'active'" th:href="@{/management/notices?category=event}">이벤트</a>
+            <a class="nav-link" th:classappend="${curCategory?.name() == 'event'} ? 'active'" th:href="@{/management/notices?category=event}">이벤트</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" th:classappend="${category == 'update'} ? 'active'" th:href="@{/management/notices?category=update}">업데이트</a>
+            <a class="nav-link" th:classappend="${curCategory?.name() == 'update'} ? 'active'" th:href="@{/management/notices?category=update}">업데이트</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" th:classappend="${category == 'devnote'} ? 'active'" th:href="@{/management/notices?category=dev}">개발자노트</a>
+            <a class="nav-link" th:classappend="${curCategory?.name() == 'dev'} ? 'active'" th:href="@{/management/notices?category=dev}">개발자노트</a>
         </li>
     </ul>
 
@@ -64,14 +64,22 @@
                     <td class="col5" th:case="'DEV'" th:text="개발자노트"></td>
                     <td class="col5" th:case="*" th:text="해당없음"></td> <!-- 있어서는 안 될 분류이긴 함 -->
                 </th:block>
-                <td class="col6">
+                <td th:switch="${{notice.status}}" class="col6">
+<!--                    <a th:case="'PUBLIC'" th:href="@{ /management/notices/{id}/update-status?t=PRIVATE (id=${notice.id}) }">-->
+<!--                        <button th:text="공개 중" class="btn btn-sm btn-success">-->
+<!--                        </button>-->
+<!--                    </a>-->
+<!--                    <a th:case="'PRIVATE'" th:href="@{ /management/notices/{id}/update-status?t=PUBLIC (id=${notice.id}) }">-->
+<!--                        <button th:text="비공개" class="btn btn-sm btn-secondary">-->
+<!--                        </button>-->
+<!--                    </a>-->
+
                     <button
-                            class="btn btn-sm"
+                            class="btn btn-sm btn-toggle-status"
                             th:data-id="${notice.id}"
                             th:data-status="${notice.status}"
-                            th:classappend="${notice.status == 'PUBLIC'} ? 'btn-success' : 'btn-secondary'"
-                            th:text="${notice.status == 'PUBLIC'} ? '공개 중' : '비공개'"
-                            th:onclick="|updateStatus(${notice.id});|">
+                            th:classappend="${notice.status.name() == 'PUBLIC'} ? 'btn-success' : 'btn-secondary'"
+                            th:text="${notice.status.name() == 'PUBLIC'} ? '공개 중' : '비공개'">
                     </button>
                 </td>
                 <td class="col7">

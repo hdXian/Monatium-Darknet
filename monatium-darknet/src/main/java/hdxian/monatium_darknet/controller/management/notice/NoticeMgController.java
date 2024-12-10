@@ -38,7 +38,7 @@ public class NoticeMgController {
         List<Notice> noticeList = noticeService.searchNotice(searchCond);
 
         model.addAttribute("noticeList", noticeList);
-        model.addAttribute("category", category);
+        model.addAttribute("curCategory", category);
         return "management/notice/noticeList";
     }
 
@@ -99,6 +99,12 @@ public class NoticeMgController {
         NoticeStatus updatedStatus = noticeService.updateNoticeStatus(noticeId, status);
         return new NoticeStatusResponseDto(true, updatedStatus);
     }
+
+//    @PostMapping("/{noticeId}/update-status")
+//    public String updateStatus(@PathVariable("noticeId")Long noticeId, @RequestParam("t") NoticeStatus status) {
+//        NoticeStatus updatedStatus = noticeService.updateNoticeStatus(noticeId, status);
+//        return "redirect:/management/notices";
+//    }
 
     @Data
     @AllArgsConstructor
