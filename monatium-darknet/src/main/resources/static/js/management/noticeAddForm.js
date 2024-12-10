@@ -55,3 +55,21 @@ const quill = new Quill('#editor', {
 document.querySelector('form').addEventListener('submit', function (event) {
     document.querySelector('#content').value = quill.root.innerHTML;
 });
+
+// 등록 버튼에 확인창 추가
+document.querySelector('form').addEventListener('submit', function (event) {
+    const userConfirmed = confirm('공지사항을 등록하시겠습니까?');
+    if (!userConfirmed) {
+        event.preventDefault(); // 폼 제출을 중단
+        return;
+    }
+    document.querySelector('#content').value = quill.root.innerHTML;
+});
+
+// 취소 버튼에 확인창 추가
+document.querySelector('a.btn.button-cancel').addEventListener('click', function (event) {
+    const userConfirmed = confirm('작성 중인 내용이 사라집니다. 취소하시겠습니까?');
+    if (!userConfirmed) {
+        event.preventDefault(); // 기본 동작(페이지 이동) 중단
+    }
+});
