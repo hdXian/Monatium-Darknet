@@ -100,12 +100,6 @@ public class NoticeMgController {
         return new NoticeStatusResponseDto(true, updatedStatus);
     }
 
-//    @PostMapping("/{noticeId}/update-status")
-//    public String updateStatus(@PathVariable("noticeId")Long noticeId, @RequestParam("t") NoticeStatus status) {
-//        NoticeStatus updatedStatus = noticeService.updateNoticeStatus(noticeId, status);
-//        return "redirect:/management/notices";
-//    }
-
     @Data
     @AllArgsConstructor
     static class NoticeStatusResponseDto {
