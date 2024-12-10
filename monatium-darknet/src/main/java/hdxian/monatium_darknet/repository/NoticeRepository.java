@@ -1,14 +1,22 @@
 package hdxian.monatium_darknet.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
+import hdxian.monatium_darknet.domain.notice.NoticeStatus;
+import hdxian.monatium_darknet.domain.notice.QNotice;
+import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import static hdxian.monatium_darknet.domain.notice.QNotice.notice;
 
 @Repository
 @RequiredArgsConstructor
@@ -68,6 +76,52 @@ public class NoticeRepository {
         String jpql = "select n from Notice n";
         return em.createQuery(jpql, Notice.class)
                 .getResultList();
+    }
+
+    // queryDsl
+    public List<Notice> searchNotice(NoticeSearchCond searchCond) {
+        NoticeCategory category = searchCond.getCategory();
+        NoticeStatus status = searchCond.getStatus();
+        String title = searchCond.getTitle();
+        String content = searchCond.getContent();
+
+        return queryFactory.select(notice)
+                .from(notice)
+                .where(
+                        equalsCategory(category),
+                        equalsStatus(status),
+                        likeTitle(title),
+                        likeContent(content)
+                )
+                .fetch();
+    }
+
+    private BooleanExpression equalsCategory(NoticeCategory category) {
+        if (category != null) {
+            return notice.category.eq(category);
+        }
+        return null;
+    }
+
+    private BooleanExpression equalsStatus(NoticeStatus status) {
+        if (status != null) {
+            return notice.status.eq(status);
+        }
+        return null; // 조건이 없을 경우 null 리턴 -> queryDsl null safe 기능 활용
+    }
+
+    private BooleanExpression likeTitle(String title) {
+        if (StringUtils.hasText(title)) {
+            return notice.title.like("%" + title + "%");
+        }
+        return null;
+    }
+
+    private BooleanExpression likeContent(String content) {
+        if (StringUtils.hasText(content)) {
+            return notice.content.like("%" + content + "%");
+        }
+        return null;
     }
 
 }
