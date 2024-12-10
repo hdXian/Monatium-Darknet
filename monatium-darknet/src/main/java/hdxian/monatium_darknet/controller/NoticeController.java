@@ -2,6 +2,7 @@ package hdxian.monatium_darknet.controller;
 
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
+import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
@@ -25,14 +26,9 @@ public class NoticeController {
 
     @GetMapping
     public String noticeList(@RequestParam(value = "category", required = false) NoticeCategory category, Model model) {
-
-        List<Notice> noticeList;
-        if (category == null) {
-            noticeList = noticeService.findAll();
-        }
-        else {
-            noticeList = noticeService.findByCategory(category);
-        }
+        NoticeSearchCond searchCond = new NoticeSearchCond();
+        searchCond.setCategory(category);
+        List<Notice> noticeList = noticeService.searchNotice(searchCond);
 
         model.addAttribute("noticeList", noticeList);
         

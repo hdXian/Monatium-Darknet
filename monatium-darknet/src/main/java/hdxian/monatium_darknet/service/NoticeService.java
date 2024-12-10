@@ -8,6 +8,7 @@ import hdxian.monatium_darknet.domain.notice.NoticeStatus;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.FileStorageService;
 import hdxian.monatium_darknet.repository.NoticeRepository;
+import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -164,14 +165,7 @@ public class NoticeService {
     @Transactional
     public void deleteNotice(Long noticeId) {
         Notice notice = findOne(noticeId);
-
-//        Member member = notice.getMember();
-//        if (member != null) {
-//            member.removeNotice(notice);
-//        }
         notice.updateStatus(NoticeStatus.DELETED);
-
-//        noticeRepository.delete(notice);
     }
 
     // 공지사항 조회 기능
@@ -196,6 +190,10 @@ public class NoticeService {
 
     public List<Notice> findAll() {
         return noticeRepository.findAll();
+    }
+
+    public List<Notice> searchNotice(NoticeSearchCond searchCond) {
+        return noticeRepository.searchNotice(searchCond);
     }
 
     public String getNoticeImageUrl(Long noticeId, String imageName) {
