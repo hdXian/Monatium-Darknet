@@ -104,10 +104,17 @@ public class NoticeRepository {
     }
 
     private BooleanExpression equalsStatus(NoticeStatus status) {
+
         if (status != null) {
-            return notice.status.eq(status);
+            // 삭제된 공지사항만 따로 찾는 경우
+            if (status == NoticeStatus.DELETED)
+                return notice.status.eq(NoticeStatus.DELETED);
+            // 아니면 기본적으로 DELETED는 제외
+            else
+                return notice.status.eq(status).and(notice.status.ne(NoticeStatus.DELETED));
         }
-        return null; // 조건이 없을 경우 null 리턴 -> queryDsl null safe 기능 활용
+
+        return notice.status.ne(NoticeStatus.DELETED); // 조건이 따로 없을 경우, 기본적으로 DELETED가 아닌 공지사항을 제외하고 조회
     }
 
     private BooleanExpression likeTitle(String title) {

@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.controller.management.notice;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import hdxian.monatium_darknet.domain.notice.NoticeStatus;
+import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.MemberService;
 import hdxian.monatium_darknet.service.NoticeService;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
@@ -32,14 +33,9 @@ public class NoticeMgController {
     // 공지사항 목록 (대시보드 -> 공지사항 관리)
     @GetMapping
     public String noticeList(@RequestParam(value = "category", required = false) NoticeCategory category, Model model) {
-        List<Notice> noticeList;
-
-        if (category == null) {
-            noticeList = noticeService.findAll();
-        }
-        else {
-            noticeList = noticeService.findByCategory(category);
-        }
+        NoticeSearchCond searchCond = new NoticeSearchCond();
+        searchCond.setCategory(category);
+        List<Notice> noticeList = noticeService.searchNotice(searchCond);
 
         model.addAttribute("noticeList", noticeList);
         model.addAttribute("category", category);
