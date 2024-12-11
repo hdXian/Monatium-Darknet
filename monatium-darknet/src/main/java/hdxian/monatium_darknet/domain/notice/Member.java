@@ -19,6 +19,9 @@ public class Member {
     private String password;
     private String nickName;
 
+    @Enumerated(EnumType.STRING)
+    private MemberStatus status;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notice> notices = new ArrayList<>();
 
@@ -43,6 +46,7 @@ public class Member {
         member.setLoginId(loginId);
         member.setPassword(password);
         member.setNickName(nickName);
+        member.setStatus(MemberStatus.ACTIVE); // 생성 시 기본 상태는 ACTIVE
 
         return member;
     }

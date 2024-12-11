@@ -1,6 +1,7 @@
 package hdxian.monatium_darknet.repository;
 
 import hdxian.monatium_darknet.domain.notice.Member;
+import hdxian.monatium_darknet.domain.notice.MemberStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

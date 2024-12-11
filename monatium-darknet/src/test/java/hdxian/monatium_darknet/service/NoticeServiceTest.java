@@ -11,10 +11,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -297,7 +295,7 @@ class NoticeServiceTest {
         Long devId1 = noticeService.createNewNotice(lilyId, devDto1);
 
         // when
-        memberService.deleteMember(lilyId); // 릴리 회원 삭제
+        memberService.deactivateMember(lilyId); // 릴리 회원 삭제
 
         // then
         // 릴리가 작성한 공지들은 삭제됨
@@ -305,7 +303,13 @@ class NoticeServiceTest {
 
         searchCond.setMemberId(lilyId);
         List<Notice> byLily = noticeService.findAll(searchCond);
-        assertThat(byLily).isEmpty();
+        // 로직 변경 -> 회원이 삭제돼도 DB에서 제거되지 않음 -> 연관된 공지사항도 제거되지 않음
+//        assertThat(byLily).isEmpty();
+
+        Notice notice1 = noticeService.findOne(noticeId1);
+        Notice update2 = noticeService.findOne(updateId2);
+        Notice dev1 = noticeService.findOne(devId1);
+        assertThat(byLily).containsExactlyInAnyOrder(notice1, update2, dev1);
 
         // 아멜리아가 작성한 공지들
         Notice notice2 = noticeService.findOne(noticeId2);
