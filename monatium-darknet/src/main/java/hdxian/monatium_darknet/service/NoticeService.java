@@ -8,10 +8,10 @@ import hdxian.monatium_darknet.domain.notice.NoticeStatus;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.FileStorageService;
 import hdxian.monatium_darknet.repository.NoticeRepository;
+import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -118,6 +118,12 @@ public class NoticeService {
         return notice.getId();
     }
 
+    @Transactional
+    public void incrementView(Long noticeId) {
+        Notice notice = findOne(noticeId);
+        notice.incrementView();
+    }
+
     // 임시 저장 경로에 있던 공지사항 이미지들을 정식 경로에 저장
     public List<String> moveImagesFromTemp(Long noticeId, List<String> imgSrcs) throws IOException {
 
@@ -164,14 +170,7 @@ public class NoticeService {
     @Transactional
     public void deleteNotice(Long noticeId) {
         Notice notice = findOne(noticeId);
-
-//        Member member = notice.getMember();
-//        if (member != null) {
-//            member.removeNotice(notice);
-//        }
         notice.updateStatus(NoticeStatus.DELETED);
-
-//        noticeRepository.delete(notice);
     }
 
     // 공지사항 조회 기능
@@ -181,21 +180,16 @@ public class NoticeService {
         if (find.isEmpty()) {
             throw new NoSuchElementException("해당 공지사항이 없습니다. id=" + noticeId);
         }
-        Notice notice = find.get();
-        notice.incrementView();
-        return notice;
-    }
-
-    public List<Notice> findByMemberId(Long memberId) {
-        return noticeRepository.findByMemberId(memberId);
-    }
-
-    public List<Notice> findByCategory(NoticeCategory category) {
-        return noticeRepository.findByNoticeCategory(category);
+        return find.get();
     }
 
     public List<Notice> findAll() {
-        return noticeRepository.findAll();
+        NoticeSearchCond searchCond = new NoticeSearchCond();
+        return noticeRepository.findAll(searchCond);
+    }
+
+    public List<Notice> findAll(NoticeSearchCond searchCond) {
+        return noticeRepository.findAll(searchCond);
     }
 
     public String getNoticeImageUrl(Long noticeId, String imageName) {

@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.repository;
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
+import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.MemberService;
 import hdxian.monatium_darknet.service.dto.MemberDto;
 import org.junit.jupiter.api.DisplayName;
@@ -84,8 +85,13 @@ class NoticeRepositoryTest {
         noticeRepository.save(notice3);
 
         // then
-        List<Notice> lilyNotices = noticeRepository.findByMemberId(lilyId);
-        List<Notice> ameliaNotices = noticeRepository.findByMemberId(ameliaId);
+        NoticeSearchCond searchCond = new NoticeSearchCond();
+
+        searchCond.setMemberId(lilyId);
+        List<Notice> lilyNotices = noticeRepository.findAll(searchCond);
+
+        searchCond.setMemberId(ameliaId);
+        List<Notice> ameliaNotices = noticeRepository.findAll(searchCond);
 
         assertThat(lilyNotices).containsExactlyInAnyOrder(notice1, notice2);
         assertThat(ameliaNotices).containsExactlyInAnyOrder(notice3);
@@ -94,7 +100,7 @@ class NoticeRepositoryTest {
     // 카테고리별 공지사항 검색
     @Test
     @DisplayName("카테고리별 검색")
-    @Rollback(value = false)
+//    @Rollback(value = false)
     void findByCategory() {
         // given
         MemberDto lilyDto = generateMemberDto("lily", "1234", "GM릴1리");
@@ -134,20 +140,27 @@ class NoticeRepositoryTest {
         noticeRepository.save(dev1);
 
         // then
-        List<Notice> noticeList = noticeRepository.findByNoticeCategory(NoticeCategory.NOTICE);
+        NoticeSearchCond searchCond = new NoticeSearchCond();
+
+        searchCond.setCategory(NoticeCategory.NOTICE);
+        List<Notice> noticeList = noticeRepository.findAll(searchCond);
         assertThat(noticeList).containsExactlyInAnyOrder(notice1, notice2);
 
-        List<Notice> eventList = noticeRepository.findByNoticeCategory(NoticeCategory.EVENT);
+        searchCond.setCategory(NoticeCategory.EVENT);
+        List<Notice> eventList = noticeRepository.findAll(searchCond);
         assertThat(eventList).containsExactlyInAnyOrder(event1, event2);
 
-        List<Notice> updateList = noticeRepository.findByNoticeCategory(NoticeCategory.UPDATE);
+        searchCond.setCategory(NoticeCategory.UPDATE);
+        List<Notice> updateList = noticeRepository.findAll(searchCond);
         assertThat(updateList).containsExactlyInAnyOrder(update1, update2, update3);
 
-        List<Notice> devList = noticeRepository.findByNoticeCategory(NoticeCategory.DEV);
+        searchCond.setCategory(NoticeCategory.DEV);
+        List<Notice> devList = noticeRepository.findAll(searchCond);
         assertThat(devList).containsExactlyInAnyOrder(dev1);
 
         // 전체 검색
-        List<Notice> all = noticeRepository.findAll();
+        searchCond.setCategory(null);
+        List<Notice> all = noticeRepository.findAll(searchCond);
         assertThat(all).containsExactlyInAnyOrder(notice1, notice2, event1, event2, update1, update2, update3, dev1);
     }
 

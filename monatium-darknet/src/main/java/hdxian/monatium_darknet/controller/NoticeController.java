@@ -2,6 +2,8 @@ package hdxian.monatium_darknet.controller;
 
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
+import hdxian.monatium_darknet.domain.notice.NoticeStatus;
+import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
@@ -25,14 +27,10 @@ public class NoticeController {
 
     @GetMapping
     public String noticeList(@RequestParam(value = "category", required = false) NoticeCategory category, Model model) {
-
-        List<Notice> noticeList;
-        if (category == null) {
-            noticeList = noticeService.findAll();
-        }
-        else {
-            noticeList = noticeService.findByCategory(category);
-        }
+        NoticeSearchCond searchCond = new NoticeSearchCond();
+        searchCond.setCategory(category);
+        searchCond.setStatus(NoticeStatus.PUBLIC); // 공개 상태인 공지사항만 노출
+        List<Notice> noticeList = noticeService.findAll(searchCond);
 
         model.addAttribute("noticeList", noticeList);
         
@@ -40,9 +38,13 @@ public class NoticeController {
     }
 
     @GetMapping("/{noticeId}")
-    public String getContent(@PathVariable("noticeId") Long noticeId, Model model) {
+    public String getDetail(@PathVariable("noticeId") Long noticeId, Model model) {
         Notice notice = noticeService.findOne(noticeId);
-
+        // TODO - 공개된 공지사항 아니면 노출 안되도록 검증 필요. 보안 패치 및 에러 페이지 추가할 때 같이 추가할 듯.
+//        if (notice.getStatus() != NoticeStatus.PUBLIC) {
+//            throw new IllegalStateException("공개되지 않은 공지사항입니다..?");
+//        }
+        noticeService.incrementView(noticeId); // 조회수 증가
         model.addAttribute("notice", notice);
 
         return "notice/noticeDetail";

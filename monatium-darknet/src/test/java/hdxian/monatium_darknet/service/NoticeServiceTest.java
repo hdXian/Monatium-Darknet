@@ -3,6 +3,8 @@ package hdxian.monatium_darknet.service;
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
+import hdxian.monatium_darknet.domain.notice.NoticeStatus;
+import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.dto.MemberDto;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
 import org.junit.jupiter.api.DisplayName;
@@ -102,12 +104,15 @@ class NoticeServiceTest {
         Notice update1 = noticeService.findOne(updateId1);
 
         // then
+        NoticeSearchCond searchCond = new NoticeSearchCond();
         // 릴1리는 업데이트1, 이벤트1을 작성함
-        List<Notice> lilyNotices = noticeService.findByMemberId(lilyId);
+        searchCond.setMemberId(lilyId);
+        List<Notice> lilyNotices = noticeService.findAll(searchCond);
         assertThat(lilyNotices).containsExactlyInAnyOrder(notice1, update1);
 
         // 아멜리아는 공지2를 작성함
-        List<Notice> ameliaNotices = noticeService.findByMemberId(ameliaId);
+        searchCond.setMemberId(ameliaId);
+        List<Notice> ameliaNotices = noticeService.findAll(searchCond);
         assertThat(ameliaNotices).containsExactlyInAnyOrder(notice2);
     }
 
@@ -167,16 +172,22 @@ class NoticeServiceTest {
         Notice dev1 = noticeService.findOne(devId1);
 
         // then
-        List<Notice> notices = noticeService.findByCategory(NoticeCategory.NOTICE);
+        NoticeSearchCond searchCond = new NoticeSearchCond();
+
+        searchCond.setCategory(NoticeCategory.NOTICE);
+        List<Notice> notices = noticeService.findAll(searchCond);
         assertThat(notices).containsExactlyInAnyOrder(notice1, notice2);
 
-        List<Notice> events = noticeService.findByCategory(NoticeCategory.EVENT);
+        searchCond.setCategory(NoticeCategory.EVENT);
+        List<Notice> events = noticeService.findAll(searchCond);
         assertThat(events).containsExactlyInAnyOrder(event1, event2);
 
-        List<Notice> updates = noticeService.findByCategory(NoticeCategory.UPDATE);
+        searchCond.setCategory(NoticeCategory.UPDATE);
+        List<Notice> updates = noticeService.findAll(searchCond);
         assertThat(updates).containsExactlyInAnyOrder(update1, update2, update3);
 
-        List<Notice> devs = noticeService.findByCategory(NoticeCategory.DEV);
+        searchCond.setCategory(NoticeCategory.DEV);
+        List<Notice> devs = noticeService.findAll(searchCond);
         assertThat(devs).containsExactlyInAnyOrder(dev1);
     }
 
@@ -230,11 +241,22 @@ class NoticeServiceTest {
         assertThat(all).containsExactly(notice2);
 
         // 1번 공지사항은 없어야 함
-        assertThatThrownBy(() -> noticeService.findOne(savedNoticeId1))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 공지사항이 없습니다. id=" + savedNoticeId1);
+//        assertThatThrownBy(() -> noticeService.findOne(savedNoticeId1))
+//                .isInstanceOf(NoSuchElementException.class)
+//                .hasMessage("해당 공지사항이 없습니다. id=" + savedNoticeId1);
+
+        // 스펙 변경 -> 삭제된 공지사항은 status 컬럼이 "DELETED"로 업데이트 됨
+        Notice findNotice = noticeService.findOne(savedNoticeId1);
+        assertThat(findNotice.getStatus()).isEqualTo(NoticeStatus.DELETED);
+
+        // findAll()로 찾으면 조회는 안 됨
+        NoticeSearchCond searchCond = new NoticeSearchCond();
+        searchCond.setCategory(NoticeCategory.NOTICE);
+        List<Notice> noticeList = noticeService.findAll(searchCond);
+        assertThat(noticeList).isEmpty();
     }
 
+    // TODO - 회원 삭제 시 해당 회원 및 공지사항 처리 정책 변경 필요
     @Test
     @DisplayName("회원 삭제 시 연관 공지사항 삭제")
 //    @Rollback(value = false)
@@ -279,7 +301,10 @@ class NoticeServiceTest {
 
         // then
         // 릴리가 작성한 공지들은 삭제됨
-        List<Notice> byLily = noticeService.findByMemberId(lilyId);
+        NoticeSearchCond searchCond = new NoticeSearchCond();
+
+        searchCond.setMemberId(lilyId);
+        List<Notice> byLily = noticeService.findAll(searchCond);
         assertThat(byLily).isEmpty();
 
         // 아멜리아가 작성한 공지들
@@ -287,7 +312,8 @@ class NoticeServiceTest {
         Notice event1 = noticeService.findOne(eventId1);
         Notice update1 = noticeService.findOne(updateId1);
 
-        List<Notice> byAmelia = noticeService.findByMemberId(ameliaId);
+        searchCond.setMemberId(ameliaId);
+        List<Notice> byAmelia = noticeService.findAll(searchCond);
         assertThat(byAmelia).containsExactlyInAnyOrder(notice2, event1, update1);
     }
 

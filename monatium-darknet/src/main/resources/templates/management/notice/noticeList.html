@@ -15,19 +15,19 @@
     <!-- 탭 네비게이션 -->
     <ul class="nav nav-tabs mb-3">
         <li class="nav-item">
-            <a class="nav-link" th:classappend="${category == null} ? 'active'" th:href="@{/management/notices}">전체</a>
+            <a class="nav-link" th:classappend="${curCategory == null} ? 'active'" th:href="@{/management/notices}">전체</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" th:classappend="${category == 'notice'} ? 'active'" th:href="@{/management/notices?category=notice}">공지사항</a>
+            <a class="nav-link" th:classappend="${curCategory?.name() == 'notice'} ? 'active'" th:href="@{/management/notices?category=notice}">공지사항</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" th:classappend="${category == 'event'} ? 'active'" th:href="@{/management/notices?category=event}">이벤트</a>
+            <a class="nav-link" th:classappend="${curCategory?.name() == 'event'} ? 'active'" th:href="@{/management/notices?category=event}">이벤트</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" th:classappend="${category == 'update'} ? 'active'" th:href="@{/management/notices?category=update}">업데이트</a>
+            <a class="nav-link" th:classappend="${curCategory?.name() == 'update'} ? 'active'" th:href="@{/management/notices?category=update}">업데이트</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" th:classappend="${category == 'devnote'} ? 'active'" th:href="@{/management/notices?category=dev}">개발자노트</a>
+            <a class="nav-link" th:classappend="${curCategory?.name() == 'dev'} ? 'active'" th:href="@{/management/notices?category=dev}">개발자노트</a>
         </li>
     </ul>
 
@@ -66,12 +66,12 @@
                 </th:block>
                 <td class="col6">
                     <button
-                            class="btn btn-sm"
+                            class="btn btn-sm btn-toggle-status"
                             th:data-id="${notice.id}"
                             th:data-status="${notice.status}"
-                            th:classappend="${notice.status == 'PUBLIC'} ? 'btn-success' : 'btn-secondary'"
-                            th:text="${notice.status == 'PUBLIC'} ? '공개 중' : '비공개'"
-                            th:onclick="|updateStatus(${notice.id});|">
+                            th:data-title="${notice.title}"
+                            th:classappend="${notice.status.name() == 'PUBLIC'} ? 'btn-success' : 'btn-secondary'"
+                            th:text="${notice.status.name() == 'PUBLIC'} ? '공개 중' : '비공개'">
                     </button>
                 </td>
                 <td class="col7">
@@ -92,42 +92,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script th:src="@{/js/management/noticeList.js}"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    // 모든 삭제 버튼에 클릭 이벤트 추가
-    const deleteButtons = document.querySelectorAll('.btn-delete');
-
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const noticeId = this.getAttribute('data-id'); // 삭제할 공지사항의 ID
-            const noticeTitle = this.getAttribute('data-title'); // 공지사항 제목
-
-            if (!confirm(`공지사항을 삭제하시겠습니까?\n제목: ${noticeTitle}`)) {
-                return;
-            }
-
-            fetch(`/management/notices/${noticeId}`, {
-                method: 'DELETE'
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('삭제가 완료되었습니다.');
-                    location.reload(); // 페이지 새로고침
-                    // this.closest('tr').remove(); // 또는 테이블에서 해당 행 삭제
-                } else {
-                    alert('삭제에 실패했습니다.');
-                }
-            })
-            .catch(error => {
-                console.error('삭제 중 오류 발생:', error);
-                alert('삭제에 실패했습니다.');
-            });
-        });
-    });
-});
-
-</script>
 
 </body>
 </html>
