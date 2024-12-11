@@ -1,12 +1,12 @@
 package hdxian.monatium_darknet.service;
 
 import hdxian.monatium_darknet.domain.notice.Member;
+import hdxian.monatium_darknet.domain.notice.MemberStatus;
 import hdxian.monatium_darknet.service.dto.MemberDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
@@ -240,12 +240,16 @@ class MemberServiceTest {
         Long savedId2 = memberService.createNewMember(dto2);
 
         // when
-        memberService.deleteMember(savedId);
+        memberService.deactivateMember(savedId);
 
         // then
-        assertThatThrownBy(() -> memberService.findOne(savedId))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 회원이 존재하지 않습니다. id=" + savedId);
+//        assertThatThrownBy(() -> memberService.findOne(savedId))
+//                .isInstanceOf(NoSuchElementException.class)
+//                .hasMessage("해당 회원이 존재하지 않습니다. id=" + savedId);
+
+        // 로직 변경 -> 회원 삭제 시 상태만 INACTIVE로 변경
+        Member findLily = memberService.findOne(savedId);
+        assertThat(findLily.getStatus()).isEqualTo(MemberStatus.INACTIVE);
 
         Member findAmelia = memberService.findOne(savedId2);
         assertThat(findAmelia).isNotNull();

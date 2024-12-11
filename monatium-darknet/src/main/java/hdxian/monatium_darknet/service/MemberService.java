@@ -1,6 +1,7 @@
 package hdxian.monatium_darknet.service;
 
 import hdxian.monatium_darknet.domain.notice.Member;
+import hdxian.monatium_darknet.domain.notice.MemberStatus;
 import hdxian.monatium_darknet.repository.MemberRepository;
 import hdxian.monatium_darknet.service.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +29,7 @@ public class MemberService {
         Member member = Member.createMember(
                 memberDto.getLoginId(),
                 memberDto.getPassword(),
-                memberDto.getNickName(),
-                memberDto.getStatus()
+                memberDto.getNickName()
         );
 
         return memberRepository.save(member);
@@ -54,9 +54,15 @@ public class MemberService {
     }
 
     @Transactional
-    public void deleteMember(Long memberId) {
+    public void activeMember(Long memberId) {
         Member member = findOne(memberId);
-        memberRepository.delete(member); // notice들 cascade 걸려있어서 다 지워짐
+        member.setStatus(MemberStatus.ACTIVE);
+    }
+
+    @Transactional
+    public void deactivateMember(Long memberId) {
+        Member member = findOne(memberId);
+        member.setStatus(MemberStatus.INACTIVE); // 상태만 INACTIVE로 변경. 실제 DB 삭제 x.
     }
 
     // 회원 검색 기능

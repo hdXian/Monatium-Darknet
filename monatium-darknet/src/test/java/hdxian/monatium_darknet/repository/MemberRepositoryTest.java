@@ -27,7 +27,7 @@ class MemberRepositoryTest {
 //    @Rollback(value = false)
     void addMember() {
         // given
-        Member member = Member.createMember("hello", "1234", "GM릴1리", MemberStatus.ACTIVE);
+        Member member = Member.createMember("hello", "1234", "GM릴1리");
 
         // when
         Long savedId = repository.save(member);
@@ -47,8 +47,8 @@ class MemberRepositoryTest {
 //    @Rollback(value = false)
     void findOne() {
         // given
-        Member lily = Member.createMember("lily", "1234", "GM릴1리", MemberStatus.ACTIVE);
-        Member amelia = Member.createMember("amelia", "9876", "CM아멜리아", MemberStatus.ACTIVE);
+        Member lily = Member.createMember("lily", "1234", "GM릴1리");
+        Member amelia = Member.createMember("amelia", "9876", "CM아멜리아");
 
         // when
         // 리턴값 사용 x

@@ -41,12 +41,12 @@ public class Member {
     }
 
     // 생성 메서드
-    public static Member createMember(String loginId, String password, String nickName, MemberStatus status) {
+    public static Member createMember(String loginId, String password, String nickName) {
         Member member = new Member();
         member.setLoginId(loginId);
         member.setPassword(password);
         member.setNickName(nickName);
-        member.setStatus(status);
+        member.setStatus(MemberStatus.ACTIVE); // 생성 시 기본 상태는 ACTIVE
 
         return member;
     }
