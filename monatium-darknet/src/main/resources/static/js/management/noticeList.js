@@ -6,11 +6,12 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', function () {
             const noticeId = this.getAttribute('data-id'); // 공지사항의 ID
             const currentStatus = this.getAttribute('data-status'); // 현재 상태 (PUBLIC / PRIVATE)
+            const title = this.getAttribute('data-title');
             const isPublic = currentStatus === 'PUBLIC';
 
             const confirmMessage = isPublic
-                ? '이 공지사항을 비공개로 전환하시겠습니까?'
-                : '이 공지사항을 공개로 전환하시겠습니까?';
+                ? `이 공지사항을 비공개로 전환하시겠습니까?\n제목: "${title}"`
+                : `이 공지사항을 공개로 전환하시겠습니까?\n제목: "${title}"`;
 
             const userConfirmed = confirm(confirmMessage);
             if (!userConfirmed) {
@@ -63,7 +64,12 @@ function updateStatus(noticeId) {
     }
 
     const currentStatus = button.getAttribute('data-status');
-    const newStatus = (currentStatus === 'PUBLIC') ? 'PRIVATE' : 'PUBLIC';
+    const isPublic = (currentStatus === 'PUBLIC');
+    const newStatus = isPublic ? 'PRIVATE' : 'PUBLIC';
+
+    const alertMessage = isPublic
+                    ? '공지사항을 비공개 상태로 전환하였습니다.'
+                    : '공지사항을 공개 상태로 전환하였습니다.';
 
     // 서버에 상태 변경 요청
     fetch(`/management/notices/${noticeId}/update-status?t=${newStatus}`, {
@@ -84,6 +90,7 @@ function updateStatus(noticeId) {
 
             // 버튼의 data-status 속성 업데이트
             button.setAttribute('data-status', data.newStatus);
+            alert(alertMessage);
         } else {
             alert('상태 변경에 실패했습니다.');
         }
