@@ -2,6 +2,7 @@ package hdxian.monatium_darknet.controller;
 
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.notice.Notice;
+import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.CharacterService;
 import hdxian.monatium_darknet.service.NoticeService;
 import lombok.RequiredArgsConstructor;

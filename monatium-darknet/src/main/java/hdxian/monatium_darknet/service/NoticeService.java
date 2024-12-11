@@ -12,7 +12,6 @@ import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -184,20 +183,21 @@ public class NoticeService {
         return find.get();
     }
 
-    public List<Notice> findByMemberId(Long memberId) {
-        return noticeRepository.findByMemberId(memberId);
-    }
-
-    public List<Notice> findByCategory(NoticeCategory category) {
-        return noticeRepository.findByNoticeCategory(category);
-    }
-
+//    public List<Notice> findByMemberId(Long memberId) {
+//        return noticeRepository.findByMemberId(memberId);
+//    }
+//
+//    public List<Notice> findByCategory(NoticeCategory category) {
+//        return noticeRepository.findByNoticeCategory(category);
+//    }
+//
     public List<Notice> findAll() {
-        return noticeRepository.findAll();
+        NoticeSearchCond searchCond = new NoticeSearchCond();
+        return noticeRepository.findAll(searchCond);
     }
 
-    public List<Notice> searchNotice(NoticeSearchCond searchCond) {
-        return noticeRepository.searchNotice(searchCond);
+    public List<Notice> findAll(NoticeSearchCond searchCond) {
+        return noticeRepository.findAll(searchCond);
     }
 
     public String getNoticeImageUrl(Long noticeId, String imageName) {

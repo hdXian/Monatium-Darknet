@@ -5,7 +5,6 @@ import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import hdxian.monatium_darknet.domain.notice.NoticeStatus;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.NoticeService;
-import hdxian.monatium_darknet.service.dto.NoticeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +30,7 @@ public class NoticeController {
         NoticeSearchCond searchCond = new NoticeSearchCond();
         searchCond.setCategory(category);
         searchCond.setStatus(NoticeStatus.PUBLIC); // 공개 상태인 공지사항만 노출
-        List<Notice> noticeList = noticeService.searchNotice(searchCond);
+        List<Notice> noticeList = noticeService.findAll(searchCond);
 
         model.addAttribute("noticeList", noticeList);
         

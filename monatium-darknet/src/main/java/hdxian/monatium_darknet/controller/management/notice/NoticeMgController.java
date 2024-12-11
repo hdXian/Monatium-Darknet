@@ -35,7 +35,7 @@ public class NoticeMgController {
     public String noticeList(@RequestParam(value = "category", required = false) NoticeCategory category, Model model) {
         NoticeSearchCond searchCond = new NoticeSearchCond();
         searchCond.setCategory(category);
-        List<Notice> noticeList = noticeService.searchNotice(searchCond);
+        List<Notice> noticeList = noticeService.findAll(searchCond);
 
         model.addAttribute("noticeList", noticeList);
         model.addAttribute("curCategory", category);

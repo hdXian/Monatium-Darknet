@@ -18,4 +18,5 @@ public class NoticeSearchCond {
 //    private LocalDateTime date;
     private int view;
     private String content;
+    private Long memberId;
 }
