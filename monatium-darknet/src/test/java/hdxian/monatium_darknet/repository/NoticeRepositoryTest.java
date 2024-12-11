@@ -100,7 +100,7 @@ class NoticeRepositoryTest {
     // 카테고리별 공지사항 검색
     @Test
     @DisplayName("카테고리별 검색")
-    @Rollback(value = false)
+//    @Rollback(value = false)
     void findByCategory() {
         // given
         MemberDto lilyDto = generateMemberDto("lily", "1234", "GM릴1리");

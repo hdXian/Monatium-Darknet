@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.service;
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
+import hdxian.monatium_darknet.domain.notice.NoticeStatus;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.dto.MemberDto;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
@@ -240,11 +241,22 @@ class NoticeServiceTest {
         assertThat(all).containsExactly(notice2);
 
         // 1번 공지사항은 없어야 함
-        assertThatThrownBy(() -> noticeService.findOne(savedNoticeId1))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 공지사항이 없습니다. id=" + savedNoticeId1);
+//        assertThatThrownBy(() -> noticeService.findOne(savedNoticeId1))
+//                .isInstanceOf(NoSuchElementException.class)
+//                .hasMessage("해당 공지사항이 없습니다. id=" + savedNoticeId1);
+
+        // 스펙 변경 -> 삭제된 공지사항은 status 컬럼이 "DELETED"로 업데이트 됨
+        Notice findNotice = noticeService.findOne(savedNoticeId1);
+        assertThat(findNotice.getStatus()).isEqualTo(NoticeStatus.DELETED);
+
+        // findAll()로 찾으면 조회는 안 됨
+        NoticeSearchCond searchCond = new NoticeSearchCond();
+        searchCond.setCategory(NoticeCategory.NOTICE);
+        List<Notice> noticeList = noticeService.findAll(searchCond);
+        assertThat(noticeList).isEmpty();
     }
 
+    // TODO - 회원 삭제 시 해당 회원 및 공지사항 처리 정책 변경 필요
     @Test
     @DisplayName("회원 삭제 시 연관 공지사항 삭제")
 //    @Rollback(value = false)
@@ -300,7 +312,7 @@ class NoticeServiceTest {
         Notice event1 = noticeService.findOne(eventId1);
         Notice update1 = noticeService.findOne(updateId1);
 
-        searchCond.setMemberId(lilyId);
+        searchCond.setMemberId(ameliaId);
         List<Notice> byAmelia = noticeService.findAll(searchCond);
         assertThat(byAmelia).containsExactlyInAnyOrder(notice2, event1, update1);
     }
