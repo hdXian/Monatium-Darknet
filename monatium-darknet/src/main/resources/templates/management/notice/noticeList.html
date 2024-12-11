@@ -64,16 +64,7 @@
                     <td class="col5" th:case="'DEV'" th:text="개발자노트"></td>
                     <td class="col5" th:case="*" th:text="해당없음"></td> <!-- 있어서는 안 될 분류이긴 함 -->
                 </th:block>
-                <td th:switch="${{notice.status}}" class="col6">
-<!--                    <a th:case="'PUBLIC'" th:href="@{ /management/notices/{id}/update-status?t=PRIVATE (id=${notice.id}) }">-->
-<!--                        <button th:text="공개 중" class="btn btn-sm btn-success">-->
-<!--                        </button>-->
-<!--                    </a>-->
-<!--                    <a th:case="'PRIVATE'" th:href="@{ /management/notices/{id}/update-status?t=PUBLIC (id=${notice.id}) }">-->
-<!--                        <button th:text="비공개" class="btn btn-sm btn-secondary">-->
-<!--                        </button>-->
-<!--                    </a>-->
-
+                <td class="col6">
                     <button
                             class="btn btn-sm btn-toggle-status"
                             th:data-id="${notice.id}"
