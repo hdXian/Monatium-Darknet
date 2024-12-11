@@ -5,6 +5,7 @@ import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import hdxian.monatium_darknet.domain.notice.NoticeStatus;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.NoticeService;
+import hdxian.monatium_darknet.service.dto.NoticeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,7 @@ public class NoticeController {
 //        if (notice.getStatus() != NoticeStatus.PUBLIC) {
 //            throw new IllegalStateException("공개되지 않은 공지사항입니다..?");
 //        }
+        noticeService.incrementView(noticeId); // 조회수 증가
         model.addAttribute("notice", notice);
 
         return "notice/noticeDetail";

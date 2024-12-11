@@ -119,6 +119,12 @@ public class NoticeService {
         return notice.getId();
     }
 
+    @Transactional
+    public void incrementView(Long noticeId) {
+        Notice notice = findOne(noticeId);
+        notice.incrementView();
+    }
+
     // 임시 저장 경로에 있던 공지사항 이미지들을 정식 경로에 저장
     public List<String> moveImagesFromTemp(Long noticeId, List<String> imgSrcs) throws IOException {
 
@@ -175,9 +181,7 @@ public class NoticeService {
         if (find.isEmpty()) {
             throw new NoSuchElementException("해당 공지사항이 없습니다. id=" + noticeId);
         }
-        Notice notice = find.get();
-        notice.incrementView();
-        return notice;
+        return find.get();
     }
 
     public List<Notice> findByMemberId(Long memberId) {

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // 🔥 모든 공개/비공개 전환 버튼에 클릭 이벤트 추가
+    // 모든 공개/비공개 전환 버튼에 클릭 이벤트 추가
     const toggleButtons = document.querySelectorAll('.btn-toggle-status');
 
     toggleButtons.forEach(button => {
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // 🔥 모든 삭제 버튼에 클릭 이벤트 추가
+    // 모든 삭제 버튼에 클릭 이벤트 추가
     const deleteButtons = document.querySelectorAll('.btn-delete');
 
     deleteButtons.forEach(button => {
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// 🔥 상태 전환 함수 (변경 사항 없음)
+// 상태 전환 함수 (변경 사항 없음)
 function updateStatus(noticeId) {
     const button = document.querySelector(`button[data-id="${noticeId}"]`);
     if (!button) {
