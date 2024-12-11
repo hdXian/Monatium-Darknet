@@ -56,26 +56,6 @@ public class NoticeRepository {
         return Optional.ofNullable(find);
     }
 
-//    public List<Notice> findByMemberId(Long memberId) {
-//        String jpql = "select n from Notice n where n.member.id = :memberId";
-//        return em.createQuery(jpql, Notice.class)
-//                .setParameter("memberId", memberId)
-//                .getResultList();
-//    }
-//
-//    public List<Notice> findByNoticeCategory(NoticeCategory category) {
-//        String jpql = "select n from Notice n where n.category = :category";
-//        return em.createQuery(jpql, Notice.class)
-//                .setParameter("category", category)
-//                .getResultList();
-//    }
-//
-//    public List<Notice> findAll() {
-//        String jpql = "select n from Notice n";
-//        return em.createQuery(jpql, Notice.class)
-//                .getResultList();
-//    }
-
     // queryDsl
     public List<Notice> findAll(NoticeSearchCond searchCond) {
         NoticeCategory category = searchCond.getCategory();

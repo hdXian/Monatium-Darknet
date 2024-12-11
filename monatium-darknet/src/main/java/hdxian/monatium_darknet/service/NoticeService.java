@@ -183,14 +183,6 @@ public class NoticeService {
         return find.get();
     }
 
-//    public List<Notice> findByMemberId(Long memberId) {
-//        return noticeRepository.findByMemberId(memberId);
-//    }
-//
-//    public List<Notice> findByCategory(NoticeCategory category) {
-//        return noticeRepository.findByNoticeCategory(category);
-//    }
-//
     public List<Notice> findAll() {
         NoticeSearchCond searchCond = new NoticeSearchCond();
         return noticeRepository.findAll(searchCond);
