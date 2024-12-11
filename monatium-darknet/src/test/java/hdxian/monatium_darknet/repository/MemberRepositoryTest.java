@@ -1,6 +1,7 @@
 package hdxian.monatium_darknet.repository;
 
 import hdxian.monatium_darknet.domain.notice.Member;
+import hdxian.monatium_darknet.domain.notice.MemberStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ class MemberRepositoryTest {
 //    @Rollback(value = false)
     void addMember() {
         // given
-        Member member = Member.createMember("hello", "1234", "GM릴1리");
+        Member member = Member.createMember("hello", "1234", "GM릴1리", MemberStatus.ACTIVE);
 
         // when
         Long savedId = repository.save(member);
@@ -46,8 +47,8 @@ class MemberRepositoryTest {
 //    @Rollback(value = false)
     void findOne() {
         // given
-        Member lily = Member.createMember("lily", "1234", "GM릴1리");
-        Member amelia = Member.createMember("amelia", "9876", "CM아멜리아");
+        Member lily = Member.createMember("lily", "1234", "GM릴1리", MemberStatus.ACTIVE);
+        Member amelia = Member.createMember("amelia", "9876", "CM아멜리아", MemberStatus.ACTIVE);
 
         // when
         // 리턴값 사용 x
