@@ -3,6 +3,7 @@
 
 <head th:replace="~{fragments/mg_header :: common_mg_header(~{::title}, ~{::link})}">
     <title>관리자 대시보드</title>
+    <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
     <link rel="stylesheet" th:href="@{/css/management/dashBoard.css}">
     <!-- 커스텀 css -->
 </head>
@@ -13,7 +14,7 @@
         상단 네비게이션 바 영역
     </nav>
 
-    <div class="container-fluid mt-3">
+    <div class="container-fluid mt-3 main-content">
         <div class="row">
             <!-- 사이드바 -->
             <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
