@@ -1,0 +1,163 @@
+.form-section {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.form-title {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+.btn-custom {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+}
+
+.btn-custom:hover {
+    background-color: #45A049;
+}
+
+#likes-container {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.like-input-container input {
+    flex: 1;
+    margin-right: 5px;
+    max-width: 70%;
+}
+
+.like-input-container button {
+    margin-left: 5px;
+}
+
+textarea.auto-resize {
+    min-height: 40px;          /* 최소 높이 */
+    overflow: hidden;          /* 스크롤바가 나타나지 않도록 함 */
+    resize: none;              /* 사용자가 직접 크기 조절을 못하도록 함 */
+}
+
+.info-group {
+    border: 2px solid #4CAF50;
+    border-radius: 10px;
+    padding: 20px;
+
+    /* v18 추가 */
+    margin-bottom: 20px;
+    background-color: #ffffff;
+}
+
+.info-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-icon {
+    font-size: 1.5rem;
+    transition: transform 0.3s;
+}
+
+.toggle-icon.open {
+    color: #4CAF50;
+}
+
+.toggle-icon.closed {
+    color: #FF5733;
+}
+
+.info-subgroup {
+    border: 2px solid #4CAF50;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    /* background-color: #ffffff; */
+    background-color: #f9f9f9; /* 미묘한 배경색 추가 */
+}
+
+.form-subtitle {
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+}
+
+.form-subtitle-small {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.row > .col-md-6 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.d-flex > .form-control {
+    flex: 1;
+}
+
+.d-flex > .form-control:first-child {
+    max-width: 70%;
+}
+
+.d-flex > .form-control:last-child {
+    max-width: 30%;
+}
+
+.status-num {
+    width: 60px;
+}
+
+/* 특성 입력란 스타일 */
+.trait-name {
+    max-width: 50%; /* 특성 이름의 너비 조절 */
+}
+
+.trait-value {
+    max-width: 25%; /* 특성 수치의 너비를 줄여 공간 확보 */
+}
+
+.btn-add-trait {
+    margin-left: 8px; /* + 버튼과 특성 수치 입력란 사이의 간격 */
+}
+
+.btn-remove-trait {
+    margin-left: 8px; /* + 버튼과 - 버튼 사이의 간격 */
+}
+
+button.btn-add-trait,
+button.btn-remove-trait {
+    width: 32px; /* 버튼의 가로 크기를 작게 조정 */
+    height: 32px; /* 버튼의 높이도 조정하여 일관성 유지 */
+    padding: 0; /* 버튼 내부 여백 제거 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px; /* 더 명확한 크기의 기호 */
+}
+
+.image-upload-wrapper {
+    position: relative;
+    width: 120px; /* 이미지 크기 조정 */
+    /* height: 120px; */
+    height: auto;
+    margin: 0 auto;
+}
+

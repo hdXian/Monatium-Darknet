@@ -1,4 +1,4 @@
-package hdxian.monatium_darknet.controller.management;
+package hdxian.monatium_darknet.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;

@@ -1,4 +1,4 @@
-package hdxian.monatium_darknet.controller.management.login;
+package hdxian.monatium_darknet.controller.management;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package hdxian.monatium_darknet.controller.management.login;
+package hdxian.monatium_darknet.controller.management;
 
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.service.LoginService;

@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<head th:replace="~{fragments/mg_header :: common_mg_header(~{::title}, ~{::link})}">
     <title>공지사항 관리</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link th:href="@{/css/management/noticeList.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/management/noticeList.css}">
+    <!-- 커스텀 css -->
 </head>
+
 <body>
-<div class="container mt-4">
+
+<!-- 상단 네비게이션 바 -->
+<nav th:replace="~{fragments/mg_navbar :: common_mg_navbar}">
+    상단 네비게이션 바 영역
+</nav>
+
+<div class="container mt-4 main-content">
     <h1 class="mb-4">공지사항 관리</h1>
 
     <!-- 탭 네비게이션 -->
@@ -88,10 +94,12 @@
     </table>
 </div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 <script th:src="@{/js/management/noticeList.js}"></script>
+
+<!-- 하단 푸터 -->
+<footer th:replace="~{fragments/mg_footer :: common_mg_footer}">
+    하단 푸터 영역
+</footer>
 
 </body>
 </html>
