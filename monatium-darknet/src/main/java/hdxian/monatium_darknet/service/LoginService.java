@@ -18,7 +18,7 @@ public class LoginService {
     public Member login(String loginId, String password) {
         return memberRepository.findByLoginId(loginId)
                 .filter(member -> member.getPassword().equals(password))
-                .orElseThrow(() -> new NoSuchElementException("해당 아이디로 회원을 찾을 수 없습니다. loginId=" + loginId));
+                .orElse(null);
     }
 
 }

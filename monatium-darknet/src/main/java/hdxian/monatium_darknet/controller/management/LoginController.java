@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,18 +40,20 @@ public class LoginController {
 
     // 로그인 시도
     @PostMapping("/login")
-    public String login(@ModelAttribute("loginForm") LoginForm form, BindingResult bindingResult) {
+    public String login(@Validated @ModelAttribute("loginForm") LoginForm form, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
             return "management/loginForm";
         }
 
-        System.out.println("form.getUserName() = " + form.getLoginId());
-        System.out.println("form.getPassword() = " + form.getPassword());
-
         Member loginMember = loginService.login(form.getLoginId(), form.getPassword());
+        if (loginMember == null) {
+            log.info("login Failed with loginId: {}", form.getLoginId());
+            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
+            return "management/loginForm";
+        }
 
-        log.info("loginMember = {}", loginMember);
+        // TODO - 로그인 성공 시 추가 처리 로직
 
         // 로그인 성공 시 대시보드 페이지로 이동
         return "redirect:/management/dashBoard";
