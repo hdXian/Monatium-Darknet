@@ -1,6 +1,5 @@
 package hdxian.monatium_darknet.service;
 
-import hdxian.monatium_darknet.controller.management.HtmlContentUtil;
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;

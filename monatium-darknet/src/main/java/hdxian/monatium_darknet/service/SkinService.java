@@ -5,6 +5,7 @@ import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.repository.SkinCategoryRepository;
 import hdxian.monatium_darknet.repository.SkinRepository;
+import hdxian.monatium_darknet.service.dto.SkinDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

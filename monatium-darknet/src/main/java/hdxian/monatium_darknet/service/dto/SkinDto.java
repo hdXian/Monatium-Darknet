@@ -1,10 +1,7 @@
-package hdxian.monatium_darknet.service;
+package hdxian.monatium_darknet.service.dto;
 
 import hdxian.monatium_darknet.domain.skin.SkinGrade;
 import lombok.Data;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 public class SkinDto {

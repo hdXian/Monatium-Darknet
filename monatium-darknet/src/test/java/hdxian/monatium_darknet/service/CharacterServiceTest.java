@@ -8,11 +8,11 @@ import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinGrade;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
+import hdxian.monatium_darknet.service.dto.SkinDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

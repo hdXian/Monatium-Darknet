@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--v3-->
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -9,186 +9,8 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        /* =====================
-        공통 스타일 설정
-        ===================== */
-        body {
-            background-color: #F9FAFB; /* 밝고 부드러운 배경색 */
-            font-family: 'Noto Sans KR', sans-serif; /* 깔끔한 한글 폰트 */
-        }
+    <link th:href="@{/css/management/characterList.css}">
 
-        h2 {
-            color: #333;
-            font-weight: bold;
-        }
-
-        .container-fluid {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .btn-success {
-            background-color: #28A745;
-            border-color: #28A745;
-        }
-
-        .btn-success:hover {
-            background-color: #218838;
-        }
-
-        /* =====================
-        캐릭터 카드 스타일
-        ===================== */
-        .character-item {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .character-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .card {
-            border: none;
-            border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: scale(1.02);
-        }
-
-        .card-img-top {
-            width: 100%;
-            height: 150px;
-            object-fit: cover; /* 이미지 비율 유지 */
-            border-bottom: 3px solid #4CAF50;
-        }
-
-        .card-body {
-            text-align: center;
-            padding: 15px;
-        }
-
-        .card-title {
-            color: #333;
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .symbol-image {
-            width: 24px;
-            height: 24px;
-            margin-left: 0.5rem;
-            vertical-align: middle;
-        }
-
-        /* 가로로 긴 이미지 스타일 (셩급) */
-        .star-image {
-            width: 100%; /* 가로로 길게 설정 */
-            height: auto;
-            margin-bottom: 10px;
-        }
-
-        .card-body p {
-            font-size: 0.9rem;
-            color: #555;
-            margin-bottom: 0.25rem;
-        }
-
-        .small-images-container {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .small-image {
-            width: 32px;
-            height: 32px;
-            border-radius: 5px;
-            background-color: #E8E8E8;
-            object-fit: cover;
-        }
-
-        .card-link {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .card-link:hover {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .card-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-        }
-
-        .card-actions button {
-            font-size: 0.8rem;
-        }
-
-        .btn-primary {
-            background-color: #007BFF;
-        }
-
-        .btn-danger {
-            background-color: #DC3545;
-        }
-
-        /* =====================
-        캐릭터 추가 모달 스타일
-        ===================== */
-        .modal-content {
-            border-radius: 10px;
-        }
-
-        .modal-header {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .modal-body {
-            padding: 20px;
-        }
-
-        .form-control,
-        .form-select {
-            border-radius: 5px;
-        }
-
-        .btn-close {
-            background-color: #f8f9fa;
-            border-radius: 50%;
-            width: 25px;
-            height: 25px;
-            padding: 0;
-        }
-
-        /* =====================
-        반응형 디자인
-        ===================== */
-        @media (max-width: 768px) {
-            .card-body {
-                padding: 10px;
-            }
-
-            .small-image {
-                width: 24px;
-                height: 24px;
-            }
-
-            .btn {
-                font-size: 0.85rem;
-            }
-        }
-
-    </style>
 </head>
 
 <body>
@@ -368,51 +190,9 @@
     </div>
 </div>
 
-<!-- 캐릭터 추가 모달 -->
-<div class="modal fade" id="addCharacterModal" tabindex="-1" aria-labelledby="addCharacterModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addCharacterModalLabel">캐릭터 추가</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="addCharacterForm">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">캐릭터 이름</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="profileUrl" class="form-label">이미지 URL</label>
-                        <input type="text" class="form-control" id="profileUrl" name="profileUrl" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="race" class="form-label">종족</label>
-                        <select class="form-select" id="race" name="race">
-                            <option value="fairy">요정</option>
-                            <option value="beast">수인</option>
-                            <option value="elf">엘프</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="role" class="form-label">역할</label>
-                        <select class="form-select" id="role" name="role">
-                            <option value="dealer">딜러</option>
-                            <option value="tanker">탱커</option>
-                            <option value="supporter">서포터</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">추가</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Custom JS -->
 <script>
     function deleteCharacter(characterId) {
         if (confirm("이 캐릭터를 삭제하시겠습니까?")) {
@@ -420,14 +200,6 @@
             // 삭제 로직 구현 필요 (API 호출)
         }
     }
-
-    document.getElementById('addCharacterForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const characterData = Object.fromEntries(formData);
-        alert('캐릭터 추가 요청: ' + JSON.stringify(characterData));
-        // 추가 로직 구현 필요 (API 호출)
-    });
 </script>
 
 </body>
