@@ -25,4 +25,9 @@ public class CharacterMgController {
         return "management/character/characterList";
     }
 
+    @GetMapping("/new")
+    public String newForm(Model model) {
+        return "management/character/characterAddForm";
+    }
+
 }

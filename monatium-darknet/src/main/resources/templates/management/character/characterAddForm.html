@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<!-- v18 - 각 그룹 접고 펼치기 추가 -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>캐릭터 추가</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #F0F8FF;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .form-section {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .form-title {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .btn-custom {
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .btn-custom:hover {
+            background-color: #45A049;
+        }
+
+        #likes-container {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .like-input-container input {
+            flex: 1;
+            margin-right: 5px;
+            max-width: 70%;
+        }
+
+        .like-input-container button {
+            margin-left: 5px;
+        }
+
+        textarea.auto-resize {
+            min-height: 40px;          /* 최소 높이 */
+            overflow: hidden;          /* 스크롤바가 나타나지 않도록 함 */
+            resize: none;              /* 사용자가 직접 크기 조절을 못하도록 함 */
+        }
+
+        .info-group {
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            padding: 20px;
+
+            /* v18 추가 */
+            margin-bottom: 20px;
+            background-color: #ffffff;
+        }
+
+        .info-title {
+            font-weight: bold;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toggle-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .toggle-icon.open {
+            color: #4CAF50;
+        }
+
+        .toggle-icon.closed {
+            color: #FF5733;
+        }
+
+        .info-subgroup {
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            /* background-color: #ffffff; */
+            background-color: #f9f9f9; /* 미묘한 배경색 추가 */
+        }
+
+        .form-subtitle {
+            font-weight: bold;
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+        }
+
+        .form-subtitle-small {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .row > .col-md-6 {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .d-flex > .form-control {
+            flex: 1;
+        }
+
+        .d-flex > .form-control:first-child {
+            max-width: 70%;
+        }
+
+        .d-flex > .form-control:last-child {
+            max-width: 30%;
+        }
+
+        .status-num {
+            width: 60px;
+        }
+
+        /* 특성 입력란 스타일 */
+        .trait-name {
+            max-width: 50%; /* 특성 이름의 너비 조절 */
+        }
+
+        .trait-value {
+            max-width: 25%; /* 특성 수치의 너비를 줄여 공간 확보 */
+        }
+
+        .btn-add-trait {
+            margin-left: 8px; /* + 버튼과 특성 수치 입력란 사이의 간격 */
+        }
+
+        .btn-remove-trait {
+            margin-left: 8px; /* + 버튼과 - 버튼 사이의 간격 */
+        }
+
+        button.btn-add-trait, 
+        button.btn-remove-trait {
+            width: 32px; /* 버튼의 가로 크기를 작게 조정 */
+            height: 32px; /* 버튼의 높이도 조정하여 일관성 유지 */
+            padding: 0; /* 버튼 내부 여백 제거 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px; /* 더 명확한 크기의 기호 */
+        }
+
+        .image-upload-wrapper {
+            position: relative;
+            width: 120px; /* 이미지 크기 조정 */
+            /* height: 120px; */
+            height: auto;
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+
+    <div class="form-section">
+
+        <h2 class="form-title">캐릭터 추가</h2>
+
+        <form action="/character/add" method="post" enctype="multipart/form-data">
+
+            <!-- 프로필 그룹 -->
+            <div class="info-group mb-4">
+                <div class="info-title" data-bs-toggle="collapse" data-bs-target="#profileSection" aria-expanded="true">
+                    <span>프로필</span>
+                    <i class="fas fa-angle-down toggle-icon"></i>
+                </div>
+
+                <div id="profileSection" class="collapse show">
+                    <hr>
+                    <div class="row mt-3">
+                        <!-- 좌측 폼 -->
+                        <div class="col-md-6">
+                            <!-- 이름 -->
+                            <div class="mb-3">
+                                <label for="name" class="form-label">이름</label>
+                                <input type="text" id="name" name="name" class="form-control" placeholder="캐릭터의 이름을 입력하세요" required>
+                            </div>
+    
+                            <!-- 수식언 -->
+                            <div class="mb-3">
+                                <label for="epithet" class="form-label">수식언</label>
+                                <input type="text" id="epithet" name="epithet" class="form-control" placeholder="캐릭터의 수식언을 입력하세요">
+                            </div>
+    
+                            <!-- 성급 -->
+                            <div class="mb-3">
+                                <label for="star" class="form-label">성급</label>
+                                <select id="star" name="star" class="form-select">
+                                    <option value="1">1성</option>
+                                    <option value="2">2성</option>
+                                    <option value="3">3성</option>
+                                </select>
+                            </div>
+    
+                            <!-- 종족 -->
+                            <div class="mb-3">
+                                <label for="race" class="form-label">종족</label>
+                                <select id="race" name="race" class="form-select">
+                                    <option value="fairy">요정</option>
+                                    <option value="witch">마녀</option>
+                                    <option value="beastman">수인</option>
+                                    <option value="dragon">용족</option>
+                                    <option value="ghost">유령</option>
+                                    <option value="spirit">정령</option>
+                                    <option value="elf">엘프</option>
+                                </select>
+                            </div>
+    
+                            <!-- 성우 -->
+                            <div class="mb-3">
+                                <label for="voiceActor" class="form-label">성우</label>
+                                <input type="text" id="voiceActor" name="voiceActor" class="form-control" placeholder="성우의 이름을 입력하세요">
+                            </div>
+                        </div>
+                        
+                        <!-- 우측 폼 -->
+                        <div class="col-md-6">
+                            <!-- 한마디 -->
+                            <div class="mb-3">
+                                <label for="quote" class="form-label">한마디</label>
+                                <textarea id="quote" name="quote" class="form-control" placeholder="캐릭터의 한마디를 입력하세요"></textarea>
+                            </div>
+    
+                            <!-- TMI -->
+                            <div class="mb-3">
+                                <label for="tmi" class="form-label">TMI</label>
+                                <textarea id="tmi" name="tmi" class="form-control" placeholder="캐릭터의 TMI를 입력하세요"></textarea>
+                            </div>
+    
+                            <!-- 좋아하는 것 -->
+                            <div class="mb-3">
+                                <label class="form-label">좋아하는 것</label>
+                                <div id="likes-container">
+                                    <div class="d-flex mb-2 like-input-container">
+                                        <input type="text" name="likes" class="form-control me-2" placeholder="좋아하는 것을 입력하세요">
+                                        <button type="button" class="btn btn-success btn-add-like">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- 이미지 업로드 섹션 -->
+                    <div class="info-subgroup">
+                        <h4 class="form-subtitle">캐릭터 이미지</h4>
+    
+                        <div class="row align-items-center mb-3">
+                            <!-- 프로필 이미지 -->
+                            <div class="col-md-4 text-center">
+                                <label for="profileImage" class="form-label">프로필 이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="profileImagePreview" 
+                                        src="https://via.placeholder.com/120x120.png?text=프로필" 
+                                        alt="프로필 이미지 미리보기" 
+                                        class="img-thumbnail">
+                                    <input type="file" id="profileImage" name="profileImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+    
+                            <!-- 초상화 이미지 -->
+                            <div class="col-md-4 text-center">
+                                <label for="portraitImage" class="form-label">초상화 이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="portraitImagePreview" 
+                                        src="https://via.placeholder.com/120x120.png?text=초상화" 
+                                        alt="초상화 이미지 미리보기" 
+                                        class="img-thumbnail">
+                                    <input type="file" id="portraitImage" name="portraitImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+    
+                            <!-- 전신 이미지 -->
+                            <div class="col-md-4 text-center">
+                                <label for="fullBodyImage" class="form-label">전신 이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="fullBodyImagePreview" 
+                                        src="https://via.placeholder.com/120x120.png?text=전신" 
+                                        alt="전신 이미지 미리보기" 
+                                        class="img-thumbnail">
+                                    <input type="file" id="fullBodyImage" name="fullBodyImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- 특성 정보 그룹 -->
+            <div class="info-group mb-4">
+                <div class="info-title" data-bs-toggle="collapse" data-bs-target="#traitSection" aria-expanded="false">
+                    <span>특성 정보</span>
+                    <i class="fas fa-angle-left toggle-icon"></i>
+                </div>
+
+                <div id="traitSection" class="collapse">
+                    <hr>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <!-- 성격 -->
+                            <div class="mb-3">
+                                <label for="personality" class="form-label">성격</label>
+                                <select id="personality" name="personality" class="form-select">
+                                    <option value="pure">순수</option>
+                                    <option value="madness">광기</option>
+                                    <option value="calm">냉정</option>
+                                    <option value="melancholy">우울</option>
+                                    <option value="lively">활발</option>
+                                </select>
+                            </div>
+    
+                            <!-- 역할 -->
+                            <div class="mb-3">
+                                <label for="role" class="form-label">역할</label>
+                                <select id="role" name="role" class="form-select">
+                                    <option value="dealer">딜러</option>
+                                    <option value="tank">탱커</option>
+                                    <option value="support">서포터</option>
+                                </select>
+                            </div>
+    
+                            <!-- 공격 방식 -->
+                            <div class="mb-3">
+                                <label for="attackStyle" class="form-label">공격 방식</label>
+                                <select id="attackStyle" name="attackStyle" class="form-select">
+                                    <option value="physical">물리</option>
+                                    <option value="magic">마법</option>
+                                </select>
+                            </div>
+    
+                            <!-- 배치 -->
+                            <div class="mb-3">
+                                <label for="placement" class="form-label">배치</label>
+                                <select id="placement" name="placement" class="form-select">
+                                    <option value="front">전열</option>
+                                    <option value="middle">중열</option>
+                                    <option value="back">후열</option>
+                                    <option value="all">모든 열</option>
+                                </select>
+                            </div>
+                        </div>
+    
+                        <div class="col-md-6">
+                            <!-- 깡 -->
+                            <div class="mb-3">
+                                <label for="strength" class="form-label">깡</label>
+                                <div class="d-flex align-items-center">
+                                    <input type="range" id="strength-slider" name="strength" class="form-range me-3" min="1" max="7" step="1" value="4">
+                                    <input type="number" id="strength-number" class="form-control status-num" min="1" max="7" step="1" value="4" >
+                                </div>
+                            </div>
+    
+                            <!-- 맷집 -->
+                            <div class="mb-3">
+                                <label for="durability" class="form-label">맷집</label>
+                                <div class="d-flex align-items-center">
+                                    <input type="range" id="durability-slider" name="durability" class="form-range me-3" min="1" max="7" step="1" value="4">
+                                    <input type="number" id="durability-number" class="form-control status-num" min="1" max="7" step="1" value="4">
+                                </div>
+                            </div>
+    
+                            <!-- 재주 -->
+                            <div class="mb-3">
+                                <label for="talent" class="form-label">재주</label>
+                                <div class="d-flex align-items-center">
+                                    <input type="range" id="talent-slider" name="talent" class="form-range me-3" min="1" max="7" step="1" value="4">
+                                    <input type="number" id="talent-number" class="form-control status-num" min="1" max="7" step="1" value="4">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 스킬 정보 그룹 -->
+            <div class="info-group mb-4">
+
+                <div class="info-title" data-bs-toggle="collapse" data-bs-target="#skilSection" aria-expanded="false">
+                    <span>스킬 정보</span>
+                    <i class="fas fa-angle-left toggle-icon"></i>
+                </div>
+
+                <div id="skilSection" class="collapse">
+                    <hr>
+                    <!-- 기본 공격 -->
+                    <div class="info-subgroup mb-3 mt-3">
+                        <h4 class="form-subtitle">기본 공격</h4>
+                
+                        <div class="mb-3">
+                            <label for="basicAttackDescription" class="form-label">공격 설명</label>
+                            <textarea id="basicAttackDescription" name="basicAttackDescription" 
+                                class="form-control auto-resize" 
+                                placeholder="기본 공격의 설명을 입력하세요"></textarea>
+                        </div>
+                
+                        <label class="form-label">특성</label>
+                        <div id="basic-attack-traits-container">
+                            <div class="d-flex align-items-center mb-2 trait-input-container">
+                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-trait">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- 강화 공격 -->
+                    <div class="info-subgroup mb-3">
+                        <h4 class="form-subtitle">강화 공격</h4>
+                
+                        <div class="mb-3">
+                            <label for="enhancedAttackDescription" class="form-label">공격 설명</label>
+                            <textarea id="enhancedAttackDescription" name="enhancedAttackDescription" 
+                                class="form-control auto-resize" 
+                                placeholder="강화 공격의 설명을 입력하세요"></textarea>
+                        </div>
+                
+                        <label class="form-label">특성</label>
+                        <div id="enhanced-attack-traits-container">
+                            <div class="d-flex align-items-center mb-2 trait-input-container">
+                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-trait">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- 저학년 스킬 -->
+                    <div class="info-subgroup mb-3">
+                        <h4 class="form-subtitle">저학년 스킬</h4>
+
+                        <!-- 스킬 이미지 업로드 추가 -->
+                        <div class="row align-items-center">
+                            <!-- 이미지 업로드 박스 -->
+                            <div class="col-md-3 text-center">
+                                <label for="lowSkillImage" class="form-label">스킬 이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="lowSkillImagePreview" src="https://via.placeholder.com/120x120.png?text=이미지" 
+                                        alt="스킬 이미지 미리보기" class="img-thumbnail">
+                                    <input type="file" id="lowSkillImage" name="lowSkillImage" class="form-control d-none" 
+                                        accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+
+                            <!-- 스킬 이름 및 효과 입력 -->
+                            <div class="col-md-9">
+                                <!-- 스킬 이름 입력 -->
+                                <div class="mb-3">
+                                    <label for="lowSkillName" class="form-label">스킬 이름</label>
+                                    <input type="text" id="lowSkillName" name="lowSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                                </div>
+
+                                <!-- 스킬 효과 입력 -->
+                                <div class="mb-3">
+                                    <label for="lowSkillEffect" class="form-label">스킬 효과</label>
+                                    <textarea id="lowSkillEffect" name="lowSkillEffect" class="form-control auto-resize" placeholder="스킬 효과를 입력하세요"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 특성 입력 -->
+                        <label class="form-label">특성</label>
+                        <div id="lowSkill-traits-container">
+                            <div class="d-flex align-items-center mb-2 trait-input-container">
+                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-trait">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- 고학년 스킬 -->
+                    <div class="info-subgroup">
+                        <h4 class="form-subtitle">고학년 스킬</h4>
+                
+                        <div class="mb-3">
+                            <label for="highSkillName" class="form-label">스킬 이름</label>
+                            <input type="text" id="highSkillName" name="highSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                        </div>
+                
+                        <div class="mb-3">
+                            <label for="highSkillEffect" class="form-label">스킬 효과</label>
+                            <textarea id="highSkillEffect" name="highSkillEffect" class="form-control auto-resize" placeholder="스킬 효과를 입력하세요"></textarea>
+                        </div>
+                
+                        <label class="form-label">특성</label>
+                        <div id="high-skill-traits-container">
+                            <div class="d-flex align-items-center mb-2 trait-input-container">
+                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-trait">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 어사이드 그룹 -->
+            <div class="info-group mb-4">
+
+                <div class="info-title" data-bs-toggle="collapse" data-bs-target="#asideSection" aria-expanded="false">
+                    <span>어사이드</span>
+                    <i class="fas fa-angle-left toggle-icon"></i>
+                </div>
+
+                <div id="asideSection" class="collapse">
+                    <hr>
+                    <!-- 1. 어사이드 정보 -->
+                    <div class="info-subgroup mb-3 mt-3">
+                        <h4 class="form-subtitle">어사이드 정보</h4>
+                        
+                        <!-- 어사이드 이미지 -->
+                        <div class="row align-items-center">
+                            <div class="col-md-3 text-center">
+                                <label for="asideImage1" class="form-label">이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="asideImagePreview1" src="https://via.placeholder.com/120x120.png?text=이미지" 
+                                        alt="이미지 미리보기" class="img-thumbnail">
+                                    <input type="file" id="asideImage1" name="asideImage1" class="form-control d-none" 
+                                        accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+                
+                            <div class="col-md-9">
+                                <div class="mb-3">
+                                    <label for="asideName1" class="form-label">어사이드 이름</label>
+                                    <input type="text" id="asideName1" name="asideName1" class="form-control" placeholder="이름을 입력하세요">
+                                </div>
+                
+                                <div class="mb-3">
+                                    <label for="asideDescription" class="form-label">어사이드 설명</label>
+                                    <textarea id="asideDescription" name="asideDescription" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <label class="form-label">특성</label>
+                        <div id="aside1-traits-container">
+                            <div class="d-flex align-items-center mb-2 trait-input-container">
+                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-trait">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- 2. 어사이드 1단계 -->
+                    <div class="info-subgroup mb-3">
+                        <h4 class="form-subtitle">어사이드 1단계</h4>
+                        <!-- 이미지 -->
+                        <div class="row align-items-center">
+                            <div class="col-md-3 text-center">
+                                <label for="asideImage2" class="form-label">이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="asideImagePreview2" src="https://via.placeholder.com/120x120.png?text=이미지" 
+                                        alt="이미지 미리보기" class="img-thumbnail">
+                                    <input type="file" id="asideImage2" name="asideImage2" class="form-control d-none" 
+                                        accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+                
+                            <div class="col-md-9">
+                                <div class="mb-3">
+                                    <label for="asideName2" class="form-label">어사이드 1단계 이름</label>
+                                    <input type="text" id="asideName2" name="asideName2" class="form-control" placeholder="이름을 입력하세요">
+                                </div>
+                
+                                <div class="mb-3">
+                                    <label for="asideDescription" class="form-label">어사이드 설명</label>
+                                    <textarea id="asideDescription" name="asideDescription" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <label class="form-label">특성</label>
+                        <div id="aside2-traits-container">
+                            <div class="d-flex align-items-center mb-2 trait-input-container">
+                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-trait">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- 3. 어사이드 2단계 -->
+                    <div class="info-subgroup mb-3">
+                        <h4 class="form-subtitle">어사이드 2단계</h4>
+                        <!-- 이미지 -->
+                        <div class="row align-items-center">
+                            <div class="col-md-3 text-center">
+                                <label for="asideImage3" class="form-label">이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="asideImagePreview3" src="https://via.placeholder.com/120x120.png?text=이미지" 
+                                        alt="이미지 미리보기" class="img-thumbnail">
+                                    <input type="file" id="asideImage3" name="asideImage3" class="form-control d-none" 
+                                        accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+                
+                            <div class="col-md-9">
+                                <div class="mb-3">
+                                    <label for="asideName3" class="form-label">어사이드 2단계 이름</label>
+                                    <input type="text" id="asideName3" name="asideName3" class="form-control" placeholder="이름을 입력하세요">
+                                </div>
+                
+                                <div class="mb-3">
+                                    <label for="asideDescription" class="form-label">어사이드 설명</label>
+                                    <textarea id="asideDescription" name="asideDescription" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <label class="form-label">특성</label>
+                        <div id="aside3-traits-container">
+                            <div class="d-flex align-items-center mb-2 trait-input-container">
+                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-trait">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- 4. 어사이드 3단계 -->
+                    <div class="info-subgroup mb-3">
+                        <h4 class="form-subtitle">어사이드 3단계</h4>
+                        <!-- 이미지 -->
+                        <div class="row align-items-center">
+                            <div class="col-md-3 text-center">
+                                <label for="asideImage4" class="form-label">이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="asideImagePreview4" src="https://via.placeholder.com/120x120.png?text=이미지" 
+                                        alt="이미지 미리보기" class="img-thumbnail">
+                                    <input type="file" id="asideImage4" name="asideImage4" class="form-control d-none" 
+                                        accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+                
+                            <div class="col-md-9">
+                                <div class="mb-3">
+                                    <label for="asideName4" class="form-label">어사이드 3단계 이름</label>
+                                    <input type="text" id="asideName4" name="asideName4" class="form-control" placeholder="이름을 입력하세요">
+                                </div>
+                
+                                <div class="mb-3">
+                                    <label for="asideDescription" class="form-label">어사이드 설명</label>
+                                    <textarea id="asideDescription" name="asideDescription" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <label class="form-label">특성</label>
+                        <div id="aside1-traits-container">
+                            <div class="d-flex align-items-center mb-2 trait-input-container">
+                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-trait">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+        </form>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- 좋아하는 것 입력 란 -->
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const likesContainer = document.getElementById('likes-container');
+
+        document.querySelector('.btn-add-like').addEventListener('click', function() {
+            const newLikeInput = document.createElement('div');
+            newLikeInput.classList.add('d-flex', 'mb-2', 'like-input-container');
+
+            newLikeInput.innerHTML = `
+                <input type="text" name="likes" class="form-control me-2" placeholder="좋아하는 것을 입력하세요">
+                <button type="button" class="btn btn-success btn-add-like">+</button>
+                <button type="button" class="btn btn-danger btn-remove-like ms-2">-</button>
+            `;
+
+            likesContainer.appendChild(newLikeInput);
+
+            newLikeInput.querySelector('.btn-add-like').addEventListener('click', function() {
+                document.querySelector('.btn-add-like').click();
+            });
+
+            newLikeInput.querySelector('.btn-remove-like').addEventListener('click', function() {
+                newLikeInput.remove();
+            });
+        });
+    });
+</script>
+
+<!-- 깡, 맷집, 재주 입력 란 -->
+<script>
+    function syncInput(sliderId, numberId) {
+        const slider = document.getElementById(sliderId);
+        const number = document.getElementById(numberId);
+        
+        // 슬라이더 변경 시 숫자 입력 필드에 동기화
+        slider.addEventListener('input', function() {
+            number.value = slider.value;
+        });
+
+        // 숫자 입력 필드 변경 시 슬라이더에 동기화
+        number.addEventListener('input', function() {
+            if (number.value < 1) number.value = 1;
+            if (number.value > 7) number.value = 7;
+            slider.value = number.value;
+        });
+    }
+
+    // 각 특성의 슬라이더와 숫자 입력 필드 동기화
+    syncInput('strength-slider', 'strength-number');
+    syncInput('durability-slider', 'durability-number');
+    syncInput('talent-slider', 'talent-number');
+</script>
+
+<!-- 특성 입력 란 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const subgroups = document.querySelectorAll('.info-subgroup');
+
+        subgroups.forEach(function(subgroup) {
+            subgroup.addEventListener('click', function(e) {
+                const container = subgroup.querySelector('[id$="-traits-container"]');
+                
+                if (e.target.classList.contains('btn-add-trait')) {
+                    const newTraitInput = document.createElement('div');
+                    newTraitInput.classList.add('d-flex', 'align-items-center', 'mb-2', 'trait-input-container');
+                    newTraitInput.innerHTML = `
+                        <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                        <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                        <button type="button" class="btn btn-success btn-add-trait">+</button>
+                        <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                    `;
+                    container.appendChild(newTraitInput);
+                }
+
+                if (e.target.classList.contains('btn-remove-trait')) {
+                    const traitContainer = e.target.closest('.trait-input-container');
+                    const allTraitContainers = container.querySelectorAll('.trait-input-container');
+                    if (allTraitContainers.length > 1) {
+                        traitContainer.remove();
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+<!-- textarea 크기 자동 조절 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const autoResizeTextareas = document.querySelectorAll('textarea.auto-resize');
+    
+    autoResizeTextareas.forEach(textarea => {
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto'; // 높이 초기화 (초기화하지 않으면 height가 누적됨)
+            this.style.height = this.scrollHeight + 'px'; // 스크롤 높이에 맞춰 자동으로 높이 설정
+        });
+    });
+});
+
+</script>
+
+<!-- 이미지 미리보기 기능 -->
+<!-- TODO - 이미지 기본 썸네일 src 서버 리소스로 대체 필요 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.image-upload-wrapper img').forEach(img => {
+            img.addEventListener('click', function() {
+                const input = this.nextElementSibling;
+                input.click();
+            });
+        });
+    });
+
+    function previewImage(input) {
+        const file = input.files[0];
+        const preview = input.previousElementSibling; // 바로 이전의 img 요소
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+</script>
+
+<!-- 각 그룹 내용 접기/펼치기 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const titles = document.querySelectorAll('.info-title');
+
+        titles.forEach(title => {
+            const icon = title.querySelector('.toggle-icon');
+            const targetId = title.getAttribute('data-bs-target');
+            const targetElement = document.querySelector(targetId);
+
+            // 열림 이벤트 (⏴ → ⏷)
+            targetElement.addEventListener('shown.bs.collapse', function() {
+                icon.classList.remove('fa-angle-left');
+                icon.classList.add('fa-angle-down');
+            });
+
+            // 닫힘 이벤트 (⏷ → ⏴)
+            targetElement.addEventListener('hidden.bs.collapse', function() {
+                icon.classList.remove('fa-angle-down');
+                icon.classList.add('fa-angle-left');
+            });
+        });
+    });
+</script>
+
+</body>
+
+</html>
