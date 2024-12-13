@@ -2,154 +2,30 @@
 <!--v3-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head th:replace="~{fragments/mg_header :: common_mg_header(~{::title}, ~{::link})}">
     <title>관리자 - 캐릭터 관리</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link th:href="@{/css/management/characterList.css}">
-
+    <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/management/characterList.css}">
+    <!-- 커스텀 css -->
 </head>
 
 <body>
 
 <!-- 상단 네비게이션 바 -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">관리자 대시보드</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" href="/admin/characters">캐릭터 관리</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/cards">카드 관리</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/users">유저 관리</a>
-                </li>
-            </ul>
-        </div>
-    </div>
+<nav th:replace="~{fragments/mg_navbar :: common_mg_navbar}">
+    상단 네비게이션 바 영역
 </nav>
 
-<div class="container-fluid mt-4">
+<div class="container-fluid mt-4 main-content">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>캐릭터 관리</h2>
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCharacterModal">+ 캐릭터 추가</button>
+        <a th:href="@{/management/characters/new}">
+            <button class="btn btn-success">+ 캐릭터 추가</button>
+        </a>
     </div>
 
     <!-- 캐릭터 목록 -->
     <div class="row" id="characterList">
-
-        <!-- 캐릭터 카드 (반복될 요소) -->
-        <div th:each="character : ${characterList}"
-             class="col-6 col-sm-4 col-lg-2 mb-4 character-item"
-             th:classappend="| ${{character.race}} ${{character.personality}} ${{character.role}} ${{character.attackType}} ${{character.position}}| ">
-
-            <a th:href="@{ /wiki/characters/{id} (id=${character.id}) }" class="card-link">
-                <div class="card">
-                    <!-- 캐릭터 이미지 -->
-                    <img src="../../../images/wiki/erpin.webp" class="card-img-top" alt="캐릭터 1">
-
-                    <div class="card-body">
-                        <!-- 캐릭터 이름과 종족 심볼 -->
-                        <h5 class="card-title mb-2 d-inline-flex align-items-center">
-                            에르핀
-                            <img src="../../../images/wiki/symbol_fairy.webp" class="symbol-image ms-2" alt="종족 심볼: 인간"> <!-- 종족 심볼 추가 -->
-                        </h5>
-
-                        <!-- 성급 이미지 -->
-                        <img src="../../../images/wiki/star_3.webp" class="star-image mb-2" alt="성급 이미지">
-
-                        <!-- 작은 특성 이미지 -->
-                        <div class="small-images-container">
-                            <img src="../../../images/wiki/stat_pure.webp" class="small-image" alt="성격 이미지">
-                            <img src="../../../images/wiki/class_dealer.webp" class="small-image" alt="역할 이미지">
-                            <img src="../../../images/wiki/attack_magical.webp" class="small-image" alt="공격 방식 이미지">
-                            <img src="../../../images/wiki/position_back.webp" class="small-image" alt="위치 이미지">
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- 캐릭터 카드 (반복될 요소) -->
-        <div th:each="character : ${characterList}"
-             class="col-6 col-sm-4 col-lg-2 mb-4 character-item"
-             th:classappend="| ${{character.race}} ${{character.personality}} ${{character.role}} ${{character.attackType}} ${{character.position}}| ">
-
-            <a th:href="@{ /wiki/characters/{id} (id=${character.id}) }" class="card-link">
-                <div class="card">
-                    <!-- 캐릭터 이미지 -->
-                    <img th:src="@{ ${character.urls.profile_url} }" class="card-img-top" alt="캐릭터 프로필 이미지">
-
-                    <div class="card-body">
-                        <!-- 캐릭터 이름과 종족 심볼 -->
-                        <h5 class="card-title mb-2 d-inline-flex align-items-center">
-                            <span th:text="${character.name}">캐릭터 이름</span>
-                            <img th:src="@{|/imgs/wiki/icons/symbol_${{character.race}}.webp|}" class="symbol-image ms-2" alt="종족 심볼 이미지">
-                        </h5>
-
-                        <!-- 성급 이미지 -->
-                        <th:block th:switch="${character.grade}">
-                            <img th:case="3" th:src="@{/imgs/wiki/icons/star_3.webp}" class="star-image mb-2" alt="3성 이미지">
-                            <!-- <img th:case="2" th:src="@{/imgs/wiki/icons/star_2.webp}" class="star-image mb-2" alt="2성 이미지">
-                            <img th:case="1" th:src="@{/imgs/wiki/icons/star_1.webp}" class="star-image mb-2" alt="1성 이미지"> -->
-                        </th:block>
-
-                        <!-- 작은 특성 이미지 -->
-                        <div class="small-images-container">
-                            <img th:src="@{ |/imgs/wiki/icons/personality_${{character.personality}}.webp| }" class="small-image" alt="성격 이미지">
-                            <img th:src="@{ |/imgs/wiki/icons/class_${{character.role}}.webp| }" class="small-image" alt="역할 이미지">
-                            <img th:src="@{ |/imgs/wiki/icons/attackType_${{character.attackType}}.webp| }" class="small-image" alt="공격 타입 이미지">
-                            <img th:src="@{ |/imgs/wiki/icons/position_${{character.position}}.webp| }" class="small-image" alt="위치 이미지">
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- 캐릭터 카드 (반복될 요소) -->
-        <div th:each="character : ${characterList}"
-             class="col-6 col-sm-4 col-lg-2 mb-4 character-item"
-             th:classappend="| ${{character.race}} ${{character.personality}} ${{character.role}} ${{character.attackType}} ${{character.position}}| ">
-
-            <a th:href="@{ /wiki/characters/{id} (id=${character.id}) }" class="card-link">
-                <div class="card">
-                    <!-- 캐릭터 이미지 -->
-                    <img th:src="@{ ${character.urls.profile_url} }" class="card-img-top" alt="캐릭터 프로필 이미지">
-
-                    <div class="card-body">
-                        <!-- 캐릭터 이름과 종족 심볼 -->
-                        <h5 class="card-title mb-2 d-inline-flex align-items-center">
-                            <span th:text="${character.name}">캐릭터 이름</span>
-                            <img th:src="@{|/imgs/wiki/icons/symbol_${{character.race}}.webp|}" class="symbol-image ms-2" alt="종족 심볼 이미지">
-                        </h5>
-
-                        <!-- 성급 이미지 -->
-                        <th:block th:switch="${character.grade}">
-                            <img th:case="3" th:src="@{/imgs/wiki/icons/star_3.webp}" class="star-image mb-2" alt="3성 이미지">
-                            <!-- <img th:case="2" th:src="@{/imgs/wiki/icons/star_2.webp}" class="star-image mb-2" alt="2성 이미지">
-                            <img th:case="1" th:src="@{/imgs/wiki/icons/star_1.webp}" class="star-image mb-2" alt="1성 이미지"> -->
-                        </th:block>
-
-                        <!-- 작은 특성 이미지 -->
-                        <div class="small-images-container">
-                            <img th:src="@{ |/imgs/wiki/icons/personality_${{character.personality}}.webp| }" class="small-image" alt="성격 이미지">
-                            <img th:src="@{ |/imgs/wiki/icons/class_${{character.role}}.webp| }" class="small-image" alt="역할 이미지">
-                            <img th:src="@{ |/imgs/wiki/icons/attackType_${{character.attackType}}.webp| }" class="small-image" alt="공격 타입 이미지">
-                            <img th:src="@{ |/imgs/wiki/icons/position_${{character.position}}.webp| }" class="small-image" alt="위치 이미지">
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
 
         <!-- 캐릭터 카드 (반복될 요소) -->
         <div th:each="character : ${characterList}"
@@ -190,17 +66,10 @@
     </div>
 </div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-    function deleteCharacter(characterId) {
-        if (confirm("이 캐릭터를 삭제하시겠습니까?")) {
-            alert(`캐릭터 ID ${characterId} 삭제 요청이 전송되었습니다.`);
-            // 삭제 로직 구현 필요 (API 호출)
-        }
-    }
-</script>
+<!-- 하단 푸터 -->
+<footer th:replace="~{fragments/mg_footer :: common_mg_footer}">
+    하단 푸터 영역
+</footer>
 
 </body>
 </html>
