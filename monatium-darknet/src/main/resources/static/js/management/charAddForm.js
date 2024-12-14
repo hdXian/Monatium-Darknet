@@ -1,29 +1,3 @@
-//// 좋아하는 것 입력 란
-//document.addEventListener('DOMContentLoaded', function() {
-//    const likesContainer = document.getElementById('likes-container');
-//
-//    document.querySelector('.btn-add-like').addEventListener('click', function() {
-//        const newLikeInput = document.createElement('div');
-//        newLikeInput.classList.add('d-flex', 'mb-2', 'like-input-container');
-//
-//        newLikeInput.innerHTML = `
-//            <input type="text" name="likes" class="form-control me-2" placeholder="좋아하는 것을 입력하세요">
-//            <button type="button" class="btn btn-success btn-add-like">+</button>
-//            <button type="button" class="btn btn-danger btn-remove-like ms-2">-</button>
-//        `;
-//
-//        likesContainer.appendChild(newLikeInput);
-//
-//        newLikeInput.querySelector('.btn-add-like').addEventListener('click', function() {
-//            document.querySelector('.btn-add-like').click();
-//        });
-//
-//        newLikeInput.querySelector('.btn-remove-like').addEventListener('click', function() {
-//            newLikeInput.remove();
-//        });
-//    });
-//});
-
 // 좋아하는 것 입력 란
 document.addEventListener('DOMContentLoaded', function() {
     const likesContainer = document.getElementById('likes-container');
@@ -81,8 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-
-
 
 // 깡, 맷집, 재주 입력 란
 function syncInput(sliderId, numberId) {
