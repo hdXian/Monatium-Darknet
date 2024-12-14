@@ -1,4 +1,4 @@
-package hdxian.monatium_darknet.controller.api;
+package hdxian.monatium_darknet.web.controller.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

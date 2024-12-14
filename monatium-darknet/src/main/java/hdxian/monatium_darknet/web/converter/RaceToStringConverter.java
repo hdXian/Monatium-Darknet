@@ -1,4 +1,4 @@
-package hdxian.monatium_darknet.config.converter;
+package hdxian.monatium_darknet.web.converter;
 
 import hdxian.monatium_darknet.domain.character.Race;
 import lombok.extern.slf4j.Slf4j;

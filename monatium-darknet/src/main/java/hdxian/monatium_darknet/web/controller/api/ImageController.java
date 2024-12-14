@@ -1,4 +1,4 @@
-package hdxian.monatium_darknet.controller.api;
+package hdxian.monatium_darknet.web.controller.api;
 
 import hdxian.monatium_darknet.file.FileStorageService;
 import lombok.RequiredArgsConstructor;

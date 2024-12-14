@@ -1,4 +1,4 @@
-package hdxian.monatium_darknet.controller.management;
+package hdxian.monatium_darknet.web.controller.management;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;

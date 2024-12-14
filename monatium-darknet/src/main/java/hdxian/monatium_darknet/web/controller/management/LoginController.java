@@ -1,4 +1,4 @@
-package hdxian.monatium_darknet.controller.management;
+package hdxian.monatium_darknet.web.controller.management;
 
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.service.LoginService;
@@ -7,11 +7,9 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 // 로그인 및 대시보드 관련 요청 처리
 
