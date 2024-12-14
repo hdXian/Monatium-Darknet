@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.web.controller.management.character;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.service.CharacterService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +13,7 @@ import java.util.List;
 
 import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
 
+@Slf4j
 @Controller
 @RequestMapping("/management/characters")
 @RequiredArgsConstructor
@@ -44,6 +46,11 @@ public class CharacterMgController {
 
         if (bindingResult.hasErrors()) {
             return "characters/addChStep1";
+        }
+
+        log.info("chForm1 = {}", chForm);
+        for (String favorite : chForm.getFavorites()) {
+            log.info("favorite = {}", favorite);
         }
 
         return "redirect:/management/characters/new/step2";

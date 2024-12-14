@@ -22,7 +22,7 @@
 
         <h2 class="form-title">캐릭터 추가</h2>
 
-        <form action="/character/new" method="post" enctype="multipart/form-data">
+        <form th:object="${chForm}" th:action="@{/management/characters/new/step1}" method="post" enctype="multipart/form-data">
 
             <!-- 프로필 그룹 -->
             <div class="info-group mb-4">
@@ -39,29 +39,29 @@
                             <!-- 이름 -->
                             <div class="mb-3">
                                 <label for="name" class="form-label">이름</label>
-                                <input type="text" id="name" name="name" class="form-control" placeholder="캐릭터의 이름을 입력하세요" required>
+                                <input th:field="*{name}" type="text" id="name" name="name" class="form-control" placeholder="캐릭터의 이름을 입력하세요" required>
                             </div>
     
                             <!-- 수식언 -->
                             <div class="mb-3">
-                                <label for="epithet" class="form-label">수식언</label>
-                                <input type="text" id="epithet" name="epithet" class="form-control" placeholder="캐릭터의 수식언을 입력하세요">
+                                <label for="subtitle" class="form-label">수식언</label>
+                                <input th:field="*{subtitle}" type="text" id="subtitle" name="subtitle" class="form-control" placeholder="캐릭터의 수식언을 입력하세요">
                             </div>
     
                             <!-- 성급 -->
                             <div class="mb-3">
                                 <label for="star" class="form-label">성급</label>
-                                <select id="star" name="star" class="form-select">
-                                    <option value="1">1성</option>
-                                    <option value="2">2성</option>
+                                <select th:field="*{grade}" id="star" name="star" class="form-select">
                                     <option value="3">3성</option>
+                                    <option value="2">2성</option>
+                                    <option value="1">1성</option>
                                 </select>
                             </div>
     
                             <!-- 종족 -->
                             <div class="mb-3">
                                 <label for="race" class="form-label">종족</label>
-                                <select id="race" name="race" class="form-select">
+                                <select th:field="*{race}" id="race" name="race" class="form-select">
                                     <option value="fairy">요정</option>
                                     <option value="witch">마녀</option>
                                     <option value="beastman">수인</option>
@@ -75,7 +75,7 @@
                             <!-- 성우 -->
                             <div class="mb-3">
                                 <label for="voiceActor" class="form-label">성우</label>
-                                <input type="text" id="voiceActor" name="voiceActor" class="form-control" placeholder="성우의 이름을 입력하세요">
+                                <input th:field="*{cv}" type="text" id="voiceActor" name="voiceActor" class="form-control" placeholder="성우의 이름을 입력하세요">
                             </div>
                         </div>
                         
@@ -84,23 +84,33 @@
                             <!-- 한마디 -->
                             <div class="mb-3">
                                 <label for="quote" class="form-label">한마디</label>
-                                <textarea id="quote" name="quote" class="form-control" placeholder="캐릭터의 한마디를 입력하세요"></textarea>
+                                <textarea th:field="*{quote}" id="quote" name="quote" class="form-control" placeholder="캐릭터의 한마디를 입력하세요"></textarea>
                             </div>
     
                             <!-- TMI -->
                             <div class="mb-3">
                                 <label for="tmi" class="form-label">TMI</label>
-                                <textarea id="tmi" name="tmi" class="form-control" placeholder="캐릭터의 TMI를 입력하세요"></textarea>
+                                <textarea th:field="*{tmi}" id="tmi" name="tmi" class="form-control" placeholder="캐릭터의 TMI를 입력하세요"></textarea>
                             </div>
     
                             <!-- 좋아하는 것 -->
                             <div class="mb-3">
                                 <label class="form-label">좋아하는 것</label>
                                 <div id="likes-container">
-                                    <div class="d-flex mb-2 like-input-container">
-                                        <input type="text" name="likes" class="form-control me-2" placeholder="좋아하는 것을 입력하세요">
+
+                                    <!-- favorites가 비어 있을 때 기본 입력 필드 1개 추가 -->
+                                    <div th:if="${#lists.isEmpty(favorites)}" class="d-flex mb-2 like-input-container">
+                                        <input th:field="*{favorites[0]}" class="form-control me-2" placeholder="좋아하는 것을 입력하세요">
                                         <button type="button" class="btn btn-success btn-add-like">+</button>
                                     </div>
+
+                                    <!-- favorites에 값이 있으면 해당 입력 필드를 렌더링 -->
+                                    <div th:each="favorite, iterStat : *{favorites}" th:if="!${#lists.isEmpty(favorites)}" class="d-flex mb-2 like-input-container">
+                                        <input th:field="*{favorites[__${iterStat.index}__]}" class="form-control me-2" placeholder="좋아하는 것을 입력하세요">
+                                        <button type="button" class="btn btn-success btn-add-like">+</button>
+                                        <button th:if="${iterStat.index > 0}" type="button" class="btn btn-danger btn-remove-like ms-2">-</button>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -119,7 +129,7 @@
                                         src="https://via.placeholder.com/120x120.png?text=프로필" 
                                         alt="프로필 이미지 미리보기" 
                                         class="img-thumbnail">
-                                    <input type="file" id="profileImage" name="profileImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
+                                    <input th:field="*{profileImage}" type="file" id="profileImage" name="profileImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
                                 </div>
                             </div>
     
@@ -131,27 +141,29 @@
                                         src="https://via.placeholder.com/120x120.png?text=초상화" 
                                         alt="초상화 이미지 미리보기" 
                                         class="img-thumbnail">
-                                    <input type="file" id="portraitImage" name="portraitImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
+                                    <input th:field="*{portraitImage}" type="file" id="portraitImage" name="portraitImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
                                 </div>
                             </div>
     
                             <!-- 전신 이미지 -->
                             <div class="col-md-4 text-center">
-                                <label for="fullBodyImage" class="form-label">전신 이미지</label>
+                                <label for="bodyImage" class="form-label">전신 이미지</label>
                                 <div class="image-upload-wrapper">
                                     <img id="fullBodyImagePreview" 
                                         src="https://via.placeholder.com/120x120.png?text=전신" 
                                         alt="전신 이미지 미리보기" 
                                         class="img-thumbnail">
-                                    <input type="file" id="fullBodyImage" name="fullBodyImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
+                                    <input th:field="*{bodyImage}" type="file" id="bodyImage" name="bodyImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
                                 </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
-
             </div>
+
+            <!-- 폼 제출 버튼 -->
+            <button type="submit" class="btn btn-primary">다음 단계로</button>
 
         </form>
 

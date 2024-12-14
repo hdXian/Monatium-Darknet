@@ -4,6 +4,7 @@ import hdxian.monatium_darknet.domain.character.Race;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // 캐릭터 등록 폼 step 1 (프로필)
@@ -15,7 +16,7 @@ public class ChFormStep1 {
     private int grade;
     private String quote;
     private String tmi;
-    private List<String> favorite;
+    private List<String> favorites = new ArrayList<>();
     private Race race;
 
     private MultipartFile profileImage;
