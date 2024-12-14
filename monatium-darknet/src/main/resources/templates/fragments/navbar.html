@@ -3,7 +3,7 @@
 
 <body>
 
-<!-- 상단 네비게이션 바 -->
+<!-- 일반 페이지 상단 네비게이션 바 -->
 <nav th:fragment="common_navbar" class="navbar navbar-expand-lg navbar-dark sticky-top">
   <div class="container-fluid px-5">
 
@@ -15,12 +15,12 @@
       </a>
 
       <!-- 네비게이션 메뉴 (왼쪽 정렬) 화면 작아질 시 나타나는 햄버거 버튼 -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#common_navbarNav" aria-controls="common_navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <!-- 모바일에서 메뉴 숨김 -->
-      <div class="collapse navbar-collapse" id="navbarNav">
+      <div class="collapse navbar-collapse" id="common_navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
             <a class="nav-link me-3 nav-text" href="#notice">새소식</a>
@@ -68,6 +68,50 @@
       <a href="/download" class="btn btn-download">다운로드</a>
     </div>
 
+  </div>
+</nav>
+
+<!-- 관리자 페이지 상단 네비게이션 바 -->
+<nav th:fragment="management_navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" th:href="@{/management/dashBoard}">관리자 대시보드</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#management_navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="management_navbarNav">
+
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/management/notices}">공지사항 관리</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/management/characters}">캐릭터 관리</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/management/cards}">카드 관리</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{management/skins}">스킨 관리</a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ms-auto">
+
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/}">사이트 홈으로 이동</a>
+        </li>
+
+        <li class="nav-item">
+          <form th:action="@{/management/logout}" method="post">
+            <button type="submit" class="btn btn-link nav-link">
+              로그아웃
+            </button>
+          </form>
+        </li>
+
+      </ul>
+
+    </div>
   </div>
 </nav>
 

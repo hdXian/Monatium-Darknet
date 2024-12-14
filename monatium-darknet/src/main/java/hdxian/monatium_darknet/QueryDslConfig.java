@@ -1,4 +1,4 @@
-package hdxian.monatium_darknet.config;
+package hdxian.monatium_darknet;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

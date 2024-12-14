@@ -2,7 +2,7 @@
 <!--v3-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/mg_header :: common_mg_header(~{::title}, ~{::link})}">
+<head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
     <title>관리자 - 캐릭터 관리</title>
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
     <link rel="stylesheet" th:href="@{/css/management/characterList.css}">
@@ -12,7 +12,7 @@
 <body>
 
 <!-- 상단 네비게이션 바 -->
-<nav th:replace="~{fragments/mg_navbar :: common_mg_navbar}">
+<nav th:replace="~{fragments/navbar :: management_navbar}">
     상단 네비게이션 바 영역
 </nav>
 
@@ -67,7 +67,7 @@
 </div>
 
 <!-- 하단 푸터 -->
-<footer th:replace="~{fragments/mg_footer :: common_mg_footer}">
+<footer th:replace="~{fragments/footer :: management_footer}">
     하단 푸터 영역
 </footer>
 

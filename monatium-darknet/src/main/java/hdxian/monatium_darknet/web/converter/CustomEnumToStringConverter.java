@@ -1,4 +1,4 @@
-package hdxian.monatium_darknet.config.converter;
+package hdxian.monatium_darknet.web.converter;
 
 import hdxian.monatium_darknet.domain.card.CardGrade;
 import hdxian.monatium_darknet.domain.character.*;
@@ -12,10 +12,10 @@ public class CustomEnumToStringConverter implements Converter<Enum<?>, String> {
     public String convert(Enum<?> source) {
         if (source instanceof Race || source instanceof Personality || source instanceof Role
                 || source instanceof AttackType || source instanceof Position || source instanceof CardGrade) {
-            log.info("convert Enum {} to lowerCase", source.name());
+//            log.info("convert Enum {} to lowerCase", source.name());
             return source.name().toLowerCase();
         }
-        log.info("convert Enum {}", source.name());
+//        log.info("convert Enum {}", source.name());
         return source.name();
     }
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/mg_header :: common_mg_header(~{::title}, ~{::link})}">
+<head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
     <title>공지사항 수정</title>
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
@@ -12,7 +12,7 @@
 <body>
 
 <!-- 상단 네비게이션 바 -->
-<nav th:replace="~{fragments/mg_navbar :: common_mg_navbar}">
+<nav th:replace="~{fragments/navbar :: management_navbar}">
     상단 네비게이션 바 영역
 </nav>
 
@@ -20,7 +20,7 @@
     <h1>공지사항 수정</h1>
 
     <!-- 공지사항 수정 폼 -->
-    <form th:action="@{/management/notices/{id}/edit (id=${noticeId})}" th:object="${noticeForm}" method="post" enctype="multipart/form-data">
+    <form id="notice-form" th:action="@{/management/notices/{id}/edit (id=${noticeId})}" th:object="${noticeForm}" method="post" enctype="multipart/form-data">
         <!-- 제목 입력 -->
         <div class="mb-3">
             <label for="title" class="form-label">제목</label>
@@ -47,12 +47,12 @@
 
         <!-- 버튼 영역 -->
         <button type="submit" class="btn btn-primary">수정</button>
-        <a th:href="@{/management/notices}" class="btn btn-secondary button-cancel">취소</a>
+        <a id="cancel-button" th:href="@{/management/notices}" class="btn btn-secondary">취소</a>
     </form>
 </div>
 
 <!-- 하단 푸터 -->
-<footer th:replace="~{fragments/mg_footer :: common_mg_footer}">
+<footer th:replace="~{fragments/footer :: management_footer}">
     하단 푸터 영역
 </footer>
 

@@ -1,5 +1,6 @@
-package hdxian.monatium_darknet.controller.management.notice;
+package hdxian.monatium_darknet.web.controller.management.notice;
 
+import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import hdxian.monatium_darknet.domain.notice.NoticeStatus;
@@ -7,6 +8,7 @@ import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.MemberService;
 import hdxian.monatium_darknet.service.NoticeService;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
+import hdxian.monatium_darknet.web.controller.management.SessionConst;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +53,9 @@ public class NoticeMgController {
     // 공지사항 작성 기능
     // 로그인 처리 선처리 필요 (memberId)
     @PostMapping("/new")
-    public String createNotice(@ModelAttribute("noticeForm") NoticeForm form) throws IOException {
+    public String createNotice(@ModelAttribute("noticeForm") NoticeForm form,
+                               @SessionAttribute(SessionConst.LOGIN_MEMBER) Member member) throws IOException
+    {
 
         NoticeCategory category = form.getCategory();
         String title = form.getTitle();
@@ -59,7 +63,7 @@ public class NoticeMgController {
 
         // 전달받은 내용으로 공지사항 생성 (공지사항 Id 리턴)
         NoticeDto noticeDto = new NoticeDto(category, title, htmlContent);
-        noticeService.createNewNotice(1L, noticeDto); // TODO - 로그인 처리 후 memberId 설정 필요
+        noticeService.createNewNotice(member.getId(), noticeDto);
 
         return "redirect:/management/notices";
     }

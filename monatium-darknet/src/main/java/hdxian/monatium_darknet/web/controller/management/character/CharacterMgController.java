@@ -1,4 +1,4 @@
-package hdxian.monatium_darknet.controller.management.character;
+package hdxian.monatium_darknet.web.controller.management.character;
 
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.service.CharacterService;

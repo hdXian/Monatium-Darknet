@@ -51,23 +51,19 @@ const quill = new Quill('#editor', {
     }
 });
 
-// 폼 제출 시 데이터 전송
-document.querySelector('form').addEventListener('submit', function (event) {
-    document.querySelector('#content').value = quill.root.innerHTML;
-});
-
 // 등록 버튼에 확인창 추가
-document.querySelector('form').addEventListener('submit', function (event) {
+document.querySelector('#notice-form').addEventListener('submit', function (event) {
     const userConfirmed = confirm('공지사항을 등록하시겠습니까?');
     if (!userConfirmed) {
         event.preventDefault(); // 폼 제출을 중단
         return;
     }
+    console.log(quill.root.innerHTML);
     document.querySelector('#content').value = quill.root.innerHTML;
 });
 
 // 취소 버튼에 확인창 추가
-document.querySelector('a.btn.button-cancel').addEventListener('click', function (event) {
+document.querySelector('#cancel-button').addEventListener('click', function (event) {
     const userConfirmed = confirm('작성 중인 내용이 사라집니다. 취소하시겠습니까?');
     if (!userConfirmed) {
         event.preventDefault(); // 기본 동작(페이지 이동) 중단

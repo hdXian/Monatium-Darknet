@@ -1,4 +1,4 @@
-package hdxian.monatium_darknet.controller;
+package hdxian.monatium_darknet.web.controller;
 
 import hdxian.monatium_darknet.domain.card.ArtifactCard;
 import hdxian.monatium_darknet.domain.card.SpellCard;

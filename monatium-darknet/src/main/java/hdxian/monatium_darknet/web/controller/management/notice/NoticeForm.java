@@ -1,4 +1,4 @@
-package hdxian.monatium_darknet.controller.management.notice;
+package hdxian.monatium_darknet.web.controller.management.notice;
 
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import lombok.Data;
