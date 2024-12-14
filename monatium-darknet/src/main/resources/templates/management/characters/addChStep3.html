@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<!-- v18 -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
+    <title>캐릭터 추가</title>
+    <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/management/charAddForm.css}">
+    <!-- 커스텀 css -->
+</head>
+
+<body>
+
+<!-- 상단 네비게이션 바 -->
+<nav th:replace="~{fragments/navbar :: management_navbar}">
+    상단 네비게이션 바 영역
+</nav>
+
+<div class="container mt-5 main-content">
+
+    <div class="form-section">
+
+        <h2 class="form-title">캐릭터 추가</h2>
+
+        <form action="/character/new" method="post" enctype="multipart/form-data">
+
+            <!-- 스킬 정보 그룹 -->
+            <div class="info-group mb-4">
+
+                <div class="info-title" data-bs-toggle="collapse" data-bs-target="#skilSection" aria-expanded="true">
+                    <span>스킬 정보</span>
+                    <i class="fas fa-angle-left toggle-icon"></i>
+                </div>
+
+                <div id="skilSection" class="collapse show">
+                    <hr>
+                    <!-- 기본 공격 -->
+                    <div class="info-subgroup mb-3 mt-3">
+                        <h4 class="form-subtitle">기본 공격</h4>
+                
+                        <div class="mb-3">
+                            <label for="basicAttackDescription" class="form-label">공격 설명</label>
+                            <textarea id="basicAttackDescription" name="basicAttackDescription" 
+                                class="form-control auto-resize" 
+                                placeholder="기본 공격의 설명을 입력하세요"></textarea>
+                        </div>
+                
+                        <label class="form-label">특성</label>
+                        <div id="basic-attack-traits-container">
+                            <div class="d-flex align-items-center mb-2 trait-input-container">
+                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-trait">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- 강화 공격 -->
+                    <div class="info-subgroup mb-3">
+                        <h4 class="form-subtitle">강화 공격</h4>
+                
+                        <div class="mb-3">
+                            <label for="enhancedAttackDescription" class="form-label">공격 설명</label>
+                            <textarea id="enhancedAttackDescription" name="enhancedAttackDescription" 
+                                class="form-control auto-resize" 
+                                placeholder="강화 공격의 설명을 입력하세요"></textarea>
+                        </div>
+                
+                        <label class="form-label">특성</label>
+                        <div id="enhanced-attack-traits-container">
+                            <div class="d-flex align-items-center mb-2 trait-input-container">
+                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-trait">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- 저학년 스킬 -->
+                    <div class="info-subgroup mb-3">
+                        <h4 class="form-subtitle">저학년 스킬</h4>
+
+                        <!-- 스킬 이미지 업로드 추가 -->
+                        <div class="row align-items-center">
+                            <!-- 이미지 업로드 박스 -->
+                            <div class="col-md-3 text-center">
+                                <label for="lowSkillImage" class="form-label">스킬 이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="lowSkillImagePreview" src="https://via.placeholder.com/120x120.png?text=이미지" 
+                                        alt="스킬 이미지 미리보기" class="img-thumbnail">
+                                    <input type="file" id="lowSkillImage" name="lowSkillImage" class="form-control d-none" 
+                                        accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+
+                            <!-- 스킬 이름 및 효과 입력 -->
+                            <div class="col-md-9">
+                                <!-- 스킬 이름 입력 -->
+                                <div class="mb-3">
+                                    <label for="lowSkillName" class="form-label">스킬 이름</label>
+                                    <input type="text" id="lowSkillName" name="lowSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                                </div>
+
+                                <!-- 스킬 효과 입력 -->
+                                <div class="mb-3">
+                                    <label for="lowSkillEffect" class="form-label">스킬 효과</label>
+                                    <textarea id="lowSkillEffect" name="lowSkillEffect" class="form-control auto-resize" placeholder="스킬 효과를 입력하세요"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 특성 입력 -->
+                        <label class="form-label">특성</label>
+                        <div id="lowSkill-traits-container">
+                            <div class="d-flex align-items-center mb-2 trait-input-container">
+                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-trait">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- 고학년 스킬 -->
+                    <div class="info-subgroup">
+                        <h4 class="form-subtitle">고학년 스킬</h4>
+                
+                        <div class="mb-3">
+                            <label for="highSkillName" class="form-label">스킬 이름</label>
+                            <input type="text" id="highSkillName" name="highSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                        </div>
+                
+                        <div class="mb-3">
+                            <label for="highSkillEffect" class="form-label">스킬 효과</label>
+                            <textarea id="highSkillEffect" name="highSkillEffect" class="form-control auto-resize" placeholder="스킬 효과를 입력하세요"></textarea>
+                        </div>
+                
+                        <label class="form-label">특성</label>
+                        <div id="high-skill-traits-container">
+                            <div class="d-flex align-items-center mb-2 trait-input-container">
+                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-trait">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- 하단 푸터 -->
+<footer th:replace="~{fragments/footer :: management_footer}">
+    하단 푸터 영역
+</footer>
+
+<script th:src="@{/js/management/charAddForm.js}">
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!-- v18 -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
+    <title>캐릭터 추가</title>
+    <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/management/charAddForm.css}">
+    <!-- 커스텀 css -->
+</head>
+
+<body>
+
+<!-- 상단 네비게이션 바 -->
+<nav th:replace="~{fragments/navbar :: management_navbar}">
+    상단 네비게이션 바 영역
+</nav>
+
+<div class="container mt-5 main-content">
+
+    <div class="form-section">
+
+        <h2 class="form-title">캐릭터 추가</h2>
+
+        <form action="/character/new" method="post" enctype="multipart/form-data">
+
+            <!-- 특성 정보 그룹 -->
+            <div class="info-group mb-4">
+                <div class="info-title" data-bs-toggle="collapse" data-bs-target="#traitSection" aria-expanded="true">
+                    <span>특성 정보</span>
+                    <i class="fas fa-angle-left toggle-icon"></i>
+                </div>
+
+                <div id="traitSection" class="collapse show">
+                    <hr>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <!-- 성격 -->
+                            <div class="mb-3">
+                                <label for="personality" class="form-label">성격</label>
+                                <select id="personality" name="personality" class="form-select">
+                                    <option value="pure">순수</option>
+                                    <option value="madness">광기</option>
+                                    <option value="calm">냉정</option>
+                                    <option value="melancholy">우울</option>
+                                    <option value="lively">활발</option>
+                                </select>
+                            </div>
+    
+                            <!-- 역할 -->
+                            <div class="mb-3">
+                                <label for="role" class="form-label">역할</label>
+                                <select id="role" name="role" class="form-select">
+                                    <option value="dealer">딜러</option>
+                                    <option value="tank">탱커</option>
+                                    <option value="support">서포터</option>
+                                </select>
+                            </div>
+    
+                            <!-- 공격 방식 -->
+                            <div class="mb-3">
+                                <label for="attackStyle" class="form-label">공격 방식</label>
+                                <select id="attackStyle" name="attackStyle" class="form-select">
+                                    <option value="physical">물리</option>
+                                    <option value="magic">마법</option>
+                                </select>
+                            </div>
+    
+                            <!-- 배치 -->
+                            <div class="mb-3">
+                                <label for="placement" class="form-label">배치</label>
+                                <select id="placement" name="placement" class="form-select">
+                                    <option value="front">전열</option>
+                                    <option value="middle">중열</option>
+                                    <option value="back">후열</option>
+                                    <option value="all">모든 열</option>
+                                </select>
+                            </div>
+                        </div>
+    
+                        <div class="col-md-6">
+                            <!-- 깡 -->
+                            <div class="mb-3">
+                                <label for="strength-status" class="form-label">깡</label>
+                                <div id="strength-status" class="d-flex align-items-center">
+                                    <input type="range" id="strength-slider" name="strength" class="form-range me-3" min="1" max="7" step="1" value="4">
+                                    <input type="number" id="strength-number" class="form-control status-num" min="1" max="7" step="1" value="4" >
+                                </div>
+                            </div>
+    
+                            <!-- 맷집 -->
+                            <div class="mb-3">
+                                <label for="durability-status" class="form-label">맷집</label>
+                                <div id="durability-status" class="d-flex align-items-center">
+                                    <input type="range" id="durability-slider" name="durability" class="form-range me-3" min="1" max="7" step="1" value="4">
+                                    <input type="number" id="durability-number" class="form-control status-num" min="1" max="7" step="1" value="4">
+                                </div>
+                            </div>
+    
+                            <!-- 재주 -->
+                            <div class="mb-3">
+                                <label for="trick-status" class="form-label">재주</label>
+                                <div id="trick-status" class="d-flex align-items-center">
+                                    <input type="range" id="trick-slider" name="talent" class="form-range me-3" min="1" max="7" step="1" value="4">
+                                    <input type="number" id="trick-number" class="form-control status-num" min="1" max="7" step="1" value="4">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- 하단 푸터 -->
+<footer th:replace="~{fragments/footer :: management_footer}">
+    하단 푸터 영역
+</footer>
+
+<script th:src="@{/js/management/charAddForm.js}">
+
+</script>
+
+</body>
+
+</html>
