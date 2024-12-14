@@ -25,24 +25,15 @@ public class LoginController {
     private final LoginService loginService;
 
     @GetMapping
-    public String home(HttpServletRequest request) {
-        // 세션을 가져옴
-        HttpSession session = request.getSession(false);
-
+    public String home(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false)Member loginMember) {
         // 세션이 없으면 로그인 화면으로
-        if (session == null) {
+        if (loginMember == null) {
             return "redirect:/management/login";
         }
 
         // 유효한 세션이 있으면 대시보드로
         return "management/dashBoard";
     }
-
-    // 대시보드 페이지
-//    @GetMapping("/dashBoard")
-//    public String dashBoard(HttpServletRequest request) {
-//        return "management/dashBoard";
-//    }
 
     // 로그인 화면
     @GetMapping("/login")
