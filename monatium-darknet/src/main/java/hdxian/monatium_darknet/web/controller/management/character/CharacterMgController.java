@@ -11,13 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
 
 @Slf4j
 @Controller
 @RequestMapping("/management/characters")
 @RequiredArgsConstructor
-@SessionAttributes({CHFORM_STEP1, CHFORM_STEP2, CHFORM_STEP3, CHFORM_STEP4})
 public class CharacterMgController {
 
     private final CharacterService characterService;
@@ -45,7 +43,7 @@ public class CharacterMgController {
     public String chAddStep1(@ModelAttribute("chForm")ChFormStep1 chForm, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return "characters/addChStep1";
+            return "management/characters/addChStep1";
         }
 
         log.info("chForm1 = {}", chForm);
@@ -65,8 +63,10 @@ public class CharacterMgController {
     @PostMapping("/new/step2")
     public String chAddStep2(@ModelAttribute("chForm")ChFormStep2 chForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "characters/addChStep2";
+            return "management/characters/addChStep2";
         }
+
+        log.info("chForm2 = {}", chForm);
 
         return "redirect:/management/characters/new/step3";
     }
@@ -80,7 +80,7 @@ public class CharacterMgController {
     @PostMapping("/new/step3")
     public String chAddStep3(@ModelAttribute("chForm")ChFormStep3 chForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "characters/addChStep3";
+            return "management/characters/addChStep3";
         }
 
         return "redirect:/management/characters/new/step4";
@@ -95,7 +95,7 @@ public class CharacterMgController {
     @PostMapping("/new/step4")
     public String chAddStep4(@ModelAttribute("chForm")ChFormStep4 chForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "characters/addChStep4";
+            return "management/characters/addChStep4";
         }
 
         return "redirect:/management/characters/preview"; // 4단계 끝나면 캐릭터 리스트 또는 미리보기 페이지로 이동

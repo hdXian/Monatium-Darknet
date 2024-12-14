@@ -75,8 +75,8 @@ function syncInput(sliderId, numberId) {
 }
 
 // 각 특성의 슬라이더와 숫자 입력 필드 동기화
-syncInput('strength-slider', 'strength-number');
-syncInput('durability-slider', 'durability-number');
+syncInput('aggressive-slider', 'aggressive-number');
+syncInput('endurance-slider', 'endurance-number');
 syncInput('trick-slider', 'trick-number');
 
 

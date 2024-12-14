@@ -22,7 +22,7 @@
 
         <h2 class="form-title">캐릭터 추가</h2>
 
-        <form action="/character/new" method="post" enctype="multipart/form-data">
+        <form th:object="${chForm}" th:action="@{/management/characters/new/step2}" method="post" enctype="multipart/form-data">
 
             <!-- 특성 정보 그룹 -->
             <div class="info-group mb-4">
@@ -38,42 +38,42 @@
                             <!-- 성격 -->
                             <div class="mb-3">
                                 <label for="personality" class="form-label">성격</label>
-                                <select id="personality" name="personality" class="form-select">
-                                    <option value="pure">순수</option>
-                                    <option value="madness">광기</option>
-                                    <option value="calm">냉정</option>
-                                    <option value="melancholy">우울</option>
-                                    <option value="lively">활발</option>
+                                <select th:field="*{personality}" id="personality" name="personality" class="form-select">
+                                    <option value="PURE">순수</option>
+                                    <option value="MADNESS">광기</option>
+                                    <option value="COOL">냉정</option>
+                                    <option value="GLOOMY">우울</option>
+                                    <option value="ACTIVITY">활발</option>
                                 </select>
                             </div>
     
                             <!-- 역할 -->
                             <div class="mb-3">
                                 <label for="role" class="form-label">역할</label>
-                                <select id="role" name="role" class="form-select">
-                                    <option value="dealer">딜러</option>
-                                    <option value="tank">탱커</option>
-                                    <option value="support">서포터</option>
+                                <select th:field="*{role}" id="role" name="role" class="form-select">
+                                    <option value="DEALER">딜러</option>
+                                    <option value="TANKER">탱커</option>
+                                    <option value="SUPPORTER">서포터</option>
                                 </select>
                             </div>
     
                             <!-- 공격 방식 -->
                             <div class="mb-3">
                                 <label for="attackStyle" class="form-label">공격 방식</label>
-                                <select id="attackStyle" name="attackStyle" class="form-select">
-                                    <option value="physical">물리</option>
-                                    <option value="magic">마법</option>
+                                <select th:field="*{attackType}" id="attackStyle" name="attackStyle" class="form-select">
+                                    <option value="PHYSICAL">물리</option>
+                                    <option value="MAGICAL">마법</option>
                                 </select>
                             </div>
     
                             <!-- 배치 -->
                             <div class="mb-3">
                                 <label for="placement" class="form-label">배치</label>
-                                <select id="placement" name="placement" class="form-select">
-                                    <option value="front">전열</option>
-                                    <option value="middle">중열</option>
-                                    <option value="back">후열</option>
-                                    <option value="all">모든 열</option>
+                                <select th:field="*{position}" id="placement" name="placement" class="form-select">
+                                    <option value="FRONT">전열</option>
+                                    <option value="MIDDLE">중열</option>
+                                    <option value="BACK">후열</option>
+                                    <option value="ALL">모든 열</option>
                                 </select>
                             </div>
                         </div>
@@ -81,19 +81,19 @@
                         <div class="col-md-6">
                             <!-- 깡 -->
                             <div class="mb-3">
-                                <label for="strength-status" class="form-label">깡</label>
-                                <div id="strength-status" class="d-flex align-items-center">
-                                    <input type="range" id="strength-slider" name="strength" class="form-range me-3" min="1" max="7" step="1" value="4">
-                                    <input type="number" id="strength-number" class="form-control status-num" min="1" max="7" step="1" value="4" >
+                                <label for="aggressive-status" class="form-label">깡</label>
+                                <div id="aggressive-status" class="d-flex align-items-center">
+                                    <input th:field=*{aggressive} th:value="*{aggressive}" type="range" id="aggressive-slider" name="aggressive" class="form-range me-3" min="1" max="7" step="1" value="4">
+                                    <input th:value="*{aggressive}" type="number" id="aggressive-number" class="form-control status-num" min="1" max="7" step="1" value="4" >
                                 </div>
                             </div>
     
                             <!-- 맷집 -->
                             <div class="mb-3">
-                                <label for="durability-status" class="form-label">맷집</label>
-                                <div id="durability-status" class="d-flex align-items-center">
-                                    <input type="range" id="durability-slider" name="durability" class="form-range me-3" min="1" max="7" step="1" value="4">
-                                    <input type="number" id="durability-number" class="form-control status-num" min="1" max="7" step="1" value="4">
+                                <label for="endurance-status" class="form-label">맷집</label>
+                                <div id="endurance-status" class="d-flex align-items-center">
+                                    <input th:field="*{endurance}" th:value="*{endurance}" type="range" id="endurance-slider" name="endurance" class="form-range me-3" min="1" max="7" step="1" value="4">
+                                    <input th:value="*{endurance}" type="number" id="endurance-number" class="form-control status-num" min="1" max="7" step="1" value="4">
                                 </div>
                             </div>
     
@@ -101,13 +101,19 @@
                             <div class="mb-3">
                                 <label for="trick-status" class="form-label">재주</label>
                                 <div id="trick-status" class="d-flex align-items-center">
-                                    <input type="range" id="trick-slider" name="talent" class="form-range me-3" min="1" max="7" step="1" value="4">
-                                    <input type="number" id="trick-number" class="form-control status-num" min="1" max="7" step="1" value="4">
+                                    <input th:field="*{trick}" th:value="*{trick}" type="range" id="trick-slider" name="talent" class="form-range me-3" min="1" max="7" step="1" value="4">
+                                    <input th:value="*{trick}" type="number" id="trick-number" class="form-control status-num" min="1" max="7" step="1" value="4">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- 폼 제출 버튼 -->
+            <div class="d-flex justify-content-between mt-4">
+                <a th:href="@{/management/characters/new/step1}" class="btn btn-secondary">이전으로</a>
+                <button type="submit" class="btn btn-primary">다음 단계로</button>
             </div>
 
         </form>
