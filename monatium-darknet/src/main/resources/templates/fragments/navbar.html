@@ -96,8 +96,19 @@
       </ul>
 
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" th:href="@{/}">사이트 홈으로 이동</a></li>
-        <li class="nav-item"><a class="nav-link" th:href="@{/management/logout}">로그아웃</a></li>
+
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/}">사이트 홈으로 이동</a>
+        </li>
+
+        <li class="nav-item">
+          <form th:action="@{/management/logout}" method="post">
+            <button type="submit" class="btn btn-link nav-link">
+              로그아웃
+            </button>
+          </form>
+        </li>
+
       </ul>
 
     </div>

@@ -2,14 +2,16 @@ package hdxian.monatium_darknet.controller.management;
 
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.service.LoginService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 // 로그인 및 대시보드 관련 요청 처리
 
@@ -23,23 +25,34 @@ public class LoginController {
     private final LoginService loginService;
 
     @GetMapping
-    public String loginHome() {
-        return "redirect:/management/login";
-    }
+    public String home(HttpServletRequest request) {
+        // 세션을 가져옴
+        HttpSession session = request.getSession(false);
 
-    // 해당 Cookie 값이 필수(required true). 없을 시 400 응답 발생.
-    @GetMapping("/dashBoard")
-    public String dashBoard(@CookieValue("memberId")Long memberId) {
+        // 세션이 없으면 로그인 화면으로
+        if (session == null) {
+            return "redirect:/management/login";
+        }
+
+        // 유효한 세션이 있으면 대시보드로
         return "management/dashBoard";
     }
 
+    // 대시보드 페이지
+//    @GetMapping("/dashBoard")
+//    public String dashBoard(HttpServletRequest request) {
+//        return "management/dashBoard";
+//    }
+
+    // 로그인 화면
     @GetMapping("/login")
     public String loginForm(@ModelAttribute("loginForm")LoginForm form) {
         return "management/loginForm";
     }
 
+    // 로그인 처리
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute("loginForm") LoginForm form, BindingResult bindingResult, HttpServletResponse response) {
+    public String login(@Validated @ModelAttribute("loginForm") LoginForm form, BindingResult bindingResult, HttpServletRequest request) {
 
         if(bindingResult.hasErrors()) {
             return "management/loginForm";
@@ -56,15 +69,21 @@ public class LoginController {
         }
 
         // 로그인 성공 시
-        // 1. memberId를 담은 쿠키 생성
-        Cookie memberIdCookie = new Cookie("memberId", String.valueOf(loginMember.getId()));
-        memberIdCookie.setMaxAge(60 * 60); // 만료시간 설정 (초 단위, 1시간으로 설정)
+        HttpSession session = request.getSession(); // 세션이 있으면 있는 세션 반환, 없으면 새로운 세션 생성
+        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember); // 세션에 로그인한 회원 정보 보관
 
-        // 2. 생성한 쿠키를 응답에 추가
-        response.addCookie(memberIdCookie); // 만료 기간 명시 x -> 세션 쿠키 -> 브라우저 종료 시 만료
+        return "redirect:/management";
+    }
 
-        // 3. 대시보드 페이지로 리다이렉트
-        return "redirect:/management/dashBoard";
+    // 로그아웃 처리
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        // 세션을 가져옴. 세션이 없어도 새로 생성하지 않음.
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate(); // 세션 파기
+        }
+        return "redirect:/management";
     }
 
 }
