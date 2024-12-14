@@ -19,7 +19,7 @@
 
 <div class="container mt-4 main-content">
     <h1>공지사항 작성</h1>
-    <form th:action="@{/management/notices/new}" th:object="${noticeForm}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/management/notices/new}" th:object="${noticeForm}" id="notice-form" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="title" class="form-label">제목</label>
             <input th:field="*{title}" type="text" id="title" name="title" class="form-control" required>
@@ -39,7 +39,7 @@
             <textarea th:field="*{content}" id="content" name="content" class="d-none"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">등록</button>
-        <a th:href="@{/management/notices}" class="btn btn-secondary button-cancel">취소</a>
+        <a th:href="@{/management/notices}" class="btn btn-secondary" id="cancel-button">취소</a>
   </form>
 </div>
 
