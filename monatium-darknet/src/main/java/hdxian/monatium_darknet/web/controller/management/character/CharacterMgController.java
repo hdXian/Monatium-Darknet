@@ -83,6 +83,8 @@ public class CharacterMgController {
             return "management/characters/addChStep3";
         }
 
+        log.info("chForm3 = {}", chForm);
+
         return "redirect:/management/characters/new/step4";
     }
 

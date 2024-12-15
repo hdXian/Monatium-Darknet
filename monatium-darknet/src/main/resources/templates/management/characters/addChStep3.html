@@ -22,38 +22,41 @@
 
         <h2 class="form-title">캐릭터 추가</h2>
 
-        <form action="/character/new" method="post" enctype="multipart/form-data">
+        <form th:object="${chForm}" th:action="@{/management/characters/new/step3}" method="post" enctype="multipart/form-data">
 
             <!-- 스킬 정보 그룹 -->
             <div class="info-group mb-4">
 
-                <div class="info-title" data-bs-toggle="collapse" data-bs-target="#skilSection" aria-expanded="true">
+                <div class="info-title" data-bs-toggle="collapse" data-bs-target="#skillSection" aria-expanded="true">
                     <span>스킬 정보</span>
                     <i class="fas fa-angle-left toggle-icon"></i>
                 </div>
 
-                <div id="skilSection" class="collapse show">
+                <div id="skillSection" class="collapse show">
                     <hr>
                     <!-- 기본 공격 -->
                     <div class="info-subgroup mb-3 mt-3">
                         <h4 class="form-subtitle">기본 공격</h4>
                 
                         <div class="mb-3">
-                            <label for="basicAttackDescription" class="form-label">공격 설명</label>
-                            <textarea id="basicAttackDescription" name="basicAttackDescription" 
-                                class="form-control auto-resize" 
-                                placeholder="기본 공격의 설명을 입력하세요"></textarea>
+                            <label for="normalAttackDescription" class="form-label">공격 설명</label>
+                            <textarea th:field="*{normalAttackDescription}" id="normalAttackDescription" name="basicAttackDescription"
+                                      class="form-control auto-resize"
+                                      placeholder="기본 공격의 설명을 입력하세요"></textarea>
                         </div>
                 
                         <label class="form-label">특성</label>
                         <div id="basic-attack-traits-container">
-                            <div class="d-flex align-items-center mb-2 trait-input-container">
-                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
-                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
-                                <button type="button" class="btn btn-success btn-add-trait">+</button>
-                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+
+                            <div th:each="attribute, stat : *{normalAttributes}" class="d-flex align-items-center mb-2 trait-input-container">
+                                <input type="text" th:field="*{normalAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{normalAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-normal-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-normal-attribute">-</button>
                             </div>
+
                         </div>
+
                     </div>
                 
                     <!-- 강화 공격 -->
@@ -151,6 +154,12 @@
 
             </div>
 
+            <!-- 폼 제출 버튼 -->
+            <div class="d-flex justify-content-between mt-4">
+                <a th:href="@{/management/characters/new/step1}" class="btn btn-secondary">이전으로</a>
+                <button type="submit" class="btn btn-primary">다음 단계로</button>
+            </div>
+
         </form>
 
     </div>
@@ -162,9 +171,8 @@
     하단 푸터 영역
 </footer>
 
-<script th:src="@{/js/management/charAddForm.js}">
-
-</script>
+<script th:src="@{/js/management/charAddFormCommon.js}" defer></script>
+<script th:src="@{/js/management/charAddFormStep3.js}" defer></script>
 
 </body>
 
