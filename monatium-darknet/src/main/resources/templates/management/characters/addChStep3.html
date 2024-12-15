@@ -40,7 +40,7 @@
                 
                         <div class="mb-3">
                             <label for="normalAttackDescription" class="form-label">공격 설명</label>
-                            <textarea th:field="*{normalAttackDescription}" id="normalAttackDescription" name="basicAttackDescription"
+                            <textarea th:field="*{normalAttackDescription}" id="normalAttackDescription" name="normalAttackDescription"
                                       class="form-control auto-resize"
                                       placeholder="기본 공격의 설명을 입력하세요"></textarea>
                         </div>
@@ -63,18 +63,18 @@
                 
                         <div class="mb-3">
                             <label for="enhancedAttackDescription" class="form-label">공격 설명</label>
-                            <textarea id="enhancedAttackDescription" name="enhancedAttackDescription" 
+                            <textarea th:field="*{enhancedAttackDescription}" id="enhancedAttackDescription" name="enhancedAttackDescription"
                                 class="form-control auto-resize" 
                                 placeholder="강화 공격의 설명을 입력하세요"></textarea>
                         </div>
                 
                         <label class="form-label">특성</label>
                         <div id="enhancedAttack-attributes-container">
-                            <div class="d-flex align-items-center mb-2 attribute-input-container">
-                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
-                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
-                                <button type="button" class="btn btn-success btn-add-trait">+</button>
-                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                            <div th:each="attribute, stat : *{enhancedAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-enhanced-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-enhanced-attribute">-</button>
                             </div>
                         </div>
                     </div>
