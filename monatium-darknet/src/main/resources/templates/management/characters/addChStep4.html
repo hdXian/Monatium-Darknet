@@ -22,7 +22,7 @@
 
         <h2 class="form-title">캐릭터 추가</h2>
 
-        <form action="/character/new" method="post" enctype="multipart/form-data">
+        <form th:object="${chForm}" th:action="@{/management/characters/new/step4}" method="post" enctype="multipart/form-data">
 
             <!-- 어사이드 그룹 -->
             <div class="info-group mb-4">
@@ -41,37 +41,28 @@
                         <!-- 어사이드 이미지 -->
                         <div class="row align-items-center">
                             <div class="col-md-3 text-center">
-                                <label for="asideImage1" class="form-label">이미지</label>
+                                <label for="asideImage" class="form-label">이미지</label>
                                 <div class="image-upload-wrapper">
                                     <img id="asideImagePreview1" src="https://via.placeholder.com/120x120.png?text=이미지" 
                                         alt="이미지 미리보기" class="img-thumbnail">
-                                    <input type="file" id="asideImage1" name="asideImage1" class="form-control d-none" 
+                                    <input th:field="*{asideImage}" type="file" id="asideImage" name="asideImage" class="form-control d-none"
                                         accept="image/*" onchange="previewImage(this)">
                                 </div>
                             </div>
                 
                             <div class="col-md-9">
                                 <div class="mb-3">
-                                    <label for="asideName1" class="form-label">어사이드 이름</label>
-                                    <input type="text" id="asideName1" name="asideName1" class="form-control" placeholder="이름을 입력하세요">
+                                    <label for="asideName" class="form-label">어사이드 이름</label>
+                                    <input th:field="*{asideName}" type="text" id="asideName" name="asideName" class="form-control" placeholder="이름을 입력하세요">
                                 </div>
                 
                                 <div class="mb-3">
-                                    <label for="asideDescription1" class="form-label">어사이드 설명</label>
-                                    <textarea id="asideDescription1" name="asideDescription" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                    <label for="description" class="form-label">어사이드 설명</label>
+                                    <textarea th:field="*{description}" id="description" name="description" class="form-control auto-resize" placeholder="설명을 입력하세요"></textarea>
                                 </div>
                             </div>
                         </div>
-                
-                        <label class="form-label">특성</label>
-                        <div id="aside-traits-container1">
-                            <div class="d-flex align-items-center mb-2 trait-input-container">
-                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
-                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
-                                <button type="button" class="btn btn-success btn-add-trait">+</button>
-                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
-                            </div>
-                        </div>
+
                     </div>
                 
                     <!-- 2. 어사이드 1단계 -->
@@ -80,35 +71,35 @@
                         <!-- 이미지 -->
                         <div class="row align-items-center">
                             <div class="col-md-3 text-center">
-                                <label for="asideImage2" class="form-label">이미지</label>
+                                <label for="asideLv1Image" class="form-label">이미지</label>
                                 <div class="image-upload-wrapper">
-                                    <img id="asideImagePreview2" src="https://via.placeholder.com/120x120.png?text=이미지" 
+                                    <img id="aside1ImagePreview" src="https://via.placeholder.com/120x120.png?text=이미지"
                                         alt="이미지 미리보기" class="img-thumbnail">
-                                    <input type="file" id="asideImage2" name="asideImage2" class="form-control d-none" 
+                                    <input th:field="*{asideLv1Image}" type="file" id="asideLv1Image" name="asideLv1Image" class="form-control d-none"
                                         accept="image/*" onchange="previewImage(this)">
                                 </div>
                             </div>
                 
                             <div class="col-md-9">
                                 <div class="mb-3">
-                                    <label for="asideName2" class="form-label">어사이드 1단계 이름</label>
-                                    <input type="text" id="asideName2" name="asideName2" class="form-control" placeholder="이름을 입력하세요">
+                                    <label for="asideLv1Name" class="form-label">어사이드 1단계 이름</label>
+                                    <input th:field="*{asideLv1Name}" type="text" id="asideLv1Name" name="asideLv1Name" class="form-control" placeholder="이름을 입력하세요">
                                 </div>
                 
                                 <div class="mb-3">
-                                    <label for="asideDescription2" class="form-label">어사이드 설명</label>
-                                    <textarea id="asideDescription2" name="asideDescription" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                    <label for="asideLv1Description" class="form-label">어사이드 설명</label>
+                                    <textarea th:field="*{asideLv1Description}" id="asideLv1Description" name="asideLv1Description" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
                                 </div>
                             </div>
                         </div>
                 
                         <label class="form-label">특성</label>
-                        <div id="aside-traits-container2">
-                            <div class="d-flex align-items-center mb-2 trait-input-container">
-                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
-                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
-                                <button type="button" class="btn btn-success btn-add-trait">+</button>
-                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                        <div id="aside1-attributes-container">
+                            <div th:each="attribute, stat : *{asideLv1Attributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{asideLv1Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{asideLv1Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-aside1-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-aside1-attribute">-</button>
                             </div>
                         </div>
                     </div>
@@ -119,35 +110,35 @@
                         <!-- 이미지 -->
                         <div class="row align-items-center">
                             <div class="col-md-3 text-center">
-                                <label for="asideImage3" class="form-label">이미지</label>
+                                <label for="asideLv2Image" class="form-label">이미지</label>
                                 <div class="image-upload-wrapper">
-                                    <img id="asideImagePreview3" src="https://via.placeholder.com/120x120.png?text=이미지" 
+                                    <img id="aside2ImagePreview" src="https://via.placeholder.com/120x120.png?text=이미지"
                                         alt="이미지 미리보기" class="img-thumbnail">
-                                    <input type="file" id="asideImage3" name="asideImage3" class="form-control d-none" 
+                                    <input th:field="*{asideLv2Image}" type="file" id="asideLv2Image" name="asideLv2Image" class="form-control d-none"
                                         accept="image/*" onchange="previewImage(this)">
                                 </div>
                             </div>
                 
                             <div class="col-md-9">
                                 <div class="mb-3">
-                                    <label for="asideName3" class="form-label">어사이드 2단계 이름</label>
-                                    <input type="text" id="asideName3" name="asideName3" class="form-control" placeholder="이름을 입력하세요">
+                                    <label for="asideLv2Name" class="form-label">어사이드 2단계 이름</label>
+                                    <input th:field="*{asideLv2Name}" type="text" id="asideLv2Name" name="asideLv2Name" class="form-control" placeholder="이름을 입력하세요">
                                 </div>
                 
                                 <div class="mb-3">
-                                    <label for="asideDescription3" class="form-label">어사이드 설명</label>
-                                    <textarea id="asideDescription3" name="asideDescription" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                    <label for="asideLv2Description" class="form-label">어사이드 설명</label>
+                                    <textarea th:field="*{asideLv2Description}" id="asideLv2Description" name="asideLv2Description" class="form-control auto-resize" placeholder="설명을 입력하세요"></textarea>
                                 </div>
                             </div>
                         </div>
                 
                         <label class="form-label">특성</label>
-                        <div id="aside-traits-container3">
-                            <div class="d-flex align-items-center mb-2 trait-input-container">
-                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
-                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
-                                <button type="button" class="btn btn-success btn-add-trait">+</button>
-                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                        <div id="aside2-attributes-container">
+                            <div th:each="attribute, stat : *{asideLv2Attributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{asideLv2Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{asideLv2Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-aside2-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-aside2-attribute">-</button>
                             </div>
                         </div>
                     </div>
@@ -158,40 +149,46 @@
                         <!-- 이미지 -->
                         <div class="row align-items-center">
                             <div class="col-md-3 text-center">
-                                <label for="asideImage4" class="form-label">이미지</label>
+                                <label for="asideLv3Image" class="form-label">이미지</label>
                                 <div class="image-upload-wrapper">
                                     <img id="asideImagePreview4" src="https://via.placeholder.com/120x120.png?text=이미지" 
                                         alt="이미지 미리보기" class="img-thumbnail">
-                                    <input type="file" id="asideImage4" name="asideImage4" class="form-control d-none" 
+                                    <input th:field="*{asideLv3Image}" type="file" id="asideLv3Image" name="asideLv3Image" class="form-control d-none"
                                         accept="image/*" onchange="previewImage(this)">
                                 </div>
                             </div>
                 
                             <div class="col-md-9">
                                 <div class="mb-3">
-                                    <label for="asideName4" class="form-label">어사이드 3단계 이름</label>
-                                    <input type="text" id="asideName4" name="asideName4" class="form-control" placeholder="이름을 입력하세요">
+                                    <label for="asideLv3Name" class="form-label">어사이드 3단계 이름</label>
+                                    <input th:field="*{asideLv3Name}" type="text" id="asideLv3Name" name="asideLv3Name" class="form-control" placeholder="이름을 입력하세요">
                                 </div>
                 
                                 <div class="mb-3">
-                                    <label for="asideDescription4" class="form-label">어사이드 설명</label>
-                                    <textarea id="asideDescription4" name="asideDescription" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                    <label for="asideLv3Description" class="form-label">어사이드 설명</label>
+                                    <textarea th:field="*{asideLv3Description}" id="asideLv3Description" name="asideLv3Description" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
                                 </div>
                             </div>
                         </div>
                 
                         <label class="form-label">특성</label>
-                        <div id="aside-traits-container4">
-                            <div class="d-flex align-items-center mb-2 trait-input-container">
-                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
-                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
-                                <button type="button" class="btn btn-success btn-add-trait">+</button>
-                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                        <div id="aside3-attributes-container">
+                            <div th:each="attribute, stat : *{asideLv3Attributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{asideLv3Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{asideLv3Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-aside3-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-aside3-attribute">-</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
+            </div>
+
+            <!-- 폼 제출 버튼 -->
+            <div class="d-flex justify-content-between mt-4">
+                <a th:href="@{/management/characters/new/step3}" class="btn btn-secondary">이전으로</a>
+                <button type="submit" class="btn btn-primary">다음 단계로</button>
             </div>
             
         </form>
@@ -205,9 +202,8 @@
     하단 푸터 영역
 </footer>
 
-<script th:src="@{/js/management/charAddForm.js}">
-
-</script>
+<script th:src="@{/js/management/charAddFormCommon.js}"></script>
+<script th:src="@{/js/management/charAddFormStep4.js}"></script>
 
 </body>
 

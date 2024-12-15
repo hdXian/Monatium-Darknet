@@ -1,0 +1,28 @@
+// 특성 입력 란 필드 구성
+document.addEventListener('DOMContentLoaded', function() {
+    // 어사이드 1단계
+    setupDynamicInputFields({
+        containerId: 'aside1-attributes-container',
+        addButtonClass: 'btn-add-aside1-attribute',
+        removeButtonClass: 'btn-remove-aside1-attribute',
+        inputNamePrefix: 'asideLv1Attributes'
+    });
+
+    // 어사이드 2단계
+    setupDynamicInputFields({
+        containerId: 'aside2-attributes-container',
+        addButtonClass: 'btn-add-aside2-attribute',
+        removeButtonClass: 'btn-remove-aside2-attribute',
+        inputNamePrefix: 'asideLv2Attributes'
+    });
+
+    // 어사이드 3단계
+    setupDynamicInputFields({
+        containerId: 'aside3-attributes-container',
+        addButtonClass: 'btn-add-aside3-attribute',
+        removeButtonClass: 'btn-remove-aside3-attribute',
+        inputNamePrefix: 'asideLv3Attributes'
+    });
+
+});
+

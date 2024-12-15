@@ -37,13 +37,23 @@ public class AsideSpec {
     }
 
     // 생성 메서드
-    public static AsideSpec createAsideSpec(String name, String description, Attribute... attributes) {
+    public static AsideSpec createAsideSpec(String name, String description) {
         AsideSpec asideSpec = new AsideSpec();
         asideSpec.setName(name);
         asideSpec.setDescription(description);
 
         // 인자로 전달된 Attributes들 모두 추가
-        asideSpec.attributes.addAll(Arrays.asList(attributes));
+
+        return asideSpec;
+    }
+
+    public static AsideSpec createAsideSpec(String name, String description, List<Attribute> attributes) {
+        AsideSpec asideSpec = new AsideSpec();
+        asideSpec.setName(name);
+        asideSpec.setDescription(description);
+
+        // 인자로 전달된 Attributes들 모두 추가
+        asideSpec.attributes.addAll(attributes);
 
         return asideSpec;
     }

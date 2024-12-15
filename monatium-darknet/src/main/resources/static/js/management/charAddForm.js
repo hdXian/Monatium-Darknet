@@ -1,3 +1,4 @@
+// legacy. not used
 // 좋아하는 것 입력 란
 document.addEventListener('DOMContentLoaded', function() {
     const likesContainer = document.getElementById('likes-container');
