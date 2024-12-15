@@ -127,17 +127,31 @@
                     <!-- 고학년 스킬 -->
                     <div class="info-subgroup">
                         <h4 class="form-subtitle">고학년 스킬</h4>
-                
-                        <div class="mb-3">
-                            <label for="highSkillName" class="form-label">스킬 이름</label>
-                            <input th:field="*{highSkillName}" type="text" id="highSkillName" name="highSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+
+                        <!-- 스킬명, 쿨타임 입력 칸이 위치하는 행 -->
+                        <div class="row mb-3">
+                            <!-- 스킬 이름 입력 필드 -->
+                            <div class="col-7">
+                                <label for="highSkillName" class="form-label">스킬 이름</label>
+                                <input th:field="*{highSkillName}" type="text" id="highSkillName" name="highSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                            </div>
+
+                            <!-- 재사용 대기시간 입력 필드 -->
+                            <div class="col-5">
+                                <label for="highSkillCooldown" class="form-label">재사용 대기시간</label>
+                                <div class="input-group">
+                                    <input type="number" th:field="*{highSkillCooldown}" id="highSkillCooldown" name="highSkillCooldown" class="form-control" placeholder="쿨타임"
+                                           min="1" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '');">
+                                    <span class="input-group-text">초</span>
+                                </div>
+                            </div>
                         </div>
-                
+
                         <div class="mb-3">
-                            <label for="highSkillEffect" class="form-label">스킬 효과</label>
-                            <textarea th:field="*{highSkillDescription}" id="highSkillEffect" name="highSkillEffect" class="form-control auto-resize" placeholder="스킬 효과를 입력하세요"></textarea>
+                            <label for="highSkillDescription" class="form-label">스킬 설명</label>
+                            <textarea th:field="*{highSkillDescription}" id="highSkillDescription" name="highSkillDescription" class="form-control auto-resize" placeholder="스킬 설명을 입력하세요"></textarea>
                         </div>
-                
+
                         <label class="form-label">특성</label>
                         <div id="highSkill-attributes-container">
                             <div th:each="attribute, stat : *{highSkillAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">

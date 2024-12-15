@@ -41,7 +41,6 @@ public class ChFormStep3 {
     // 저학년 스킬
     private String lowSkillName;
     private String lowSkillDescription;
-    private Integer lowSkillCooldown;
     private MultipartFile lowSkillImage;
     private List<Attribute> lowSkillAttributes = new ArrayList<>();
 
