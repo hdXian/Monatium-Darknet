@@ -16,7 +16,15 @@ public class ChFormStep1 {
     private int grade;
     private String quote;
     private String tmi;
+
     private List<String> favorites = new ArrayList<>();
+    public List<String> getFavorites() {
+        if (favorites.isEmpty()) {
+            favorites.add("");
+        }
+        return favorites;
+    }
+
     private Race race;
 
     private MultipartFile profileImage;
