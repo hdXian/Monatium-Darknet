@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.web.controller.management.character;
 
+import hdxian.monatium_darknet.domain.Attribute;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
@@ -26,7 +27,7 @@ import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
 @RequiredArgsConstructor
 public class CharacterMgController {
 
-    private static final String defaultThumbnailPath = "/imgs/defaultThumbnail.png";
+    private static final String defaultThumbnailUrl = "/imgs/defaultThumbnail.png";
 
     private final CharacterService characterService;
     private final LocalFileStorageService fileStorageService;
@@ -51,15 +52,13 @@ public class CharacterMgController {
         ChFormStep1 chForm = Optional.ofNullable( (ChFormStep1) session.getAttribute(CHFORM_STEP1) )
                 .orElse(new ChFormStep1());
 
-        // 프로필, 초상화, 전신 이미지 url이 세션에 있으면 -> 그 url을, 없으면 -> 기본 썸네일 경로를
-        // 모델에 담아 전달해야 한다.
-        String profileImageUrl = Optional.ofNullable( (String) session.getAttribute(IMAGE_URL_PROFILE) ).orElse(defaultThumbnailPath);
-        String portraitImageUrl = Optional.ofNullable( (String) session.getAttribute(IMAGE_URL_PORTRAIT) ).orElse(defaultThumbnailPath);
-        String bodyImageUrl = Optional.ofNullable( (String) session.getAttribute(IMAGE_URL_BODY) ).orElse(defaultThumbnailPath);
-        System.out.println("profileImageUrl = " + profileImageUrl);
-        System.out.println("portraitImageUrl = " + portraitImageUrl);
-        System.out.println("bodyImageUrl = " + bodyImageUrl);
+        // 1. 세션에서 이미지에 대한 임시 경로를 조회
+        // 2. 없으면 기본 썸네일 이미지 경로로 지정
+        String profileImageUrl = Optional.ofNullable( (String) session.getAttribute(IMAGE_URL_PROFILE) ).orElse(defaultThumbnailUrl);
+        String portraitImageUrl = Optional.ofNullable( (String) session.getAttribute(IMAGE_URL_PORTRAIT) ).orElse(defaultThumbnailUrl);
+        String bodyImageUrl = Optional.ofNullable( (String) session.getAttribute(IMAGE_URL_BODY) ).orElse(defaultThumbnailUrl);
 
+        // 3. 폼 객체와 이미지 경로들을 모델에 추가
         model.addAttribute("chForm", chForm);
         model.addAttribute(IMAGE_URL_PROFILE, profileImageUrl);
         model.addAttribute(IMAGE_URL_PORTRAIT, portraitImageUrl);
@@ -80,7 +79,8 @@ public class CharacterMgController {
             log.info("favorite = {}", favorite);
         }
 
-        // 1. 업로드한 이미지 파일 (MultipartFile)을 서버 임시 경로에 저장하고, URL(임시 경로)을 세션에 저장한다.
+        // 1. 업로드한 이미지 파일(MultipartFile)을 서버 임시 경로에 저장
+        // 2. 이미지에 대한 요청 URL을 세션에 저장
         uploadImageToTemp(session, IMAGE_URL_PROFILE, chForm.getProfileImage());
         uploadImageToTemp(session, IMAGE_URL_PORTRAIT, chForm.getPortraitImage());
         uploadImageToTemp(session, IMAGE_URL_BODY, chForm.getBodyImage());
@@ -120,6 +120,9 @@ public class CharacterMgController {
         ChFormStep3 chForm = Optional.ofNullable( (ChFormStep3) session.getAttribute(CHFORM_STEP3) )
                 .orElse(new ChFormStep3());
 
+        String lowSkillImageUrl = Optional.ofNullable((String) session.getAttribute(IMAGE_URL_LOWSKILL)).orElse(defaultThumbnailUrl);
+
+        model.addAttribute(IMAGE_URL_LOWSKILL, lowSkillImageUrl);
         model.addAttribute("chForm", chForm);
         return "management/characters/addChStep3";
     }
@@ -129,6 +132,10 @@ public class CharacterMgController {
         if (bindingResult.hasErrors()) {
             return "management/characters/addChStep3";
         }
+
+        // 1. 업로드한 이미지 파일(MultipartFile)을 서버 임시 경로에 저장
+        // 2. 이미지에 대한 요청 URL을 세션에 저장
+        uploadImageToTemp(session, IMAGE_URL_LOWSKILL, chForm.getLowSkillImage());
 
         log.info("chForm3 = {}", chForm);
         session.setAttribute(CHFORM_STEP3, chForm);
@@ -143,7 +150,17 @@ public class CharacterMgController {
         ChFormStep4 chForm = Optional.ofNullable( (ChFormStep4) session.getAttribute(CHFORM_STEP4) )
                 .orElse(new ChFormStep4());
 
+        String asideImageUrl = Optional.ofNullable((String) session.getAttribute(IMAGE_URL_ASIDE)).orElse(defaultThumbnailUrl);
+        String aside1ImageUrl = Optional.ofNullable((String) session.getAttribute(IMAGE_URL_ASIDE_LV1)).orElse(defaultThumbnailUrl);
+        String aside2ImageUrl = Optional.ofNullable((String) session.getAttribute(IMAGE_URL_ASIDE_LV2)).orElse(defaultThumbnailUrl);
+        String aside3ImageUrl = Optional.ofNullable((String) session.getAttribute(IMAGE_URL_ASIDE_LV3)).orElse(defaultThumbnailUrl);
+
         model.addAttribute("chForm", chForm);
+        model.addAttribute(IMAGE_URL_ASIDE, asideImageUrl);
+        model.addAttribute(IMAGE_URL_ASIDE_LV1, aside1ImageUrl);
+        model.addAttribute(IMAGE_URL_ASIDE_LV2, aside2ImageUrl);
+        model.addAttribute(IMAGE_URL_ASIDE_LV3, aside3ImageUrl);
+
         return "management/characters/addChStep4";
     }
 
@@ -152,6 +169,13 @@ public class CharacterMgController {
         if (bindingResult.hasErrors()) {
             return "management/characters/addChStep4";
         }
+
+        // 1. 업로드한 이미지 파일(MultipartFile)을 서버 임시 경로에 저장
+        // 2. 이미지에 대한 요청 URL을 세션에 저장
+        uploadImageToTemp(session, IMAGE_URL_ASIDE, chForm.getAsideImage());
+        uploadImageToTemp(session, IMAGE_URL_ASIDE_LV1, chForm.getAsideLv1Image());
+        uploadImageToTemp(session, IMAGE_URL_ASIDE_LV2, chForm.getAsideLv2Image());
+        uploadImageToTemp(session, IMAGE_URL_ASIDE_LV3, chForm.getAsideLv3Image());
 
         log.info("chForm4 = {}", chForm);
         session.setAttribute(CHFORM_STEP4, chForm);
@@ -163,9 +187,29 @@ public class CharacterMgController {
     public String chAddSummary(Model model, HttpSession session) {
 
         ChFormStep1 chForm1 = (ChFormStep1) session.getAttribute(CHFORM_STEP1);
-        ChFormStep1 chForm2 = (ChFormStep1) session.getAttribute(CHFORM_STEP2);
-        ChFormStep1 chForm3 = (ChFormStep1) session.getAttribute(CHFORM_STEP3);
-        ChFormStep1 chForm4 = (ChFormStep1) session.getAttribute(CHFORM_STEP4);
+        ChFormStep2 chForm2 = (ChFormStep2) session.getAttribute(CHFORM_STEP2);
+        ChFormStep3 chForm3 = (ChFormStep3) session.getAttribute(CHFORM_STEP3);
+        ChFormStep4 chForm4 = (ChFormStep4) session.getAttribute(CHFORM_STEP4);
+        System.out.println("chForm1 = " + chForm1);
+        System.out.println("chForm2 = " + chForm2);
+        System.out.println("chForm3 = " + chForm3);
+        for (Attribute attribute : chForm3.getNormalAttributes()) {
+            System.out.println("normalAttribute.getAttrName() = " + attribute.getAttrName());
+            System.out.println("normalAttribute.getAttrValue() = " + attribute.getAttrValue());
+        }
+        for (Attribute attribute : chForm3.getEnhancedAttributes()) {
+            System.out.println("normalAttribute.getAttrName() = " + attribute.getAttrName());
+            System.out.println("normalAttribute.getAttrValue() = " + attribute.getAttrValue());
+        }
+        for (Attribute attribute : chForm3.getLowSkillAttributes()) {
+            System.out.println("normalAttribute.getAttrName() = " + attribute.getAttrName());
+            System.out.println("normalAttribute.getAttrValue() = " + attribute.getAttrValue());
+        }
+        for (Attribute attribute : chForm3.getHighSkillAttributes()) {
+            System.out.println("normalAttribute.getAttrName() = " + attribute.getAttrName());
+            System.out.println("normalAttribute.getAttrValue() = " + attribute.getAttrValue());
+        }
+        System.out.println("chForm4 = " + chForm4);
 
         return "management/characters/summary";
     }

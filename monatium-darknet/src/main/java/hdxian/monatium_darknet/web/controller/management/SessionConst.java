@@ -15,4 +15,11 @@ public interface SessionConst {
     public static final String IMAGE_URL_PORTRAIT = "portraitImageUrl";
     public static final String IMAGE_URL_BODY = "bodyImageUrl";
 
+    public static final String IMAGE_URL_LOWSKILL = "lowSkillImageUrl";
+
+    public static final String IMAGE_URL_ASIDE = "asideImageUrl";
+    public static final String IMAGE_URL_ASIDE_LV1 = "asideLv1ImageUrl";
+    public static final String IMAGE_URL_ASIDE_LV2 = "asideLv2ImageUrl";
+    public static final String IMAGE_URL_ASIDE_LV3 = "asideLv3ImageUrl";
+
 }

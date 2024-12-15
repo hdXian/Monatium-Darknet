@@ -43,7 +43,7 @@
                             <div class="col-md-3 text-center">
                                 <label for="asideImage" class="form-label">이미지</label>
                                 <div class="image-upload-wrapper">
-                                    <img id="asideImagePreview1" src="https://via.placeholder.com/120x120.png?text=이미지" 
+                                    <img id="asideImagePreview1" th:src="${asideImageUrl}"
                                         alt="이미지 미리보기" class="img-thumbnail">
                                     <input th:field="*{asideImage}" type="file" id="asideImage" name="asideImage" class="form-control d-none"
                                         accept="image/*" onchange="previewImage(this)">
@@ -73,7 +73,7 @@
                             <div class="col-md-3 text-center">
                                 <label for="asideLv1Image" class="form-label">이미지</label>
                                 <div class="image-upload-wrapper">
-                                    <img id="aside1ImagePreview" src="https://via.placeholder.com/120x120.png?text=이미지"
+                                    <img id="aside1ImagePreview" th:src="${asideLv1ImageUrl}"
                                         alt="이미지 미리보기" class="img-thumbnail">
                                     <input th:field="*{asideLv1Image}" type="file" id="asideLv1Image" name="asideLv1Image" class="form-control d-none"
                                         accept="image/*" onchange="previewImage(this)">
@@ -112,7 +112,7 @@
                             <div class="col-md-3 text-center">
                                 <label for="asideLv2Image" class="form-label">이미지</label>
                                 <div class="image-upload-wrapper">
-                                    <img id="aside2ImagePreview" src="https://via.placeholder.com/120x120.png?text=이미지"
+                                    <img id="aside2ImagePreview" th:src="${asideLv2ImageUrl}"
                                         alt="이미지 미리보기" class="img-thumbnail">
                                     <input th:field="*{asideLv2Image}" type="file" id="asideLv2Image" name="asideLv2Image" class="form-control d-none"
                                         accept="image/*" onchange="previewImage(this)">
@@ -151,7 +151,7 @@
                             <div class="col-md-3 text-center">
                                 <label for="asideLv3Image" class="form-label">이미지</label>
                                 <div class="image-upload-wrapper">
-                                    <img id="asideImagePreview4" src="https://via.placeholder.com/120x120.png?text=이미지" 
+                                    <img id="asideImagePreview4" th:src="${asideLv3ImageUrl}"
                                         alt="이미지 미리보기" class="img-thumbnail">
                                     <input th:field="*{asideLv3Image}" type="file" id="asideLv3Image" name="asideLv3Image" class="form-control d-none"
                                         accept="image/*" onchange="previewImage(this)">
