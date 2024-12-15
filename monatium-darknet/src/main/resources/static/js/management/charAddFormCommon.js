@@ -44,11 +44,11 @@ function setupDynamicInputFields({ containerId, addButtonClass, removeButtonClas
 
         // + 버튼이 클릭되었을 때
         if (target.classList.contains(addButtonClass)) {
-            const currentIndex = container.querySelectorAll('.trait-input-container').length;
+            const currentIndex = container.querySelectorAll('.attribute-input-container').length;
 
             // 새로운 특성 입력 필드 추가
             const newTraitInput = document.createElement('div');
-            newTraitInput.classList.add('d-flex', 'align-items-center', 'mb-2', 'trait-input-container');
+            newTraitInput.classList.add('d-flex', 'align-items-center', 'mb-2', 'attribute-input-container');
 
             newTraitInput.innerHTML = `
                 <input type="text" name="${inputNamePrefix}[${currentIndex}].attrName"
@@ -65,11 +65,11 @@ function setupDynamicInputFields({ containerId, addButtonClass, removeButtonClas
 
         // - 버튼이 클릭되었을 때
         if (target.classList.contains(removeButtonClass)) {
-            const allTraitContainers = container.querySelectorAll('.trait-input-container');
+            const allTraitContainers = container.querySelectorAll('.attribute-input-container');
 
             // **방식 1 적용: 삭제 전에 검사**
             if (allTraitContainers.length > 1) {
-                const traitInputContainer = target.closest('.trait-input-container');
+                const traitInputContainer = target.closest('.attribute-input-container');
                 traitInputContainer.remove();
                 updateFieldNames(container, inputNamePrefix); // 인덱스를 다시 정렬
             } else {
@@ -84,12 +84,12 @@ function setupDynamicInputFields({ containerId, addButtonClass, removeButtonClas
      * @param {string} inputNamePrefix - 동적 추가 필드의 name 속성에 들어갈 접두사
      */
     function updateFieldNames(container, inputNamePrefix) {
-        const traitContainers = container.querySelectorAll('.trait-input-container');
+        const traitContainers = container.querySelectorAll('.attribute-input-container');
 
         // **방식 2 적용: 모든 입력 필드 삭제 후 보장**
         if (traitContainers.length === 0) {
             const newTraitInput = document.createElement('div');
-            newTraitInput.classList.add('d-flex', 'align-items-center', 'mb-2', 'trait-input-container');
+            newTraitInput.classList.add('d-flex', 'align-items-center', 'mb-2', 'attribute-input-container');
 
             newTraitInput.innerHTML = `
                 <input type="text" name="${inputNamePrefix}[0].attrName"

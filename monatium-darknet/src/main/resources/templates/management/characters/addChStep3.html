@@ -46,15 +46,13 @@
                         </div>
                 
                         <label class="form-label">특성</label>
-                        <div id="basic-attack-traits-container">
-
-                            <div th:each="attribute, stat : *{normalAttributes}" class="d-flex align-items-center mb-2 trait-input-container">
+                        <div id="normalAttack-attributes-container">
+                            <div th:each="attribute, stat : *{normalAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
                                 <input type="text" th:field="*{normalAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
                                 <input type="text" th:field="*{normalAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
                                 <button type="button" class="btn btn-success btn-add-normal-attribute">+</button>
                                 <button type="button" class="btn btn-danger btn-remove-normal-attribute">-</button>
                             </div>
-
                         </div>
 
                     </div>
@@ -71,8 +69,8 @@
                         </div>
                 
                         <label class="form-label">특성</label>
-                        <div id="enhanced-attack-traits-container">
-                            <div class="d-flex align-items-center mb-2 trait-input-container">
+                        <div id="enhancedAttack-attributes-container">
+                            <div class="d-flex align-items-center mb-2 attribute-input-container">
                                 <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
                                 <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
                                 <button type="button" class="btn btn-success btn-add-trait">+</button>
@@ -116,8 +114,8 @@
 
                         <!-- 특성 입력 -->
                         <label class="form-label">특성</label>
-                        <div id="lowSkill-traits-container">
-                            <div class="d-flex align-items-center mb-2 trait-input-container">
+                        <div id="lowSkill-attributes-container">
+                            <div class="d-flex align-items-center mb-2 attribute-input-container">
                                 <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
                                 <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
                                 <button type="button" class="btn btn-success btn-add-trait">+</button>
@@ -141,8 +139,8 @@
                         </div>
                 
                         <label class="form-label">특성</label>
-                        <div id="high-skill-traits-container">
-                            <div class="d-flex align-items-center mb-2 trait-input-container">
+                        <div id="highSkill-attributes-container">
+                            <div class="d-flex align-items-center mb-2 attribute-input-container">
                                 <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
                                 <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
                                 <button type="button" class="btn btn-success btn-add-trait">+</button>

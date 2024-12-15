@@ -134,7 +134,7 @@ textarea.auto-resize {
     max-width: 25%; /* 특성 수치의 너비를 줄여 공간 확보 */
 }
 
-.trait-input-container button {
+.attribute-input-container button {
     width: 32px; /* 버튼의 가로 크기를 작게 조정 */
     height: 32px; /* 버튼의 높이도 조정하여 일관성 유지 */
     padding: 0; /* 버튼 내부 여백 제거 */
