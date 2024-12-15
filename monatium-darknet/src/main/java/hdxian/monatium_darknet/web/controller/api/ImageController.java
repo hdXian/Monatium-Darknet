@@ -1,6 +1,7 @@
 package hdxian.monatium_darknet.web.controller.api;
 
 import hdxian.monatium_darknet.file.FileStorageService;
+import hdxian.monatium_darknet.file.LocalFileStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -21,11 +22,7 @@ import java.net.MalformedURLException;
 public class ImageController {
 
     // TODO - IOException 나는것들 묶어서 처리하기
-
-    private final FileStorageService fileStorageService;
-
-    @Value("${file.tempDir}")
-    private String tempDir;
+    private final LocalFileStorageService fileStorageService;
 
     // 파일 이름과 타입으로 서버에 이미지 요청
     @GetMapping("/{fileName}")
@@ -35,6 +32,14 @@ public class ImageController {
         UrlResource urlResource = new UrlResource("file:" + fileStorageService.getFullPath(basePath + fileName));
 
         return ResponseEntity.ok(urlResource);
+    }
+
+    @GetMapping("/tmp/{fileName}")
+    public ResponseEntity<Resource> getImageFromTemp(@PathVariable("fileName") String fileName) throws IOException {
+        String tempDir = fileStorageService.getTempDir();
+        String fullPath = fileStorageService.getFullPath(tempDir);
+        UrlResource resource = new UrlResource("file:" + fullPath + fileName);
+        return ResponseEntity.ok(resource);
     }
 
     // 서버에 이미지를 업로드
@@ -58,9 +63,9 @@ public class ImageController {
     private String setBasePath(String type) {
         switch (type) {
             case "tmp":
-                return tempDir;
+                return fileStorageService.getTempDir();
             default:
-                return tempDir;
+                return fileStorageService.getTempDir();
         }
     }
 

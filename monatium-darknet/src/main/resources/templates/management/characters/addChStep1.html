@@ -117,7 +117,7 @@
                                 <label for="profileImage" class="form-label">프로필 이미지</label>
                                 <div class="image-upload-wrapper">
                                     <img id="profileImagePreview" 
-                                        src="https://via.placeholder.com/120x120.png?text=프로필" 
+                                        th:src="${profileImageUrl}"
                                         alt="프로필 이미지 미리보기" 
                                         class="img-thumbnail">
                                     <input th:field="*{profileImage}" type="file" id="profileImage" name="profileImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
@@ -129,7 +129,7 @@
                                 <label for="portraitImage" class="form-label">초상화 이미지</label>
                                 <div class="image-upload-wrapper">
                                     <img id="portraitImagePreview" 
-                                        src="https://via.placeholder.com/120x120.png?text=초상화" 
+                                        th:src="${portraitImageUrl}"
                                         alt="초상화 이미지 미리보기" 
                                         class="img-thumbnail">
                                     <input th:field="*{portraitImage}" type="file" id="portraitImage" name="portraitImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
@@ -141,7 +141,7 @@
                                 <label for="bodyImage" class="form-label">전신 이미지</label>
                                 <div class="image-upload-wrapper">
                                     <img id="fullBodyImagePreview" 
-                                        src="https://via.placeholder.com/120x120.png?text=전신" 
+                                        th:src="${bodyImageUrl}"
                                         alt="전신 이미지 미리보기" 
                                         class="img-thumbnail">
                                     <input th:field="*{bodyImage}" type="file" id="bodyImage" name="bodyImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
