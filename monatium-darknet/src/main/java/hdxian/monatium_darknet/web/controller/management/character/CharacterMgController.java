@@ -100,6 +100,8 @@ public class CharacterMgController {
             return "management/characters/addChStep4";
         }
 
+        log.info("chForm4 = {}", chForm);
+
         return "redirect:/management/characters/preview"; // 4단계 끝나면 캐릭터 리스트 또는 미리보기 페이지로 이동
     }
 
