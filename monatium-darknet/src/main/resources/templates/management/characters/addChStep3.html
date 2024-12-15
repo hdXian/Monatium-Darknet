@@ -91,7 +91,7 @@
                                 <div class="image-upload-wrapper">
                                     <img id="lowSkillImagePreview" src="https://via.placeholder.com/120x120.png?text=이미지" 
                                         alt="스킬 이미지 미리보기" class="img-thumbnail">
-                                    <input type="file" id="lowSkillImage" name="lowSkillImage" class="form-control d-none" 
+                                    <input th:field="*{lowSkillImage}" type="file" id="lowSkillImage" name="lowSkillImage" class="form-control d-none"
                                         accept="image/*" onchange="previewImage(this)">
                                 </div>
                             </div>
@@ -101,13 +101,13 @@
                                 <!-- 스킬 이름 입력 -->
                                 <div class="mb-3">
                                     <label for="lowSkillName" class="form-label">스킬 이름</label>
-                                    <input type="text" id="lowSkillName" name="lowSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                                    <input th:field="*{lowSkillName}" type="text" id="lowSkillName" name="lowSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
                                 </div>
 
                                 <!-- 스킬 효과 입력 -->
                                 <div class="mb-3">
-                                    <label for="lowSkillEffect" class="form-label">스킬 효과</label>
-                                    <textarea id="lowSkillEffect" name="lowSkillEffect" class="form-control auto-resize" placeholder="스킬 효과를 입력하세요"></textarea>
+                                    <label for="lowSkillDescription" class="form-label">스킬 효과</label>
+                                    <textarea th:field="*{lowSkillDescription}" id="lowSkillDescription" name="lowSkillDescription" class="form-control auto-resize" placeholder="스킬 효과를 입력하세요"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -115,11 +115,11 @@
                         <!-- 특성 입력 -->
                         <label class="form-label">특성</label>
                         <div id="lowSkill-attributes-container">
-                            <div class="d-flex align-items-center mb-2 attribute-input-container">
-                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
-                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
-                                <button type="button" class="btn btn-success btn-add-trait">+</button>
-                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                            <div th:each="attribute, stat : *{lowSkillAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{lowSkillAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{lowSkillAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-lowSkill-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-lowSkill-attribute">-</button>
                             </div>
                         </div>
                     </div>
@@ -130,21 +130,21 @@
                 
                         <div class="mb-3">
                             <label for="highSkillName" class="form-label">스킬 이름</label>
-                            <input type="text" id="highSkillName" name="highSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                            <input th:field="*{highSkillName}" type="text" id="highSkillName" name="highSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
                         </div>
                 
                         <div class="mb-3">
                             <label for="highSkillEffect" class="form-label">스킬 효과</label>
-                            <textarea id="highSkillEffect" name="highSkillEffect" class="form-control auto-resize" placeholder="스킬 효과를 입력하세요"></textarea>
+                            <textarea th:field="*{highSkillDescription}" id="highSkillEffect" name="highSkillEffect" class="form-control auto-resize" placeholder="스킬 효과를 입력하세요"></textarea>
                         </div>
                 
                         <label class="form-label">특성</label>
                         <div id="highSkill-attributes-container">
-                            <div class="d-flex align-items-center mb-2 attribute-input-container">
-                                <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
-                                <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
-                                <button type="button" class="btn btn-success btn-add-trait">+</button>
-                                <button type="button" class="btn btn-danger btn-remove-trait">-</button>
+                            <div th:each="attribute, stat : *{highSkillAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{highSkillAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{highSkillAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-highSkill-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-highSkill-attribute">-</button>
                             </div>
                         </div>
                     </div>

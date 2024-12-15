@@ -27,7 +27,7 @@ public class ChFormStep3 {
 
     // 강화 공격
     private String enhancedAttackDescription;
-    List<Attribute> enhancedAttributes = new ArrayList<>();
+    private List<Attribute> enhancedAttributes = new ArrayList<>();
 
     // Getter
     public List<Attribute> getEnhancedAttributes() {
@@ -39,23 +39,49 @@ public class ChFormStep3 {
     }
 
     // 저학년 스킬
-    private Skill lowSkill;
-    private Skill highSkill;
+    private String lowSkillName;
+    private String lowSkillDescription;
+    private Integer lowSkillCooldown;
+    private MultipartFile lowSkillImage;
+    private List<Attribute> lowSkillAttributes = new ArrayList<>();
 
-//    private Attack normalAttack;
-//    public Attack generateNormalAttack() {
-//        if (normalAttack != null) {
-//            return null;
-//        }
-//        return null;
-//    }
-//
-//    private Attack enhancedAttack;
-//    public Attack generateEnhancedAttack() {
-//        if (enhancedAttack != null) {
-//            return null;
-//        }
-//        return null;
-//    }
+    public List<Attribute> getLowSkillAttributes() {
+        if (lowSkillAttributes.isEmpty()) {
+            lowSkillAttributes.add(new Attribute("", ""));
+        }
+        return lowSkillAttributes;
+    }
+
+    // 고학년 스킬
+    private String highSkillName;
+    private String highSkillDescription;
+    private Integer highSkillCooldown;
+    private List<Attribute> highSkillAttributes = new ArrayList<>();
+
+    public List<Attribute> getHighSkillAttributes() {
+        if (highSkillAttributes.isEmpty()) {
+            highSkillAttributes.add(new Attribute("", ""));
+        }
+        return highSkillAttributes;
+    }
+
+    // Attack, Skill 객체로 받아오기 (컨트롤러에서 사용, 렌더링 대상 x)
+    public Attack generateNormalAttack() {
+        return Attack.createNormalAttack(normalAttackDescription, normalAttributes);
+    }
+
+    public Attack generateEnhancedAttack() {
+        return Attack.createEnhancedAttack(enhancedAttackDescription, enhancedAttributes);
+    }
+
+    public Skill generateLowSkill() {
+        return Skill.createLowSkill(lowSkillName, lowSkillDescription,
+                "", lowSkillAttributes);
+    }
+
+    public Skill generateHighSkill() {
+        return Skill.createHighSkill(highSkillName, highSkillDescription,
+                highSkillCooldown, "", highSkillAttributes);
+    }
 
 }

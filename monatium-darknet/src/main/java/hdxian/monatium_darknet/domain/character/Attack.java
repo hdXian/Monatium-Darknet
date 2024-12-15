@@ -37,22 +37,39 @@ public class Attack {
 
     // 생성 메서드
     // Character와의 연관관계는 Character의 생성 메서드에서 설정
-    public static Attack createNormalAttack(String description, Attribute... attributes) {
+    public static Attack createNormalAttack(String description) {
         Attack normalAttack = new Attack();
         normalAttack.setCategory(AttackCategory.NORMAL);
         normalAttack.setDescription(description);
 
-        normalAttack.attributes.addAll(Arrays.asList(attributes));
+        return normalAttack;
+    }
+
+    public static Attack createNormalAttack(String description, List<Attribute> attributes) {
+        Attack normalAttack = new Attack();
+        normalAttack.setCategory(AttackCategory.NORMAL);
+        normalAttack.setDescription(description);
+
+        normalAttack.attributes.addAll(attributes);
 
         return normalAttack;
     }
 
-    public static Attack createEnhancedAttack(String description, Attribute... attributes) {
+    public static Attack createEnhancedAttack(String description) {
         Attack enhancedAttack = new Attack();
         enhancedAttack.setCategory(AttackCategory.ENHANCED);
         enhancedAttack.setDescription(description);
 
-        enhancedAttack.attributes.addAll(Arrays.asList(attributes));
+
+        return enhancedAttack;
+    }
+
+    public static Attack createEnhancedAttack(String description, List<Attribute> attributes) {
+        Attack enhancedAttack = new Attack();
+        enhancedAttack.setCategory(AttackCategory.ENHANCED);
+        enhancedAttack.setDescription(description);
+
+        enhancedAttack.attributes.addAll(attributes);
 
         return enhancedAttack;
     }
