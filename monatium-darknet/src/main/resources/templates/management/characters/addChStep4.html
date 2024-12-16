@@ -20,7 +20,7 @@
 
     <div class="form-section">
 
-        <h2 class="form-title">캐릭터 추가</h2>
+        <h2 class="form-title">캐릭터 추가(4 of 4)</h2>
 
         <form th:object="${chForm}" th:action="@{/management/characters/new/step4}" method="post" enctype="multipart/form-data">
 
@@ -57,8 +57,8 @@
                                 </div>
                 
                                 <div class="mb-3">
-                                    <label for="description" class="form-label">어사이드 설명</label>
-                                    <textarea th:field="*{description}" id="description" name="description" class="form-control auto-resize" placeholder="설명을 입력하세요"></textarea>
+                                    <label for="asideDescription" class="form-label">어사이드 설명</label>
+                                    <textarea th:field="*{asideDescription}" id="asideDescription" name="asideDescription" class="form-control auto-resize" placeholder="설명을 입력하세요"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -188,7 +188,7 @@
             <!-- 폼 제출 버튼 -->
             <div class="d-flex justify-content-between mt-4">
                 <a th:href="@{/management/characters/new/step3}" class="btn btn-secondary">이전으로</a>
-                <button type="submit" class="btn btn-primary">다음 단계로</button>
+                <button type="submit" class="btn btn-primary">마지막 확인하러 가기</button>
             </div>
             
         </form>
