@@ -30,11 +30,14 @@ public class LocalFileStorageService2 {
     // 임시 경로에 파일을 저장하는 메서드
     // 파일을 저장하고, 경로와 파일명을 리턴
     public FileDto saveFileToTemp(MultipartFile multipartFile) throws IOException {
-        String fullPath = getFullPath(tempDir);
-        String savedFileName = generateFileName(multipartFile.getOriginalFilename());
+        String tempDirName = getFullPath(tempDir);
+        Path tempDir = Paths.get(tempDirName);
 
-        multipartFile.transferTo(new File(fullPath + savedFileName));
-        return new FileDto(fullPath, savedFileName);
+        String savedFileName = generateFileName(multipartFile.getOriginalFilename());
+        Path targetFile = tempDir.resolve(savedFileName);
+
+        multipartFile.transferTo(targetFile.toFile());
+        return new FileDto(tempDirName, savedFileName);
     }
 
     // 임시 저장 파일의 전체 경로를 리턴 (baseDir + tempDir을 붙여줌)

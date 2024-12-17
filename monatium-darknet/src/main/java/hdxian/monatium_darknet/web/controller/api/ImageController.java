@@ -1,8 +1,10 @@
 package hdxian.monatium_darknet.web.controller.api;
 
 import hdxian.monatium_darknet.domain.character.*;
+import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.FileStorageService;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
+import hdxian.monatium_darknet.file.LocalFileStorageService2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -23,7 +25,8 @@ import java.net.MalformedURLException;
 public class ImageController {
 
     // TODO - IOException 나는것들 묶어서 처리하기
-    private final LocalFileStorageService fileStorageService;
+//    private final LocalFileStorageService fileStorageService;
+    private final LocalFileStorageService2 fileStorageService;
 
     @GetMapping("/icon/race/{race}")
     public ResponseEntity<Resource> getIcon(@PathVariable("race")Race race) throws MalformedURLException {
@@ -60,12 +63,14 @@ public class ImageController {
 
 
 
+    // TODO - 컨트롤러 로직 갈아엎어야 함
     // 파일 이름과 타입으로 서버에 이미지 요청
     @GetMapping("/{fileName}")
     public ResponseEntity<Resource> getImage(@PathVariable("fileName") String fileName, @RequestParam("t") String type) throws IOException {
         String basePath = setBasePath(type);
 
-        UrlResource urlResource = new UrlResource("file:" + fileStorageService.getFullPath(basePath + fileName));
+        String filePath = fileStorageService.getFilePath(new FileDto(basePath, fileName));
+        UrlResource urlResource = new UrlResource("file:" + filePath);
 
         return ResponseEntity.ok(urlResource);
     }
@@ -83,11 +88,19 @@ public class ImageController {
     public UploadImageResponseDto uploadImage(@RequestParam("file") MultipartFile multipartFile, @RequestParam("t") String type) throws MalformedURLException {
         String basePath = setBasePath(type);
 
-        String saveFileName = generateFileName(multipartFile.getOriginalFilename());
-        String savePath = basePath + saveFileName;
+//        String saveFileName = generateFileName(multipartFile.getOriginalFilename());
+        String saveFileName;
 
         try {
-            fileStorageService.uploadFile(multipartFile, savePath);
+            if (type.equals("tmp")) {
+                log.info("save multipartFile to temp path");
+                FileDto fileDto = fileStorageService.saveFileToTemp(multipartFile);
+                saveFileName = fileDto.getFileName();
+            }
+            else {
+                saveFileName = generateFileName(multipartFile.getOriginalFilename());
+                fileStorageService.saveFile(multipartFile, new FileDto(basePath, saveFileName));
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
