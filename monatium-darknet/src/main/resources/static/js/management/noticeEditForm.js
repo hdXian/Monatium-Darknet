@@ -24,7 +24,7 @@ const quill = new Quill('#editor', {
                         formData.append('file', file);
 
                         try {
-                            const response = await fetch('/api/images/upload?t=tmp', {
+                            const response = await fetch('/api/images/upload/tmp', {
                                 method: 'POST',
                                 body: formData
                             });

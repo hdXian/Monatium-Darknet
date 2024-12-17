@@ -16,6 +16,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
+// legecy
+@Deprecated
 @Slf4j
 @Service
 public class LocalFileStorageService implements FileStorageService {

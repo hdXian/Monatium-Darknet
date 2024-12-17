@@ -2,13 +2,9 @@ package hdxian.monatium_darknet.web.controller.api;
 
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.file.FileDto;
-import hdxian.monatium_darknet.file.FileStorageService;
-import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.file.LocalFileStorageService2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
@@ -58,71 +54,45 @@ public class ImageController {
         return ResponseEntity.ok(urlResource);
     }
 
-
-
-
-
-
-    // TODO - 컨트롤러 로직 갈아엎어야 함
-    // 파일 이름과 타입으로 서버에 이미지 요청
-    @GetMapping("/{fileName}")
-    public ResponseEntity<Resource> getImage(@PathVariable("fileName") String fileName, @RequestParam("t") String type) throws IOException {
-        String basePath = setBasePath(type);
-
-        String filePath = fileStorageService.getFilePath(new FileDto(basePath, fileName));
-        UrlResource urlResource = new UrlResource("file:" + filePath);
-
-        return ResponseEntity.ok(urlResource);
-    }
-
+    // 임시 경로 이미지 요청
     @GetMapping("/tmp/{fileName}")
     public ResponseEntity<Resource> getImageFromTemp(@PathVariable("fileName") String fileName) throws IOException {
-        String tempDir = fileStorageService.getTempDir();
-        String fullPath = fileStorageService.getFullPath(tempDir);
-        UrlResource resource = new UrlResource("file:" + fullPath + fileName);
+        String filePath = fileStorageService.getFilePathFromTemp(fileName);
+        UrlResource resource = new UrlResource("file:" + filePath);
         return ResponseEntity.ok(resource);
     }
 
-    // 서버에 이미지를 업로드
-    @PostMapping("/upload")
-    public UploadImageResponseDto uploadImage(@RequestParam("file") MultipartFile multipartFile, @RequestParam("t") String type) throws MalformedURLException {
-        String basePath = setBasePath(type);
-
-//        String saveFileName = generateFileName(multipartFile.getOriginalFilename());
-        String saveFileName;
+    // 서버 임시 경로에 이미지를 업로드
+    @PostMapping("/upload/tmp")
+    public UploadImageResponseDto uploadImage(@RequestParam("file") MultipartFile multipartFile) {
 
         try {
-            if (type.equals("tmp")) {
-                log.info("save multipartFile to temp path");
-                FileDto fileDto = fileStorageService.saveFileToTemp(multipartFile);
-                saveFileName = fileDto.getFileName();
-            }
-            else {
-                saveFileName = generateFileName(multipartFile.getOriginalFilename());
-                fileStorageService.saveFile(multipartFile, new FileDto(basePath, saveFileName));
-            }
+
+            FileDto fileDto = fileStorageService.saveFileToTemp(multipartFile);
+            String fileName = fileDto.getFileName();
+            String imageUrl = "/api/images/tmp/" + fileName;
+            return new UploadImageResponseDto(true, imageUrl);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        String imageUrl = "/api/images/" + saveFileName + "?t=tmp";
-        return new UploadImageResponseDto(true, imageUrl);
     }
 
-    private String setBasePath(String type) {
-        switch (type) {
-            case "tmp":
-                return fileStorageService.getTempDir();
-            default:
-                return fileStorageService.getTempDir();
-        }
-    }
 
-    private static String generateFileName(String OriginalFileName) {
-        // 랜덤 문자열 생성 (난독화)
-        String randomName = RandomStringUtils.randomAlphanumeric(20);
 
-        return randomName + "_" + OriginalFileName;
-    }
+    // TODO - 컨트롤러 로직 갈아엎어야 함
+//    // 파일 이름과 타입으로 서버에 이미지 요청
+//    @GetMapping("/{fileName}")
+//    public ResponseEntity<Resource> getImage(@PathVariable("fileName") String fileName, @RequestParam("t") String type) throws IOException {
+//        String basePath = setBasePath(type);
+//
+//        String filePath = fileStorageService.getFilePath(new FileDto(basePath, fileName));
+//        UrlResource urlResource = new UrlResource("file:" + filePath);
+//
+//        return ResponseEntity.ok(urlResource);
+//    }
+
+
 
 }
