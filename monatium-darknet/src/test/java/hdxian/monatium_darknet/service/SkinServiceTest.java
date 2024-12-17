@@ -419,7 +419,7 @@ class SkinServiceTest {
         AsideSpec level3 = AsideSpec.createAsideSpec(name + "어사이드3레벨", name + "어사이드3레벨 설명", "어사이드 3레벨 이미지 url");
         level3.addAttribute("어사이드 3단계 속성", "333%");
 
-        Aside aside = Aside.createAside(name + "어사이드", name + "어사이드 설명", level1, level2, level3);
+        Aside aside = Aside.createAside(name + "어사이드", name + "어사이드 설명", "어사이드 이미지 url", level1, level2, level3);
 
         CharacterDto dto = new CharacterDto();
         dto.setName(name);

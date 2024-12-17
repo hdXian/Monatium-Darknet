@@ -17,6 +17,8 @@ public class Aside {
 
     private String description;
 
+    private String imageUrl;
+
     @OneToOne(mappedBy = "aside")
     private Character character;
 
@@ -40,10 +42,11 @@ public class Aside {
     }
 
     // 생성 메서드 (AsideSpec 필드에 대해 cascade ALL 설정돼있음 -> Aside 저장시 함께 저장)
-    public static Aside createAside(String name, String description, AsideSpec lv1, AsideSpec lv2, AsideSpec lv3) {
+    public static Aside createAside(String name, String description, String imageUrl, AsideSpec lv1, AsideSpec lv2, AsideSpec lv3) {
         Aside aside = new Aside();
         aside.setName(name);
         aside.setDescription(description);
+        aside.setImageUrl(imageUrl);
 //        aside.setCharacter(character); Character 연관관계는 Character 생성 메서드에서 설정 (연관관계 주인을 Character로 잡음)
         aside.setLevel1(lv1);
         aside.setLevel2(lv2);
