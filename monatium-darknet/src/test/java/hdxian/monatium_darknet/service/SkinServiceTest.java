@@ -410,16 +410,16 @@ class SkinServiceTest {
         CharacterUrl urls = new CharacterUrl(name+"portrait_url", name+"profile_url", name+"body_url");
 
         // 어사이드
-        AsideSpec level1 = AsideSpec.createAsideSpec(name + "어사이드1레벨", name + "어사이드1레벨 설명", "어사이드 1레벨 이미지 url");
+        AsideSpec level1 = AsideSpec.createAsideSpec(name + "어사이드1레벨", name + "어사이드1레벨 설명");
         level1.addAttribute("어사이드 1단계 속성", "111%");
 
-        AsideSpec level2 = AsideSpec.createAsideSpec(name + "어사이드2레벨", name + "어사이드2레벨 설명", "어사이드 2레벨 이미지 url");
+        AsideSpec level2 = AsideSpec.createAsideSpec(name + "어사이드2레벨", name + "어사이드2레벨 설명");
         level2.addAttribute("어사이드 2단계 속성", "222%");
 
-        AsideSpec level3 = AsideSpec.createAsideSpec(name + "어사이드3레벨", name + "어사이드3레벨 설명", "어사이드 3레벨 이미지 url");
+        AsideSpec level3 = AsideSpec.createAsideSpec(name + "어사이드3레벨", name + "어사이드3레벨 설명");
         level3.addAttribute("어사이드 3단계 속성", "333%");
 
-        Aside aside = Aside.createAside(name + "어사이드", name + "어사이드 설명", "어사이드 이미지 url", level1, level2, level3);
+        Aside aside = Aside.createAside(name + "어사이드", name + "어사이드 설명", level1, level2, level3);
 
         CharacterDto dto = new CharacterDto();
         dto.setName(name);

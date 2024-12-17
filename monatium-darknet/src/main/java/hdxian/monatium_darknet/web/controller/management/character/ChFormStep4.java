@@ -58,10 +58,10 @@ public class ChFormStep4 {
 
     // 어사이드 스펙 객체 만들어서 리턴 (컨트롤러에서 사용. 렌더링에 사용 x)
     public Aside generateAside() {
-        AsideSpec lv1 = AsideSpec.createAsideSpec(asideLv1Name, asideLv1Description, "", asideLv1Attributes);
-        AsideSpec lv2 = AsideSpec.createAsideSpec(asideLv2Name, asideLv2Description, "", asideLv2Attributes);
-        AsideSpec lv3 = AsideSpec.createAsideSpec(asideLv3Name, asideLv3Description, "", asideLv3Attributes);
-        return Aside.createAside(asideName, asideDescription, "", lv1, lv2, lv3);
+        AsideSpec lv1 = AsideSpec.createAsideSpec(asideLv1Name, asideLv1Description, asideLv1Attributes);
+        AsideSpec lv2 = AsideSpec.createAsideSpec(asideLv2Name, asideLv2Description, asideLv2Attributes);
+        AsideSpec lv3 = AsideSpec.createAsideSpec(asideLv3Name, asideLv3Description, asideLv3Attributes);
+        return Aside.createAside(asideName, asideDescription, lv1, lv2, lv3);
     }
 
 }
