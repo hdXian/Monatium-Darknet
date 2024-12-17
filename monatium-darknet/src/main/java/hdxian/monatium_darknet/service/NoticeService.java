@@ -5,7 +5,7 @@ import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import hdxian.monatium_darknet.domain.notice.NoticeStatus;
 import hdxian.monatium_darknet.file.FileDto;
-import hdxian.monatium_darknet.file.LocalFileStorageService2;
+import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.repository.NoticeRepository;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
@@ -29,7 +29,7 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final MemberService memberService;
 //    private final LocalFileStorageService fileStorageService;
-    private final LocalFileStorageService2 fileStorageService;
+    private final LocalFileStorageService fileStorageService;
 
     private final HtmlContentUtil htmlContentUtil;
 

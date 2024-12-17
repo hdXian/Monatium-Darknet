@@ -2,7 +2,7 @@ package hdxian.monatium_darknet.web.controller.api;
 
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.file.FileDto;
-import hdxian.monatium_darknet.file.LocalFileStorageService2;
+import hdxian.monatium_darknet.file.LocalFileStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -22,7 +22,7 @@ public class ImageController {
 
     // TODO - IOException 나는것들 묶어서 처리하기
 //    private final LocalFileStorageService fileStorageService;
-    private final LocalFileStorageService2 fileStorageService;
+    private final LocalFileStorageService fileStorageService;
 
     @GetMapping("/icon/race/{race}")
     public ResponseEntity<Resource> getIcon(@PathVariable("race")Race race) throws MalformedURLException {

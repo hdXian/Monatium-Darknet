@@ -2,7 +2,7 @@ package hdxian.monatium_darknet.web.controller.management.character;
 
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.file.FileDto;
-import hdxian.monatium_darknet.file.LocalFileStorageService2;
+import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.service.CharacterService;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import jakarta.servlet.http.HttpSession;
@@ -30,7 +30,7 @@ public class CharacterMgController {
     private static final String defaultThumbnailUrl = "/imgs/defaultThumbnail.png";
 
     private final CharacterService characterService;
-    private final LocalFileStorageService2 fileStorageService;
+    private final LocalFileStorageService fileStorageService;
 
     @GetMapping
     public String characterList(Model model) {

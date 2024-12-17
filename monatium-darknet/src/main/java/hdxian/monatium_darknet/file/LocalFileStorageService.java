@@ -1,26 +1,23 @@
 package hdxian.monatium_darknet.file;
 
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
 
-// legecy
-@Deprecated
-@Slf4j
+// 파일 서비스는 파일을 전달받아 지정한 경로에 저장한다,
+// 그리고 저장한 파일에 대한 정보를 리턴한다.
+// 단지 그뿐이다. 그 이상의 일은 하지 않는다.
+
 @Service
-public class LocalFileStorageService implements FileStorageService {
+public class LocalFileStorageService {
 
     @Value("${file.dir}")
     private String baseDir;
@@ -29,113 +26,69 @@ public class LocalFileStorageService implements FileStorageService {
     @Value("${file.tempDir}")
     private String tempDir;
 
-    // multipartFile과 경로만 전달받아서 파일을 저장
-    @Override
-    public void uploadFile(MultipartFile multipartFile, String filePath) throws IOException {
+    // 임시 경로에 파일을 저장하는 메서드
+    // 파일을 저장하고, 경로와 파일명을 리턴
+    public FileDto saveFileToTemp(MultipartFile multipartFile) throws IOException {
+        String tempDirName = getFullPath(tempDir);
+        Path tempDir = Paths.get(tempDirName);
 
-        if (multipartFile.isEmpty()) {
-            log.error("[LocalFileStorageService.uploadFile()] multipartFile is empty");
-            throw new IOException("multipartFile is empty");
-        }
+        String savedFileName = generateFileName(multipartFile.getOriginalFilename());
+        Path targetFile = tempDir.resolve(savedFileName);
 
-        String savePath = getFullPath(filePath);
-
-        // 파일 저장
-        multipartFile.transferTo(new File(savePath));
+        multipartFile.transferTo(targetFile.toFile());
+        return new FileDto(tempDirName, savedFileName);
     }
 
-    @Override
-    public void uploadFiles(List<MultipartFile> multipartFiles, String filePath) throws IOException {
-        for (MultipartFile multipartFile : multipartFiles) {
-            uploadFile(multipartFile, filePath);
-        }
+    // 임시 저장 파일의 전체 경로를 리턴 (baseDir + tempDir을 붙여줌)
+    public String getFilePathFromTemp(String fileName) {
+        return getFullPath(tempDir) + fileName;
     }
 
-    public FileDto uploadFileToTemp(MultipartFile multipartFile) throws IOException {
-        String originalFilename = multipartFile.getOriginalFilename();
-        String savedFileName = generateFileName(originalFilename);
-        String fullPath = getFullPath(tempDir);
+    public FileDto saveFile(MultipartFile multipartFile, FileDto dst) throws IOException {
+        // 1. 저장할 디렉터리의 경로 객체 생성
+        String targetDirName = getFullPath(dst.getPath());
+        Path targetDir = Paths.get(targetDirName);
 
-        multipartFile.transferTo(new File(fullPath + savedFileName));
-        return new FileDto(fullPath, savedFileName);
+        // 2. 지정한 경로에 디렉터리 생성
+        Files.createDirectories(targetDir);
+
+        // 3. 파일을 저장할 경로 객체 생성
+        String fileName = dst.getFileName();
+        Path targetFile = targetDir.resolve(fileName);
+
+        // 4. 지정한 경로에 multipartFile의 파일 저장
+        multipartFile.transferTo(targetFile.toFile());
+
+        return new FileDto(targetDirName, fileName);
     }
 
-    public File getFileFromTemp(String fileName) throws IOException {
-        String fullPath = getFullPath(tempDir);
-        return new File(fullPath, fileName);
-    }
-
-    @Override
-    public File loadFile(FileDto target) throws IOException {
-        log.info("[LocalFileStorageService.loadFile()] get file {}", baseDir + target.getTotalPath());
-
-        return new File(baseDir, target.getTotalPath());
-    }
-
-    @Override
-    public List<File> loadFiles(List<FileDto> targets) throws IOException {
-        List<File> files = new ArrayList<>();
-        for (FileDto target : targets) {
-            files.add(loadFile(target));
-        }
-
-        return files;
-    }
-
-    @Override
+    // from -> to로 파일 이동
     public void moveFile(FileDto from, FileDto to) throws IOException {
+        // from 파일의 경로 객체 생성
+        String fromFileName = getFilePath(from);
+        Path sourcePath = Paths.get(fromFileName);
 
-        File fromFile = loadFile(from);
-        // 이동시킬 파일의 전체 경로 (file.toPath)
-        Path sourcePath = fromFile.toPath();
+        // to 파일의 경로 객체 생성
+        String toFileName = getFilePath(to);
+        Path destPath = Paths.get(toFileName);
 
-        // 파일을 저장할 경로 (디렉터리 경로까지만, base + dto.path)
-        Path targetDir = Paths.get(baseDir + to.getPath());
+        // to 파일 경로에 디렉터리 생성 (이미 있을 경우 안 건드림)
+        Files.createDirectories(destPath.getParent());
 
-        // 파일을 저장할 경로가 없으면 디렉터리를 새로 생성
-        if(!Files.exists(targetDir)) {
-            Files.createDirectories(targetDir);
-        }
-
-        // 목적지의 전체 경로 (경로 + 이름)
-        Path targetPath = Paths.get(baseDir + to.getTotalPath());
-
-        // 기존 파일이 존재하면 덮어쓰도록 설정
-        Files.move(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+        // from -> to 경로로 파일 이동
+        Files.move(sourcePath, destPath, StandardCopyOption.REPLACE_EXISTING);
     }
 
-    @Override
-    public void deleteFile(String fileName) throws IOException {
-        // TODO delete file
+    // 파일 전체 경로를 반환 (baseDir을 앞에 붙여줌)
+    public String getFilePath(FileDto findTo) {
+        return getFullPath(findTo.getTotalPath());
     }
 
-    @Override
-    public void init() throws IOException {
-//        TODO if (!Files.exists(fileDir)) ...
-    }
-
-    @Override
     public String getFullPath(String path) {
         return baseDir + path;
     }
 
-    @Override
-    public String extractFileName(String src) {
-        int idx = src.lastIndexOf("/");
-        return src.substring(idx+1);
-    }
-
-    @Override
-    public String extractExt(String fileName) {
-        int idx = fileName.lastIndexOf(".");
-
-        // 확장자 없을 경우 TODO - 파일 확장자 없을 시 예외처리 고려
-        if (idx == -1)
-            return "";
-
-        return fileName.substring(idx);
-    }
-
+    // 랜덤 파일명 생성
     private String generateFileName(String originalFileName) {
         String ext = extractExt(originalFileName);
 
@@ -145,9 +98,19 @@ public class LocalFileStorageService implements FileStorageService {
         return randomName + ext;
     }
 
-    public static String extractPath(String filePath) {
-        int idx = filePath.lastIndexOf("/");
-        return filePath.substring(0, idx+1);
+    public String extractExt(String fileName) {
+        int idx = fileName.lastIndexOf(".");
+
+        // 확장자 없을 경우
+        if (idx == -1)
+            return "";
+
+        return fileName.substring(idx);
+    }
+
+    public String extractFileName(String src) {
+        int idx = src.lastIndexOf("/");
+        return src.substring(idx+1);
     }
 
 }
