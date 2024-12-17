@@ -44,26 +44,5 @@ file:
   noticeDir: imgs/notice/
 
 url:
-  character:
-    stat:
-      personality:
-        pure: /imgs/wiki/icons/personality_pure.webp
-        madness: /imgs/wiki/icons/personality_madness.webp
-        cool: /imgs/wiki/icons/personality_cool.webp
-        gloomy: /imgs/wiki/icons/personality_gloomy.webp
-        activity: /imgs/wiki/icons/personality_activity.webp
-
-      role:
-        dealer: /imgs/wiki/icons/class_dealer.webp
-        tanker: /imgs/wiki/icons/class_tanker.webp
-        supporter: /imgs/wiki/icons/class_supporter.webp
-
-      attackType:
-        physical: /imgs/wiki/icons/normalAttack_physical.webp
-        magical: /imgs/wiki/icons/normalAttack_magical.webp
-
-      position:
-        front: /imgs/wiki/icons/position_front.webp
-        middle: /imgs/wiki/icons/position_middle.webp
-        back: /imgs/wiki/icons/position_back.webp
-        all: /imgs/wiki/icons/position_all.webp
+  baseurl:
+    icons: /imgs/wiki/icons/

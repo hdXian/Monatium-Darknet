@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.web.controller.api;
 
+import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.file.FileStorageService;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,41 @@ public class ImageController {
 
     // TODO - IOException 나는것들 묶어서 처리하기
     private final LocalFileStorageService fileStorageService;
+
+    @GetMapping("/icon/race/{race}")
+    public ResponseEntity<Resource> getIcon(@PathVariable("race")Race race) throws MalformedURLException {
+        UrlResource urlResource = new UrlResource("");
+        return ResponseEntity.ok(urlResource);
+    }
+
+    @GetMapping("/icon/personality/{personality}")
+    public ResponseEntity<Resource> getIcon(@PathVariable("personality")Personality personality) throws MalformedURLException {
+        UrlResource urlResource = new UrlResource("");
+        return ResponseEntity.ok(urlResource);
+    }
+
+    @GetMapping("/icon/class/{class}")
+    public ResponseEntity<Resource> getIcon(@PathVariable("class")Role role) throws MalformedURLException {
+        UrlResource urlResource = new UrlResource("");
+        return ResponseEntity.ok(urlResource);
+    }
+
+    @GetMapping("/icon/attackType/{attackType}")
+    public ResponseEntity<Resource> getIcon(@PathVariable("attackType")AttackType attackType) throws MalformedURLException {
+        UrlResource urlResource = new UrlResource("");
+        return ResponseEntity.ok(urlResource);
+    }
+
+    @GetMapping("/icon/position/{position}")
+    public ResponseEntity<Resource> getIcon(@PathVariable("position")Position position) throws MalformedURLException {
+        UrlResource urlResource = new UrlResource("");
+        return ResponseEntity.ok(urlResource);
+    }
+
+
+
+
+
 
     // 파일 이름과 타입으로 서버에 이미지 요청
     @GetMapping("/{fileName}")
