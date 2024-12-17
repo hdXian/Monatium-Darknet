@@ -41,8 +41,12 @@ logging.level:
 file:
   dir: D:/Dev/trickcal_unofficial/files/
   tempDir: temp/
-  noticeDir: imgs/notice/
+  noticeDir: imgs/notices/
+  wikiDir: imgs/wiki/
+  iconDir: imgs/wiki/icons/
+  chDir: imgs/wiki/characters/
+  asideDir: imgs/wiki/asides/
+  spellCardDir: imgs/wiki/cards/spell/
+  artifactCardDir: imgs/wiki/cards/artifact/
+  skinDir: imgs/wiki/skins/
 
-url:
-  baseurl:
-    icons: /imgs/wiki/icons/

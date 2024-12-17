@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 
 // 파일 서비스는 파일을 전달받아 지정한 경로에 저장한다,
 // 그리고 저장한 파일에 대한 정보를 리턴한다.
@@ -88,16 +89,6 @@ public class LocalFileStorageService {
         return baseDir + path;
     }
 
-    // 랜덤 파일명 생성
-    private String generateFileName(String originalFileName) {
-        String ext = extractExt(originalFileName);
-
-        // 랜덤 문자열 생성 (난독화)
-        String randomName = RandomStringUtils.randomAlphanumeric(20);
-
-        return randomName + ext;
-    }
-
     public String extractExt(String fileName) {
         int idx = fileName.lastIndexOf(".");
 
@@ -111,6 +102,21 @@ public class LocalFileStorageService {
     public String extractFileName(String src) {
         int idx = src.lastIndexOf("/");
         return src.substring(idx+1);
+    }
+
+    public String getContentType(String filePath) throws IOException {
+        String contentType = Files.probeContentType(Paths.get(filePath));
+        return Optional.ofNullable(contentType).orElse("application/octet-stream");
+    }
+
+    // 랜덤 파일명 생성
+    private String generateFileName(String originalFileName) {
+        String ext = extractExt(originalFileName);
+
+        // 랜덤 문자열 생성 (난독화)
+        String randomName = RandomStringUtils.randomAlphanumeric(20);
+
+        return randomName + ext;
     }
 
 }

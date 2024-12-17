@@ -3,10 +3,12 @@ package hdxian.monatium_darknet.web.controller.api;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
+import hdxian.monatium_darknet.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,12 +24,20 @@ public class ImageController {
 
     // TODO - IOException 나는것들 묶어서 처리하기
 //    private final LocalFileStorageService fileStorageService;
+    private final ImageService imageService;
     private final LocalFileStorageService fileStorageService;
 
     @GetMapping("/icon/race/{race}")
-    public ResponseEntity<Resource> getIcon(@PathVariable("race")Race race) throws MalformedURLException {
-        UrlResource urlResource = new UrlResource("");
-        return ResponseEntity.ok(urlResource);
+    public ResponseEntity<Resource> getIcon(@PathVariable("race")Race race) throws IOException {
+        String iconFileName = imageService.getIconFileName(race);
+        String fullPath = fileStorageService.getFullPath(iconFileName);
+
+        UrlResource urlResource = new UrlResource("file:" + fullPath);
+        String contentType = fileStorageService.getContentType(fullPath);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(urlResource);
     }
 
     @GetMapping("/icon/personality/{personality}")
