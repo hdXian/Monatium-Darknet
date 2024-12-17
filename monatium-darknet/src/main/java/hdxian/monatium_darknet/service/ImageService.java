@@ -33,24 +33,27 @@ public class ImageService {
 
     private static final String ext = ".webp";
 
-    public String getIconFileName(Race race) {
-        return iconDir + "symbol_" + race.name().toLowerCase() + ext;
+    public String getIconFileName(Enum<?> icon) {
+        if (icon instanceof Race) {
+            return iconDir + "symbol_" + ((Race) icon).name().toLowerCase() + ext;
+        }
+        if (icon instanceof Personality) {
+            return iconDir + "personality_" + ((Personality) icon).name().toLowerCase() + ext;
+        }
+        if (icon instanceof Role) {
+            return iconDir + "class_" + ((Role) icon).name().toLowerCase() + ext;
+        }
+        if (icon instanceof AttackType) {
+            return iconDir + "attackType_" + ((AttackType) icon).name().toLowerCase() + ext;
+        }
+        if (icon instanceof Position) {
+            return iconDir + "position_" + ((Position) icon).name().toLowerCase() + ext;
+        }
+        else {
+            return "";
+        }
+
     }
 
-    public String getIconFileName(Personality personality) {
-        return iconDir + personality.name().toLowerCase() + ext;
-    }
-
-    public String getIconFileName(Role role) {
-        return iconDir + role.name().toLowerCase() + ext;
-    }
-
-    public String getIconFileName(AttackType attackType) {
-        return iconDir + attackType.name().toLowerCase() + ext;
-    }
-
-    public String getIconFileName(Position position) {
-        return iconDir + position.name().toLowerCase() + ext;
-    }
 
 }
