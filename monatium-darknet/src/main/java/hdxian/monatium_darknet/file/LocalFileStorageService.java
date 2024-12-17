@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.file;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,10 @@ public class LocalFileStorageService implements FileStorageService {
     @Value("${file.dir}")
     private String baseDir;
 
+    @Getter
+    @Value("${file.tempDir}")
+    private String tempDir;
+
     // multipartFile과 경로만 전달받아서 파일을 저장
     @Override
     public void uploadFile(MultipartFile multipartFile, String filePath) throws IOException {
@@ -31,14 +36,6 @@ public class LocalFileStorageService implements FileStorageService {
             throw new IOException("multipartFile is empty");
         }
 
-        // 사용자 업로드 파일명 추출
-//        String originalFilename = multipartFile.getOriginalFilename();
-
-        // 저장할 파일명 생성 (랜덤 문자열 + 확장자)
-//        String storeFileName = generateFileName(originalFilename);
-
-        // 최종적으로 저장할 파일명 (경로 + 파일명)
-//        String fullPath = getFullPath(storeFileName);
         String savePath = getFullPath(filePath);
 
         // 파일 저장
@@ -50,6 +47,20 @@ public class LocalFileStorageService implements FileStorageService {
         for (MultipartFile multipartFile : multipartFiles) {
             uploadFile(multipartFile, filePath);
         }
+    }
+
+    public FileDto uploadFileToTemp(MultipartFile multipartFile) throws IOException {
+        String originalFilename = multipartFile.getOriginalFilename();
+        String savedFileName = generateFileName(originalFilename);
+        String fullPath = getFullPath(tempDir);
+
+        multipartFile.transferTo(new File(fullPath + savedFileName));
+        return new FileDto(fullPath, savedFileName);
+    }
+
+    public File getFileFromTemp(String fileName) throws IOException {
+        String fullPath = getFullPath(tempDir);
+        return new File(fullPath, fileName);
     }
 
     @Override

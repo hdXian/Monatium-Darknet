@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<!-- v18 -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
+    <title>캐릭터 추가</title>
+    <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/management/charAddForm.css}">
+    <!-- 커스텀 css -->
+</head>
+
+<body>
+
+<!-- 상단 네비게이션 바 -->
+<nav th:replace="~{fragments/navbar :: management_navbar}">
+    상단 네비게이션 바 영역
+</nav>
+
+<div class="container mt-5 main-content">
+
+    <div class="form-section">
+
+        <h2 class="form-title">캐릭터 추가 (3 of 4)</h2>
+
+        <form th:object="${chForm}" th:action="@{/management/characters/new/step3}" method="post" enctype="multipart/form-data">
+
+            <!-- 스킬 정보 그룹 -->
+            <div class="info-group mb-4">
+
+                <div class="info-title" data-bs-toggle="collapse" data-bs-target="#skillSection" aria-expanded="true">
+                    <span>스킬 정보</span>
+                    <i class="fas fa-angle-left toggle-icon"></i>
+                </div>
+
+                <div id="skillSection" class="collapse show">
+                    <hr>
+                    <!-- 기본 공격 -->
+                    <div class="info-subgroup mb-3 mt-3">
+                        <h4 class="form-subtitle">기본 공격</h4>
+                
+                        <div class="mb-3">
+                            <label for="normalAttackDescription" class="form-label">공격 설명</label>
+                            <textarea th:field="*{normalAttackDescription}" id="normalAttackDescription" name="normalAttackDescription"
+                                      class="form-control auto-resize"
+                                      placeholder="기본 공격의 설명을 입력하세요"></textarea>
+                        </div>
+                
+                        <label class="form-label">특성</label>
+                        <div id="normalAttack-attributes-container">
+                            <div th:each="attribute, stat : *{normalAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{normalAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{normalAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-normal-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-normal-attribute">-</button>
+                            </div>
+                        </div>
+
+                    </div>
+                
+                    <!-- 강화 공격 -->
+                    <div class="info-subgroup mb-3">
+                        <h4 class="form-subtitle">강화 공격</h4>
+                
+                        <div class="mb-3">
+                            <label for="enhancedAttackDescription" class="form-label">공격 설명</label>
+                            <textarea th:field="*{enhancedAttackDescription}" id="enhancedAttackDescription" name="enhancedAttackDescription"
+                                class="form-control auto-resize" 
+                                placeholder="강화 공격의 설명을 입력하세요"></textarea>
+                        </div>
+                
+                        <label class="form-label">특성</label>
+                        <div id="enhancedAttack-attributes-container">
+                            <div th:each="attribute, stat : *{enhancedAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-enhanced-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-enhanced-attribute">-</button>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- 저학년 스킬 -->
+                    <div class="info-subgroup mb-3">
+                        <h4 class="form-subtitle">저학년 스킬</h4>
+
+                        <!-- 스킬 이미지 업로드 추가 -->
+                        <div class="row align-items-center">
+                            <!-- 이미지 업로드 박스 -->
+                            <div class="col-md-3 text-center">
+                                <label for="lowSkillImage" class="form-label">스킬 이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="lowSkillImagePreview" th:src="${lowSkillImageUrl}"
+                                        alt="스킬 이미지 미리보기" class="img-thumbnail">
+                                    <input th:field="*{lowSkillImage}" type="file" id="lowSkillImage" name="lowSkillImage" class="form-control d-none"
+                                        accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+
+                            <!-- 스킬 이름 및 효과 입력 -->
+                            <div class="col-md-9">
+                                <!-- 스킬 이름 입력 -->
+                                <div class="mb-3">
+                                    <label for="lowSkillName" class="form-label">스킬 이름</label>
+                                    <input th:field="*{lowSkillName}" type="text" id="lowSkillName" name="lowSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                                </div>
+
+                                <!-- 스킬 효과 입력 -->
+                                <div class="mb-3">
+                                    <label for="lowSkillDescription" class="form-label">스킬 효과</label>
+                                    <textarea th:field="*{lowSkillDescription}" id="lowSkillDescription" name="lowSkillDescription" class="form-control auto-resize" placeholder="스킬 효과를 입력하세요"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 특성 입력 -->
+                        <label class="form-label">특성</label>
+                        <div id="lowSkill-attributes-container">
+                            <div th:each="attribute, stat : *{lowSkillAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{lowSkillAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{lowSkillAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-lowSkill-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-lowSkill-attribute">-</button>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- 고학년 스킬 -->
+                    <div class="info-subgroup">
+                        <h4 class="form-subtitle">고학년 스킬</h4>
+
+                        <!-- 스킬명, 쿨타임 입력 칸이 위치하는 행 -->
+                        <div class="row mb-3">
+                            <!-- 스킬 이름 입력 필드 -->
+                            <div class="col-7">
+                                <label for="highSkillName" class="form-label">스킬 이름</label>
+                                <input th:field="*{highSkillName}" type="text" id="highSkillName" name="highSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                            </div>
+
+                            <!-- 재사용 대기시간 입력 필드 -->
+                            <div class="col-5">
+                                <label for="highSkillCooldown" class="form-label">재사용 대기시간</label>
+                                <div class="input-group">
+                                    <input type="number" th:field="*{highSkillCooldown}" id="highSkillCooldown" name="highSkillCooldown" class="form-control" placeholder="쿨타임"
+                                           min="1" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '');">
+                                    <span class="input-group-text">초</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="highSkillDescription" class="form-label">스킬 설명</label>
+                            <textarea th:field="*{highSkillDescription}" id="highSkillDescription" name="highSkillDescription" class="form-control auto-resize" placeholder="스킬 설명을 입력하세요"></textarea>
+                        </div>
+
+                        <label class="form-label">특성</label>
+                        <div id="highSkill-attributes-container">
+                            <div th:each="attribute, stat : *{highSkillAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{highSkillAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{highSkillAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-highSkill-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-highSkill-attribute">-</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 폼 제출 버튼 -->
+            <div class="d-flex justify-content-between mt-4">
+                <a th:href="@{/management/characters/new/step2}" class="btn btn-secondary">이전으로</a>
+                <button type="submit" class="btn btn-primary">다음 단계로</button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- 하단 푸터 -->
+<footer th:replace="~{fragments/footer :: management_footer}">
+    하단 푸터 영역
+</footer>
+
+<script th:src="@{/js/management/charAddFormCommon.js}" defer></script>
+<script th:src="@{/js/management/charAddFormStep3.js}" defer></script>
+
+</body>
+
+</html>

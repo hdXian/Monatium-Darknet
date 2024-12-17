@@ -126,27 +126,19 @@ textarea.auto-resize {
 }
 
 /* 특성 입력란 스타일 */
-.trait-name {
+.attribute-name {
     max-width: 50%; /* 특성 이름의 너비 조절 */
 }
 
-.trait-value {
+.attribute-value {
     max-width: 25%; /* 특성 수치의 너비를 줄여 공간 확보 */
 }
 
-.btn-add-trait {
-    margin-left: 8px; /* + 버튼과 특성 수치 입력란 사이의 간격 */
-}
-
-.btn-remove-trait {
-    margin-left: 8px; /* + 버튼과 - 버튼 사이의 간격 */
-}
-
-button.btn-add-trait,
-button.btn-remove-trait {
+.attribute-input-container button {
     width: 32px; /* 버튼의 가로 크기를 작게 조정 */
     height: 32px; /* 버튼의 높이도 조정하여 일관성 유지 */
     padding: 0; /* 버튼 내부 여백 제거 */
+    margin-left: 8px;
     display: flex;
     justify-content: center;
     align-items: center;

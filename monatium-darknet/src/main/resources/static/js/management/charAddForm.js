@@ -1,29 +1,61 @@
+// legacy. not used
 // 좋아하는 것 입력 란
 document.addEventListener('DOMContentLoaded', function() {
     const likesContainer = document.getElementById('likes-container');
 
-    document.querySelector('.btn-add-like').addEventListener('click', function() {
-        const newLikeInput = document.createElement('div');
-        newLikeInput.classList.add('d-flex', 'mb-2', 'like-input-container');
+    // 부모 요소인 likesContainer에 이벤트 위임
+    likesContainer.addEventListener('click', function(event) {
+        const target = event.target;
 
-        newLikeInput.innerHTML = `
-            <input type="text" name="likes" class="form-control me-2" placeholder="좋아하는 것을 입력하세요">
-            <button type="button" class="btn btn-success btn-add-like">+</button>
-            <button type="button" class="btn btn-danger btn-remove-like ms-2">-</button>
-        `;
+        // + 버튼이 클릭되었을 때
+        if (target.classList.contains('btn-add-like')) {
+            const currentIndex = likesContainer.children.length;
 
-        likesContainer.appendChild(newLikeInput);
+            // 새로운 입력 필드 추가
+            const newLikeInput = document.createElement('div');
+            newLikeInput.classList.add('d-flex', 'mb-2', 'like-input-container');
 
-        newLikeInput.querySelector('.btn-add-like').addEventListener('click', function() {
-            document.querySelector('.btn-add-like').click();
-        });
+            newLikeInput.innerHTML = `
+                <input type="text" name="favorites[${currentIndex}]" class="form-control me-2" placeholder="좋아하는 것을 입력하세요">
+                <button type="button" class="btn btn-success btn-add-like">+</button>
+                <button type="button" class="btn btn-danger btn-remove-like ms-2">-</button>
+            `;
 
-        newLikeInput.querySelector('.btn-remove-like').addEventListener('click', function() {
-            newLikeInput.remove();
-        });
+            likesContainer.appendChild(newLikeInput);
+        }
+
+        // - 버튼이 클릭되었을 때
+        if (target.classList.contains('btn-remove-like')) {
+            const likeInputContainer = target.closest('.like-input-container');
+            likeInputContainer.remove();
+
+            // 삭제 후, 입력 필드가 하나도 없으면 기본 입력 필드 추가
+            updateLikeFieldNames();
+        }
     });
-});
 
+    // 모든 좋아하는 것 입력 필드의 name 속성을 다시 정렬하는 함수
+    function updateLikeFieldNames() {
+        const likeInputs = document.querySelectorAll('#likes-container input[name^="favorites"]');
+
+        // 삭제 후, 입력 필드가 하나도 없으면 기본 입력 필드 추가
+        if (likeInputs.length === 0) {
+            const newLikeInput = document.createElement('div');
+            newLikeInput.classList.add('d-flex', 'mb-2', 'like-input-container');
+            newLikeInput.innerHTML = `
+                <input type="text" name="favorites[0]" class="form-control me-2" placeholder="좋아하는 것을 입력하세요">
+                <button type="button" class="btn btn-success btn-add-like">+</button>
+                <button type="button" class="btn btn-danger btn-remove-like ms-2">-</button>
+            `;
+            likesContainer.appendChild(newLikeInput);
+        }
+
+        // name 속성 인덱스 다시 정렬
+        likeInputs.forEach((input, index) => {
+            input.name = `favorites[${index}]`;
+        });
+    }
+});
 
 // 깡, 맷집, 재주 입력 란
 function syncInput(sliderId, numberId) {
@@ -44,41 +76,63 @@ function syncInput(sliderId, numberId) {
 }
 
 // 각 특성의 슬라이더와 숫자 입력 필드 동기화
-syncInput('strength-slider', 'strength-number');
-syncInput('durability-slider', 'durability-number');
+syncInput('aggressive-slider', 'aggressive-number');
+syncInput('endurance-slider', 'endurance-number');
 syncInput('trick-slider', 'trick-number');
 
 
 // 특성 입력 란
 document.addEventListener('DOMContentLoaded', function() {
-    const subgroups = document.querySelectorAll('.info-subgroup');
+    const traitsContainer = document.getElementById('basic-attack-traits-container');
 
-    subgroups.forEach(function(subgroup) {
-        subgroup.addEventListener('click', function(e) {
-            const container = subgroup.querySelector('[id$="-traits-container"]');
+    // 부모 요소인 traitsContainer에 이벤트 위임
+    traitsContainer.addEventListener('click', function(event) {
+        console.log('click addeventLisetse');
+        const target = event.target;
 
-            if (e.target.classList.contains('btn-add-trait')) {
-                const newTraitInput = document.createElement('div');
-                newTraitInput.classList.add('d-flex', 'align-items-center', 'mb-2', 'trait-input-container');
-                newTraitInput.innerHTML = `
-                    <input type="text" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
-                    <input type="text" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
-                    <button type="button" class="btn btn-success btn-add-trait">+</button>
-                    <button type="button" class="btn btn-danger btn-remove-trait">-</button>
-                `;
-                container.appendChild(newTraitInput);
-            }
+        // + 버튼이 클릭되었을 때
+        if (target.classList.contains('btn-add-attribute')) {
+            const currentIndex = traitsContainer.querySelectorAll('.trait-input-container').length;
 
-            if (e.target.classList.contains('btn-remove-trait')) {
-                const traitContainer = e.target.closest('.trait-input-container');
-                const allTraitContainers = container.querySelectorAll('.trait-input-container');
-                if (allTraitContainers.length > 1) {
-                    traitContainer.remove();
-                }
-            }
-        });
+            // 새로운 특성 입력 필드 추가
+            const newTraitInput = document.createElement('div');
+            newTraitInput.classList.add('d-flex', 'align-items-center', 'mb-2', 'trait-input-container');
+
+            newTraitInput.innerHTML = `
+                <input type="text" name="normalAttributes[${currentIndex}].attrName"
+                       class="form-control me-2 attribute-name" placeholder="특성 이름">
+                <input type="text" name="normalAttributes[${currentIndex}].attrValue"
+                       class="form-control me-2 attribute-value" placeholder="특성 수치">
+                <button type="button" class="btn btn-success btn-add-attribute">+</button>
+                <button type="button" class="btn btn-danger btn-remove-attribute">-</button>
+            `;
+
+            traitsContainer.appendChild(newTraitInput);
+            updateTraitFieldNames(); // 인덱스를 다시 정렬
+        }
+
+        // - 버튼이 클릭되었을 때
+        if (target.classList.contains('btn-remove-attribute')) {
+            const traitInputContainer = target.closest('.trait-input-container');
+            traitInputContainer.remove();
+            updateTraitFieldNames(); // 인덱스를 다시 정렬
+        }
     });
+
+    // 모든 특성 입력 필드의 name 속성을 다시 정렬하는 함수
+    function updateTraitFieldNames() {
+        const traitContainers = document.querySelectorAll('#basic-attack-traits-container .trait-input-container');
+
+        traitContainers.forEach((container, index) => {
+            const nameInput = container.querySelector('.attribute-name');
+            const valueInput = container.querySelector('.attribute-value');
+
+            nameInput.name = `normalAttributes[${index}].attrName`;
+            valueInput.name = `normalAttributes[${index}].attrValue`;
+        });
+    }
 });
+
 
 
 // textarea 크기 자동 조절
