@@ -19,6 +19,7 @@ public class AsideSpec {
 
     private String name;
     private String description;
+    private String imageUrl;
 
 //    @OneToOne // AsideSpec 테이블에도 Aside 외래 키를 가지도록 구성 가능하기는 함
 //    @JoinColumn(name = "aside_id")
@@ -37,20 +38,22 @@ public class AsideSpec {
     }
 
     // 생성 메서드
-    public static AsideSpec createAsideSpec(String name, String description) {
+    public static AsideSpec createAsideSpec(String name, String description, String imageUrl) {
         AsideSpec asideSpec = new AsideSpec();
         asideSpec.setName(name);
         asideSpec.setDescription(description);
+        asideSpec.setImageUrl(imageUrl);
 
         // 인자로 전달된 Attributes들 모두 추가
 
         return asideSpec;
     }
 
-    public static AsideSpec createAsideSpec(String name, String description, List<Attribute> attributes) {
+    public static AsideSpec createAsideSpec(String name, String description, String imageUrl, List<Attribute> attributes) {
         AsideSpec asideSpec = new AsideSpec();
         asideSpec.setName(name);
         asideSpec.setDescription(description);
+        asideSpec.setImageUrl(imageUrl);
 
         // 인자로 전달된 Attributes들 모두 추가
         asideSpec.attributes.addAll(attributes);
