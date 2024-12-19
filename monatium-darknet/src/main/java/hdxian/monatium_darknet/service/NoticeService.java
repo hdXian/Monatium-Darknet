@@ -5,7 +5,7 @@ import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import hdxian.monatium_darknet.domain.notice.NoticeStatus;
 import hdxian.monatium_darknet.file.FileDto;
-import hdxian.monatium_darknet.file.FileStorageService;
+import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.repository.NoticeRepository;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
@@ -28,12 +28,10 @@ public class NoticeService {
 
     private final NoticeRepository noticeRepository;
     private final MemberService memberService;
-    private final FileStorageService fileStorageService;
+//    private final LocalFileStorageService fileStorageService;
+    private final LocalFileStorageService fileStorageService;
 
     private final HtmlContentUtil htmlContentUtil;
-
-    @Value("${file.tempDir}")
-    private String tempDir;
 
     @Value("${file.noticeDir}")
     private String noticeBaseDir;
@@ -63,7 +61,7 @@ public class NoticeService {
             // {basePath}/temp/abcdef.png -> {basePath}}/notice/{noticeId}/img_01.png
             List<String> changedImgSrcs;
             try {
-                changedImgSrcs = moveImagesFromTemp(noticeId, imgSrcs);
+                changedImgSrcs = moveNoticeImageFiles(noticeId, imgSrcs);
             } catch (IOException e) { // 파일 작업 중에 예외 터지면 롤백
                 throw new IllegalArgumentException(e);
             }
@@ -96,7 +94,7 @@ public class NoticeService {
             List<String> changedFileNames;
 
             try {
-                changedFileNames = moveImagesFromTemp(noticeId, imgSrcs);
+                changedFileNames = moveNoticeImageFiles(noticeId, imgSrcs);
             } catch (IOException e) { // 파일 작업 중에 예외 터지면 롤백
                 throw new IllegalArgumentException(e);
             }
@@ -121,42 +119,6 @@ public class NoticeService {
     public void incrementView(Long noticeId) {
         Notice notice = findOne(noticeId);
         notice.incrementView();
-    }
-
-    // 임시 저장 경로에 있던 공지사항 이미지들을 정식 경로에 저장
-    public List<String> moveImagesFromTemp(Long noticeId, List<String> imgSrcs) throws IOException {
-
-        List<String> changedFileNames = new ArrayList<>();
-
-        // noticeId로 폴더를 만들고, 해당 폴더에 이미지 저장
-        String targetDir = noticeBaseDir + (noticeId + "/");
-
-        int seq = 1;
-        String fileName, ext, saveFileName;
-        FileDto from, to;
-
-        for (String src : imgSrcs) {
-            // imgSrc = /api/images/o2p2aRmhWArow8cHh5x9_awsec2_logo.png
-            fileName = fileStorageService.extractFileName(src);
-            ext = fileStorageService.extractExt(fileName);
-            saveFileName = String.format("img_%02d%s", seq, ext);
-
-            // url이 /api로 시작하면 temp 경로에 있는 파일임
-            if (src.startsWith("/api")) {
-                from = new FileDto(tempDir, fileName);
-                to = new FileDto(targetDir, saveFileName);
-            }
-            else { // 그 외에는 기존 공지사항 폴더에 있던 파일. 파일명 변경해야 함.
-                from = new FileDto(targetDir, fileName);
-                to = new FileDto(targetDir, saveFileName);
-            }
-
-            changedFileNames.add(to.getFileName()); // add("img_#.ext")
-            fileStorageService.moveFile(from, to);
-            seq++;
-        }
-
-        return changedFileNames;
     }
 
     @Transactional
@@ -192,7 +154,50 @@ public class NoticeService {
     }
 
     public String getNoticeImageUrl(Long noticeId, String imageName) {
-        return fileStorageService.getFullPath(noticeBaseDir + (noticeId + "/" + imageName));
+        String noticeDir = getNoticeDir(noticeId);
+        return fileStorageService.getFileFullPath(new FileDto(noticeDir, imageName));
+    }
+
+    // 임시 저장 경로에 있던 공지사항 이미지들을 정식 경로에 저장
+    public List<String> moveNoticeImageFiles(Long noticeId, List<String> imgSrcs) throws IOException {
+
+        String tempDir = fileStorageService.getTempDir();
+
+        List<String> changedFileNames = new ArrayList<>();
+
+        // 공지사항을 저장할 폴더 경로
+        String targetDir = getNoticeDir(noticeId);
+
+        int seq = 1;
+        String fileName, ext, saveFileName;
+        FileDto from, to;
+
+        // src = "/api/images/o2p2aRmhWArow8cHh5x9_awsec2_logo.png"
+        for (String src : imgSrcs) {
+            fileName = fileStorageService.extractFileName(src); // fileName = "o2p2aRmhWArow8cHh5x9_awsec2_logo.png"
+            ext = fileStorageService.extractExt(fileName); // ext = ".png"
+            saveFileName = String.format("img_%02d%s", seq, ext); // saveFileName = "img_01.png"
+
+            // url이 /api로 시작하면 temp 경로에 있는 파일임
+            if (src.startsWith("/api")) {
+                from = new FileDto(tempDir, fileName); // from : temp 폴더에 저장돼있는 "o2p2aRmhWArow8cHh5x9_awsec2_logo.png" 이라는 이름의 파일
+                to = new FileDto(targetDir, saveFileName); // to : noticeBaseDir에 noticeId를 붙여 만든 경로에 "img_01.png" 라는 이름의 파일(로 저장하겠다)
+            }
+            else { // 그 외에는 기존 공지사항 폴더에 있던 파일. 파일명 변경해야 함.
+                from = new FileDto(targetDir, fileName); // from : 기존 noticeBaseDir에 저장돼있던 "img_01.png" 라는 이름의 파일
+                to = new FileDto(targetDir, saveFileName); // to : 기존 noticeBaseDir에 "img_02.png" 등으로 숫자를 바꾸어 다시 저장(하겠다)
+            }
+
+            changedFileNames.add(to.getFileName()); // add("img_#.ext")
+            fileStorageService.moveFile(from, to);
+            seq++;
+        }
+
+        return changedFileNames;
+    }
+
+    private String getNoticeDir(Long noticeId) {
+        return noticeBaseDir + (noticeId + "/");
     }
 
 }

@@ -17,6 +17,13 @@ public class FileDto {
         this.fileName = fileName;
     }
 
+    public FileDto(String fullPath) {
+        int idx = fullPath.lastIndexOf("/");
+
+        path = fullPath.substring(0, idx+1); // 0부터 idx까지
+        fileName = fullPath.substring(idx+1); // idx+1 부터 끝까지
+    }
+
     public String getTotalPath() {
         return path + fileName;
     }

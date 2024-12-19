@@ -4,7 +4,9 @@ import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.service.CharacterService;
+import hdxian.monatium_darknet.service.ImageService;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
+import hdxian.monatium_darknet.service.dto.CharacterImagePathDto;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,7 @@ public class CharacterMgController {
 
     private final CharacterService characterService;
     private final LocalFileStorageService fileStorageService;
+    private final ImageService imageService;
 
     @GetMapping
     public String characterList(Model model) {
@@ -166,8 +169,43 @@ public class CharacterMgController {
                                 @ModelAttribute(CHFORM_STEP3) ChFormStep3 chForm3,
                                 @ModelAttribute(CHFORM_STEP4) ChFormStep4 chForm4) {
 
+        // 1. 캐릭터 정보를 DB에 저장한다. (url 정보 포함)
         CharacterDto charDto = generateCharDto(chForm1, chForm2, chForm3, chForm4);
         Long characterId = characterService.createNewCharacter(charDto);
+        characterService.updateCharacterUrls(characterId, imageService.generateCharacterImageUrls(characterId));
+
+        // 2. 임시 경로에 저장된 캐릭터 이미지를 정식 경로로 이동시킨다.
+
+        // /api/images/tmp/...
+        String tmp_portrait_url = (String) session.getAttribute(IMAGE_URL_PORTRAIT);
+        String tmp_profile_url = (String) session.getAttribute(IMAGE_URL_PROFILE);
+        String tmp_body_url = (String) session.getAttribute(IMAGE_URL_BODY);
+
+        // 세션의 tmp 이미지 url -> fileName 추출
+        String tmp_portrait_fileName = fileStorageService.extractFileName(tmp_portrait_url);
+        String tmp_profile_fileName = fileStorageService.extractFileName(tmp_profile_url);
+        String tmp_body_fileName = fileStorageService.extractFileName(tmp_body_url);
+
+        // fileName으로 -> tmp 파일 경로의 fullPath 획득
+        String tempDir = fileStorageService.getTempDir();
+        String tmp_portrait_filePath = tempDir + tmp_portrait_fileName;
+        String tmp_profile_filePath = tempDir + tmp_profile_fileName;
+        String tmp_body_filePath = tempDir + tmp_body_fileName;
+
+        // 캐릭터 이미지를 저장할 파일 경로들
+        CharacterImagePathDto chImagePaths = imageService.generateChImagePaths(characterId);
+
+        String save_portrait_path = chImagePaths.getPortraitImagePath();
+        String save_profile_path = chImagePaths.getProfileImagePath();
+        String save_body_path = chImagePaths.getBodyImagePath();
+
+        try {
+            fileStorageService.moveFile(new FileDto(tmp_portrait_filePath), new FileDto(save_portrait_path));
+            fileStorageService.moveFile(new FileDto(tmp_profile_filePath), new FileDto(save_profile_path));
+            fileStorageService.moveFile(new FileDto(tmp_body_filePath), new FileDto(save_body_path));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return "redirect:/management/characters/characterList";
     }
@@ -324,7 +362,7 @@ public class CharacterMgController {
             return;
 
         try {
-            FileDto fileDto = fileStorageService.uploadFileToTemp(multipartFile);
+            FileDto fileDto = fileStorageService.saveFileToTemp(multipartFile);
             String tempImageUrl = "/api/images/tmp/" + fileDto.getFileName();
             session.setAttribute(attrName, tempImageUrl);
         } catch (IOException e) {
