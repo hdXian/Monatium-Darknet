@@ -63,12 +63,12 @@ public class TestDataInit {
             Ids.add(chId);
         }
 
-        String baseUrl = "/imgs/wiki/characters/";
-        CharacterUrl url;
-        for (Long id : Ids) {
-            url = new CharacterUrl(baseUrl + id + "/portrait.webp",baseUrl + id + "/profile.webp", baseUrl + id + "/bodyShot.webp");
-            characterService.updateCharacterUrls(id, url);
-        }
+//        String baseUrl = "/imgs/wiki/characters/";
+//        CharacterUrl url;
+//        for (Long id : Ids) {
+//            url = new CharacterUrl(baseUrl + id + "/portrait.webp",baseUrl + id + "/profile.webp", baseUrl + id + "/bodyShot.webp");
+//            characterService.updateCharacterUrls(id, url);
+//        }
 
         // 스킨 테스트 데이터 추가 (하드코딩, 1개 넣었음)
         SkinDto skinDto1 = generateSkinDto("하드워킹 홀리데이", SkinGrade.NORMAL);

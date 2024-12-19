@@ -88,11 +88,11 @@ public class CharacterService {
         return ch.getId(); // ***중요 -> em.find()를 통해 찾아온 엔티티는 merge로 업데이트하면 안됨. (이해는 안됨. 추가 학습 필요)
     }
 
-    @Transactional
-    public void updateCharacterUrls(Long characterId, CharacterUrl urls) {
-        Character ch = findOne(characterId);
-        ch.setUrls(urls);
-    }
+//    @Transactional
+//    public void updateCharacterUrls(Long characterId, CharacterUrl urls) {
+//        Character ch = findOne(characterId);
+//        ch.setUrls(urls);
+//    }
 
     // 스킬 변경
     private static void updateSkill(Skill skill, Skill updateParam) {

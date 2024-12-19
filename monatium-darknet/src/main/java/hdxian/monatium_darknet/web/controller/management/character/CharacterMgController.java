@@ -4,7 +4,8 @@ import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.service.CharacterService;
-import hdxian.monatium_darknet.service.ImageService;
+import hdxian.monatium_darknet.service.ImagePathService;
+import hdxian.monatium_darknet.service.ImageUrlService;
 import hdxian.monatium_darknet.service.dto.AsideImagePathDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.CharacterImagePathDto;
@@ -30,11 +31,11 @@ import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
 @RequiredArgsConstructor
 public class CharacterMgController {
 
-    private static final String defaultThumbnailUrl = "/imgs/defaultThumbnail.png";
-
     private final CharacterService characterService;
     private final LocalFileStorageService fileStorageService;
-    private final ImageService imageService;
+
+    private final ImagePathService imagePathService;
+    private final ImageUrlService imageUrlService;
 
     @GetMapping
     public String characterList(Model model) {
@@ -173,15 +174,17 @@ public class CharacterMgController {
         // 1. 캐릭터 정보를 DB에 저장한다. (url 정보 포함)
         CharacterDto charDto = generateCharDto(chForm1, chForm2, chForm3, chForm4);
         Long characterId = characterService.createNewCharacter(charDto);
-        characterService.updateCharacterUrls(characterId, imageService.generateCharacterImageUrls(characterId));
+//        characterService.updateCharacterUrls(characterId, imageService.generateCharacterImageUrls(characterId));
 
         // 2. 임시 경로에 저장된 캐릭터 이미지를 정식 경로로 이동시킨다.
         saveCharacterImages(session, characterId);
 
-        return "redirect:/management/characters/characterList";
+        return "redirect:/management/characters";
     }
 
     // ===== private ====
+
+    // 임시경로의 캐릭터 이미지 저장
     private void saveCharacterImages(HttpSession session, Long characterId) {
         String tempDir = fileStorageService.getTempDir();
 
@@ -200,8 +203,8 @@ public class CharacterMgController {
         String tmp_aside_lv3_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE_LV3), tempDir);
 
         // 4. 이미지들을 저장할 파일 경로를 받아온다.
-        CharacterImagePathDto chImagePaths = imageService.generateChImagePaths(characterId); // img/chs/{ID}/profile.ext, ...
-        AsideImagePathDto asideImagePaths = imageService.generateAsideImagePaths(characterId); // img/chs/{ID}/aside.ext, ...
+        CharacterImagePathDto chImagePaths = imagePathService.generateChImagePaths(characterId); // img/chs/{ID}/profile.ext, ...
+        AsideImagePathDto asideImagePaths = imagePathService.generateAsideImagePaths(characterId); // img/chs/{ID}/aside.ext, ...
 
         String save_profile_path = chImagePaths.getProfileImagePath();
         String save_portrait_path = chImagePaths.getPortraitImagePath();
@@ -338,6 +341,8 @@ public class CharacterMgController {
      * @param model 가져온 url을 추가할 model 객체
      */
     private void addStep4ImageUrlsOnModel(HttpSession session, Model model) {
+        String defaultThumbnailUrl = imageUrlService.getDefaultThumbnailUrl();
+
         String asideImageUrl = Optional.ofNullable((String) session.getAttribute(IMAGE_URL_ASIDE)).orElse(defaultThumbnailUrl);
         String aside1ImageUrl = Optional.ofNullable((String) session.getAttribute(IMAGE_URL_ASIDE_LV1)).orElse(defaultThumbnailUrl);
         String aside2ImageUrl = Optional.ofNullable((String) session.getAttribute(IMAGE_URL_ASIDE_LV2)).orElse(defaultThumbnailUrl);
@@ -354,6 +359,8 @@ public class CharacterMgController {
      * @param model 가져온 url을 추가할 model 객체
      */
     private void addStep3ImageUrlsOnModel(HttpSession session, Model model) {
+        String defaultThumbnailUrl = imageUrlService.getDefaultThumbnailUrl();
+
         String lowSkillImageUrl = Optional.ofNullable((String) session.getAttribute(IMAGE_URL_LOWSKILL)).orElse(defaultThumbnailUrl);
 
         model.addAttribute(IMAGE_URL_LOWSKILL, lowSkillImageUrl);
@@ -364,6 +371,8 @@ public class CharacterMgController {
      * @param model 가져온 url을 추가할 model 객체
      */
     private void addStep1ImageUrlsOnModel(HttpSession session, Model model) {
+        String defaultThumbnailUrl = imageUrlService.getDefaultThumbnailUrl();
+
         String profileImageUrl = Optional.ofNullable( (String) session.getAttribute(IMAGE_URL_PROFILE) ).orElse(defaultThumbnailUrl);
         String portraitImageUrl = Optional.ofNullable( (String) session.getAttribute(IMAGE_URL_PORTRAIT) ).orElse(defaultThumbnailUrl);
         String bodyImageUrl = Optional.ofNullable( (String) session.getAttribute(IMAGE_URL_BODY) ).orElse(defaultThumbnailUrl);

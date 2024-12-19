@@ -69,8 +69,8 @@ public class Character {
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Skin> skins = new ArrayList<>();
 
-    @Embedded
-    private CharacterUrl urls; // 이미지 url
+//    @Embedded
+//    private CharacterUrl urls; // 이미지 url
 
     // for JPA spec (일반 비즈니스 로직에서 사용 x)
     protected Character() {

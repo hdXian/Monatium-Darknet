@@ -1,8 +1,6 @@
 package hdxian.monatium_darknet.web;
 
-import hdxian.monatium_darknet.web.converter.CustomEnumToStringConverter;
-import hdxian.monatium_darknet.web.converter.StringToNoticeCategoryConverter;
-import hdxian.monatium_darknet.web.converter.StringToRaceConverter;
+import hdxian.monatium_darknet.web.converter.*;
 import hdxian.monatium_darknet.web.interceptor.LoginCheckInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -16,7 +14,13 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new StringToNoticeCategoryConverter());
+
         registry.addConverter(new StringToRaceConverter());
+        registry.addConverter(new StringToPersonalityConverter());
+        registry.addConverter(new StringToRoleConverter());
+        registry.addConverter(new StringToAttackTypeConverter());
+        registry.addConverter(new StringToPositionConverter());
+
         registry.addConverter(new CustomEnumToStringConverter());
     }
 

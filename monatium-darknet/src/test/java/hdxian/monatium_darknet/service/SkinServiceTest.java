@@ -407,7 +407,7 @@ class SkinServiceTest {
         highSkill.addAttribute(name+"고학년스킬 속성", "525%");
 
         // 이미지 url들
-        CharacterUrl urls = new CharacterUrl(name+"portrait_url", name+"profile_url", name+"body_url");
+//        CharacterUrl urls = new CharacterUrl(name+"portrait_url", name+"profile_url", name+"body_url");
 
         // 어사이드
         AsideSpec level1 = AsideSpec.createAsideSpec(name + "어사이드1레벨", name + "어사이드1레벨 설명");

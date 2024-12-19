@@ -176,7 +176,7 @@
             <!-- 왼쪽: 캐릭터 이미지 영역 -->
             <div class="characters-content-col d-flex justify-content-center align-items-center">
                 <div class="image-container d-flex justify-content-center align-items-center">
-                    <img id="main-character-img" th:src="@{/imgs/wiki/characters/1/bodyShot.webp}" alt="캐릭터 이미지" class="character-img rounded">
+                    <img id="main-character-img" th:src="@{ |${chBaseUrl}body/1| }" alt="캐릭터 이미지" class="character-img rounded">
                 </div>
             </div>
 
@@ -186,10 +186,10 @@
                 <!-- 초상화 목록 -->
                 <div class="character-portraits d-flex flex-wrap justify-content-center g-3"> <!-- 자동 줄바꿈 -->
                     <div th:each="character: ${characterList}" class="portrait-container">
-                        <img th:src="@{${character.urls.portrait_url}}" alt="캐릭터 1" class="character-portrait"
+                        <img th:src="@{ |${chBaseUrl}portrait/${character.id}| }" alt="캐릭터 1" class="character-portrait"
                         th:data-target="|character-info-${character.id}|"
-                        th:data-img="${character.urls.body_url}"
-                        th:data-portrait="${character.urls.portrait_url}">
+                        th:data-img="@{ |${chBaseUrl}body/${character.id}| }"
+                        th:data-portrait="@{ |${chBaseUrl}portrait/${character.id}| }">
                     </div>
                 </div>
 
@@ -201,7 +201,7 @@
                     <!-- 초상화 이미지와 이름, 수식어 -->
                     <div class="character-title d-flex align-items-center justify-content-center">
                         <div class="portrait-container">
-                            <img th:src="${character.urls.portrait_url}" alt="캐릭터 1" class="info-portrait">
+                            <img th:src="@{ |${chBaseUrl}portrait/${character.id}| }" alt="캐릭터 1" class="info-portrait">
                         </div>
                         <div>
                             <div th:text="${character.name}" class="character-info-text mb-1"> 캐릭터 이름 <span th:text="${character.subtitle}" class="character-subtitle"> 캐릭터 수식언 </span></div>
@@ -217,37 +217,37 @@
                             종족:
                             <th:block th:case="'fairy'">
                                 <span th:text="요정" class="character-race">종족명</span>
-                                <img th:src="@{/imgs/wiki/icons/symbol_fairy.webp}" class="symbol-icon" alt="종족 심볼">
+                                <img th:src="@{ |${iconBaseUrl}race/fairy| }" class="symbol-icon" alt="종족 심볼">
                             </th:block>
 
                             <th:block th:case="'witch'">
                                 <span th:text="마녀" class="character-race">종족명</span>
-                                <img th:src="@{/imgs/wiki/icons/symbol_witch.webp}" class="symbol-icon" alt="종족 심볼">
+                                <img th:src="@{ |${iconBaseUrl}race/witch| }" class="symbol-icon" alt="종족 심볼">
                             </th:block>
 
                             <th:block th:case="'furry'">
                                 <span th:text="수인" class="character-race">종족명</span>
-                                <img th:src="@{/imgs/wiki/icons/symbol_furry.webp}" class="symbol-icon" alt="종족 심볼">
+                                <img th:src="@{ |${iconBaseUrl}race/furry| }}" class="symbol-icon" alt="종족 심볼">
                             </th:block>
 
                             <th:block th:case="'dragon'">
                                 <span th:text="용족" class="character-race">종족명</span>
-                                <img th:src="@{/imgs/wiki/icons/symbol_dragon.webp}" class="symbol-icon" alt="종족 심볼">
+                                <img th:src="@{ |${iconBaseUrl}race/dragon| }" class="symbol-icon" alt="종족 심볼">
                             </th:block>
 
                             <th:block th:case="'ghost'">
                                 <span th:text="유령" class="character-race">종족명</span>
-                                <img th:src="@{/imgs/wiki/icons/symbol_ghost.webp}" class="symbol-icon" alt="종족 심볼">
+                                <img th:src="@{ |${iconBaseUrl}race/ghost| }" class="symbol-icon" alt="종족 심볼">
                             </th:block>
 
                             <th:block th:case="'spirit'">
                                 <span th:text="정령" class="character-race">종족명</span>
-                                <img th:src="@{/imgs/wiki/icons/symbol_spirit.webp}" class="symbol-icon" alt="종족 심볼">
+                                <img th:src="@{ |${iconBaseUrl}race/spirit| }" class="symbol-icon" alt="종족 심볼">
                             </th:block>
 
                             <th:block th:case="'elf'">
                                 <span th:text="엘프" class="character-race">종족명</span>
-                                <img th:src="@{/imgs/wiki/icons/symbol_elf.webp}" class="symbol-icon" alt="종족 심볼">
+                                <img th:src="@{ |${iconBaseUrl}race/elf| }" class="symbol-icon" alt="종족 심볼">
                             </th:block>
 
                         </div>
@@ -451,7 +451,7 @@
 </div>
 
 <!-- 푸터 -->
-<footer th:replace="~{fragments/footer}"></footer>
+<footer th:replace="~{fragments/footer :: common_footer}"></footer>
 
 <script>
     AOS.init();

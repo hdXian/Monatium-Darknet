@@ -50,3 +50,6 @@ file:
   artifactCardDir: imgs/wiki/cards/artifact/
   skinDir: imgs/wiki/skins/
 
+url:
+  api_baseUrl: /api/
+  default_thumbnail_url: /imgs/defaultThumbnail.png
