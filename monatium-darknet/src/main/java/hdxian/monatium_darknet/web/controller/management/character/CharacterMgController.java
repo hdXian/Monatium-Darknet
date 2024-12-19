@@ -5,6 +5,7 @@ import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.service.CharacterService;
 import hdxian.monatium_darknet.service.ImageService;
+import hdxian.monatium_darknet.service.dto.AsideImagePathDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.CharacterImagePathDto;
 import jakarta.servlet.http.HttpSession;
@@ -175,43 +176,64 @@ public class CharacterMgController {
         characterService.updateCharacterUrls(characterId, imageService.generateCharacterImageUrls(characterId));
 
         // 2. 임시 경로에 저장된 캐릭터 이미지를 정식 경로로 이동시킨다.
-
-        // /api/images/tmp/...
-        String tmp_portrait_url = (String) session.getAttribute(IMAGE_URL_PORTRAIT);
-        String tmp_profile_url = (String) session.getAttribute(IMAGE_URL_PROFILE);
-        String tmp_body_url = (String) session.getAttribute(IMAGE_URL_BODY);
-
-        // 세션의 tmp 이미지 url -> fileName 추출
-        String tmp_portrait_fileName = fileStorageService.extractFileName(tmp_portrait_url);
-        String tmp_profile_fileName = fileStorageService.extractFileName(tmp_profile_url);
-        String tmp_body_fileName = fileStorageService.extractFileName(tmp_body_url);
-
-        // fileName으로 -> tmp 파일 경로의 fullPath 획득
-        String tempDir = fileStorageService.getTempDir();
-        String tmp_portrait_filePath = tempDir + tmp_portrait_fileName;
-        String tmp_profile_filePath = tempDir + tmp_profile_fileName;
-        String tmp_body_filePath = tempDir + tmp_body_fileName;
-
-        // 캐릭터 이미지를 저장할 파일 경로들
-        CharacterImagePathDto chImagePaths = imageService.generateChImagePaths(characterId);
-
-        String save_portrait_path = chImagePaths.getPortraitImagePath();
-        String save_profile_path = chImagePaths.getProfileImagePath();
-        String save_body_path = chImagePaths.getBodyImagePath();
-
-        try {
-            fileStorageService.moveFile(new FileDto(tmp_portrait_filePath), new FileDto(save_portrait_path));
-            fileStorageService.moveFile(new FileDto(tmp_profile_filePath), new FileDto(save_profile_path));
-            fileStorageService.moveFile(new FileDto(tmp_body_filePath), new FileDto(save_body_path));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        saveCharacterImages(session, characterId);
 
         return "redirect:/management/characters/characterList";
     }
 
-
     // ===== private ====
+    private void saveCharacterImages(HttpSession session, Long characterId) {
+        String tempDir = fileStorageService.getTempDir();
+
+        // 프로필, 초상화, 전신 이미지 tmp 경로 추출
+        String tmp_profile_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_PROFILE), tempDir);
+        String tmp_portrait_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_PORTRAIT), tempDir);
+        String tmp_body_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_BODY), tempDir);
+
+        // 저학년 스킬 이미지 tmp 경로 추출
+        String tmp_lowSkill_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_LOWSKILL), tempDir);
+
+        // 어사이드 이미지 tmp 경로 추출
+        String tmp_aside_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE), tempDir);
+        String tmp_aside_lv1_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE_LV1), tempDir);
+        String tmp_aside_lv2_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE_LV2), tempDir);
+        String tmp_aside_lv3_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE_LV3), tempDir);
+
+        // 4. 이미지들을 저장할 파일 경로를 받아온다.
+        CharacterImagePathDto chImagePaths = imageService.generateChImagePaths(characterId); // img/chs/{ID}/profile.ext, ...
+        AsideImagePathDto asideImagePaths = imageService.generateAsideImagePaths(characterId); // img/chs/{ID}/aside.ext, ...
+
+        String save_profile_path = chImagePaths.getProfileImagePath();
+        String save_portrait_path = chImagePaths.getPortraitImagePath();
+        String save_body_path = chImagePaths.getBodyImagePath();
+        String save_lowSkill_path = chImagePaths.getLowSkillImagePath();
+
+        String save_aside_image_path = asideImagePaths.getAsideImagePath(); // 어사이드 프로필
+        String save_aside_lv1_image_path = asideImagePaths.getLv1Path(); // lv1
+        String save_aside_lv2_image_path = asideImagePaths.getLv2Path(); // lv2
+        String save_aside_lv3_image_path = asideImagePaths.getLv3Path(); // lv3
+
+        try {
+            fileStorageService.moveFile(new FileDto(tmp_profile_filePath), new FileDto(save_profile_path));
+            fileStorageService.moveFile(new FileDto(tmp_portrait_filePath), new FileDto(save_portrait_path));
+            fileStorageService.moveFile(new FileDto(tmp_body_filePath), new FileDto(save_body_path));
+
+            fileStorageService.moveFile(new FileDto(tmp_lowSkill_filePath), new FileDto(save_lowSkill_path));
+
+            fileStorageService.moveFile(new FileDto(tmp_aside_filePath), new FileDto(save_aside_image_path));
+            fileStorageService.moveFile(new FileDto(tmp_aside_lv1_filePath), new FileDto(save_aside_lv1_image_path));
+            fileStorageService.moveFile(new FileDto(tmp_aside_lv2_filePath), new FileDto(save_aside_lv2_image_path));
+            fileStorageService.moveFile(new FileDto(tmp_aside_lv3_filePath), new FileDto(save_aside_lv3_image_path));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private String convertUrlToFilePathTemp(String url, String tempDir) {
+        String fileName = fileStorageService.extractFileName(url);
+        return tempDir + fileName;
+    }
 
     private CharacterDto generateCharDto(ChFormStep1 chForm1, ChFormStep2 chForm2, ChFormStep3 chForm3, ChFormStep4 chForm4) {
 

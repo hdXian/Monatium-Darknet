@@ -10,10 +10,12 @@ public class CharacterImagePathDto {
     private String portraitImagePath;
     private String bodyImagePath;
 
-    public CharacterImagePathDto(String profileImagePath, String portraitImagePath, String bodyImagePath) {
+    private String lowSkillImagePath;
+
+    public CharacterImagePathDto(String profileImagePath, String portraitImagePath, String bodyImagePath, String lowSkillImagePath) {
         this.profileImagePath = profileImagePath;
         this.portraitImagePath = portraitImagePath;
         this.bodyImagePath = bodyImagePath;
+        this.lowSkillImagePath = lowSkillImagePath;
     }
-
 }

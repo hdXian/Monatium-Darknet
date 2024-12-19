@@ -1,6 +1,7 @@
 package hdxian.monatium_darknet.service;
 
 import hdxian.monatium_darknet.domain.character.*;
+import hdxian.monatium_darknet.service.dto.AsideImagePathDto;
 import hdxian.monatium_darknet.service.dto.CharacterImagePathDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,10 +63,26 @@ public class ImageService {
 
     // 서버 스토리지 내 이미지 저장 경로를 리턴
     public CharacterImagePathDto generateChImagePaths(Long characterId) {
-        String portraitPath = chDir + (characterId + "/") + ("portrait" + ext); // {noticeId}/portrait{.ext}
-        String profilePath = chDir + (characterId + "/") + ("profile" + ext); // {noticeId}/portrait{.ext}
-        String bodyPath = chDir + (characterId + "/") + ("bodyShot" + ext); // {noticeId}/portrait{.ext}
-        return new CharacterImagePathDto(portraitPath, profilePath, bodyPath);
+        String basePath = chDir + (characterId + "/");
+
+        String portraitPath = basePath + ("portrait" + ext); // {characterId}/portrait{.ext}
+        String profilePath = basePath+ ("profile" + ext);
+        String bodyPath = basePath + ("bodyShot" + ext);
+
+        String lowSkillPath = basePath + ("lowSkill" + ext);
+
+        return new CharacterImagePathDto(profilePath, portraitPath, bodyPath, lowSkillPath);
+    }
+
+    public AsideImagePathDto generateAsideImagePaths(Long characterId) {
+        String basePath = chDir + (characterId + "/");
+
+        String asidePath = basePath + "aside" + ext;
+        String lv1Path = basePath + "asideLv1" + ext;
+        String lv2Path = basePath + "asideLv2" + ext;
+        String lv3Path = basePath + "asideLv3" + ext;
+
+        return new AsideImagePathDto(asidePath, lv1Path, lv2Path, lv3Path);
     }
 
     // 클라이언트가 요청할 이미지 url을 리턴
