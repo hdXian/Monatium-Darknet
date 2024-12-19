@@ -57,6 +57,18 @@ public class ImagePathService {
         return iconDir + "position_" + position.name().toLowerCase() + ext;
     }
 
+    public String getNormalAttackIconFileName(AttackType attackType) {
+        return iconDir + "normalAttack_" + attackType.name().toLowerCase() + ext;
+    }
+
+    public String getGradeStarIconFileName(Integer grade) {
+        return iconDir + "star_" + grade + ext;
+    }
+
+    public String getOneStarIconFileName(String isFilled) {
+        return iconDir + "star_" + isFilled + ext;
+    }
+
     // 서버 스토리지 내 이미지 저장 경로를 리턴
     public CharacterImagePathDto generateChImagePaths(Long characterId) {
         String basePath = chDir + (characterId + "/");

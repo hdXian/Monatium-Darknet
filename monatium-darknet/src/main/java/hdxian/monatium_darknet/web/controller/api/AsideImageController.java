@@ -26,7 +26,7 @@ public class AsideImageController {
     private final LocalFileStorageService fileStorageService;
 
     // 어사이드 이미지
-    @GetMapping("/aside/{level}/{characterId}")
+    @GetMapping("/{level}/{characterId}")
     public ResponseEntity<Resource> asideImage(@PathVariable("characterId")Long characterId, @PathVariable("level")Integer level) throws IOException {
         // 어사이드 이미지 파일의 경로 받아오기
         AsideImagePathDto asideImagePaths = imagePathService.generateAsideImagePaths(characterId);
