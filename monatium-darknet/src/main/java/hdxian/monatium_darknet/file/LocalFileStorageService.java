@@ -1,6 +1,7 @@
 package hdxian.monatium_darknet.file;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.Optional;
 // 그리고 저장한 파일에 대한 정보를 리턴한다.
 // 단지 그뿐이다. 그 이상의 일은 하지 않는다.
 
+@Slf4j
 @Service
 public class LocalFileStorageService {
 
@@ -41,7 +43,7 @@ public class LocalFileStorageService {
     }
 
     // 임시 저장 파일의 전체 경로를 리턴 (baseDir + tempDir을 붙여줌)
-    public String getFilePathFromTemp(String fileName) {
+    public String getFileFullPathFromTemp(String fileName) {
         return getFullPath(tempDir) + fileName;
     }
 
@@ -66,22 +68,23 @@ public class LocalFileStorageService {
     // from -> to로 파일 이동
     public void moveFile(FileDto from, FileDto to) throws IOException {
         // from 파일의 경로 객체 생성
-        String fromFileName = getFilePath(from);
+        String fromFileName = getFileFullPath(from);
         Path sourcePath = Paths.get(fromFileName);
 
         // to 파일의 경로 객체 생성
-        String toFileName = getFilePath(to);
+        String toFileName = getFileFullPath(to);
         Path destPath = Paths.get(toFileName);
 
         // to 파일 경로에 디렉터리 생성 (이미 있을 경우 안 건드림)
         Files.createDirectories(destPath.getParent());
 
+        log.info("move files from {} to {}", sourcePath.toString(), destPath.toString());
         // from -> to 경로로 파일 이동
         Files.move(sourcePath, destPath, StandardCopyOption.REPLACE_EXISTING);
     }
 
     // 파일 전체 경로를 반환 (baseDir을 앞에 붙여줌)
-    public String getFilePath(FileDto findTo) {
+    public String getFileFullPath(FileDto findTo) {
         return getFullPath(findTo.getTotalPath());
     }
 

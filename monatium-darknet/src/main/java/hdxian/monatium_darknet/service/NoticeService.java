@@ -155,7 +155,7 @@ public class NoticeService {
 
     public String getNoticeImageUrl(Long noticeId, String imageName) {
         String noticeDir = getNoticeDir(noticeId);
-        return fileStorageService.getFilePath(new FileDto(noticeDir, imageName));
+        return fileStorageService.getFileFullPath(new FileDto(noticeDir, imageName));
     }
 
     // 임시 저장 경로에 있던 공지사항 이미지들을 정식 경로에 저장

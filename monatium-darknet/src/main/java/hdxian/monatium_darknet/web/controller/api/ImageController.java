@@ -53,7 +53,7 @@ public class ImageController {
     // 임시 경로 이미지 요청
     @GetMapping("/tmp/{fileName}")
     public ResponseEntity<Resource> getImageFromTemp(@PathVariable("fileName") String fileName) throws IOException {
-        String filePath = fileStorageService.getFilePathFromTemp(fileName);
+        String filePath = fileStorageService.getFileFullPathFromTemp(fileName);
         UrlResource resource = new UrlResource("file:" + filePath);
         return ResponseEntity.ok(resource);
     }
