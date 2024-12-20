@@ -64,4 +64,25 @@ public class ChFormStep4 {
         return Aside.createAside(asideName, asideDescription, lv1, lv2, lv3);
     }
 
+    // === 수정 페이지 등에서 Model에 정보를 담아 보낼 때 사용 ===
+    public void setAsideFields(Aside aside) {
+        this.asideName = aside.getName();
+        this.asideDescription = aside.getDescription();
+
+        AsideSpec level1 = aside.getLevel1();
+        this.asideLv1Name = level1.getName();
+        this.asideLv1Description = level1.getDescription();
+        this.asideLv1Attributes = level1.getAttributes();
+
+        AsideSpec level2 = aside.getLevel2();
+        this.asideLv2Name = level2.getName();
+        this.asideLv2Description = level2.getDescription();
+        this.asideLv2Attributes = level2.getAttributes();
+
+        AsideSpec level3 = aside.getLevel3();
+        this.asideLv3Name = level3.getName();
+        this.asideLv3Description = level3.getDescription();
+        this.asideLv3Attributes = level3.getAttributes();
+    }
+
 }

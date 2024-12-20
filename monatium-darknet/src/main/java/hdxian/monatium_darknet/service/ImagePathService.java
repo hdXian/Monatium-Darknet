@@ -3,8 +3,8 @@ package hdxian.monatium_darknet.service;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
-import hdxian.monatium_darknet.service.dto.AsideImagePathDto;
-import hdxian.monatium_darknet.service.dto.CharacterImagePathDto;
+import hdxian.monatium_darknet.service.dto.AsideImageDto;
+import hdxian.monatium_darknet.service.dto.CharacterImageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -81,7 +81,7 @@ public class ImagePathService {
     }
 
     // 서버 스토리지 내 이미지 저장 경로를 리턴
-    public CharacterImagePathDto generateChImagePaths(Long characterId) {
+    public CharacterImageDto generateChImagePaths(Long characterId) {
         String basePath = chDir + (characterId + "/");
 
         String portraitPath = basePath + ("portrait" + ext); // {characterId}/portrait{.ext}
@@ -90,10 +90,10 @@ public class ImagePathService {
 
         String lowSkillPath = basePath + ("lowSkill" + ext);
 
-        return new CharacterImagePathDto(profilePath, portraitPath, bodyPath, lowSkillPath);
+        return new CharacterImageDto(profilePath, portraitPath, bodyPath, lowSkillPath);
     }
 
-    public AsideImagePathDto generateAsideImagePaths(Long characterId) {
+    public AsideImageDto generateAsideImagePaths(Long characterId) {
         String basePath = chDir + (characterId + "/");
 
         String asidePath = basePath + "aside" + ext;
@@ -101,19 +101,19 @@ public class ImagePathService {
         String lv2Path = basePath + "asideLv2" + ext;
         String lv3Path = basePath + "asideLv3" + ext;
 
-        return new AsideImagePathDto(asidePath, lv1Path, lv2Path, lv3Path);
+        return new AsideImageDto(asidePath, lv1Path, lv2Path, lv3Path);
     }
 
     // 캐릭터 이미지 정보 저장
     @Transactional // 예외 터지면 관련 트랜잭션 롤백
-    public void saveCharacterImages(Long characterId, CharacterImagePathDto src) {
-        CharacterImagePathDto dst = generateChImagePaths(characterId);
+    public void saveCharacterImages(Long characterId, CharacterImageDto src) {
+        CharacterImageDto dst = generateChImagePaths(characterId);
 
         try {
-            fileStorageService.moveFile(new FileDto(src.getProfileImagePath()), new FileDto(dst.getProfileImagePath()));
-            fileStorageService.moveFile(new FileDto(src.getPortraitImagePath()), new FileDto(dst.getPortraitImagePath()));
-            fileStorageService.moveFile(new FileDto(src.getBodyImagePath()), new FileDto(dst.getBodyImagePath()));
-            fileStorageService.moveFile(new FileDto(src.getLowSkillImagePath()), new FileDto(dst.getLowSkillImagePath()));
+            fileStorageService.moveFile(new FileDto(src.getProfileImage()), new FileDto(dst.getProfileImage()));
+            fileStorageService.moveFile(new FileDto(src.getPortraitImage()), new FileDto(dst.getPortraitImage()));
+            fileStorageService.moveFile(new FileDto(src.getBodyImage()), new FileDto(dst.getBodyImage()));
+            fileStorageService.moveFile(new FileDto(src.getLowSkillImage()), new FileDto(dst.getLowSkillImage()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -122,14 +122,14 @@ public class ImagePathService {
 
     // 어사이드 이미지 정보 저장
     @Transactional // 예외 터지면 관련 트랜잭션 롤백
-    public void saveAsideImages(Long characterId, AsideImagePathDto src) {
-        AsideImagePathDto dst = generateAsideImagePaths(characterId);
+    public void saveAsideImages(Long characterId, AsideImageDto src) {
+        AsideImageDto dst = generateAsideImagePaths(characterId);
 
         try {
-            fileStorageService.moveFile(new FileDto(src.getAsideImagePath()), new FileDto(dst.getAsideImagePath()));
-            fileStorageService.moveFile(new FileDto(src.getLv1Path()), new FileDto(dst.getLv1Path()));
-            fileStorageService.moveFile(new FileDto(src.getLv2Path()), new FileDto(dst.getLv2Path()));
-            fileStorageService.moveFile(new FileDto(src.getLv3Path()), new FileDto(dst.getLv3Path()));
+            fileStorageService.moveFile(new FileDto(src.getAsideImage()), new FileDto(dst.getAsideImage()));
+            fileStorageService.moveFile(new FileDto(src.getLv1Image()), new FileDto(dst.getLv1Image()));
+            fileStorageService.moveFile(new FileDto(src.getLv2Image()), new FileDto(dst.getLv2Image()));
+            fileStorageService.moveFile(new FileDto(src.getLv3Image()), new FileDto(dst.getLv3Image()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

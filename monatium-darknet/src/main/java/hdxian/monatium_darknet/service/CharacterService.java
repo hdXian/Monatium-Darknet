@@ -7,12 +7,11 @@ import hdxian.monatium_darknet.domain.card.ArtifactCard;
 import hdxian.monatium_darknet.domain.character.Attack;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.character.CharacterStatus;
-import hdxian.monatium_darknet.domain.character.CharacterUrl;
 import hdxian.monatium_darknet.repository.CardRepository;
 import hdxian.monatium_darknet.repository.CharacterRepository;
-import hdxian.monatium_darknet.service.dto.AsideImagePathDto;
+import hdxian.monatium_darknet.service.dto.AsideImageDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
-import hdxian.monatium_darknet.service.dto.CharacterImagePathDto;
+import hdxian.monatium_darknet.service.dto.CharacterImageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,7 +58,7 @@ public class CharacterService {
     }
 
     @Transactional
-    public Long createNewCharacter(CharacterDto chDto, CharacterImagePathDto chImagePaths, AsideImagePathDto asideImagePaths) {
+    public Long createNewCharacter(CharacterDto chDto, CharacterImageDto chImagePaths, AsideImageDto asideImagePaths) {
 
         // 캐릭터 기본 정보 저장
         Character ch = Character.createCharacter(

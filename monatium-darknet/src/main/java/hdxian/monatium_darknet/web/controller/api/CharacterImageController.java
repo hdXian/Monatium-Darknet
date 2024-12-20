@@ -2,7 +2,7 @@ package hdxian.monatium_darknet.web.controller.api;
 
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.service.ImagePathService;
-import hdxian.monatium_darknet.service.dto.CharacterImagePathDto;
+import hdxian.monatium_darknet.service.dto.CharacterImageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -29,7 +29,7 @@ public class CharacterImageController {
     @GetMapping("/{type}/{characterId}")
     public ResponseEntity<Resource> chImage(@PathVariable("characterId")Long characterId, @PathVariable("type")String type) throws IOException {
         // 캐릭터 이미지 파일의 경로 받아오기
-        CharacterImagePathDto chImagePaths = imagePathService.generateChImagePaths(characterId);
+        CharacterImageDto chImagePaths = imagePathService.generateChImagePaths(characterId);
         String fullPath = getChImageFullPath(type, chImagePaths);
 
         String contentType = fileStorageService.getContentType(fullPath);
@@ -43,12 +43,12 @@ public class CharacterImageController {
 
     // === privete ===
 
-    private String getChImageFullPath(String type, CharacterImagePathDto chImagePaths) {
+    private String getChImageFullPath(String type, CharacterImageDto chImagePaths) {
         String filePath = switch (type) {
-            case "profile" ->chImagePaths.getProfileImagePath();
-            case "portrait" -> chImagePaths.getPortraitImagePath();
-            case "body" -> chImagePaths.getBodyImagePath();
-            case "lowSkill" -> chImagePaths.getLowSkillImagePath();
+            case "profile" ->chImagePaths.getProfileImage();
+            case "portrait" -> chImagePaths.getPortraitImage();
+            case "body" -> chImagePaths.getBodyImage();
+            case "lowSkill" -> chImagePaths.getLowSkillImage();
             default -> ""; // TODO - 디폴트 이미지 경로 리턴하기
         };
 

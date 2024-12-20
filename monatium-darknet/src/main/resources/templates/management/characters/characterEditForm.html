@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<!-- v18 -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
+    <title>캐릭터 추가</title>
+    <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/management/charAddForm.css}">
+    <!-- 커스텀 css -->
+</head>
+
+<body>
+
+<!-- 상단 네비게이션 바 -->
+<nav th:replace="~{fragments/navbar :: management_navbar}">
+    상단 네비게이션 바 영역
+</nav>
+
+<div class="container mt-5 main-content">
+
+    <div class="form-section">
+
+        <h2 class="form-title">캐릭터 추가 (최종 확인)</h2>
+
+        <form th:action="@{/management/characters/edit/{id} (id = ${characterId})}" method="post" enctype="multipart/form-data">
+
+            <!-- 프로필 그룹 -->
+            <div th:object="${chFormStep1}" class="info-group mb-4">
+                <div class="info-title" data-bs-toggle="collapse" data-bs-target="#profileSection" aria-expanded="true">
+                    <span>프로필</span>
+                    <i class="fas fa-angle-down toggle-icon"></i>
+                </div>
+
+                <div id="profileSection" class="collapse show">
+                    <hr>
+                    <div class="row mt-3">
+                        <!-- 좌측 폼 -->
+                        <div class="col-md-6">
+                            <!-- 이름 -->
+                            <div class="mb-3">
+                                <label for="name" class="form-label">이름</label>
+                                <input th:field="*{name}" type="text" id="name" name="name" class="form-control" placeholder="캐릭터의 이름을 입력하세요" required>
+                            </div>
+
+                            <!-- 수식언 -->
+                            <div class="mb-3">
+                                <label for="subtitle" class="form-label">수식언</label>
+                                <input th:field="*{subtitle}" type="text" id="subtitle" name="subtitle" class="form-control" placeholder="캐릭터의 수식언을 입력하세요">
+                            </div>
+
+                            <!-- 성급 -->
+                            <div class="mb-3">
+                                <label for="star" class="form-label">성급</label>
+                                <select th:field="*{grade}" id="star" name="star" class="form-select">
+                                    <option value="3">3성</option>
+                                    <option value="2">2성</option>
+                                    <option value="1">1성</option>
+                                </select>
+                            </div>
+
+                            <!-- 종족 -->
+                            <div class="mb-3">
+                                <label for="race" class="form-label">종족</label>
+                                <select th:field="*{race}" id="race" name="race" class="form-select">
+                                    <option value="fairy">요정</option>
+                                    <option value="witch">마녀</option>
+                                    <option value="beastman">수인</option>
+                                    <option value="dragon">용족</option>
+                                    <option value="ghost">유령</option>
+                                    <option value="spirit">정령</option>
+                                    <option value="elf">엘프</option>
+                                </select>
+                            </div>
+
+                            <!-- 성우 -->
+                            <div class="mb-3">
+                                <label for="voiceActor" class="form-label">성우</label>
+                                <input th:field="*{cv}" type="text" id="voiceActor" name="voiceActor" class="form-control" placeholder="성우의 이름을 입력하세요">
+                            </div>
+                        </div>
+
+                        <!-- 우측 폼 -->
+                        <div class="col-md-6">
+                            <!-- 한마디 -->
+                            <div class="mb-3">
+                                <label for="quote" class="form-label">한마디</label>
+                                <textarea th:field="*{quote}" id="quote" name="quote" class="form-control" placeholder="캐릭터의 한마디를 입력하세요"></textarea>
+                            </div>
+
+                            <!-- TMI -->
+                            <div class="mb-3">
+                                <label for="tmi" class="form-label">TMI</label>
+                                <textarea th:field="*{tmi}" id="tmi" name="tmi" class="form-control" placeholder="캐릭터의 TMI를 입력하세요"></textarea>
+                            </div>
+
+                            <!-- 좋아하는 것 -->
+                            <div class="mb-3">
+                                <label class="form-label">좋아하는 것</label>
+                                <div id="likes-container">
+                                    <div th:each="favorite, stat : *{favorites}" class="d-flex mb-2 like-input-container">
+                                        <input th:field="*{favorites[__${stat.index}__]}" class="form-control me-2" placeholder="좋아하는 것을 입력하세요">
+                                        <button type="button" class="btn btn-success btn-add-like">+</button>
+                                        <button th:if="${stat.index > 0}" type="button" class="btn btn-danger btn-remove-like ms-2">-</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 이미지 업로드 섹션 -->
+                    <div class="info-subgroup">
+                        <h4 class="form-subtitle">캐릭터 이미지</h4>
+
+                        <div class="row align-items-center mb-3">
+                            <!-- 프로필 이미지 -->
+                            <div class="col-md-4 text-center">
+                                <label for="profileImage" class="form-label">프로필 이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="profileImagePreview"
+                                         th:src="${profileImageUrl}"
+                                         alt="프로필 이미지 미리보기"
+                                         class="img-thumbnail">
+                                    <input th:field="*{profileImage}" type="file" id="profileImage" name="profileImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+
+                            <!-- 초상화 이미지 -->
+                            <div class="col-md-4 text-center">
+                                <label for="portraitImage" class="form-label">초상화 이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="portraitImagePreview"
+                                         th:src="${portraitImageUrl}"
+                                         alt="초상화 이미지 미리보기"
+                                         class="img-thumbnail">
+                                    <input th:field="*{portraitImage}" type="file" id="portraitImage" name="portraitImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+
+                            <!-- 전신 이미지 -->
+                            <div class="col-md-4 text-center">
+                                <label for="bodyImage" class="form-label">전신 이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="fullBodyImagePreview"
+                                         th:src="${bodyImageUrl}"
+                                         alt="전신 이미지 미리보기"
+                                         class="img-thumbnail">
+                                    <input th:field="*{bodyImage}" type="file" id="bodyImage" name="bodyImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 특성 정보 그룹 -->
+            <div th:object="${chFormStep2}" class="info-group mb-4">
+                <div class="info-title" data-bs-toggle="collapse" data-bs-target="#traitSection" aria-expanded="true">
+                    <span>특성 정보</span>
+                    <i class="fas fa-angle-left toggle-icon"></i>
+                </div>
+
+                <div id="traitSection" class="collapse show">
+                    <hr>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <!-- 성격 -->
+                            <div class="mb-3">
+                                <label for="personality" class="form-label">성격</label>
+                                <select th:field="*{personality}" id="personality" name="personality" class="form-select">
+                                    <option value="PURE">순수</option>
+                                    <option value="MADNESS">광기</option>
+                                    <option value="COOL">냉정</option>
+                                    <option value="GLOOMY">우울</option>
+                                    <option value="ACTIVITY">활발</option>
+                                </select>
+                            </div>
+
+                            <!-- 역할 -->
+                            <div class="mb-3">
+                                <label for="role" class="form-label">역할</label>
+                                <select th:field="*{role}" id="role" name="role" class="form-select">
+                                    <option value="DEALER">딜러</option>
+                                    <option value="TANKER">탱커</option>
+                                    <option value="SUPPORTER">서포터</option>
+                                </select>
+                            </div>
+
+                            <!-- 공격 방식 -->
+                            <div class="mb-3">
+                                <label for="attackStyle" class="form-label">공격 방식</label>
+                                <select th:field="*{attackType}" id="attackStyle" name="attackStyle" class="form-select">
+                                    <option value="PHYSICAL">물리</option>
+                                    <option value="MAGICAL">마법</option>
+                                </select>
+                            </div>
+
+                            <!-- 배치 -->
+                            <div class="mb-3">
+                                <label for="placement" class="form-label">배치</label>
+                                <select th:field="*{position}" id="placement" name="placement" class="form-select">
+                                    <option value="FRONT">전열</option>
+                                    <option value="MIDDLE">중열</option>
+                                    <option value="BACK">후열</option>
+                                    <option value="ALL">모든 열</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <!-- 깡 -->
+                            <div class="mb-3">
+                                <label for="aggressive-status" class="form-label">깡</label>
+                                <div id="aggressive-status" class="d-flex align-items-center">
+                                    <input th:field=*{aggressive} th:value="*{aggressive}" type="range" id="aggressive-slider" name="aggressive" class="form-range me-3" min="1" max="7" step="1" value="4">
+                                    <input th:value="*{aggressive}" type="number" id="aggressive-number" class="form-control status-num" min="1" max="7" step="1" value="4" >
+                                </div>
+                            </div>
+
+                            <!-- 맷집 -->
+                            <div class="mb-3">
+                                <label for="endurance-status" class="form-label">맷집</label>
+                                <div id="endurance-status" class="d-flex align-items-center">
+                                    <input th:field="*{endurance}" th:value="*{endurance}" type="range" id="endurance-slider" name="endurance" class="form-range me-3" min="1" max="7" step="1" value="4">
+                                    <input th:value="*{endurance}" type="number" id="endurance-number" class="form-control status-num" min="1" max="7" step="1" value="4">
+                                </div>
+                            </div>
+
+                            <!-- 재주 -->
+                            <div class="mb-3">
+                                <label for="trick-status" class="form-label">재주</label>
+                                <div id="trick-status" class="d-flex align-items-center">
+                                    <input th:field="*{trick}" th:value="*{trick}" type="range" id="trick-slider" name="talent" class="form-range me-3" min="1" max="7" step="1" value="4">
+                                    <input th:value="*{trick}" type="number" id="trick-number" class="form-control status-num" min="1" max="7" step="1" value="4">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 스킬 정보 그룹 -->
+            <div th:object="${chFormStep3}" class="info-group mb-4">
+
+                <div class="info-title" data-bs-toggle="collapse" data-bs-target="#skillSection" aria-expanded="true">
+                    <span>스킬 정보</span>
+                    <i class="fas fa-angle-left toggle-icon"></i>
+                </div>
+
+                <div id="skillSection" class="collapse show">
+                    <hr>
+                    <!-- 기본 공격 -->
+                    <div class="info-subgroup mb-3 mt-3">
+                        <h4 class="form-subtitle">기본 공격</h4>
+
+                        <div class="mb-3">
+                            <label for="normalAttackDescription" class="form-label">공격 설명</label>
+                            <textarea th:field="*{normalAttackDescription}" id="normalAttackDescription" name="normalAttackDescription"
+                                      class="form-control auto-resize"
+                                      placeholder="기본 공격의 설명을 입력하세요"></textarea>
+                        </div>
+
+                        <label class="form-label">특성</label>
+                        <div id="normalAttack-attributes-container">
+                            <div th:each="attribute, stat : *{normalAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{normalAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{normalAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-normal-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-normal-attribute">-</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- 강화 공격 -->
+                    <div class="info-subgroup mb-3">
+                        <h4 class="form-subtitle">강화 공격</h4>
+
+                        <div class="mb-3">
+                            <label for="enhancedAttackDescription" class="form-label">공격 설명</label>
+                            <textarea th:field="*{enhancedAttackDescription}" id="enhancedAttackDescription" name="enhancedAttackDescription"
+                                      class="form-control auto-resize"
+                                      placeholder="강화 공격의 설명을 입력하세요"></textarea>
+                        </div>
+
+                        <label class="form-label">특성</label>
+                        <div id="enhancedAttack-attributes-container">
+                            <div th:each="attribute, stat : *{enhancedAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-enhanced-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-enhanced-attribute">-</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 저학년 스킬 -->
+                    <div class="info-subgroup mb-3">
+                        <h4 class="form-subtitle">저학년 스킬</h4>
+
+                        <!-- 스킬 이미지 업로드 추가 -->
+                        <div class="row align-items-center">
+                            <!-- 이미지 업로드 박스 -->
+                            <div class="col-md-3 text-center">
+                                <label for="lowSkillImage" class="form-label">스킬 이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="lowSkillImagePreview" th:src="${lowSkillImageUrl}"
+                                         alt="스킬 이미지 미리보기" class="img-thumbnail">
+                                    <input th:field="*{lowSkillImage}" type="file" id="lowSkillImage" name="lowSkillImage" class="form-control d-none"
+                                           accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+
+                            <!-- 스킬 이름 및 효과 입력 -->
+                            <div class="col-md-9">
+                                <!-- 스킬 이름 입력 -->
+                                <div class="mb-3">
+                                    <label for="lowSkillName" class="form-label">스킬 이름</label>
+                                    <input th:field="*{lowSkillName}" type="text" id="lowSkillName" name="lowSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                                </div>
+
+                                <!-- 스킬 효과 입력 -->
+                                <div class="mb-3">
+                                    <label for="lowSkillDescription" class="form-label">스킬 효과</label>
+                                    <textarea th:field="*{lowSkillDescription}" id="lowSkillDescription" name="lowSkillDescription" class="form-control auto-resize" placeholder="스킬 효과를 입력하세요"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 특성 입력 -->
+                        <label class="form-label">특성</label>
+                        <div id="lowSkill-attributes-container">
+                            <div th:each="attribute, stat : *{lowSkillAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{lowSkillAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{lowSkillAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-lowSkill-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-lowSkill-attribute">-</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 고학년 스킬 -->
+                    <div class="info-subgroup">
+                        <h4 class="form-subtitle">고학년 스킬</h4>
+
+                        <!-- 스킬명, 쿨타임 입력 칸이 위치하는 행 -->
+                        <div class="row mb-3">
+                            <!-- 스킬 이름 입력 필드 -->
+                            <div class="col-7">
+                                <label for="highSkillName" class="form-label">스킬 이름</label>
+                                <input th:field="*{highSkillName}" type="text" id="highSkillName" name="highSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                            </div>
+
+                            <!-- 재사용 대기시간 입력 필드 -->
+                            <div class="col-5">
+                                <label for="highSkillCooldown" class="form-label">재사용 대기시간</label>
+                                <div class="input-group">
+                                    <input type="number" th:field="*{highSkillCooldown}" id="highSkillCooldown" name="highSkillCooldown" class="form-control" placeholder="쿨타임"
+                                           min="1" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '');">
+                                    <span class="input-group-text">초</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="highSkillDescription" class="form-label">스킬 설명</label>
+                            <textarea th:field="*{highSkillDescription}" id="highSkillDescription" name="highSkillDescription" class="form-control auto-resize" placeholder="스킬 설명을 입력하세요"></textarea>
+                        </div>
+
+                        <label class="form-label">특성</label>
+                        <div id="highSkill-attributes-container">
+                            <div th:each="attribute, stat : *{highSkillAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{highSkillAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{highSkillAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-highSkill-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-highSkill-attribute">-</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 어사이드 그룹 -->
+            <div th:object="${chFormStep4}" class="info-group mb-4">
+
+                <div class="info-title" data-bs-toggle="collapse" data-bs-target="#asideSection" aria-expanded="true">
+                    <span>어사이드</span>
+                    <i class="fas fa-angle-left toggle-icon"></i>
+                </div>
+
+                <div id="asideSection" class="collapse show">
+                    <hr>
+                    <!-- 1. 어사이드 정보 -->
+                    <div class="info-subgroup mb-3 mt-3">
+                        <h4 class="form-subtitle">어사이드 정보</h4>
+
+                        <!-- 어사이드 이미지 -->
+                        <div class="row align-items-center">
+                            <div class="col-md-3 text-center">
+                                <label for="asideImage" class="form-label">이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="asideImagePreview1" th:src="${asideImageUrl}"
+                                         alt="이미지 미리보기" class="img-thumbnail">
+                                    <input th:field="*{asideImage}" type="file" id="asideImage" name="asideImage" class="form-control d-none"
+                                           accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="mb-3">
+                                    <label for="asideName" class="form-label">어사이드 이름</label>
+                                    <input th:field="*{asideName}" type="text" id="asideName" name="asideName" class="form-control" placeholder="이름을 입력하세요">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="asideDescription" class="form-label">어사이드 설명</label>
+                                    <textarea th:field="*{asideDescription}" id="asideDescription" name="asideDescription" class="form-control auto-resize" placeholder="설명을 입력하세요"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- 2. 어사이드 1단계 -->
+                    <div class="info-subgroup mb-3">
+                        <h4 class="form-subtitle">어사이드 1단계</h4>
+                        <!-- 이미지 -->
+                        <div class="row align-items-center">
+                            <div class="col-md-3 text-center">
+                                <label for="asideLv1Image" class="form-label">이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="aside1ImagePreview" th:src="${asideLv1ImageUrl}"
+                                         alt="이미지 미리보기" class="img-thumbnail">
+                                    <input th:field="*{asideLv1Image}" type="file" id="asideLv1Image" name="asideLv1Image" class="form-control d-none"
+                                           accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="mb-3">
+                                    <label for="asideLv1Name" class="form-label">어사이드 1단계 이름</label>
+                                    <input th:field="*{asideLv1Name}" type="text" id="asideLv1Name" name="asideLv1Name" class="form-control" placeholder="이름을 입력하세요">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="asideLv1Description" class="form-label">어사이드 설명</label>
+                                    <textarea th:field="*{asideLv1Description}" id="asideLv1Description" name="asideLv1Description" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <label class="form-label">특성</label>
+                        <div id="aside1-attributes-container">
+                            <div th:each="attribute, stat : *{asideLv1Attributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{asideLv1Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{asideLv1Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-aside1-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-aside1-attribute">-</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. 어사이드 2단계 -->
+                    <div class="info-subgroup mb-3">
+                        <h4 class="form-subtitle">어사이드 2단계</h4>
+                        <!-- 이미지 -->
+                        <div class="row align-items-center">
+                            <div class="col-md-3 text-center">
+                                <label for="asideLv2Image" class="form-label">이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="aside2ImagePreview" th:src="${asideLv2ImageUrl}"
+                                         alt="이미지 미리보기" class="img-thumbnail">
+                                    <input th:field="*{asideLv2Image}" type="file" id="asideLv2Image" name="asideLv2Image" class="form-control d-none"
+                                           accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="mb-3">
+                                    <label for="asideLv2Name" class="form-label">어사이드 2단계 이름</label>
+                                    <input th:field="*{asideLv2Name}" type="text" id="asideLv2Name" name="asideLv2Name" class="form-control" placeholder="이름을 입력하세요">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="asideLv2Description" class="form-label">어사이드 설명</label>
+                                    <textarea th:field="*{asideLv2Description}" id="asideLv2Description" name="asideLv2Description" class="form-control auto-resize" placeholder="설명을 입력하세요"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <label class="form-label">특성</label>
+                        <div id="aside2-attributes-container">
+                            <div th:each="attribute, stat : *{asideLv2Attributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{asideLv2Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{asideLv2Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-aside2-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-aside2-attribute">-</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. 어사이드 3단계 -->
+                    <div class="info-subgroup mb-3">
+                        <h4 class="form-subtitle">어사이드 3단계</h4>
+                        <!-- 이미지 -->
+                        <div class="row align-items-center">
+                            <div class="col-md-3 text-center">
+                                <label for="asideLv3Image" class="form-label">이미지</label>
+                                <div class="image-upload-wrapper">
+                                    <img id="asideImagePreview4" th:src="${asideLv3ImageUrl}"
+                                         alt="이미지 미리보기" class="img-thumbnail">
+                                    <input th:field="*{asideLv3Image}" type="file" id="asideLv3Image" name="asideLv3Image" class="form-control d-none"
+                                           accept="image/*" onchange="previewImage(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="mb-3">
+                                    <label for="asideLv3Name" class="form-label">어사이드 3단계 이름</label>
+                                    <input th:field="*{asideLv3Name}" type="text" id="asideLv3Name" name="asideLv3Name" class="form-control" placeholder="이름을 입력하세요">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="asideLv3Description" class="form-label">어사이드 설명</label>
+                                    <textarea th:field="*{asideLv3Description}" id="asideLv3Description" name="asideLv3Description" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <label class="form-label">특성</label>
+                        <div id="aside3-attributes-container">
+                            <div th:each="attribute, stat : *{asideLv3Attributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                <input type="text" th:field="*{asideLv3Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <input type="text" th:field="*{asideLv3Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <button type="button" class="btn btn-success btn-add-aside3-attribute">+</button>
+                                <button type="button" class="btn btn-danger btn-remove-aside3-attribute">-</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 폼 제출 버튼 -->
+            <div class="button-group d-flex justify-content-between mt-4">
+                <!-- 이전 버튼 -->
+                <button type="submit" name="action" value="cancel" class="btn btn-danger">취소</button>
+
+                <!-- "저장" 버튼 -->
+                <button type="submit" name="action" value="save" class="btn btn-secondary">저장</button>
+
+                <!-- "다음 단계" 버튼 -->
+                <button type="submit" name="action" value="complete" class="btn btn-primary">캐릭터 수정 완료!</button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- 하단 푸터 -->
+<footer th:replace="~{fragments/footer :: management_footer}">
+    하단 푸터 영역
+</footer>
+
+<script th:src="@{/js/management/charAddForm.js}">
+
+</script>
+
+</body>
+
+</html>
+

@@ -1,11 +1,8 @@
 package hdxian.monatium_darknet.web.controller.api;
 
-import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.service.ImagePathService;
-import hdxian.monatium_darknet.service.dto.AsideImagePathDto;
-import hdxian.monatium_darknet.service.dto.CharacterImagePathDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 @Slf4j
 @RestController

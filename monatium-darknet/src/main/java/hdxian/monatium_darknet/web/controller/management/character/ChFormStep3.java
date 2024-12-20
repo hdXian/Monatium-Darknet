@@ -83,4 +83,28 @@ public class ChFormStep3 {
                 highSkillCooldown, "", highSkillAttributes);
     }
 
+    // === 수정 페이지 등에서 Model에 정보를 담아 보낼 때 사용 ===
+    public void setNormalAttackFields(Attack normalAttack) {
+        this.normalAttackDescription = normalAttack.getDescription();
+        this.normalAttributes = normalAttack.getAttributes();
+    }
+
+    public void setEnhancedAttackFields(Attack enhancedAttack) {
+        this.enhancedAttackDescription = enhancedAttack.getDescription();
+        this.enhancedAttributes = enhancedAttack.getAttributes();
+    }
+
+    public void setLowSkillFields(Skill lowSkill) {
+        this.lowSkillName = lowSkill.getName();
+        this.lowSkillDescription = lowSkill.getDescription();
+        this.lowSkillAttributes = lowSkill.getAttributes();
+    }
+
+    public void setHighSkillFields(Skill highSkill) {
+        this.highSkillName = highSkill.getName();
+        this.highSkillDescription = highSkill.getDescription();
+        this.highSkillCooldown = highSkill.getCooldown();
+        this.highSkillAttributes = highSkill.getAttributes();
+    }
+
 }

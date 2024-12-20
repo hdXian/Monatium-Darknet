@@ -19,4 +19,11 @@ public class ChFormStep2 {
         return new CharacterStat(aggressive, endurance, trick);
     }
 
+    // === 수정 페이지 등에서 Model에 정보를 담아 보낼 때 사용 ===
+    public void setChStatFields(CharacterStat stat) {
+        this.aggressive = stat.getAggressive();
+        this.endurance = stat.getEndurance();
+        this.trick = stat.getTrick();
+    }
+
 }
