@@ -4,7 +4,6 @@ import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.service.CharacterService;
-import hdxian.monatium_darknet.service.ImagePathService;
 import hdxian.monatium_darknet.service.ImageUrlService;
 import hdxian.monatium_darknet.service.dto.AsideImagePathDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
@@ -34,7 +33,6 @@ public class CharacterMgController {
     private final CharacterService characterService;
     private final LocalFileStorageService fileStorageService;
 
-    private final ImagePathService imagePathService;
     private final ImageUrlService imageUrlService;
 
     @GetMapping
@@ -63,7 +61,8 @@ public class CharacterMgController {
     }
 
     @PostMapping("/new/step1")
-    public String chAddStep1(HttpSession session, @ModelAttribute("chForm")ChFormStep1 chForm, BindingResult bindingResult) {
+    public String chAddStep1(HttpSession session, @ModelAttribute("chForm")ChFormStep1 chForm,
+                             @RequestParam("action") String action, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return "management/characters/addChStep1";
@@ -78,7 +77,13 @@ public class CharacterMgController {
 
         session.setAttribute(CHFORM_STEP1, chForm); // 폼 데이터를 세션에 저장
 
-        return "redirect:/management/characters/new/step2";
+        String redirectUrl;
+        switch (action) {
+            case "next" -> redirectUrl = "redirect:/management/characters/new/step2";
+            default -> redirectUrl = "redirect:/management/characters/new/step1";
+        }
+
+        return redirectUrl;
     }
 
     // 2단계 폼 페이지
@@ -91,7 +96,7 @@ public class CharacterMgController {
     }
 
     @PostMapping("/new/step2")
-    public String chAddStep2(@ModelAttribute("chForm")ChFormStep2 chForm, BindingResult bindingResult, HttpSession session) {
+    public String chAddStep2(HttpSession session, @ModelAttribute("chForm")ChFormStep2 chForm, @RequestParam("action")String action, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "management/characters/addChStep2";
         }
@@ -99,7 +104,14 @@ public class CharacterMgController {
         log.info("chForm2 = {}", chForm);
         session.setAttribute(CHFORM_STEP2, chForm);
 
-        return "redirect:/management/characters/new/step3";
+        String redirectUrl;
+        switch(action) {
+            case "prev" -> redirectUrl = "redirect:/management/characters/new/step1";
+            case "next" -> redirectUrl = "redirect:/management/characters/new/step3";
+            default -> redirectUrl = "redirect:/management/characters/new/step2";
+        }
+
+        return redirectUrl;
     }
 
     // 3단계 폼 페이지
@@ -114,7 +126,7 @@ public class CharacterMgController {
     }
 
     @PostMapping("/new/step3")
-    public String chAddStep3(@ModelAttribute("chForm")ChFormStep3 chForm, BindingResult bindingResult, HttpSession session) {
+    public String chAddStep3(HttpSession session, @ModelAttribute("chForm")ChFormStep3 chForm, @RequestParam("action")String action, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "management/characters/addChStep3";
         }
@@ -124,7 +136,14 @@ public class CharacterMgController {
         log.info("chForm3 = {}", chForm);
         session.setAttribute(CHFORM_STEP3, chForm); // 세션에 폼 데이터 저장
 
-        return "redirect:/management/characters/new/step4";
+        String redirectUrl;
+        switch(action) {
+            case "prev" -> redirectUrl = "redirect:/management/characters/new/step2";
+            case "next" -> redirectUrl = "redirect:/management/characters/new/step4";
+            default -> redirectUrl = "redirect:/management/characters/new/step3";
+        }
+
+        return redirectUrl;
     }
 
     // 4단계 폼 페이지
@@ -142,7 +161,7 @@ public class CharacterMgController {
     }
 
     @PostMapping("/new/step4")
-    public String chAddStep4(@ModelAttribute("chForm")ChFormStep4 chForm, BindingResult bindingResult, HttpSession session) {
+    public String chAddStep4(HttpSession session, @ModelAttribute("chForm")ChFormStep4 chForm, @RequestParam("action")String action, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "management/characters/addChStep4";
         }
@@ -152,7 +171,14 @@ public class CharacterMgController {
         log.info("chForm4 = {}", chForm);
         session.setAttribute(CHFORM_STEP4, chForm);
 
-        return "redirect:/management/characters/new/summary"; // 4단계 끝나면 캐릭터 리스트 또는 미리보기 페이지로 이동
+        String redirectUrl;
+        switch(action) {
+            case "prev" -> redirectUrl = "redirect:/management/characters/new/step3";
+            case "next" -> redirectUrl = "redirect:/management/characters/new/summary";
+            default -> redirectUrl = "redirect:/management/characters/new/step4";
+        }
+
+        return redirectUrl; // 4단계 끝나면 캐릭터 리스트 또는 미리보기 페이지로 이동
     }
 
     @GetMapping("/new/summary")
@@ -169,17 +195,33 @@ public class CharacterMgController {
                                 @ModelAttribute(CHFORM_STEP1) ChFormStep1 chForm1,
                                 @ModelAttribute(CHFORM_STEP2) ChFormStep2 chForm2,
                                 @ModelAttribute(CHFORM_STEP3) ChFormStep3 chForm3,
-                                @ModelAttribute(CHFORM_STEP4) ChFormStep4 chForm4) {
+                                @ModelAttribute(CHFORM_STEP4) ChFormStep4 chForm4,
+                                @RequestParam("action")String action) {
 
+        // 마지막으로 제출된 이미지를 임시 경로에 저장
+        uploadImagesToTemp(session, chForm1);
+        uploadImagesToTemp(session, chForm3);
+        uploadImagesToTemp(session, chForm4);
 
-        CharacterDto charDto = generateCharDto(chForm1, chForm2, chForm3, chForm4); // 캐릭터 정보
+        if (action.equals("next")) {
+            CharacterDto charDto = generateCharDto(chForm1, chForm2, chForm3, chForm4); // 캐릭터 정보
 
-        CharacterImagePathDto chImages = generateChImagePathsFromTemp(session); // 캐릭터 이미지 파일 경로
-        AsideImagePathDto asideImages = generateAsideImagePathsFromTemp(session); // 어사이드 이미지 파일 경로
+            CharacterImagePathDto chImages = generateChImagePathsFromTemp(session); // 캐릭터 이미지 파일 경로
+            AsideImagePathDto asideImages = generateAsideImagePathsFromTemp(session); // 어사이드 이미지 파일 경로
 
-        Long characterId = characterService.createNewCharacter(charDto, chImages, asideImages);
+            Long characterId = characterService.createNewCharacter(charDto, chImages, asideImages);
+            return "redirect:/management/characters";
+        }
 
-        return "redirect:/management/characters";
+        if (action.equals("prev")) {
+            return "redirect:/management/characters/new/step4";
+        }
+
+        // save 등
+        else {
+            return "redirect:/management/characters/new/summary";
+        }
+
     }
 
     @ModelAttribute("iconBaseUrl")
