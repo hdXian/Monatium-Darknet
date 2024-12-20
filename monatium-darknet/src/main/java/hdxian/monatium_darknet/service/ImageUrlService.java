@@ -13,10 +13,6 @@ public class ImageUrlService {
     @Value("${url.api_baseUrl}")
     private String api_baseUrl;
 
-    @Getter
-    @Value("{$url.default_thumbnail_url}")
-    private String defaultThumbnailUrl;
-
     // 클라이언트가 요청할 이미지 url을 리턴
     public CharacterUrl generateCharacterImageUrls(Long characterId) {
         String baseUrl = api_baseUrl + "images/" + characterId;
@@ -40,11 +36,9 @@ public class ImageUrlService {
         return api_baseUrl + "images/" + "aside/";
     }
 
-
-
-
-
-
+    public String getDefaultThumbnailUrl() {
+        return api_baseUrl + "images/" + "defaultThumbnail";
+    }
 
 
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 @Slf4j
 @RestController
@@ -26,12 +27,19 @@ public class ImageController {
     // TODO - IOException 나는것들 묶어서 처리하기
     private final LocalFileStorageService fileStorageService;
 
+    private final ImagePathService imagePathService;
+
     // 임시 경로 이미지 요청
     @GetMapping("/tmp/{fileName}")
     public ResponseEntity<Resource> getImageFromTemp(@PathVariable("fileName") String fileName) throws IOException {
-        String filePath = fileStorageService.getFileFullPathFromTemp(fileName);
-        UrlResource resource = new UrlResource("file:" + filePath);
-        return ResponseEntity.ok(resource);
+        String fullPath = fileStorageService.getFileFullPathFromTemp(fileName);
+
+        String contentType = fileStorageService.getContentType(fullPath);
+        UrlResource resource = new UrlResource("file:" + fullPath);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(resource);
     }
 
     // 서버 임시 경로에 이미지를 업로드
@@ -45,6 +53,18 @@ public class ImageController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @GetMapping("/defaultThumbnail")
+    public ResponseEntity<Resource> getDefaultThumbNail() throws IOException {
+        String fullPath = fileStorageService.getFullPath(imagePathService.getDefaultThumbNailFileName());
+
+        String contentType = fileStorageService.getContentType(fullPath);
+        UrlResource resource = new UrlResource("file:" + fullPath);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(resource);
     }
 
 

@@ -37,8 +37,8 @@ public class ImagePathService {
     @Value("${file.skinDir}")
     private String skinDir;
 
-    @Value("${url.api_baseUrl}")
-    private String api_baseUrl;
+    @Value("${file.defaultThumbnail}")
+    private String defaultThumbNail;
 
     private static final String ext = ".webp";
 
@@ -74,6 +74,10 @@ public class ImagePathService {
 
     public String getOneStarIconFileName(String isFilled) {
         return iconDir + "star_" + isFilled + ext;
+    }
+
+    public String getDefaultThumbNailFileName() {
+        return defaultThumbNail;
     }
 
     // 서버 스토리지 내 이미지 저장 경로를 리턴

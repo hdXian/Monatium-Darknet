@@ -182,6 +182,21 @@ public class CharacterMgController {
         return "redirect:/management/characters";
     }
 
+    @ModelAttribute("iconBaseUrl")
+    public String iconBaseUrl() {
+        return imageUrlService.getIconBaseUrl();
+    }
+
+    @ModelAttribute("chBaseUrl")
+    public String chBaseUrl() {
+        return imageUrlService.getChBaseUrl();
+    }
+
+    @ModelAttribute("asideBaseUrl")
+    public String asideBaseUrl() {
+        return imageUrlService.getAsideBaseUrl();
+    }
+
     // ===== private ====
 
     private CharacterImagePathDto generateChImagePathsFromTemp(HttpSession session) {
