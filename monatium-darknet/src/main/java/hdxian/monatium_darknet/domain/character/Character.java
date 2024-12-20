@@ -68,6 +68,7 @@ public class Character {
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Skin> skins = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
     private CharacterStatus status;
 
 //    @Embedded
