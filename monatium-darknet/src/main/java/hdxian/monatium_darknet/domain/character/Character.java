@@ -68,6 +68,8 @@ public class Character {
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Skin> skins = new ArrayList<>();
 
+    private CharacterStatus status;
+
 //    @Embedded
 //    private CharacterUrl urls; // 이미지 url
 
@@ -124,6 +126,8 @@ public class Character {
         character.setHighSkill(highSkill);
 
         character.setAside(aside);
+
+        character.setStatus(CharacterStatus.DISABLED); // 처음 생성할 땐 비활성화 상태
 
 //        character.setUrls(urls);
         return character;
