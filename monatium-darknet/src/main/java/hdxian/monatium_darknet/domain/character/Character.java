@@ -2,7 +2,6 @@ package hdxian.monatium_darknet.domain.character;
 
 import hdxian.monatium_darknet.domain.*;
 import hdxian.monatium_darknet.domain.aside.Aside;
-import hdxian.monatium_darknet.domain.card.ArtifactCard;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import jakarta.persistence.*;
 import lombok.Getter;

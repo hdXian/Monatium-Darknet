@@ -171,69 +171,46 @@ public class CharacterMgController {
                                 @ModelAttribute(CHFORM_STEP3) ChFormStep3 chForm3,
                                 @ModelAttribute(CHFORM_STEP4) ChFormStep4 chForm4) {
 
-        // 1. 캐릭터 정보를 DB에 저장한다. (url 정보 포함)
-        CharacterDto charDto = generateCharDto(chForm1, chForm2, chForm3, chForm4);
-        Long characterId = characterService.createNewCharacter(charDto);
-//        characterService.updateCharacterUrls(characterId, imageService.generateCharacterImageUrls(characterId));
 
-        // 2. 임시 경로에 저장된 캐릭터 이미지를 정식 경로로 이동시킨다.
-        saveCharacterImages(session, characterId);
+        CharacterDto charDto = generateCharDto(chForm1, chForm2, chForm3, chForm4); // 캐릭터 정보
+
+        CharacterImagePathDto chImages = generateChImagePathsFromTemp(session); // 캐릭터 이미지 파일 경로
+        AsideImagePathDto asideImages = generateAsideImagePathsFromTemp(session); // 어사이드 이미지 파일 경로
+
+        Long characterId = characterService.createNewCharacter(charDto, chImages, asideImages);
 
         return "redirect:/management/characters";
     }
 
     // ===== private ====
 
-    // 임시경로의 캐릭터 이미지 저장
-    private void saveCharacterImages(HttpSession session, Long characterId) {
+    private CharacterImagePathDto generateChImagePathsFromTemp(HttpSession session) {
         String tempDir = fileStorageService.getTempDir();
 
         // 프로필, 초상화, 전신 이미지 tmp 경로 추출
-        String tmp_profile_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_PROFILE), tempDir);
-        String tmp_portrait_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_PORTRAIT), tempDir);
-        String tmp_body_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_BODY), tempDir);
+        String profilePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_PROFILE));
+        String portraitPath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_PORTRAIT));
+        String bodyPath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_BODY));
 
         // 저학년 스킬 이미지 tmp 경로 추출
-        String tmp_lowSkill_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_LOWSKILL), tempDir);
+        String lowSkillPath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_LOWSKILL));
 
-        // 어사이드 이미지 tmp 경로 추출
-        String tmp_aside_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE), tempDir);
-        String tmp_aside_lv1_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE_LV1), tempDir);
-        String tmp_aside_lv2_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE_LV2), tempDir);
-        String tmp_aside_lv3_filePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE_LV3), tempDir);
-
-        // 4. 이미지들을 저장할 파일 경로를 받아온다.
-        CharacterImagePathDto chImagePaths = imagePathService.generateChImagePaths(characterId); // img/chs/{ID}/profile.ext, ...
-        AsideImagePathDto asideImagePaths = imagePathService.generateAsideImagePaths(characterId); // img/chs/{ID}/aside.ext, ...
-
-        String save_profile_path = chImagePaths.getProfileImagePath();
-        String save_portrait_path = chImagePaths.getPortraitImagePath();
-        String save_body_path = chImagePaths.getBodyImagePath();
-        String save_lowSkill_path = chImagePaths.getLowSkillImagePath();
-
-        String save_aside_image_path = asideImagePaths.getAsideImagePath(); // 어사이드 프로필
-        String save_aside_lv1_image_path = asideImagePaths.getLv1Path(); // lv1
-        String save_aside_lv2_image_path = asideImagePaths.getLv2Path(); // lv2
-        String save_aside_lv3_image_path = asideImagePaths.getLv3Path(); // lv3
-
-        try {
-            fileStorageService.moveFile(new FileDto(tmp_profile_filePath), new FileDto(save_profile_path));
-            fileStorageService.moveFile(new FileDto(tmp_portrait_filePath), new FileDto(save_portrait_path));
-            fileStorageService.moveFile(new FileDto(tmp_body_filePath), new FileDto(save_body_path));
-
-            fileStorageService.moveFile(new FileDto(tmp_lowSkill_filePath), new FileDto(save_lowSkill_path));
-
-            fileStorageService.moveFile(new FileDto(tmp_aside_filePath), new FileDto(save_aside_image_path));
-            fileStorageService.moveFile(new FileDto(tmp_aside_lv1_filePath), new FileDto(save_aside_lv1_image_path));
-            fileStorageService.moveFile(new FileDto(tmp_aside_lv2_filePath), new FileDto(save_aside_lv2_image_path));
-            fileStorageService.moveFile(new FileDto(tmp_aside_lv3_filePath), new FileDto(save_aside_lv3_image_path));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        return new CharacterImagePathDto(profilePath, portraitPath, bodyPath, lowSkillPath);
     }
 
-    private String convertUrlToFilePathTemp(String url, String tempDir) {
+    private AsideImagePathDto generateAsideImagePathsFromTemp(HttpSession session) {
+        String tempDir = fileStorageService.getTempDir();
+
+        String asidePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE));
+        String lv1Path = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE_LV1));
+        String lv2Path = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE_LV2));
+        String lv3Path = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE_LV3));
+
+        return new AsideImagePathDto(asidePath, lv1Path, lv2Path, lv3Path);
+    }
+
+    private String convertUrlToFilePathTemp(String url) {
+        String tempDir = fileStorageService.getTempDir();
         String fileName = fileStorageService.extractFileName(url);
         return tempDir + fileName;
     }
@@ -276,6 +253,7 @@ public class CharacterMgController {
         return dto;
     }
 
+    // TODO - imageUrl들 모델에 추가하는 메서드 @ModelAttribute로 전환
     // to summary
     private void addTotalFormsOnModel(HttpSession session, Model model) {
         ChFormStep1 chForm1 = Optional.ofNullable( (ChFormStep1) session.getAttribute(CHFORM_STEP1) ).orElse(new ChFormStep1());

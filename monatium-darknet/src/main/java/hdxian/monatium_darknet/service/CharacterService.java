@@ -9,7 +9,9 @@ import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.character.CharacterUrl;
 import hdxian.monatium_darknet.repository.CardRepository;
 import hdxian.monatium_darknet.repository.CharacterRepository;
+import hdxian.monatium_darknet.service.dto.AsideImagePathDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
+import hdxian.monatium_darknet.service.dto.CharacterImagePathDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,8 @@ public class CharacterService {
 
     private final CardRepository cardRepository;
     private final CharacterRepository characterRepository;
+
+    private final ImagePathService imagePathService;
 
     // 캐릭터 추가 기능
     @Transactional
@@ -51,6 +55,40 @@ public class CharacterService {
         );
 
         return characterRepository.save(ch);
+    }
+
+    @Transactional
+    public Long createNewCharacter(CharacterDto chDto, CharacterImagePathDto chImagePaths, AsideImagePathDto asideImagePaths) {
+
+        // 캐릭터 기본 정보 저장
+        Character ch = Character.createCharacter(
+                chDto.getName(),
+                chDto.getSubtitle(),
+                chDto.getCv(),
+                chDto.getGrade(),
+                chDto.getQuote(),
+                chDto.getTmi(),
+                chDto.getFavorite(),
+                chDto.getRace(),
+                chDto.getPersonality(),
+                chDto.getRole(),
+                chDto.getAttackType(),
+                chDto.getPosition(),
+                chDto.getStat(),
+                chDto.getNormalAttack(),
+                chDto.getEnhancedAttack(),
+                chDto.getLowSKill(),
+                chDto.getHighSkill(),
+                chDto.getAside()
+        );
+
+        Long savedId = characterRepository.save(ch);
+
+        // 캐릭터 이미지 정보 저장
+        imagePathService.saveCharacterImages(savedId, chImagePaths);
+        imagePathService.saveAsideImages(savedId, asideImagePaths);
+
+        return savedId;
     }
 
     // 캐릭터 업데이트
