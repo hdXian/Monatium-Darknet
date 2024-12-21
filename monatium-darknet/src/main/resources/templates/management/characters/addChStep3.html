@@ -89,7 +89,7 @@
                             <div class="col-md-3 text-center">
                                 <label for="lowSkillImage" class="form-label">스킬 이미지</label>
                                 <div class="image-upload-wrapper">
-                                    <img id="lowSkillImagePreview" th:src="${lowSkillImageUrl}"
+                                    <img id="lowSkillImagePreview" th:src="${chAdd_lowSkillUrl}"
                                         alt="스킬 이미지 미리보기" class="img-thumbnail">
                                     <input th:field="*{lowSkillImage}" type="file" id="lowSkillImage" name="lowSkillImage" class="form-control d-none"
                                         accept="image/*" onchange="previewImage(this)">

@@ -110,10 +110,18 @@ public class ImagePathService {
         CharacterImageDto dst = generateChImagePaths(characterId);
 
         try {
-            fileStorageService.moveFile(new FileDto(src.getProfileImage()), new FileDto(dst.getProfileImage()));
-            fileStorageService.moveFile(new FileDto(src.getPortraitImage()), new FileDto(dst.getPortraitImage()));
-            fileStorageService.moveFile(new FileDto(src.getBodyImage()), new FileDto(dst.getBodyImage()));
-            fileStorageService.moveFile(new FileDto(src.getLowSkillImage()), new FileDto(dst.getLowSkillImage()));
+            if (src.getProfileImage() != null) {
+                fileStorageService.moveFile(new FileDto(src.getProfileImage()), new FileDto(dst.getProfileImage()));
+            }
+            if (src.getPortraitImage() != null) {
+                fileStorageService.moveFile(new FileDto(src.getPortraitImage()), new FileDto(dst.getPortraitImage()));
+            }
+            if (src.getBodyImage() != null) {
+                fileStorageService.moveFile(new FileDto(src.getBodyImage()), new FileDto(dst.getBodyImage()));
+            }
+            if (src.getLowSkillImage() != null) {
+                fileStorageService.moveFile(new FileDto(src.getLowSkillImage()), new FileDto(dst.getLowSkillImage()));
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -126,10 +134,18 @@ public class ImagePathService {
         AsideImageDto dst = generateAsideImagePaths(characterId);
 
         try {
-            fileStorageService.moveFile(new FileDto(src.getAsideImage()), new FileDto(dst.getAsideImage()));
-            fileStorageService.moveFile(new FileDto(src.getLv1Image()), new FileDto(dst.getLv1Image()));
-            fileStorageService.moveFile(new FileDto(src.getLv2Image()), new FileDto(dst.getLv2Image()));
-            fileStorageService.moveFile(new FileDto(src.getLv3Image()), new FileDto(dst.getLv3Image()));
+            if (src.getAsideImage() != null) {
+                fileStorageService.moveFile(new FileDto(src.getAsideImage()), new FileDto(dst.getAsideImage()));
+            }
+            if (src.getLv1Image() != null) {
+                fileStorageService.moveFile(new FileDto(src.getLv1Image()), new FileDto(dst.getLv1Image()));
+            }
+            if (src.getLv2Image() != null) {
+                fileStorageService.moveFile(new FileDto(src.getLv2Image()), new FileDto(dst.getLv2Image()));
+            }
+            if (src.getLv3Image() != null) {
+                fileStorageService.moveFile(new FileDto(src.getLv3Image()), new FileDto(dst.getLv3Image()));
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

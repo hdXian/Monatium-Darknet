@@ -55,7 +55,7 @@ public class CharacterMgController {
     public String chFormStep1(HttpSession session, Model model) {
         ChFormStep1 chForm = Optional.ofNullable( (ChFormStep1) session.getAttribute(CHFORM_STEP1) ).orElse(new ChFormStep1()); // 세션에 저장된 게 없으면 새로운 빈 폼 객체를 생성
 
-        addStep1ImageUrlsOnModelInSession(session, model); // 이미지 url 처리
+        addUrlAttributesStep1(session, model); // 이미지 url 처리
 
         model.addAttribute("chForm", chForm); // 모델에 폼 객체 전달
 
@@ -121,7 +121,7 @@ public class CharacterMgController {
     public String chFormStep3(HttpSession session, Model model) {
         ChFormStep3 chForm = Optional.ofNullable( (ChFormStep3) session.getAttribute(CHFORM_STEP3) ).orElse(new ChFormStep3()); // 세션에 저장된 게 없으면 새로운 빈 폼 객체를 생성
 
-        addStep3ImageUrlsOnModelInSession(session, model);
+        addUrlAttributesStep3(session, model);
 
         model.addAttribute("chForm", chForm);
         return "management/characters/addChStep3";
@@ -155,7 +155,7 @@ public class CharacterMgController {
         ChFormStep4 chForm = Optional.ofNullable( (ChFormStep4) session.getAttribute(CHFORM_STEP4) )
                 .orElse(new ChFormStep4());
 
-        addStep4ImageUrlsOnModelInSession(session, model);
+        addUrlAttributesStep4(session, model);
 
         model.addAttribute("chForm", chForm);
 
@@ -189,16 +189,16 @@ public class CharacterMgController {
         addAllImageUrlsOnModelInSession(session, model);
         addAllFormsOnModelInSession(session, model);
 
-        return "management/characters/summary";
+        return "management/characters/addChSummary";
     }
 
     @PostMapping("/new/complete")
     public String chAddComplete(HttpSession session,
+                                @RequestParam("action")String action,
                                 @ModelAttribute(CHFORM_STEP1) ChFormStep1 chForm1,
                                 @ModelAttribute(CHFORM_STEP2) ChFormStep2 chForm2,
                                 @ModelAttribute(CHFORM_STEP3) ChFormStep3 chForm3,
-                                @ModelAttribute(CHFORM_STEP4) ChFormStep4 chForm4,
-                                @RequestParam("action")String action) {
+                                @ModelAttribute(CHFORM_STEP4) ChFormStep4 chForm4) {
 
         // 마지막으로 제출된 이미지를 임시 경로에 저장
         uploadImagesToTemp(session, chForm1);
@@ -218,7 +218,6 @@ public class CharacterMgController {
         if (action.equals("prev")) {
             return "redirect:/management/characters/new/step4";
         }
-
         // save 등
         else {
             return "redirect:/management/characters/new/summary";
@@ -228,47 +227,94 @@ public class CharacterMgController {
 
     // 캐릭터 수정 페이지 요청
     @GetMapping("/edit/{characterId}")
-    public String editForm(@PathVariable("characterId")Long characterId, Model model) {
+    public String editForm(HttpSession session, @PathVariable("characterId")Long characterId, Model model) {
         Character ch = characterService.findOne(characterId);
 
         model.addAttribute("characterId", characterId);
 
+        // 1. 대상 캐릭터에 대한 정보를 폼 객체에 저장
         ChFormStep1 chForm1 = generateChForm1(ch);
         ChFormStep2 chForm2 = generateChForm2(ch);
         ChFormStep3 chForm3 = generateChForm3(ch);
 
+        // 2. 폼 객체를 모델에 추가
         model.addAttribute(CHFORM_STEP1, chForm1);
         model.addAttribute(CHFORM_STEP2, chForm2);
         model.addAttribute(CHFORM_STEP3, chForm3);
 
-        CharacterImageDto chImageUrls = imageUrlService.generateCharacterImageUrls(characterId);
-        model.addAttribute(IMAGE_URL_PROFILE, chImageUrls.getProfileImage());
-        model.addAttribute(IMAGE_URL_PORTRAIT, chImageUrls.getPortraitImage());
-        model.addAttribute(IMAGE_URL_BODY, chImageUrls.getBodyImage());
-        model.addAttribute(IMAGE_URL_LOWSKILL, chImageUrls.getLowSkillImage());
+        // 캐릭터들의 이미지 url을 모델에 추가 (프로필, 초상화, 전신, 저학년 스킬)
+//        CharacterImageDto chImageUrls = imageUrlService.generateCharacterImageUrls(characterId);
+//        model.addAttribute(CH_EDIT_PROFILE_URL, chImageUrls.getProfileImage());
+//        model.addAttribute(CH_EDIT_PORTRAIT_URL, chImageUrls.getPortraitImage());
+//        model.addAttribute(CH_EDIT_BODY_URL, chImageUrls.getBodyImage());
+//        model.addAttribute(CH_EDIT_LOW_SKILL_URL, chImageUrls.getLowSkillImage());
+        addChUrlsOnEditFormModel(session, model, characterId);
 
-
-        if (ch.getAside() != null) {
-            ChFormStep4 chForm4 = generateChForm4(ch.getAside());
-            AsideImageDto asideImageUrls = imageUrlService.generateAsideImageUrls(characterId);
-
-            model.addAttribute(IMAGE_URL_ASIDE, asideImageUrls.getAsideImage());
-            model.addAttribute(IMAGE_URL_ASIDE_LV1, asideImageUrls.getLv1Image());
-            model.addAttribute(IMAGE_URL_ASIDE_LV2, asideImageUrls.getLv2Image());
-            model.addAttribute(IMAGE_URL_ASIDE_LV3, asideImageUrls.getLv3Image());
-
-            model.addAttribute(CHFORM_STEP4, chForm4);
-        }
+        // 어사이드가 있다면 어사이드 정보와 이미지 url도 추가
+//        if (ch.getAside() != null) {
+//            ChFormStep4 chForm4 = generateChForm4(ch.getAside());
+//            AsideImageDto asideImageUrls = imageUrlService.generateAsideImageUrls(characterId);
+//
+//            model.addAttribute(CH_EDIT_ASIDE_URL, asideImageUrls.getAsideImage());
+//            model.addAttribute(CH_EDIT_ASIDE_LV_1_URL, asideImageUrls.getLv1Image());
+//            model.addAttribute(CH_EDIT_ASIDE_LV_2_URL, asideImageUrls.getLv2Image());
+//            model.addAttribute(CH_EDIT_ASIDE_LV_3_URL, asideImageUrls.getLv3Image());
+//
+//            model.addAttribute(CHFORM_STEP4, chForm4);
+//        }
+        ChFormStep4 chForm4 = generateChForm4(ch.getAside());
+        model.addAttribute(CHFORM_STEP4, chForm4);
 
         return "management/characters/characterEditForm";
     }
 
+    // 캐릭터 수정
     @PostMapping("/edit/{characterId}")
-    public String edit(@PathVariable("characterId")Long characterId, @RequestParam("action")String action) {
-        // TODO...
-        return "redirect:/management/characters";
+    public String edit(HttpSession session, Model model, @RequestParam("action")String action,
+                       @PathVariable("characterId")Long characterId,
+                       @ModelAttribute("chFormStep1") ChFormStep1 chForm1,
+                       @ModelAttribute("chFormStep2") ChFormStep2 chForm2,
+                       @ModelAttribute("chFormStep3") ChFormStep3 chForm3,
+                       @ModelAttribute("chFormStep4") ChFormStep4 chForm4) {
+
+        if (action.equals("cancel")) {
+            return "redirect:/management/characters";
+        }
+
+        // temp 경로에 이미지 파일, 세션에 이미지 url 저장하기
+        // 파일이 없는 경우 (따로 첨부한 파일이 없는 경우) -> 해당 이미지 url은 세션에 저장되지 않음
+        uploadImagesFromEditFormToTemp(session, chForm1, chForm3, chForm4);
+
+        // model에 이미지 url들을 저장
+        addChUrlsOnEditFormModel(session, model, characterId);
+
+        // 캐릭터 정보 수정하여 저장하기
+        if (action.equals("complete")) {
+            CharacterDto updateDto = generateCharDto(chForm1, chForm2, chForm3, chForm4);
+
+            CharacterImageDto chImages = generateEditChImagePathsFromTemp(session);
+            AsideImageDto asideImages = generateEditAsideImagePathsFromTemp(session);
+            characterService.updateCharacter(characterId, updateDto, chImages, asideImages);
+            return "redirect:/management/characters";
+        }
+        else { // save 등
+            return "redirect:/management/characters/edit/" + characterId;
+        }
+
     }
 
+    private void uploadImagesFromEditFormToTemp(HttpSession session, ChFormStep1 chForm1, ChFormStep3 chForm3, ChFormStep4 chForm4) {
+        uploadImageToTemp(session, CH_EDIT_PROFILE_URL, chForm1.getProfileImage());
+        uploadImageToTemp(session, CH_EDIT_PORTRAIT_URL, chForm1.getPortraitImage());
+        uploadImageToTemp(session, CH_EDIT_BODY_URL, chForm1.getBodyImage());
+
+        uploadImageToTemp(session, CH_EDIT_LOW_SKILL_URL, chForm3.getLowSkillImage());
+
+        uploadImageToTemp(session, CH_EDIT_ASIDE_URL, chForm4.getAsideImage());
+        uploadImageToTemp(session, CH_EDIT_ASIDE_LV_1_URL, chForm4.getAsideLv1Image());
+        uploadImageToTemp(session, CH_EDIT_ASIDE_LV_2_URL, chForm4.getAsideLv2Image());
+        uploadImageToTemp(session, CH_EDIT_ASIDE_LV_3_URL, chForm4.getAsideLv3Image());
+    }
 
     @PostMapping("/delete/{characterId}")
     public String delete(@PathVariable("characterId")Long characterId) {
@@ -292,6 +338,53 @@ public class CharacterMgController {
     }
 
     // ===== private ====
+
+    private void addChUrlsOnEditFormModel(HttpSession session, Model model, Long characterId) {
+        // 캐릭터 이미지 url
+        // 1. 캐릭터 이미지 url 경로를 우선 생성한다.
+        CharacterImageDto chImageUrls = imageUrlService.generateCharacterImageUrls(characterId);
+
+        // 2. 세션에 저장돼있는 url들을 덮어씌운다. (세션에 남아있다 -> 이미지를 바꿔서 temp 이미지가 경로로 지정돼있다)
+        if ( session.getAttribute(CH_EDIT_PROFILE_URL) != null ) {
+            chImageUrls.setProfileImage((String) session.getAttribute(CH_EDIT_PROFILE_URL));
+        }
+        if ( session.getAttribute(CH_EDIT_PORTRAIT_URL) != null ) {
+            chImageUrls.setPortraitImage((String) session.getAttribute(CH_EDIT_PORTRAIT_URL));
+        }
+        if ( session.getAttribute(CH_EDIT_BODY_URL) != null ) {
+            chImageUrls.setBodyImage((String) session.getAttribute(CH_EDIT_BODY_URL));
+        }
+        if ( session.getAttribute(CH_EDIT_LOW_SKILL_URL) != null ) {
+            chImageUrls.setLowSkillImage((String) session.getAttribute(CH_EDIT_LOW_SKILL_URL));
+        }
+
+        // 2. 어사이드 이미지 url
+        AsideImageDto asideImageUrls = imageUrlService.generateAsideImageUrls(characterId);
+        if ( session.getAttribute(CH_EDIT_ASIDE_URL) != null ) {
+            asideImageUrls.setAsideImage((String) session.getAttribute(CH_EDIT_ASIDE_URL));
+        }
+        if ( session.getAttribute(CH_EDIT_ASIDE_LV_1_URL) != null ) {
+            asideImageUrls.setLv1Image((String) session.getAttribute(CH_EDIT_ASIDE_LV_1_URL));
+        }
+        if ( session.getAttribute(CH_EDIT_ASIDE_LV_2_URL) != null ) {
+            asideImageUrls.setLv2Image((String) session.getAttribute(CH_EDIT_ASIDE_LV_2_URL));
+        }
+        if ( session.getAttribute(CH_EDIT_ASIDE_LV_3_URL) != null ) {
+            asideImageUrls.setLv3Image((String) session.getAttribute(CH_EDIT_ASIDE_LV_3_URL));
+        }
+
+        model.addAttribute(CH_EDIT_PROFILE_URL, chImageUrls.getProfileImage());
+        model.addAttribute(CH_EDIT_PORTRAIT_URL, chImageUrls.getPortraitImage());
+        model.addAttribute(CH_EDIT_BODY_URL, chImageUrls.getBodyImage());
+        model.addAttribute(CH_EDIT_LOW_SKILL_URL, chImageUrls.getLowSkillImage());
+        log.info("chImageUrls = {}", chImageUrls);
+
+        model.addAttribute(CH_EDIT_ASIDE_URL, asideImageUrls.getAsideImage());
+        model.addAttribute(CH_EDIT_ASIDE_LV_1_URL, asideImageUrls.getLv1Image());
+        model.addAttribute(CH_EDIT_ASIDE_LV_2_URL, asideImageUrls.getLv2Image());
+        model.addAttribute(CH_EDIT_ASIDE_LV_3_URL, asideImageUrls.getLv3Image());
+        log.info("asideImageUrls = {}", asideImageUrls);
+    }
 
     private ChFormStep4 generateChForm4(Aside aside) {
         ChFormStep4 form = new ChFormStep4();
@@ -340,23 +433,78 @@ public class CharacterMgController {
         String tempDir = fileStorageService.getTempDir();
 
         // 프로필, 초상화, 전신 이미지 tmp 경로 추출
-        String profilePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_PROFILE));
-        String portraitPath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_PORTRAIT));
-        String bodyPath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_BODY));
+        String profilePath = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_PROFILE_URL));
+        String portraitPath = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_PORTRAIT_URL));
+        String bodyPath = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_BODY_URL));
 
         // 저학년 스킬 이미지 tmp 경로 추출
-        String lowSkillPath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_LOWSKILL));
+        String lowSkillPath = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_LOW_SKILL_URL));
 
+        return new CharacterImageDto(profilePath, portraitPath, bodyPath, lowSkillPath);
+    }
+
+    // tmp 경로의 이미지만 걸러서 옮겨 저장해야 함.
+    private CharacterImageDto generateEditChImagePathsFromTemp(HttpSession session) {
+        String tempDir = fileStorageService.getTempDir();
+
+        // 프로필, 초상화, 전신 이미지 tmp 경로 추출
+        String profilePath = null;
+        if (session.getAttribute(CH_EDIT_PROFILE_URL) != null) {
+            profilePath = convertUrlToFilePathTemp((String) session.getAttribute(CH_EDIT_PROFILE_URL));
+        }
+
+        String portraitPath = null;
+        if (session.getAttribute(CH_EDIT_PORTRAIT_URL) != null) {
+            portraitPath = convertUrlToFilePathTemp((String) session.getAttribute(CH_EDIT_PORTRAIT_URL));
+        }
+
+        String bodyPath = null;
+        if (session.getAttribute(CH_EDIT_BODY_URL) != null) {
+            bodyPath = convertUrlToFilePathTemp((String) session.getAttribute(CH_EDIT_BODY_URL));
+        }
+
+        String lowSkillPath = null;
+        if (session.getAttribute(CH_EDIT_LOW_SKILL_URL) != null) {
+            lowSkillPath = convertUrlToFilePathTemp((String) session.getAttribute(CH_EDIT_LOW_SKILL_URL));
+        }
+
+        // 저학년 스킬 이미지 tmp 경로 추출
         return new CharacterImageDto(profilePath, portraitPath, bodyPath, lowSkillPath);
     }
 
     private AsideImageDto generateAsideImagePathsFromTemp(HttpSession session) {
         String tempDir = fileStorageService.getTempDir();
 
-        String asidePath = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE));
-        String lv1Path = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE_LV1));
-        String lv2Path = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE_LV2));
-        String lv3Path = convertUrlToFilePathTemp((String) session.getAttribute(IMAGE_URL_ASIDE_LV3));
+        String asidePath = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_ASIDE_URL));
+        String lv1Path = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_ASIDE_LV_1_URL));
+        String lv2Path = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_ASIDE_LV_2_URL));
+        String lv3Path = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_ASIDE_LV_3_URL));
+
+        return new AsideImageDto(asidePath, lv1Path, lv2Path, lv3Path);
+    }
+
+    private AsideImageDto generateEditAsideImagePathsFromTemp(HttpSession session) {
+        String tempDir = fileStorageService.getTempDir();
+
+        String asidePath = null;
+        if ((String) session.getAttribute(CH_EDIT_ASIDE_URL) != null) {
+            asidePath = convertUrlToFilePathTemp((String) session.getAttribute(CH_EDIT_ASIDE_URL));
+        }
+
+        String lv1Path = null;
+        if ((String) session.getAttribute(CH_EDIT_ASIDE_LV_1_URL) != null) {
+            lv1Path = convertUrlToFilePathTemp((String) session.getAttribute(CH_EDIT_ASIDE_LV_1_URL));
+        }
+
+        String lv2Path = null;
+        if ((String) session.getAttribute(CH_EDIT_ASIDE_LV_2_URL) != null) {
+            lv2Path = convertUrlToFilePathTemp((String) session.getAttribute(CH_EDIT_ASIDE_LV_2_URL));
+        }
+
+        String lv3Path = null;
+        if ((String) session.getAttribute(CH_EDIT_ASIDE_LV_3_URL) != null) {
+            lv3Path = convertUrlToFilePathTemp((String) session.getAttribute(CH_EDIT_ASIDE_LV_3_URL));
+        }
 
         return new AsideImageDto(asidePath, lv1Path, lv2Path, lv3Path);
     }
@@ -427,10 +575,10 @@ public class CharacterMgController {
      * 2. 이미지에 대한 요청 URL을 세션에 저장
      */
     private void uploadImagesToTemp(HttpSession session, ChFormStep4 chForm) {
-        uploadImageToTemp(session, IMAGE_URL_ASIDE, chForm.getAsideImage());
-        uploadImageToTemp(session, IMAGE_URL_ASIDE_LV1, chForm.getAsideLv1Image());
-        uploadImageToTemp(session, IMAGE_URL_ASIDE_LV2, chForm.getAsideLv2Image());
-        uploadImageToTemp(session, IMAGE_URL_ASIDE_LV3, chForm.getAsideLv3Image());
+        uploadImageToTemp(session, CH_ADD_ASIDE_URL, chForm.getAsideImage());
+        uploadImageToTemp(session, CH_ADD_ASIDE_LV_1_URL, chForm.getAsideLv1Image());
+        uploadImageToTemp(session, CH_ADD_ASIDE_LV_2_URL, chForm.getAsideLv2Image());
+        uploadImageToTemp(session, CH_ADD_ASIDE_LV_3_URL, chForm.getAsideLv3Image());
     }
 
     /**
@@ -438,7 +586,7 @@ public class CharacterMgController {
      * @param chForm 제출된 폼 객체. 이미지 파일(MultipartFile)을 가지고 있음
      */
     private void uploadImagesToTemp(HttpSession session, ChFormStep3 chForm) {
-        uploadImageToTemp(session, IMAGE_URL_LOWSKILL, chForm.getLowSkillImage());
+        uploadImageToTemp(session, CH_ADD_LOW_SKILL_URL, chForm.getLowSkillImage());
     }
 
     /**
@@ -446,9 +594,9 @@ public class CharacterMgController {
      * @param chForm 제출된 폼 객체. 이미지 파일(MultipartFile)을 가지고 있음
      */
     private void uploadImagesToTemp(HttpSession session, ChFormStep1 chForm) {
-        uploadImageToTemp(session, IMAGE_URL_PROFILE, chForm.getProfileImage());
-        uploadImageToTemp(session, IMAGE_URL_PORTRAIT, chForm.getPortraitImage());
-        uploadImageToTemp(session, IMAGE_URL_BODY, chForm.getBodyImage());
+        uploadImageToTemp(session, CH_ADD_PROFILE_URL, chForm.getProfileImage());
+        uploadImageToTemp(session, CH_ADD_PORTRAIT_URL, chForm.getPortraitImage());
+        uploadImageToTemp(session, CH_ADD_BODY_URL, chForm.getBodyImage());
     }
 
     /**
@@ -460,56 +608,83 @@ public class CharacterMgController {
      * 3. 이미지 경로들을 모델에 추가
      */
     private void addAllImageUrlsOnModelInSession(HttpSession session, Model model) {
-        addStep1ImageUrlsOnModelInSession(session, model);
+        addUrlAttributesStep1(session, model);
         // step2에는 업로드할 이미지가 없음
-        addStep3ImageUrlsOnModelInSession(session, model);
-        addStep4ImageUrlsOnModelInSession(session, model);
+        addUrlAttributesStep3(session, model);
+        addUrlAttributesStep4(session, model);
     }
 
     /**
      * @param session 세션에 저장된 이미지 요청 url을 가져옴 (없으면 기본 썸네일 url)
      * @param model 가져온 url을 추가할 model 객체
      */
-    private void addStep4ImageUrlsOnModelInSession(HttpSession session, Model model) {
+    private void addUrlAttributesStep4(HttpSession session, Model model) {
         String defaultThumbnailUrl = imageUrlService.getDefaultThumbnailUrl();
 
-        String asideImageUrl = Optional.ofNullable((String) session.getAttribute(IMAGE_URL_ASIDE)).orElse(defaultThumbnailUrl);
-        String aside1ImageUrl = Optional.ofNullable((String) session.getAttribute(IMAGE_URL_ASIDE_LV1)).orElse(defaultThumbnailUrl);
-        String aside2ImageUrl = Optional.ofNullable((String) session.getAttribute(IMAGE_URL_ASIDE_LV2)).orElse(defaultThumbnailUrl);
-        String aside3ImageUrl = Optional.ofNullable((String) session.getAttribute(IMAGE_URL_ASIDE_LV3)).orElse(defaultThumbnailUrl);
+        String asideImageUrl = Optional.ofNullable((String) session.getAttribute(CH_ADD_ASIDE_URL)).orElse(defaultThumbnailUrl);
+        String aside1ImageUrl = Optional.ofNullable((String) session.getAttribute(CH_ADD_ASIDE_LV_1_URL)).orElse(defaultThumbnailUrl);
+        String aside2ImageUrl = Optional.ofNullable((String) session.getAttribute(CH_ADD_ASIDE_LV_2_URL)).orElse(defaultThumbnailUrl);
+        String aside3ImageUrl = Optional.ofNullable((String) session.getAttribute(CH_ADD_ASIDE_LV_3_URL)).orElse(defaultThumbnailUrl);
 
-        model.addAttribute(IMAGE_URL_ASIDE, asideImageUrl);
-        model.addAttribute(IMAGE_URL_ASIDE_LV1, aside1ImageUrl);
-        model.addAttribute(IMAGE_URL_ASIDE_LV2, aside2ImageUrl);
-        model.addAttribute(IMAGE_URL_ASIDE_LV3, aside3ImageUrl);
+        model.addAttribute(CH_ADD_ASIDE_URL, asideImageUrl);
+        model.addAttribute(CH_ADD_ASIDE_LV_1_URL, aside1ImageUrl);
+        model.addAttribute(CH_ADD_ASIDE_LV_2_URL, aside2ImageUrl);
+        model.addAttribute(CH_ADD_ASIDE_LV_3_URL, aside3ImageUrl);
     }
 
     /**
      * @param session 세션에 저장된 이미지 요청 url을 가져옴 (없으면 기본 썸네일 url)
      * @param model 가져온 url을 추가할 model 객체
      */
-    private void addStep3ImageUrlsOnModelInSession(HttpSession session, Model model) {
+    private void addUrlAttributesStep3(HttpSession session, Model model) {
         String defaultThumbnailUrl = imageUrlService.getDefaultThumbnailUrl();
 
-        String lowSkillImageUrl = Optional.ofNullable((String) session.getAttribute(IMAGE_URL_LOWSKILL)).orElse(defaultThumbnailUrl);
+        String lowSkillImageUrl = Optional.ofNullable((String) session.getAttribute(CH_ADD_LOW_SKILL_URL)).orElse(defaultThumbnailUrl);
 
-        model.addAttribute(IMAGE_URL_LOWSKILL, lowSkillImageUrl);
+        model.addAttribute(CH_ADD_LOW_SKILL_URL, lowSkillImageUrl);
     }
 
     /**
      * @param session 세션에 저장된 이미지 요청 url을 가져옴 (없으면 기본 썸네일 url)
      * @param model 가져온 url을 추가할 model 객체
      */
-    private void addStep1ImageUrlsOnModelInSession(HttpSession session, Model model) {
+    private void addUrlAttributesStep1(HttpSession session, Model model) {
         String defaultThumbnailUrl = imageUrlService.getDefaultThumbnailUrl();
 
-        String profileImageUrl = Optional.ofNullable( (String) session.getAttribute(IMAGE_URL_PROFILE) ).orElse(defaultThumbnailUrl);
-        String portraitImageUrl = Optional.ofNullable( (String) session.getAttribute(IMAGE_URL_PORTRAIT) ).orElse(defaultThumbnailUrl);
-        String bodyImageUrl = Optional.ofNullable( (String) session.getAttribute(IMAGE_URL_BODY) ).orElse(defaultThumbnailUrl);
+        String profileImageUrl = Optional.ofNullable( (String) session.getAttribute(CH_ADD_PROFILE_URL) ).orElse(defaultThumbnailUrl);
+        String portraitImageUrl = Optional.ofNullable( (String) session.getAttribute(CH_ADD_PORTRAIT_URL) ).orElse(defaultThumbnailUrl);
+        String bodyImageUrl = Optional.ofNullable( (String) session.getAttribute(CH_ADD_BODY_URL) ).orElse(defaultThumbnailUrl);
 
-        model.addAttribute(IMAGE_URL_PROFILE, profileImageUrl);
-        model.addAttribute(IMAGE_URL_PORTRAIT, portraitImageUrl);
-        model.addAttribute(IMAGE_URL_BODY, bodyImageUrl);
+        model.addAttribute(CH_ADD_PROFILE_URL, profileImageUrl);
+        model.addAttribute(CH_ADD_PORTRAIT_URL, portraitImageUrl);
+        model.addAttribute(CH_ADD_BODY_URL, bodyImageUrl);
+    }
+
+    private void addUrlAttributesOnAdd(HttpSession session, Model model) {
+        addUrlAttributesStep1(session, model);
+        addUrlAttributesStep3(session, model);
+        addUrlAttributesStep4(session, model);
+    }
+
+    private void addUrlAttributesOnEdit(HttpSession session, Model model) {
+        String defaultThumbnailUrl = imageUrlService.getDefaultThumbnailUrl();
+
+        String profileImageUrl = Optional.ofNullable( (String) session.getAttribute(CH_EDIT_PROFILE_URL) ).orElse(defaultThumbnailUrl);
+        String portraitImageUrl = Optional.ofNullable( (String) session.getAttribute(CH_EDIT_PORTRAIT_URL) ).orElse(defaultThumbnailUrl);
+        String bodyImageUrl = Optional.ofNullable( (String) session.getAttribute(CH_EDIT_BODY_URL) ).orElse(defaultThumbnailUrl);
+        String lowSkillImageUrl = Optional.ofNullable((String) session.getAttribute(CH_EDIT_LOW_SKILL_URL)).orElse(defaultThumbnailUrl);
+
+        CharacterImageDto chImageUrls = new CharacterImageDto(profileImageUrl, portraitImageUrl, bodyImageUrl, lowSkillImageUrl);
+
+        String asideImageUrl = Optional.ofNullable((String) session.getAttribute(CH_EDIT_ASIDE_URL)).orElse(defaultThumbnailUrl);
+        String aside1ImageUrl = Optional.ofNullable((String) session.getAttribute(CH_EDIT_ASIDE_LV_1_URL)).orElse(defaultThumbnailUrl);
+        String aside2ImageUrl = Optional.ofNullable((String) session.getAttribute(CH_EDIT_ASIDE_LV_2_URL)).orElse(defaultThumbnailUrl);
+        String aside3ImageUrl = Optional.ofNullable((String) session.getAttribute(CH_EDIT_ASIDE_LV_3_URL)).orElse(defaultThumbnailUrl);
+
+        AsideImageDto asideImageUrls = new AsideImageDto(asideImageUrl, aside1ImageUrl, aside2ImageUrl, aside3ImageUrl);
+
+        model.addAttribute("chImageUrls", chImageUrls);
+        model.addAttribute("asideImageUrls", asideImageUrls);
     }
 
     /**
@@ -519,6 +694,7 @@ public class CharacterMgController {
      */
     // 이미지를 서버 임시경로에 저장하고, url을 세션 attr로 저장하는 메서드
     private void uploadImageToTemp(HttpSession session, String attrName, MultipartFile multipartFile) {
+        // multipartfile 없으면 동작 x
         if (multipartFile.isEmpty())
             return;
 
@@ -526,6 +702,7 @@ public class CharacterMgController {
             FileDto fileDto = fileStorageService.saveFileToTemp(multipartFile);
             String tempImageUrl = "/api/images/tmp/" + fileDto.getFileName();
             session.setAttribute(attrName, tempImageUrl);
+            log.info("setAttribute attrName = {}, tempImageUrl = {}", attrName, tempImageUrl);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
