@@ -160,6 +160,7 @@ public class CharacterService {
 //        return characterRepository.save(ch);
 
         // 캐릭터 이미지 정보 저장
+        // 변경하지 않는 이미지 경로는 인자를 null로 전달함.
         imagePathService.saveCharacterImages(characterId, chImagePaths);
         imagePathService.saveAsideImages(characterId, asideImagePaths);
 
