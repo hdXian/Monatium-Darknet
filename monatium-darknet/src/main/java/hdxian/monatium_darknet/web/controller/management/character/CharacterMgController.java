@@ -37,16 +37,21 @@ public class CharacterMgController {
 
     private final ImageUrlService imageUrlService;
 
+    // TODO - url 옮겨다니면 세션 데이터 꼬이는 문제 해결 필요
+    // ex) 수정 페이지에서 임시저장 한 뒤 (세션에 데이터 저장) 다른 캐릭터 정보 수정 페이지에 진입
+
     @GetMapping
-    public String characterList(Model model) {
+    public String characterList(HttpSession session, Model model) {
         List<Character> characterList = characterService.findCharacters();
 
+        clearSessionAttributes(session); // 다른 페이지에 머물다 돌아온 경우에도 세션 데이터 초기화 (redirect, url 직접 입력 등)
         model.addAttribute("characterList", characterList);
         return "management/characters/characterList";
     }
 
     @GetMapping("/new")
-    public String newForm() {
+    public String newForm(HttpSession session) {
+        clearSessionAttributes(session); // 세션 데이터 초기화
         return "redirect:/management/characters/new/step1";
     }
 
@@ -274,6 +279,7 @@ public class CharacterMgController {
                        @ModelAttribute("chFormStep4") ChFormStep4 chForm4) {
 
         if (action.equals("cancel")) {
+            clearSessionAttributes(session); // 세션 데이터 지우기
             return "redirect:/management/characters";
         }
 
@@ -654,6 +660,7 @@ public class CharacterMgController {
         session.removeAttribute(CH_EDIT_ASIDE_LV_2_URL);
         session.removeAttribute(CH_EDIT_ASIDE_LV_3_URL);
 
+        log.info("clear all form data in session");
     }
 
     private void updateFormDataOnSession(HttpSession session, ChFormStep1 form1, ChFormStep2 form2, ChFormStep3 form3, ChFormStep4 form4) {
