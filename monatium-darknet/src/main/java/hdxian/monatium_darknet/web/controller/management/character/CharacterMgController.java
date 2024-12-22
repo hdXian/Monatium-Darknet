@@ -206,6 +206,9 @@ public class CharacterMgController {
         uploadImagesToTemp(session, chForm3);
         uploadImagesToTemp(session, chForm4);
 
+        // 세션의 폼 데이터 업데이트
+        updateFormDataOnSession(session, chForm1, chForm2, chForm3, chForm4);
+
         if (action.equals("next")) {
             CharacterDto charDto = generateCharDto(chForm1, chForm2, chForm3, chForm4); // 캐릭터 정보
 
@@ -213,6 +216,7 @@ public class CharacterMgController {
             AsideImageDto asideImages = generateAsideImagePathsFromTemp(session); // 어사이드 이미지 파일 경로
 
             Long characterId = characterService.createNewCharacter(charDto, chImages, asideImages);
+            clearSessionAttributes(session); // 세션 데이터 모두 지우기
             return "redirect:/management/characters";
         }
 
@@ -234,9 +238,11 @@ public class CharacterMgController {
         model.addAttribute("characterId", characterId);
 
         // 1. 대상 캐릭터에 대한 정보를 폼 객체에 저장
-        ChFormStep1 chForm1 = generateChForm1(ch);
-        ChFormStep2 chForm2 = generateChForm2(ch);
-        ChFormStep3 chForm3 = generateChForm3(ch);
+        ChFormStep1 chForm1 = Optional.ofNullable( (ChFormStep1) session.getAttribute(CHFORM_STEP1) ).orElse(generateChForm1(ch));
+        ChFormStep2 chForm2 = Optional.ofNullable( (ChFormStep2) session.getAttribute(CHFORM_STEP2) ).orElse(generateChForm2(ch));
+        ChFormStep3 chForm3 = Optional.ofNullable( (ChFormStep3) session.getAttribute(CHFORM_STEP3) ).orElse(generateChForm3(ch));
+//        ChFormStep2 chForm2 = generateChForm2(ch);
+//        ChFormStep3 chForm3 = generateChForm3(ch);
 
         // 2. 폼 객체를 모델에 추가
         model.addAttribute(CHFORM_STEP1, chForm1);
@@ -251,7 +257,8 @@ public class CharacterMgController {
 
         // 어사이드가 있다면 어사이드 정보와 이미지 url도 추가
         // TODO - 어사이드가 있는 경우에만 처리하도록 로직 세분화 해야함
-        ChFormStep4 chForm4 = generateChForm4(ch.getAside());
+        ChFormStep4 chForm4 = Optional.ofNullable( (ChFormStep4) session.getAttribute(CHFORM_STEP4) ).orElse(generateChForm4(ch.getAside()));
+//        ChFormStep4 chForm4 = generateChForm4(ch.getAside());
         model.addAttribute(CHFORM_STEP4, chForm4);
 
         return "management/characters/characterEditForm";
@@ -275,6 +282,9 @@ public class CharacterMgController {
         // TODO - 어사이드가 있는 경우에만 처리하도록 로직 세분화 해야함
         uploadImageToTemp_Edit(session, chForm1, chForm3, chForm4);
 
+        // 세션의 폼 데이터 업데이트
+        updateFormDataOnSession(session, chForm1, chForm2, chForm3, chForm4);
+
         // 캐릭터들의 이미지 url을 모델에 추가 (프로필, 초상화, 전신, 저학년 스킬)
         addChUrlsOnEditFormModel(session, model, characterId);
 
@@ -289,6 +299,8 @@ public class CharacterMgController {
             CharacterImageDto chImages = generateChImagePathsFromTemp_Edit(session);
             AsideImageDto asideImages = generateAsideImagePathsFromTemp_Edit(session);
             characterService.updateCharacter(characterId, updateDto, chImages, asideImages);
+
+            clearSessionAttributes(session); // 세션 데이터 지우기
             return "redirect:/management/characters";
         }
         else { // save 등
@@ -616,6 +628,40 @@ public class CharacterMgController {
 
 
     // === 3. 공통 유틸 메서드 ===
+
+    private void clearSessionAttributes(HttpSession session) {
+        session.removeAttribute(CHFORM_STEP1);
+        session.removeAttribute(CHFORM_STEP2);
+        session.removeAttribute(CHFORM_STEP3);
+        session.removeAttribute(CHFORM_STEP4);
+
+        session.removeAttribute(CH_ADD_PROFILE_URL);
+        session.removeAttribute(CH_ADD_PORTRAIT_URL);
+        session.removeAttribute(CH_ADD_BODY_URL);
+        session.removeAttribute(CH_ADD_LOW_SKILL_URL);
+
+        session.removeAttribute(CH_ADD_ASIDE_URL);
+        session.removeAttribute(CH_ADD_ASIDE_LV_1_URL);
+        session.removeAttribute(CH_ADD_ASIDE_LV_2_URL);
+        session.removeAttribute(CH_ADD_ASIDE_LV_3_URL);
+
+        session.removeAttribute(CH_EDIT_PROFILE_URL);
+        session.removeAttribute(CH_EDIT_PORTRAIT_URL);
+        session.removeAttribute(CH_EDIT_BODY_URL);
+        session.removeAttribute(CH_EDIT_LOW_SKILL_URL);
+        session.removeAttribute(CH_EDIT_ASIDE_URL);
+        session.removeAttribute(CH_EDIT_ASIDE_LV_1_URL);
+        session.removeAttribute(CH_EDIT_ASIDE_LV_2_URL);
+        session.removeAttribute(CH_EDIT_ASIDE_LV_3_URL);
+
+    }
+
+    private void updateFormDataOnSession(HttpSession session, ChFormStep1 form1, ChFormStep2 form2, ChFormStep3 form3, ChFormStep4 form4) {
+        session.setAttribute(CHFORM_STEP1, form1);
+        session.setAttribute(CHFORM_STEP2, form2);
+        session.setAttribute(CHFORM_STEP3, form3);
+        session.setAttribute(CHFORM_STEP4, form4);
+    }
 
     // 폼 객체에서 데이터를 뽑아 chService에 전달할 Dto 생성 (캐릭터 생성, 수정)
     private CharacterDto generateCharDto(ChFormStep1 chForm1, ChFormStep2 chForm2, ChFormStep3 chForm3, ChFormStep4 chForm4) {
