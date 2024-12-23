@@ -86,7 +86,9 @@ public class CharacterService {
 
         // 캐릭터 이미지 정보 저장
         imagePathService.saveCharacterImages(savedId, chImagePaths);
-        imagePathService.saveAsideImages(savedId, asideImagePaths);
+        if (asideImagePaths != null) {
+            imagePathService.saveAsideImages(savedId, asideImagePaths);
+        }
 
         return savedId;
     }

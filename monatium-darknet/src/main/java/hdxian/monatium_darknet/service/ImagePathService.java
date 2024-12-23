@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -107,6 +108,10 @@ public class ImagePathService {
     // 캐릭터 이미지 정보 저장
     @Transactional // 예외 터지면 관련 트랜잭션 롤백
     public void saveCharacterImages(Long characterId, CharacterImageDto src) {
+        if (src == null) {
+            throw new NoSuchElementException("src CharacterImageDto is null");
+        }
+
         CharacterImageDto dst = generateChImagePaths(characterId);
 
         try {
@@ -131,6 +136,10 @@ public class ImagePathService {
     // 어사이드 이미지 정보 저장
     @Transactional // 예외 터지면 관련 트랜잭션 롤백
     public void saveAsideImages(Long characterId, AsideImageDto src) {
+        if (src == null) {
+            throw new NoSuchElementException("argument AsideImageDto is null");
+        }
+
         AsideImageDto dst = generateAsideImagePaths(characterId);
 
         try {

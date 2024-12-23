@@ -5,6 +5,7 @@ import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.service.CharacterService;
+import hdxian.monatium_darknet.service.ImagePathService;
 import hdxian.monatium_darknet.service.ImageUrlService;
 import hdxian.monatium_darknet.service.dto.AsideImageDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
@@ -36,6 +37,7 @@ public class CharacterMgController {
     private final LocalFileStorageService fileStorageService;
 
     private final ImageUrlService imageUrlService;
+    private final ImagePathService imagePathService;
 
     // TODO - url 옮겨다니면 세션 데이터 꼬이는 문제 해결 필요
     // ex) 수정 페이지에서 임시저장 한 뒤 (세션에 데이터 저장) 다른 캐릭터 정보 수정 페이지에 진입
@@ -220,7 +222,10 @@ public class CharacterMgController {
             CharacterDto charDto = generateCharDto(chForm1, chForm2, chForm3, chForm4); // 캐릭터 정보
 
             CharacterImageDto chImages = generateChImagePathsFromTemp(session); // 캐릭터 이미지 파일 경로
-            AsideImageDto asideImages = generateAsideImagePathsFromTemp(session); // 어사이드 이미지 파일 경로
+            AsideImageDto asideImages = null;
+            if (chForm4.isEnableAside()) {
+                asideImages = generateAsideImagePathsFromTemp(session); // 어사이드 이미지 파일 경로
+            }
 
             Long characterId = characterService.createNewCharacter(charDto, chImages, asideImages);
             clearSessionAttributes(session); // 세션 데이터 모두 지우기
@@ -382,11 +387,32 @@ public class CharacterMgController {
     // === 1-2. 임시 경로에 저장돼있는 캐릭터 이미지들의 파일 경로를 추출해 리턴 ===
     private CharacterImageDto generateChImagePathsFromTemp(HttpSession session) {
 
-        String profilePath = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_PROFILE_URL));
-        String portraitPath = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_PORTRAIT_URL));
-        String bodyPath = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_BODY_URL));
+        String defaultImagePath = imagePathService.getDefaultThumbNailFileName();
 
-        String lowSkillPath = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_LOW_SKILL_URL));
+        // 임시 경로에 이미지가 없다면 -> 신규 캐릭터 생성 시점에서 이미지가 임시경로에 없다 (세션에 url이 없다) -> 디폴트 이미지를 넣어놨다
+        String profilePath;
+        if (session.getAttribute(CH_ADD_PROFILE_URL) == null)
+            profilePath = defaultImagePath;
+        else
+            profilePath = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_PROFILE_URL));
+
+        String portraitPath;
+        if (session.getAttribute(CH_ADD_PORTRAIT_URL) == null)
+            portraitPath = defaultImagePath;
+        else
+            portraitPath = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_PORTRAIT_URL));
+
+        String bodyPath;
+        if (session.getAttribute(CH_ADD_BODY_URL) == null)
+            bodyPath = defaultImagePath;
+        else
+            bodyPath = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_BODY_URL));
+
+        String lowSkillPath;
+        if (session.getAttribute(CH_ADD_LOW_SKILL_URL) == null)
+            lowSkillPath = defaultImagePath;
+        else
+            lowSkillPath = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_LOW_SKILL_URL));
 
         return new CharacterImageDto(profilePath, portraitPath, bodyPath, lowSkillPath);
     }
@@ -394,10 +420,39 @@ public class CharacterMgController {
     // === 1-3. 임시 경로에 저장돼있는 어사이드 이미지들의 파일 경로를 추출해 리턴 ===
     private AsideImageDto generateAsideImagePathsFromTemp(HttpSession session) {
 
-        String asidePath = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_ASIDE_URL));
-        String lv1Path = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_ASIDE_LV_1_URL));
-        String lv2Path = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_ASIDE_LV_2_URL));
-        String lv3Path = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_ASIDE_LV_3_URL));
+        String defaultImagePath = imagePathService.getDefaultThumbNailFileName();
+
+        String asidePath;
+        if (session.getAttribute(CH_ADD_ASIDE_URL) == null) {
+            asidePath = defaultImagePath;
+        }
+        else{
+            asidePath = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_ASIDE_URL));
+        }
+
+        String lv1Path;
+        if (session.getAttribute(CH_ADD_ASIDE_LV_1_URL) == null) {
+            lv1Path = defaultImagePath;
+        }
+        else{
+            lv1Path = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_ASIDE_LV_1_URL));
+        }
+
+        String lv2Path;
+        if (session.getAttribute(CH_ADD_ASIDE_LV_2_URL) == null) {
+            lv2Path = defaultImagePath;
+        }
+        else{
+            lv2Path = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_ASIDE_LV_2_URL));
+        }
+
+        String lv3Path;
+        if (session.getAttribute(CH_ADD_ASIDE_LV_3_URL) == null) {
+            lv3Path = defaultImagePath;
+        }
+        else{
+            lv3Path = convertUrlToFilePathTemp((String) session.getAttribute(CH_ADD_ASIDE_LV_3_URL));
+        }
 
         return new AsideImageDto(asidePath, lv1Path, lv2Path, lv3Path);
     }
@@ -727,7 +782,7 @@ public class CharacterMgController {
     // 이미지를 서버 임시경로에 저장하고, url을 세션 attr로 저장하는 메서드
     private void uploadImageToTemp(HttpSession session, String attrName, MultipartFile multipartFile) {
         // multipartfile 없으면 동작 x
-        if (multipartFile.isEmpty())
+        if (multipartFile == null || multipartFile.isEmpty())
             return;
 
         try {
