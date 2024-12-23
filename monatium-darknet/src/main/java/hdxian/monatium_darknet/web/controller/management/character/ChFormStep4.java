@@ -74,6 +74,12 @@ public class ChFormStep4 {
 
     // === 수정 페이지 등에서 Model에 정보를 담아 보낼 때 사용 ===
     public void setAsideFields(Aside aside) {
+        // boolean enableAside: 그냥 빈 폼 객체를 보낼때(신규 캐릭터 추가 등)에는 true,
+        // 수정 페이지 등으로 폼을 채워보낼 때는 어사이드 없으면 false가 Model에 전달.
+        if (aside == null) {
+            this.enableAside = false;
+            return;
+        }
         this.asideName = aside.getName();
         this.asideDescription = aside.getDescription();
 

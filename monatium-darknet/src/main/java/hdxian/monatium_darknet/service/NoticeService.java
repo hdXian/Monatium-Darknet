@@ -189,7 +189,7 @@ public class NoticeService {
             }
 
             changedFileNames.add(to.getFileName()); // add("img_#.ext")
-            fileStorageService.moveFile(from, to);
+            fileStorageService.copyFile(from, to);
             seq++;
         }
 

@@ -65,8 +65,8 @@ public class LocalFileStorageService {
         return new FileDto(targetDirName, fileName);
     }
 
-    // from -> to로 파일 이동
-    public void moveFile(FileDto from, FileDto to) throws IOException {
+    // from -> to로 파일 복사
+    public void copyFile(FileDto from, FileDto to) throws IOException {
         // from 파일의 경로 객체 생성
         String fromFileName = getFileFullPath(from);
         Path sourcePath = Paths.get(fromFileName);
@@ -80,7 +80,8 @@ public class LocalFileStorageService {
 
         log.info("move files from {} to {}", sourcePath.toString(), destPath.toString());
         // from -> to 경로로 파일 이동
-        Files.move(sourcePath, destPath, StandardCopyOption.REPLACE_EXISTING);
+//        Files.move(sourcePath, destPath, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(sourcePath, destPath, StandardCopyOption.REPLACE_EXISTING);
     }
 
     // 파일 전체 경로를 반환 (baseDir을 앞에 붙여줌)

@@ -71,7 +71,10 @@ public class ChFormStep3 {
     }
 
     public Attack generateEnhancedAttack() {
-        return Attack.createEnhancedAttack(enhancedAttackDescription, enhancedAttributes);
+        if (isEnableEnhancedAttack()) {
+            return Attack.createEnhancedAttack(enhancedAttackDescription, enhancedAttributes);
+        }
+        else return null;
     }
 
     public Skill generateLowSkill() {

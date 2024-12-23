@@ -265,12 +265,21 @@ public class CharacterMgController {
         addChUrlsOnEditFormModel(session, model, characterId);
 
         // 어사이드 이미지 url을 모델에 추가
-        addAsideUrlsOnEditFormModel(session, model, characterId);
+        // 어사이드가 있으면 해당 이미지 url로 업데이트
+        if (ch.getAside() != null) {
+            addAsideUrlsOnEditFormModel(session, model, characterId); // 어사이드 관련 url들을 모델에 추가
+        }
+        else { // 어사이드가 없으면 모두 디폴트 썸네일로 대체
+            String defaultUrl = imageUrlService.getDefaultThumbnailUrl();
+            model.addAttribute(CH_EDIT_ASIDE_URL, defaultUrl);
+            model.addAttribute(CH_EDIT_ASIDE_LV_1_URL, defaultUrl);
+            model.addAttribute(CH_EDIT_ASIDE_LV_2_URL, defaultUrl);
+            model.addAttribute(CH_EDIT_ASIDE_LV_3_URL, defaultUrl);
+        }
 
         // 어사이드가 있다면 어사이드 정보와 이미지 url도 추가
-        // TODO - 어사이드가 있는 경우에만 처리하도록 로직 세분화 해야함
+        // 어사이드 null이면 FomStep4에서 isAside false로 설정해서 보냄
         ChFormStep4 chForm4 = Optional.ofNullable( (ChFormStep4) session.getAttribute(CHFORM_STEP4) ).orElse(generateChForm4(ch.getAside()));
-//        ChFormStep4 chForm4 = generateChForm4(ch.getAside());
         model.addAttribute(CHFORM_STEP4, chForm4);
 
         return "management/characters/characterEditForm";
@@ -668,6 +677,8 @@ public class CharacterMgController {
     private void addAsideUrlsOnEditFormModel(HttpSession session, Model model, Long characterId) {
         // 1. 캐릭터 이미지 url 경로를 우선 생성한다.
         AsideImageDto asideImageUrls = imageUrlService.generateAsideImageUrls(characterId);
+
+        // 2. 세션에 저장돼있는 url들을 덮어씌운다. (세션에 남아있다 -> 이미지를 바꿔서 temp 이미지가 경로로 지정돼있다)
         if ( session.getAttribute(CH_EDIT_ASIDE_URL) != null ) {
             asideImageUrls.setAsideImage((String) session.getAttribute(CH_EDIT_ASIDE_URL));
         }
@@ -681,7 +692,6 @@ public class CharacterMgController {
             asideImageUrls.setLv3Image((String) session.getAttribute(CH_EDIT_ASIDE_LV_3_URL));
         }
 
-        // 2. 세션에 저장돼있는 url들을 덮어씌운다. (세션에 남아있다 -> 이미지를 바꿔서 temp 이미지가 경로로 지정돼있다)
         model.addAttribute(CH_EDIT_ASIDE_URL, asideImageUrls.getAsideImage());
         model.addAttribute(CH_EDIT_ASIDE_LV_1_URL, asideImageUrls.getLv1Image());
         model.addAttribute(CH_EDIT_ASIDE_LV_2_URL, asideImageUrls.getLv2Image());
