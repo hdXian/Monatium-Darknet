@@ -40,6 +40,8 @@ public class CharacterMgController {
     // TODO - url 옮겨다니면 세션 데이터 꼬이는 문제 해결 필요
     // ex) 수정 페이지에서 임시저장 한 뒤 (세션에 데이터 저장) 다른 캐릭터 정보 수정 페이지에 진입
 
+    // 일단 어사이드, 강화공격 등 선택적 요소에 따라 구성하는 로직부터 짜야 함.
+
     @GetMapping
     public String characterList(HttpSession session, Model model) {
         List<Character> characterList = characterService.findCharacters();

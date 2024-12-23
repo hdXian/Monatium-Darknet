@@ -56,18 +56,57 @@
                         </div>
 
                     </div>
-                
+
                     <!-- 강화 공격 -->
-                    <div class="info-subgroup mb-3">
+<!--                    <div class="info-subgroup mb-3">-->
+<!--                        <h4 class="form-subtitle">강화 공격</h4>-->
+<!--                -->
+<!--                        <div class="mb-3">-->
+<!--                            <label for="enhancedAttackDescription" class="form-label">공격 설명</label>-->
+<!--                            <textarea th:field="*{enhancedAttackDescription}" id="enhancedAttackDescription" name="enhancedAttackDescription"-->
+<!--                                class="form-control auto-resize" -->
+<!--                                placeholder="강화 공격의 설명을 입력하세요"></textarea>-->
+<!--                        </div>-->
+<!--                -->
+<!--                        <label class="form-label">특성</label>-->
+<!--                        <div id="enhancedAttack-attributes-container">-->
+<!--                            <div th:each="attribute, stat : *{enhancedAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">-->
+<!--                                <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">-->
+<!--                                <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">-->
+<!--                                <button type="button" class="btn btn-success btn-add-enhanced-attribute">+</button>-->
+<!--                                <button type="button" class="btn btn-danger btn-remove-enhanced-attribute">-</button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+                    <!-- 강화 공격 입력 여부 -->
+                    <div class="enable-radio mb-3 p-3 rounded d-flex align-items-center">
+                        <label class="form-label me-3 mb-0">강화 공격</label>
+                        <div class="d-flex justify-content-end">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="enableEnhancedAttack" name="enableEnhancedAttack"
+                                       th:field="*{enableEnhancedAttack}" value="true">
+                                <label class="form-check-label" for="enableEnhancedAttack">있어요</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="disableEnhancedAttack" name="enableEnhancedAttack"
+                                       th:field="*{enableEnhancedAttack}" value="false">
+                                <label class="form-check-label" for="disableEnhancedAttack">없어요</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 강화 공격 -->
+                    <div id="enhancedAttackSection" class="info-subgroup optional-info mb-3">
                         <h4 class="form-subtitle">강화 공격</h4>
-                
+
                         <div class="mb-3">
                             <label for="enhancedAttackDescription" class="form-label">공격 설명</label>
                             <textarea th:field="*{enhancedAttackDescription}" id="enhancedAttackDescription" name="enhancedAttackDescription"
-                                class="form-control auto-resize" 
-                                placeholder="강화 공격의 설명을 입력하세요"></textarea>
+                                      class="form-control auto-resize"
+                                      placeholder="강화 공격의 설명을 입력하세요"></textarea>
                         </div>
-                
+
                         <label class="form-label">특성</label>
                         <div id="enhancedAttack-attributes-container">
                             <div th:each="attribute, stat : *{enhancedAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
@@ -78,7 +117,8 @@
                             </div>
                         </div>
                     </div>
-                
+
+
                     <!-- 저학년 스킬 -->
                     <div class="info-subgroup mb-3">
                         <h4 class="form-subtitle">저학년 스킬</h4>

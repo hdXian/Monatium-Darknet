@@ -26,6 +26,7 @@ public class ChFormStep3 {
     }
 
     // 강화 공격
+    private boolean enableEnhancedAttack = true;
     private String enhancedAttackDescription;
     private List<Attribute> enhancedAttributes = new ArrayList<>();
 
