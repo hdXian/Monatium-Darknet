@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// 강화 공격 여부에 따라 입력 칸 노출, 숨김
 document.addEventListener('DOMContentLoaded', function () {
     const radios = document.getElementsByName('enableEnhancedAttack');
     const section = document.getElementById('enhancedAttackSection');

@@ -12,6 +12,9 @@ import java.util.List;
 // 캐릭터 등록 폼 step 4 (어사이드)
 @Data
 public class ChFormStep4 {
+
+    private boolean enableAside = true;
+
     // 어사이드 기본 정보
     private MultipartFile asideImage;
     private String asideName;

@@ -26,3 +26,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
+// 어사이드 여부에 따라 입력 칸 노출, 숨김
+document.addEventListener('DOMContentLoaded', function () {
+    const radios = document.getElementsByName('enableAside');
+    const asideSection = document.getElementById('asideSection');
+
+    if (radios && asideSection) {
+        // 초기 상태 설정
+        const isEnabled = Array.from(radios).find(radio => radio.checked && radio.value === 'true');
+        asideSection.style.display = isEnabled ? 'block' : 'none';
+
+        // 라디오 버튼 변경 시 표시/숨기기
+        radios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                asideSection.style.display = radio.value === 'true' ? 'block' : 'none';
+            });
+        });
+    }
+});
+

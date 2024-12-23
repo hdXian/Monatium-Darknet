@@ -24,8 +24,25 @@
 
         <form th:object="${chForm}" th:action="@{/management/characters/new/step4}" method="post" enctype="multipart/form-data">
 
+            <!-- 어사이드 여부 -->
+            <div class="enable-radio mb-3 p-3 rounded border d-flex align-items-center">
+                <label class="form-label me-3 mb-0">어사이드</label>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="enableAside" name="enableAside"
+                               th:field="*{enableAside}" value="true">
+                        <label class="form-check-label" for="enableAside">있어요</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="disableAside" name="enableAside"
+                               th:field="*{enableAside}" value="false">
+                        <label class="form-check-label" for="disableAside">없어요</label>
+                    </div>
+                </div>
+            </div>
+
             <!-- 어사이드 그룹 -->
-            <div class="info-group mb-4">
+            <div class="info-group optional-info mb-4">
 
                 <div class="info-title" data-bs-toggle="collapse" data-bs-target="#asideSection" aria-expanded="true">
                     <span>어사이드</span>
