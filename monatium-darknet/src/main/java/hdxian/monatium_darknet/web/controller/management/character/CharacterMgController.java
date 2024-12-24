@@ -619,10 +619,7 @@ public class CharacterMgController {
     private ChFormStep3 generateChForm3(Character ch) {
         ChFormStep3 form = new ChFormStep3();
         form.setNormalAttackFields(ch.getNormalAttack());
-
-        if (ch.getEnhancedAttack() != null) {
-            form.setEnhancedAttackFields(ch.getEnhancedAttack());
-        }
+        form.setEnhancedAttackFields(ch.getEnhancedAttack());
 
         form.setLowSkillFields(ch.getLowSkill());
         form.setHighSkillFields(ch.getHighSkill());
@@ -759,7 +756,7 @@ public class CharacterMgController {
 
         StringBuilder sb = new StringBuilder();
         for (String favorite : chForm1.getFavorites()) {
-            sb.append(favorite).append(" ");
+            sb.append(favorite).append("/");
         }
         dto.setFavorite(sb.toString());
         dto.setRace(chForm1.getRace());

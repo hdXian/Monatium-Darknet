@@ -94,6 +94,10 @@ public class ChFormStep3 {
     }
 
     public void setEnhancedAttackFields(Attack enhancedAttack) {
+        if (enhancedAttack == null) {
+            enableEnhancedAttack = false;
+            return;
+        }
         this.enhancedAttackDescription = enhancedAttack.getDescription();
         this.enhancedAttributes = enhancedAttack.getAttributes();
     }
