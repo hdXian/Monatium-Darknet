@@ -90,6 +90,10 @@ public class CharacterMgController {
 
         String redirectUrl;
         switch (action) {
+            case "cancel" -> {
+                clearSessionAttributes(session);
+                redirectUrl = "redirect:/management/characters";
+            }
             case "next" -> redirectUrl = "redirect:/management/characters/new/step2";
             default -> redirectUrl = "redirect:/management/characters/new/step1";
         }
@@ -117,6 +121,10 @@ public class CharacterMgController {
 
         String redirectUrl;
         switch(action) {
+            case "cancel" -> {
+                clearSessionAttributes(session);
+                redirectUrl = "redirect:/management/characters";
+            }
             case "prev" -> redirectUrl = "redirect:/management/characters/new/step1";
             case "next" -> redirectUrl = "redirect:/management/characters/new/step3";
             default -> redirectUrl = "redirect:/management/characters/new/step2";
@@ -149,6 +157,10 @@ public class CharacterMgController {
 
         String redirectUrl;
         switch(action) {
+            case "cancel" -> {
+                clearSessionAttributes(session);
+                redirectUrl = "redirect:/management/characters";
+            }
             case "prev" -> redirectUrl = "redirect:/management/characters/new/step2";
             case "next" -> redirectUrl = "redirect:/management/characters/new/step4";
             default -> redirectUrl = "redirect:/management/characters/new/step3";
@@ -184,6 +196,10 @@ public class CharacterMgController {
 
         String redirectUrl;
         switch(action) {
+            case "cancel" -> {
+                clearSessionAttributes(session);
+                redirectUrl = "redirect:/management/characters";
+            }
             case "prev" -> redirectUrl = "redirect:/management/characters/new/step3";
             case "next" -> redirectUrl = "redirect:/management/characters/new/summary";
             default -> redirectUrl = "redirect:/management/characters/new/step4";
@@ -210,6 +226,11 @@ public class CharacterMgController {
                                 @ModelAttribute(CHFORM_STEP3) ChFormStep3 chForm3,
                                 @ModelAttribute(CHFORM_STEP4) ChFormStep4 chForm4) {
 
+        if (action.equals("cancel")) {
+            clearSessionAttributes(session);
+            return "redirect:/management/characters";
+        }
+
         // 마지막으로 제출된 이미지를 임시 경로에 저장
         uploadImagesToTemp(session, chForm1);
         uploadImagesToTemp(session, chForm3);
@@ -218,7 +239,7 @@ public class CharacterMgController {
         // 세션의 폼 데이터 업데이트
         updateFormDataOnSession(session, chForm1, chForm2, chForm3, chForm4);
 
-        if (action.equals("next")) {
+        if (action.equals("complete")) {
             CharacterDto charDto = generateCharDto(chForm1, chForm2, chForm3, chForm4); // 캐릭터 정보
 
             CharacterImageDto chImages = generateChImagePathsFromTemp(session); // 캐릭터 이미지 파일 경로
@@ -231,6 +252,7 @@ public class CharacterMgController {
             clearSessionAttributes(session); // 세션 데이터 모두 지우기
             return "redirect:/management/characters";
         }
+
 
         if (action.equals("prev")) {
             return "redirect:/management/characters/new/step4";

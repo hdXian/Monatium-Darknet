@@ -39,7 +39,7 @@
                             <!-- 이름 -->
                             <div class="mb-3">
                                 <label for="name" class="form-label">이름</label>
-                                <input th:field="*{name}" type="text" id="name" name="name" class="form-control" placeholder="캐릭터의 이름을 입력하세요" required>
+                                <input th:field="*{name}" type="text" id="name" name="name" class="form-control" placeholder="캐릭터의 이름을 입력하세요">
                             </div>
     
                             <!-- 수식언 -->
@@ -155,11 +155,19 @@
 
             <!-- 폼 제출 버튼 -->
             <div class="button-group d-flex justify-content-between mt-4">
-                <!-- "저장" 버튼 -->
-                <button type="submit" name="action" value="save" class="btn btn-secondary">저장</button>
+                <!-- 왼쪽 버튼 그룹 -->
+                <div class="d-flex gap-2">
+                    <!-- 취소 버튼 -->
+                    <button type="submit" name="action" value="cancel" class="btn btn-danger">취소</button>
+                    <!-- 저장 버튼 -->
+                    <button type="submit" name="action" value="save" class="btn btn-secondary">임시 저장</button>
+                </div>
 
-                <!-- "다음 단계" 버튼 -->
-                <button type="submit" name="action" value="next" class="btn btn-primary">다음 단계로</button>
+                <!-- 오른쪽 버튼 그룹 -->
+                <div class="d-flex gap-2">
+                    <!-- 다음 버튼 -->
+                    <button type="submit" name="action" value="next" class="btn btn-primary">다음 단계로</button>
+                </div>
             </div>
 
         </form>

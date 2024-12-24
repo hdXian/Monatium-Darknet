@@ -11,9 +11,9 @@ public class ChFormStep2 {
     private AttackType attackType;
     private Position position;
 
-    private int aggressive; // 깡
-    private int endurance; // 맷집
-    private int trick; // 재주
+    private int aggressive = 1; // 깡
+    private int endurance = 1; // 맷집
+    private int trick = 1; // 재주
 
     public CharacterStat generateCharacterStat() {
         return new CharacterStat(aggressive, endurance, trick);
