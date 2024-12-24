@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -116,7 +117,14 @@ public class CharacterMgController {
     }
 
     @PostMapping("/new/step2")
-    public String chAddStep2(HttpSession session, @ModelAttribute("chForm")ChFormStep2 chForm, @RequestParam("action")String action, BindingResult bindingResult) {
+    public String chAddStep2(HttpSession session, @RequestParam("action") String action,
+                             @Validated @ModelAttribute("chForm")ChFormStep2 chForm, BindingResult bindingResult) {
+
+        // 취소 버튼은 검증 건너뛰고 목록으로 돌아감
+        if(action.equals("cancel")) {
+            return "redirect:/management/characters";
+        }
+
         if (bindingResult.hasErrors()) {
             return "management/characters/addChStep2";
         }
@@ -126,10 +134,6 @@ public class CharacterMgController {
 
         String redirectUrl;
         switch(action) {
-            case "cancel" -> {
-                clearSessionAttributes(session);
-                redirectUrl = "redirect:/management/characters";
-            }
             case "prev" -> redirectUrl = "redirect:/management/characters/new/step1";
             case "next" -> redirectUrl = "redirect:/management/characters/new/step3";
             default -> redirectUrl = "redirect:/management/characters/new/step2";
@@ -150,7 +154,25 @@ public class CharacterMgController {
     }
 
     @PostMapping("/new/step3")
-    public String chAddStep3(HttpSession session, @ModelAttribute("chForm")ChFormStep3 chForm, @RequestParam("action")String action, BindingResult bindingResult) {
+    public String chAddStep3(HttpSession session, @RequestParam("action")String action,
+                             @Validated @ModelAttribute("chForm")ChFormStep3 chForm, BindingResult bindingResult, Model model) {
+
+        // 취소 버튼은 검증 건너뛰고 목록으로 돌아감
+        if (action.equals("cancel")) {
+            return "redirect:/management/characters";
+        }
+
+        // 모델에 이미지 url 추가 (검증 실패 대비)
+        addImageUrlsOnModelStep3(session, model);
+
+        // 강화 공격이 활성화된 상태라면 해당 필드 입력을 검증해야 함
+        if (chForm.isEnableEnhancedAttack()) {
+            if (!StringUtils.hasText(chForm.getEnhancedAttackDescription())) {
+                // NotBlank.chForm.enhancedAttackDescription
+                bindingResult.rejectValue("enhancedAttackDescription", "NotBlank", "강화 공격 설명을 작성해주세요.");
+            }
+        }
+
         if (bindingResult.hasErrors()) {
             return "management/characters/addChStep3";
         }
@@ -162,10 +184,6 @@ public class CharacterMgController {
 
         String redirectUrl;
         switch(action) {
-            case "cancel" -> {
-                clearSessionAttributes(session);
-                redirectUrl = "redirect:/management/characters";
-            }
             case "prev" -> redirectUrl = "redirect:/management/characters/new/step2";
             case "next" -> redirectUrl = "redirect:/management/characters/new/step4";
             default -> redirectUrl = "redirect:/management/characters/new/step3";
@@ -189,7 +207,15 @@ public class CharacterMgController {
     }
 
     @PostMapping("/new/step4")
-    public String chAddStep4(HttpSession session, @ModelAttribute("chForm")ChFormStep4 chForm, @RequestParam("action")String action, BindingResult bindingResult) {
+    public String chAddStep4(HttpSession session, @RequestParam("action")String action,
+                             @Validated @ModelAttribute("chForm")ChFormStep4 chForm, BindingResult bindingResult, Model model) {
+
+        if (action.equals("cancel")) {
+            return "redirect:/management/characters";
+        }
+
+        addImageUrlsOnModelStep4(session, model);
+
         if (bindingResult.hasErrors()) {
             return "management/characters/addChStep4";
         }
@@ -201,10 +227,6 @@ public class CharacterMgController {
 
         String redirectUrl;
         switch(action) {
-            case "cancel" -> {
-                clearSessionAttributes(session);
-                redirectUrl = "redirect:/management/characters";
-            }
             case "prev" -> redirectUrl = "redirect:/management/characters/new/step3";
             case "next" -> redirectUrl = "redirect:/management/characters/new/summary";
             default -> redirectUrl = "redirect:/management/characters/new/step4";

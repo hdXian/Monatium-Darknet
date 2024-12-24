@@ -41,8 +41,10 @@
                         <div class="mb-3">
                             <label for="normalAttackDescription" class="form-label">공격 설명</label>
                             <textarea th:field="*{normalAttackDescription}" id="normalAttackDescription" name="normalAttackDescription"
+                                      th:errorclass="field-error"
                                       class="form-control auto-resize"
                                       placeholder="기본 공격의 설명을 입력하세요"></textarea>
+                            <div class="field-error" th:errors="*{normalAttackDescription}"></div>
                         </div>
                 
                         <label class="form-label">특성</label>
@@ -56,28 +58,6 @@
                         </div>
 
                     </div>
-
-                    <!-- 강화 공격 -->
-<!--                    <div class="info-subgroup mb-3">-->
-<!--                        <h4 class="form-subtitle">강화 공격</h4>-->
-<!--                -->
-<!--                        <div class="mb-3">-->
-<!--                            <label for="enhancedAttackDescription" class="form-label">공격 설명</label>-->
-<!--                            <textarea th:field="*{enhancedAttackDescription}" id="enhancedAttackDescription" name="enhancedAttackDescription"-->
-<!--                                class="form-control auto-resize" -->
-<!--                                placeholder="강화 공격의 설명을 입력하세요"></textarea>-->
-<!--                        </div>-->
-<!--                -->
-<!--                        <label class="form-label">특성</label>-->
-<!--                        <div id="enhancedAttack-attributes-container">-->
-<!--                            <div th:each="attribute, stat : *{enhancedAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">-->
-<!--                                <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">-->
-<!--                                <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">-->
-<!--                                <button type="button" class="btn btn-success btn-add-enhanced-attribute">+</button>-->
-<!--                                <button type="button" class="btn btn-danger btn-remove-enhanced-attribute">-</button>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
 
                     <!-- 강화 공격 입력 여부 -->
                     <div class="enable-radio mb-3 p-3 rounded d-flex align-items-center">
@@ -102,9 +82,10 @@
 
                         <div class="mb-3">
                             <label for="enhancedAttackDescription" class="form-label">공격 설명</label>
-                            <textarea th:field="*{enhancedAttackDescription}" id="enhancedAttackDescription" name="enhancedAttackDescription"
+                            <textarea th:field="*{enhancedAttackDescription}" th:errorclass="field-error" id="enhancedAttackDescription" name="enhancedAttackDescription"
                                       class="form-control auto-resize"
                                       placeholder="강화 공격의 설명을 입력하세요"></textarea>
+                            <div class="field-error" th:errors="*{enhancedAttackDescription}"></div>
                         </div>
 
                         <label class="form-label">특성</label>
@@ -141,13 +122,15 @@
                                 <!-- 스킬 이름 입력 -->
                                 <div class="mb-3">
                                     <label for="lowSkillName" class="form-label">스킬 이름</label>
-                                    <input th:field="*{lowSkillName}" type="text" id="lowSkillName" name="lowSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                                    <input th:field="*{lowSkillName}" th:errorclass="field-error" type="text" id="lowSkillName" name="lowSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                                    <div class="field-error" th:errors="*{lowSkillName}"></div>
                                 </div>
 
                                 <!-- 스킬 효과 입력 -->
                                 <div class="mb-3">
                                     <label for="lowSkillDescription" class="form-label">스킬 효과</label>
-                                    <textarea th:field="*{lowSkillDescription}" id="lowSkillDescription" name="lowSkillDescription" class="form-control auto-resize" placeholder="스킬 효과를 입력하세요"></textarea>
+                                    <textarea th:field="*{lowSkillDescription}" th:errorclass="field-error" id="lowSkillDescription" name="lowSkillDescription" class="form-control auto-resize" placeholder="스킬 효과를 입력하세요"></textarea>
+                                    <div class="field-error" th:errors="*{lowSkillDescription}"></div>
                                 </div>
                             </div>
                         </div>
@@ -173,23 +156,26 @@
                             <!-- 스킬 이름 입력 필드 -->
                             <div class="col-7">
                                 <label for="highSkillName" class="form-label">스킬 이름</label>
-                                <input th:field="*{highSkillName}" type="text" id="highSkillName" name="highSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                                <input th:field="*{highSkillName}" th:errorclass="field-error" type="text" id="highSkillName" name="highSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                                <div class="field-error" th:errors="*{highSkillName}"></div>
                             </div>
 
                             <!-- 재사용 대기시간 입력 필드 -->
                             <div class="col-5">
                                 <label for="highSkillCooldown" class="form-label">재사용 대기시간</label>
                                 <div class="input-group">
-                                    <input type="number" th:field="*{highSkillCooldown}" id="highSkillCooldown" name="highSkillCooldown" class="form-control" placeholder="쿨타임"
+                                    <input type="number" th:field="*{highSkillCooldown}" th:errorclass="field-error" id="highSkillCooldown" name="highSkillCooldown" class="form-control" placeholder="쿨타임"
                                            min="1" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '');">
                                     <span class="input-group-text">초</span>
                                 </div>
+                                <div class="field-error" th:errors="*{highSkillCooldown}"></div>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="highSkillDescription" class="form-label">스킬 설명</label>
-                            <textarea th:field="*{highSkillDescription}" id="highSkillDescription" name="highSkillDescription" class="form-control auto-resize" placeholder="스킬 설명을 입력하세요"></textarea>
+                            <textarea th:field="*{highSkillDescription}" th:errorclass="field-error" id="highSkillDescription" name="highSkillDescription" class="form-control auto-resize" placeholder="스킬 설명을 입력하세요"></textarea>
+                            <div class="field-error" th:errors="*{highSkillDescription}"></div>
                         </div>
 
                         <label class="form-label">특성</label>

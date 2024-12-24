@@ -3,6 +3,9 @@ package hdxian.monatium_darknet.web.controller.management.character;
 import hdxian.monatium_darknet.domain.Attribute;
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.character.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +16,9 @@ import java.util.List;
 @Data
 public class ChFormStep3 {
     // 기본 공격
+    @NotBlank
     private String normalAttackDescription;
+
     private List<Attribute> normalAttributes = new ArrayList<>();
 
     // Getter
@@ -40,8 +45,12 @@ public class ChFormStep3 {
     }
 
     // 저학년 스킬
+    @NotBlank
     private String lowSkillName;
+
+    @NotBlank
     private String lowSkillDescription;
+
     private MultipartFile lowSkillImage;
     private List<Attribute> lowSkillAttributes = new ArrayList<>();
 
@@ -53,9 +62,16 @@ public class ChFormStep3 {
     }
 
     // 고학년 스킬
+    @NotBlank
     private String highSkillName;
+
+    @NotBlank
     private String highSkillDescription;
+
+    @NotNull
+    @Min(1)
     private Integer highSkillCooldown;
+
     private List<Attribute> highSkillAttributes = new ArrayList<>();
 
     public List<Attribute> getHighSkillAttributes() {
