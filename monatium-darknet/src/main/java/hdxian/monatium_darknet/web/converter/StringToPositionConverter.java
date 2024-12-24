@@ -11,7 +11,7 @@ public class StringToPositionConverter implements Converter<String, Position> {
 
     @Override
     public Position convert(String source) {
-        log.info("convert String {} to Position", source);
+//        log.info("convert String {} to Position", source);
         String upperCase = source.toUpperCase(Locale.ENGLISH);
         return Position.valueOf(upperCase);
     }

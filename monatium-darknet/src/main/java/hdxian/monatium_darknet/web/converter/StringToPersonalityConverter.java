@@ -11,7 +11,7 @@ public class StringToPersonalityConverter implements Converter<String, Personali
 
     @Override
     public Personality convert(String source) {
-        log.info("convert String {} to Personality", source);
+//        log.info("convert String {} to Personality", source);
         String upperCase = source.toUpperCase(Locale.ENGLISH);
         return Personality.valueOf(upperCase);
     }

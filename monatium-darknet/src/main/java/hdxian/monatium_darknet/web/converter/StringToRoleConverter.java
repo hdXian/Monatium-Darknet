@@ -11,7 +11,7 @@ public class StringToRoleConverter implements Converter<String, Role> {
 
     @Override
     public Role convert(String source) {
-        log.info("convert String {} to Role", source);
+//        log.info("convert String {} to Role", source);
         String upperCase = source.toUpperCase(Locale.ENGLISH);
         return Role.valueOf(upperCase);
     }

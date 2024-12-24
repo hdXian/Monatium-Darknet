@@ -164,7 +164,9 @@ public class CharacterService {
         // 캐릭터 이미지 정보 저장
         // 변경하지 않는 이미지 경로는 인자를 null로 전달함.
         imagePathService.saveCharacterImages(characterId, chImagePaths);
-        imagePathService.saveAsideImages(characterId, asideImagePaths);
+        if (asideImagePaths != null) {
+            imagePathService.saveAsideImages(characterId, asideImagePaths);
+        }
 
         return ch.getId(); // ***중요 -> em.find()를 통해 찾아온 엔티티는 merge로 업데이트하면 안됨. (이해는 안됨. 추가 학습 필요)
     }

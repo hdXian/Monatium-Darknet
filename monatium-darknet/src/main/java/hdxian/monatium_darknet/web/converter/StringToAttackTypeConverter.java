@@ -11,7 +11,7 @@ public class StringToAttackTypeConverter implements Converter<String, AttackType
 
     @Override
     public AttackType convert(String source) {
-        log.info("convert String {} to AttackType", source);
+//        log.info("convert String {} to AttackType", source);
         String upperCase = source.toUpperCase(Locale.ENGLISH);
         return AttackType.valueOf(upperCase);
     }

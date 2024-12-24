@@ -11,7 +11,7 @@ public class StringToRaceConverter implements Converter<String, Race> {
 
     @Override
     public Race convert(String source) {
-        log.info("convert String {} to Race", source);
+//        log.info("convert String {} to Race", source);
         String upperCase = source.toUpperCase(Locale.ENGLISH);
         return Race.valueOf(upperCase);
     }

@@ -250,26 +250,29 @@ public class CharacterMgController {
         model.addAttribute("characterId", characterId);
 
         // 1. 대상 캐릭터에 대한 정보를 폼 객체에 저장
+        // 1-1. 임시저장 등으로 세션에 폼 데이터가 있는 경우 ->세션에서 가져옴.
+        // 1-2. 처음 요청한 상태 -> 폼 객체를 새로 만듦.
         ChFormStep1 chForm1 = Optional.ofNullable( (ChFormStep1) session.getAttribute(CHFORM_STEP1) ).orElse(generateChForm1(ch));
         ChFormStep2 chForm2 = Optional.ofNullable( (ChFormStep2) session.getAttribute(CHFORM_STEP2) ).orElse(generateChForm2(ch));
         ChFormStep3 chForm3 = Optional.ofNullable( (ChFormStep3) session.getAttribute(CHFORM_STEP3) ).orElse(generateChForm3(ch));
-//        ChFormStep2 chForm2 = generateChForm2(ch);
-//        ChFormStep3 chForm3 = generateChForm3(ch);
+
+        // 어사이드 null이면 FormStep4에서 enableAside false로 설정해서 보냄
+        ChFormStep4 chForm4 = Optional.ofNullable( (ChFormStep4) session.getAttribute(CHFORM_STEP4) ).orElse(generateChForm4(ch.getAside()));
 
         // 2. 폼 객체를 모델에 추가
         model.addAttribute(CHFORM_STEP1, chForm1);
         model.addAttribute(CHFORM_STEP2, chForm2);
         model.addAttribute(CHFORM_STEP3, chForm3);
+        model.addAttribute(CHFORM_STEP4, chForm4);
 
-        // 캐릭터들의 이미지 url을 모델에 추가 (프로필, 초상화, 전신, 저학년 스킬)
-        addChUrlsOnEditFormModel(session, model, characterId);
+        // 3. 캐릭터 이미지 url을 모델에 추가 (프로필, 초상화, 전신, 저학년 스킬)
+        addChUrlsOnModel_Edit(session, model, characterId);
 
-        // 어사이드 이미지 url을 모델에 추가
-        // 어사이드가 있으면 해당 이미지 url로 업데이트
-        if (ch.getAside() != null) {
-            addAsideUrlsOnEditFormModel(session, model, characterId); // 어사이드 관련 url들을 모델에 추가
+        // 4. 어사이드 이미지 url을 모델에 추가
+        if (chForm4.isEnableAside()) { // 4-1. 어사이드가 (적어도 폼에) 있으면 해당 url을 모델에 추가
+            addAsideUrlsOnModel_Edit(session, model, characterId);
         }
-        else { // 어사이드가 없으면 모두 디폴트 썸네일로 대체
+        else { // 4-2. 어사이드가 없으면 모두 디폴트 url로 설정
             String defaultUrl = imageUrlService.getDefaultThumbnailUrl();
             model.addAttribute(CH_EDIT_ASIDE_URL, defaultUrl);
             model.addAttribute(CH_EDIT_ASIDE_LV_1_URL, defaultUrl);
@@ -277,18 +280,13 @@ public class CharacterMgController {
             model.addAttribute(CH_EDIT_ASIDE_LV_3_URL, defaultUrl);
         }
 
-        // 어사이드가 있다면 어사이드 정보와 이미지 url도 추가
-        // 어사이드 null이면 FomStep4에서 isAside false로 설정해서 보냄
-        ChFormStep4 chForm4 = Optional.ofNullable( (ChFormStep4) session.getAttribute(CHFORM_STEP4) ).orElse(generateChForm4(ch.getAside()));
-        model.addAttribute(CHFORM_STEP4, chForm4);
-
         return "management/characters/characterEditForm";
     }
 
     // 캐릭터 수정
     @PostMapping("/edit/{characterId}")
     public String edit(HttpSession session, Model model, @RequestParam("action")String action,
-                       @PathVariable("characterId")Long characterId,
+                       @PathVariable("characterId") Long characterId,
                        @ModelAttribute("chFormStep1") ChFormStep1 chForm1,
                        @ModelAttribute("chFormStep2") ChFormStep2 chForm2,
                        @ModelAttribute("chFormStep3") ChFormStep3 chForm3,
@@ -299,33 +297,39 @@ public class CharacterMgController {
             return "redirect:/management/characters";
         }
 
-        // temp 경로에 이미지 파일, 세션에 이미지 url 저장하기
-        // 파일이 없는 경우 (따로 첨부한 파일이 없는 경우) -> 해당 이미지 url은 세션에 저장되지 않음
-        // TODO - 어사이드가 있는 경우에만 처리하도록 로직 세분화 해야함
-        uploadImageToTemp_Edit(session, chForm1, chForm3, chForm4);
+        // 1. temp 경로에 이미지 파일, 세션에 이미지 url 저장하기
+        // 1-1. 파일이 없는 경우 (따로 첨부한 파일이 없는 경우) -> 해당 이미지 url은 세션에 저장되지 않음
+        uploadChImageToTemp_Edit(session, chForm1, chForm3);
 
-        // 세션의 폼 데이터 업데이트
+        // 2. 세션의 폼 데이터 업데이트
         updateFormDataOnSession(session, chForm1, chForm2, chForm3, chForm4);
 
-        // 캐릭터들의 이미지 url을 모델에 추가 (프로필, 초상화, 전신, 저학년 스킬)
-        addChUrlsOnEditFormModel(session, model, characterId);
+        // 3. 캐릭터들의 이미지 url을 모델에 추가 (프로필, 초상화, 전신, 저학년 스킬)
+        addChUrlsOnModel_Edit(session, model, characterId);
 
-        // 어사이드 이미지 url을 모델에 추가
-        addAsideUrlsOnEditFormModel(session, model, characterId);
+        // 4. 폼에서 어사이드 정보를 입력한 경우 (enableAside: true)
+        // 4-1. temp경로 파일 업로드, 세션에 url 저장, 모델에 어사이드 url 추가
+        if (chForm4.isEnableAside()) {
+            uploadAsideImageToTemp_Edit(session, chForm4);
+            addAsideUrlsOnModel_Edit(session, model, characterId);
+        }
 
-        // 캐릭터 정보 수정하여 저장하기
+        // 5. complete 버튼을 누른 경우 -> 캐릭터 정보 수정하여 저장하기
         if (action.equals("complete")) {
             CharacterDto updateDto = generateCharDto(chForm1, chForm2, chForm3, chForm4);
 
-            // 변경하지 않는 이미지 경로는 null로 전달함.
+            // 변경하지 않는 이미지 경로는 null로 전달됨
             CharacterImageDto chImages = generateChImagePathsFromTemp_Edit(session);
-            AsideImageDto asideImages = generateAsideImagePathsFromTemp_Edit(session);
+            AsideImageDto asideImages = null;
+            if (chForm4.isEnableAside()) {
+                asideImages = generateAsideImagePathsFromTemp_Edit(session);
+            }
             characterService.updateCharacter(characterId, updateDto, chImages, asideImages);
 
             clearSessionAttributes(session); // 세션 데이터 지우기
             return "redirect:/management/characters";
         }
-        else { // save 등
+        else { // 6. save 버튼을 누른 경우 -> 세션에 데이터만 저장하고 원래 페이지로 리다이렉트
             return "redirect:/management/characters/edit/" + characterId;
         }
 
@@ -537,13 +541,15 @@ public class CharacterMgController {
     // === 2. 기존 캐릭터 수정 기능 관련 메서드 ===
 
     // === 2-1. 이미지를 임시 경로에 업로드, 세션에 url 추가 ===
-    private void uploadImageToTemp_Edit(HttpSession session, ChFormStep1 chForm1, ChFormStep3 chForm3, ChFormStep4 chForm4) {
+    private void uploadChImageToTemp_Edit(HttpSession session, ChFormStep1 chForm1, ChFormStep3 chForm3) {
         uploadImageToTemp(session, CH_EDIT_PROFILE_URL, chForm1.getProfileImage());
         uploadImageToTemp(session, CH_EDIT_PORTRAIT_URL, chForm1.getPortraitImage());
         uploadImageToTemp(session, CH_EDIT_BODY_URL, chForm1.getBodyImage());
 
         uploadImageToTemp(session, CH_EDIT_LOW_SKILL_URL, chForm3.getLowSkillImage());
+    }
 
+    private void uploadAsideImageToTemp_Edit(HttpSession session, ChFormStep4 chForm4) {
         uploadImageToTemp(session, CH_EDIT_ASIDE_URL, chForm4.getAsideImage());
         uploadImageToTemp(session, CH_EDIT_ASIDE_LV_1_URL, chForm4.getAsideLv1Image());
         uploadImageToTemp(session, CH_EDIT_ASIDE_LV_2_URL, chForm4.getAsideLv2Image());
@@ -647,13 +653,12 @@ public class CharacterMgController {
         return form;
     }
 
-    // === 캐릭터 이미지 url을 Model에 추가 ===
-    // === (수정 페이지에서만 사용, 이미지를 수정하여 경로가 tmp에 있는 이미지를 걸러내야 함.) ===
-    private void addChUrlsOnEditFormModel(HttpSession session, Model model, Long characterId) {
+    // === 2-5. 캐릭터 이미지 url을 Model에 추가 (이미지를 수정해서 임시 경로에 있는 이미지를 걸러내야 함.) ===
+    private void addChUrlsOnModel_Edit(HttpSession session, Model model, Long characterId) {
         // 1. 캐릭터 이미지 url 경로를 우선 생성한다.
         CharacterImageDto chImageUrls = imageUrlService.generateCharacterImageUrls(characterId);
 
-        // 2. 세션에 저장돼있는 url들을 덮어씌운다. (세션에 남아있다 -> 이미지를 바꿔서 temp 이미지가 경로로 지정돼있다)
+        // 2. 세션에 url이 남아있다면 그걸로 덮어씌운다. (세션에 남아있다 -> 이미지를 바꿔서 temp 이미지가 경로로 지정돼있다)
         if ( session.getAttribute(CH_EDIT_PROFILE_URL) != null ) {
             chImageUrls.setProfileImage((String) session.getAttribute(CH_EDIT_PROFILE_URL));
         }
@@ -667,14 +672,15 @@ public class CharacterMgController {
             chImageUrls.setLowSkillImage((String) session.getAttribute(CH_EDIT_LOW_SKILL_URL));
         }
 
+        // 3. 생성한 url 경로를 모델에 추가한다.
         model.addAttribute(CH_EDIT_PROFILE_URL, chImageUrls.getProfileImage());
         model.addAttribute(CH_EDIT_PORTRAIT_URL, chImageUrls.getPortraitImage());
         model.addAttribute(CH_EDIT_BODY_URL, chImageUrls.getBodyImage());
         model.addAttribute(CH_EDIT_LOW_SKILL_URL, chImageUrls.getLowSkillImage());
-        log.info("chImageUrls = {}", chImageUrls);
+//        log.info("chImageUrls = {}", chImageUrls);
     }
 
-    private void addAsideUrlsOnEditFormModel(HttpSession session, Model model, Long characterId) {
+    private void addAsideUrlsOnModel_Edit(HttpSession session, Model model, Long characterId) {
         // 1. 캐릭터 이미지 url 경로를 우선 생성한다.
         AsideImageDto asideImageUrls = imageUrlService.generateAsideImageUrls(characterId);
 
@@ -692,6 +698,7 @@ public class CharacterMgController {
             asideImageUrls.setLv3Image((String) session.getAttribute(CH_EDIT_ASIDE_LV_3_URL));
         }
 
+        // 3. 생성한 url을 모델에 추가한다.
         model.addAttribute(CH_EDIT_ASIDE_URL, asideImageUrls.getAsideImage());
         model.addAttribute(CH_EDIT_ASIDE_LV_1_URL, asideImageUrls.getLv1Image());
         model.addAttribute(CH_EDIT_ASIDE_LV_2_URL, asideImageUrls.getLv2Image());
@@ -771,6 +778,7 @@ public class CharacterMgController {
         dto.setHighSkill(chForm3.generateHighSkill());
 
         // chForm4
+        // chForm4.getAside -> asideEnable이 false면 null 리턴
         dto.setAside(chForm4.generateAside());
 
         return dto;

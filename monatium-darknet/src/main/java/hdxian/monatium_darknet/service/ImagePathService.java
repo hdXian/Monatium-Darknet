@@ -6,6 +6,7 @@ import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.service.dto.AsideImageDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ImagePathService {
@@ -108,8 +110,8 @@ public class ImagePathService {
     // 캐릭터 이미지 정보 저장
     @Transactional // 예외 터지면 관련 트랜잭션 롤백
     public void saveCharacterImages(Long characterId, CharacterImageDto src) {
-        if (src == null) {
-            throw new NoSuchElementException("src CharacterImageDto is null");
+        if (characterId == null || src == null) {
+            throw new IllegalArgumentException("characterId 또는 src가 null입니다.");
         }
 
         CharacterImageDto dst = generateChImagePaths(characterId);
@@ -136,8 +138,8 @@ public class ImagePathService {
     // 어사이드 이미지 정보 저장
     @Transactional // 예외 터지면 관련 트랜잭션 롤백
     public void saveAsideImages(Long characterId, AsideImageDto src) {
-        if (src == null) {
-            throw new NoSuchElementException("argument AsideImageDto is null");
+        if (characterId == null || src == null) {
+            throw new IllegalArgumentException("characterId 또는 src가 null입니다.");
         }
 
         AsideImageDto dst = generateAsideImagePaths(characterId);
