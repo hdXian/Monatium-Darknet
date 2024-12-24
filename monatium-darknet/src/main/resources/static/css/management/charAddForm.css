@@ -166,3 +166,7 @@ textarea.auto-resize {
     background-color: #f9f9f9; /* 약간의 배경색 */
 }
 
+.field-error {
+    color: red;
+}
+

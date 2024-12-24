@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,6 +65,7 @@ public class CharacterMgController {
     public String chFormStep1(HttpSession session, Model model) {
         ChFormStep1 chForm = Optional.ofNullable( (ChFormStep1) session.getAttribute(CHFORM_STEP1) ).orElse(new ChFormStep1()); // 세션에 저장된 게 없으면 새로운 빈 폼 객체를 생성
 
+        // TODO - url들 ModelAttribute 처리 해야할 듯.
         addImageUrlsOnModelStep1(session, model); // 이미지 url 처리
 
         model.addAttribute("chForm", chForm); // 모델에 폼 객체 전달
@@ -72,8 +74,15 @@ public class CharacterMgController {
     }
 
     @PostMapping("/new/step1")
-    public String chAddStep1(HttpSession session, @ModelAttribute("chForm")ChFormStep1 chForm,
-                             @RequestParam("action") String action, BindingResult bindingResult) {
+    public String chAddStep1(HttpSession session, @RequestParam("action") String action,
+                             @Validated @ModelAttribute("chForm") ChFormStep1 chForm, BindingResult bindingResult, Model model) {
+
+        // 취소를 누른 경우 검증을 건너뛰고 캐릭터 목록으로 리다이렉트
+        if (action.equals("cancel")) {
+            return "redirect:/management/characters";
+        }
+
+        addImageUrlsOnModelStep1(session, model); // 이미지 url 처리 (검증 전에 url은 처리해야 함)
 
         if (bindingResult.hasErrors()) {
             return "management/characters/addChStep1";
@@ -90,10 +99,6 @@ public class CharacterMgController {
 
         String redirectUrl;
         switch (action) {
-            case "cancel" -> {
-                clearSessionAttributes(session);
-                redirectUrl = "redirect:/management/characters";
-            }
             case "next" -> redirectUrl = "redirect:/management/characters/new/step2";
             default -> redirectUrl = "redirect:/management/characters/new/step1";
         }
