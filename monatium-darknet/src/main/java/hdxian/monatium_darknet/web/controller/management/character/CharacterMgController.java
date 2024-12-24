@@ -10,6 +10,7 @@ import hdxian.monatium_darknet.service.ImageUrlService;
 import hdxian.monatium_darknet.service.dto.AsideImageDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
+import hdxian.monatium_darknet.web.validator.ChFormStep4Validator;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,8 @@ public class CharacterMgController {
 
     private final ImageUrlService imageUrlService;
     private final ImagePathService imagePathService;
+
+    private final ChFormStep4Validator chForm4Validator;
 
     // TODO - url 옮겨다니면 세션 데이터 꼬이는 문제 해결 필요
     // ex) 수정 페이지에서 임시저장 한 뒤 (세션에 데이터 저장) 다른 캐릭터 정보 수정 페이지에 진입
@@ -208,13 +211,16 @@ public class CharacterMgController {
 
     @PostMapping("/new/step4")
     public String chAddStep4(HttpSession session, @RequestParam("action")String action,
-                             @Validated @ModelAttribute("chForm")ChFormStep4 chForm, BindingResult bindingResult, Model model) {
+                             @ModelAttribute("chForm")ChFormStep4 chForm, BindingResult bindingResult, Model model) {
 
         if (action.equals("cancel")) {
             return "redirect:/management/characters";
         }
 
         addImageUrlsOnModelStep4(session, model);
+
+        // chForm4에 대한 검증 수행 -> 별도의 Validator에서 Bean Validation을 함께 쓰는 경우 @Validated 쓸 필요 없음
+        chForm4Validator.validate(chForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "management/characters/addChStep4";
@@ -245,6 +251,9 @@ public class CharacterMgController {
         return "management/characters/addChSummary";
     }
 
+    // TODO - @Validated 사용 안하고, Form마다 Validator 사용해서 개별 검증 수행하도록 설계 가능.
+    // Bean Validation도 가져다 쓸 수 있고, 커스텀 검증 로직 또한 추가 가능.
+    // 폼 객체마다 Validator 사용할꺼면 다른 컨트롤러 메서드들도 @Validated 빼는게 나음.
     @PostMapping("/new/complete")
     public String chAddComplete(HttpSession session,
                                 @RequestParam("action")String action,

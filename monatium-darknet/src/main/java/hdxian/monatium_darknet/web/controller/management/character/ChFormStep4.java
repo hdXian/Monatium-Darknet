@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // 캐릭터 등록 폼 step 4 (어사이드)
+// 검증 로직은 Validator에서 수행 (enableAside에 따른 동적 검증)
 @Data
 public class ChFormStep4 {
 
