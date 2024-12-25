@@ -358,31 +358,54 @@ public class CharacterMgController {
     @PostMapping("/edit/{characterId}")
     public String edit(HttpSession session, Model model, @RequestParam("action")String action,
                        @PathVariable("characterId") Long characterId,
-                       @ModelAttribute("chFormStep1") ChFormStep1 chForm1,
-                       @ModelAttribute("chFormStep2") ChFormStep2 chForm2,
-                       @ModelAttribute("chFormStep3") ChFormStep3 chForm3,
-                       @ModelAttribute("chFormStep4") ChFormStep4 chForm4) {
+                       @Validated @ModelAttribute("chFormStep1") ChFormStep1 chForm1, BindingResult br1,
+                       @Validated @ModelAttribute("chFormStep2") ChFormStep2 chForm2, BindingResult br2,
+                       @Validated @ModelAttribute("chFormStep3") ChFormStep3 chForm3, BindingResult br3,
+                       @ModelAttribute("chFormStep4") ChFormStep4 chForm4, BindingResult br4) {
 
         if (action.equals("cancel")) {
-            clearSessionAttributes(session); // 세션 데이터 지우기
             return "redirect:/management/characters";
         }
 
-        // 1. temp 경로에 이미지 파일, 세션에 이미지 url 저장하기
-        // 1-1. 파일이 없는 경우 (따로 첨부한 파일이 없는 경우) -> 해당 이미지 url은 세션에 저장되지 않음
+        // 1. 캐릭터들의 이미지 url을 모델에 추가 (프로필, 초상화, 전신, 저학년 스킬)
+        addChUrlsOnModel_Edit(session, model, characterId);
+        addAsideUrlsOnModel_Edit(session, model, characterId);
+//        if (chForm4.isEnableAside()) {
+//            addAsideUrlsOnModel_Edit(session, model, characterId);
+//        }
+//        else {
+//            String defaultUrl = imageUrlService.getDefaultThumbnailUrl();
+//            model.addAttribute(CH_EDIT_ASIDE_URL, defaultUrl);
+//            model.addAttribute(CH_EDIT_ASIDE_LV_1_URL, defaultUrl);
+//            model.addAttribute(CH_EDIT_ASIDE_LV_2_URL, defaultUrl);
+//            model.addAttribute(CH_EDIT_ASIDE_LV_3_URL, defaultUrl);
+//        }
+
+        // chForm3의 강화 공격에 대한 추가 검증 수행
+        if (chForm3.isEnableEnhancedAttack()) {
+            if (!StringUtils.hasText(chForm3.getEnhancedAttackDescription()))
+                br3.rejectValue("enhancedAttackDescription", "NotBlank", "강화 공격 설명을 작성해주세요.");
+        }
+
+        // chForm4에 대한 검증 수행
+        chForm4Validator.validate(chForm4, br4);
+
+        if (br1.hasErrors() || br2.hasErrors() || br3.hasErrors() || br4.hasErrors()) {
+            model.addAttribute("characterId", characterId);
+            return "management/characters/characterEditForm";
+        }
+
+        // 2. temp 경로에 이미지 파일, 세션에 이미지 url 저장하기
+        // 2-1. 파일이 없는 경우 (따로 첨부한 파일이 없는 경우) -> 해당 이미지 url은 세션에 저장되지 않음
         uploadChImageToTemp_Edit(session, chForm1, chForm3);
 
-        // 2. 세션의 폼 데이터 업데이트
+        // 3. 세션의 폼 데이터 업데이트
         updateFormDataOnSession(session, chForm1, chForm2, chForm3, chForm4);
-
-        // 3. 캐릭터들의 이미지 url을 모델에 추가 (프로필, 초상화, 전신, 저학년 스킬)
-        addChUrlsOnModel_Edit(session, model, characterId);
 
         // 4. 폼에서 어사이드 정보를 입력한 경우 (enableAside: true)
         // 4-1. temp경로 파일 업로드, 세션에 url 저장, 모델에 어사이드 url 추가
         if (chForm4.isEnableAside()) {
             uploadAsideImageToTemp_Edit(session, chForm4);
-            addAsideUrlsOnModel_Edit(session, model, characterId);
         }
 
         // 5. complete 버튼을 누른 경우 -> 캐릭터 정보 수정하여 저장하기
