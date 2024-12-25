@@ -9,6 +9,7 @@ public interface SessionConst {
     public static final String CHFORM_STEP2 = "chFormStep2";
     public static final String CHFORM_STEP3 = "chFormStep3";
     public static final String CHFORM_STEP4 = "chFormStep4";
+    public static final String CHFORM_TOTAL = "chFormTotal";
 
     // 캐릭터 추가 시 이미지 url을 저장하기 위해 지정하는 속성 이름
     public static final String CH_ADD_PROFILE_URL = "chAdd_profileUrl";

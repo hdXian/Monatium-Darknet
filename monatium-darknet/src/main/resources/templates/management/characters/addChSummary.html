@@ -39,43 +39,48 @@
                             <!-- 이름 -->
                             <div class="mb-3">
                                 <label for="name" class="form-label">이름</label>
-                                <input th:field="*{name}" type="text" id="name" name="name" class="form-control" placeholder="캐릭터의 이름을 입력하세요">
+                                <input th:field="*{name}" th:errorclass="field-error" type="text" id="name" name="name" class="form-control" placeholder="캐릭터의 이름을 입력하세요">
+                                <div class="field-error" th:errors="*{name}"></div>
                             </div>
 
                             <!-- 수식언 -->
                             <div class="mb-3">
                                 <label for="subtitle" class="form-label">수식언</label>
-                                <input th:field="*{subtitle}" type="text" id="subtitle" name="subtitle" class="form-control" placeholder="캐릭터의 수식언을 입력하세요">
+                                <input th:field="*{subtitle}" th:errorclass="field-error" type="text" id="subtitle" name="subtitle" class="form-control" placeholder="캐릭터의 수식언을 입력하세요">
+                                <div class="field-error" th:errors="*{subtitle}"></div>
                             </div>
 
                             <!-- 성급 -->
                             <div class="mb-3">
                                 <label for="star" class="form-label">성급</label>
-                                <select th:field="*{grade}" id="star" name="star" class="form-select">
+                                <select th:field="*{grade}" th:errorclass="field-error" id="star" name="star" class="form-select">
                                     <option value="3">3성</option>
                                     <option value="2">2성</option>
                                     <option value="1">1성</option>
                                 </select>
+                                <div class="field-error" th:errors="*{grade}"></div>
                             </div>
 
                             <!-- 종족 -->
                             <div class="mb-3">
                                 <label for="race" class="form-label">종족</label>
-                                <select th:field="*{race}" id="race" name="race" class="form-select">
+                                <select th:field="*{race}" th:errorclass="field-error" id="race" name="race" class="form-select">
                                     <option value="fairy">요정</option>
                                     <option value="witch">마녀</option>
-                                    <option value="beastman">수인</option>
+                                    <option value="furry">수인</option>
                                     <option value="dragon">용족</option>
                                     <option value="ghost">유령</option>
                                     <option value="spirit">정령</option>
                                     <option value="elf">엘프</option>
                                 </select>
+                                <div class="field-error" th:errors="*{race}"></div>
                             </div>
 
                             <!-- 성우 -->
                             <div class="mb-3">
                                 <label for="voiceActor" class="form-label">성우</label>
-                                <input th:field="*{cv}" type="text" id="voiceActor" name="voiceActor" class="form-control" placeholder="성우의 이름을 입력하세요">
+                                <input th:field="*{cv}" th:errorclass="field-error" type="text" id="voiceActor" name="voiceActor" class="form-control" placeholder="성우의 이름을 입력하세요">
+                                <div class="field-error" th:errors="*{cv}"></div>
                             </div>
                         </div>
 
@@ -84,13 +89,15 @@
                             <!-- 한마디 -->
                             <div class="mb-3">
                                 <label for="quote" class="form-label">한마디</label>
-                                <textarea th:field="*{quote}" id="quote" name="quote" class="form-control" placeholder="캐릭터의 한마디를 입력하세요"></textarea>
+                                <textarea th:field="*{quote}" th:errorclass="field-error" id="quote" name="quote" class="form-control" placeholder="캐릭터의 한마디를 입력하세요"></textarea>
+                                <div class="field-error" th:errors="*{quote}"></div>
                             </div>
 
                             <!-- TMI -->
                             <div class="mb-3">
                                 <label for="tmi" class="form-label">TMI</label>
-                                <textarea th:field="*{tmi}" id="tmi" name="tmi" class="form-control" placeholder="캐릭터의 TMI를 입력하세요"></textarea>
+                                <textarea th:field="*{tmi}" th:errorclass="field-error" id="tmi" name="tmi" class="form-control" placeholder="캐릭터의 TMI를 입력하세요"></textarea>
+                                <div class="field-error" th:errors="*{tmi}"></div>
                             </div>
 
                             <!-- 좋아하는 것 -->
@@ -167,43 +174,47 @@
                             <!-- 성격 -->
                             <div class="mb-3">
                                 <label for="personality" class="form-label">성격</label>
-                                <select th:field="*{personality}" id="personality" name="personality" class="form-select">
+                                <select th:field="*{personality}" th:errorclass="field-error" id="personality" name="personality" class="form-select">
                                     <option value="PURE">순수</option>
                                     <option value="MADNESS">광기</option>
                                     <option value="COOL">냉정</option>
                                     <option value="GLOOMY">우울</option>
                                     <option value="ACTIVITY">활발</option>
                                 </select>
+                                <div class="field-error" th:errors="*{personality}"></div>
                             </div>
 
                             <!-- 역할 -->
                             <div class="mb-3">
                                 <label for="role" class="form-label">역할</label>
-                                <select th:field="*{role}" id="role" name="role" class="form-select">
+                                <select th:field="*{role}" th:errorclass="field-error" id="role" name="role" class="form-select">
                                     <option value="DEALER">딜러</option>
                                     <option value="TANKER">탱커</option>
                                     <option value="SUPPORTER">서포터</option>
                                 </select>
+                                <div class="field-error" th:errors="*{role}"></div>
                             </div>
 
                             <!-- 공격 방식 -->
                             <div class="mb-3">
                                 <label for="attackStyle" class="form-label">공격 방식</label>
-                                <select th:field="*{attackType}" id="attackStyle" name="attackStyle" class="form-select">
+                                <select th:field="*{attackType}" th:errorclass="field-error" id="attackStyle" name="attackStyle" class="form-select">
                                     <option value="PHYSICAL">물리</option>
                                     <option value="MAGICAL">마법</option>
                                 </select>
+                                <div class="field-error" th:errors="*{attackType}"></div>
                             </div>
 
                             <!-- 배치 -->
                             <div class="mb-3">
                                 <label for="placement" class="form-label">배치</label>
-                                <select th:field="*{position}" id="placement" name="placement" class="form-select">
+                                <select th:field="*{position}" th:errorclass="field-error" id="placement" name="placement" class="form-select">
                                     <option value="FRONT">전열</option>
                                     <option value="MIDDLE">중열</option>
                                     <option value="BACK">후열</option>
                                     <option value="ALL">모든 열</option>
                                 </select>
+                                <div class="field-error" th:errors="*{position}"></div>
                             </div>
                         </div>
 
@@ -212,27 +223,30 @@
                             <div class="mb-3">
                                 <label for="aggressive-status" class="form-label">깡</label>
                                 <div id="aggressive-status" class="d-flex align-items-center">
-                                    <input th:field=*{aggressive} th:value="*{aggressive}" type="range" id="aggressive-slider" name="aggressive" class="form-range me-3" min="1" max="7" step="1" value="4">
+                                    <input th:field="*{aggressive}" th:errorclass="field-error" th:value="*{aggressive}" type="range" id="aggressive-slider" name="aggressive" class="form-range me-3" min="1" max="7" step="1" value="4">
                                     <input th:value="*{aggressive}" type="number" id="aggressive-number" class="form-control status-num" min="1" max="7" step="1" value="4" >
                                 </div>
+                                <div class="field-error" th:errors="*{aggressive}"></div>
                             </div>
 
                             <!-- 맷집 -->
                             <div class="mb-3">
                                 <label for="endurance-status" class="form-label">맷집</label>
                                 <div id="endurance-status" class="d-flex align-items-center">
-                                    <input th:field="*{endurance}" th:value="*{endurance}" type="range" id="endurance-slider" name="endurance" class="form-range me-3" min="1" max="7" step="1" value="4">
+                                    <input th:field="*{endurance}" th:errorclass="field-error" th:value="*{endurance}" type="range" id="endurance-slider" name="endurance" class="form-range me-3" min="1" max="7" step="1" value="4">
                                     <input th:value="*{endurance}" type="number" id="endurance-number" class="form-control status-num" min="1" max="7" step="1" value="4">
                                 </div>
+                                <div class="field-error" th:errors="*{endurance}"></div>
                             </div>
 
                             <!-- 재주 -->
                             <div class="mb-3">
                                 <label for="trick-status" class="form-label">재주</label>
                                 <div id="trick-status" class="d-flex align-items-center">
-                                    <input th:field="*{trick}" th:value="*{trick}" type="range" id="trick-slider" name="talent" class="form-range me-3" min="1" max="7" step="1" value="4">
+                                    <input th:field="*{trick}" th:errorclass="field-error" th:value="*{trick}" type="range" id="trick-slider" name="talent" class="form-range me-3" min="1" max="7" step="1" value="4">
                                     <input th:value="*{trick}" type="number" id="trick-number" class="form-control status-num" min="1" max="7" step="1" value="4">
                                 </div>
+                                <div class="field-error" th:errors="*{trick}"></div>
                             </div>
                         </div>
                     </div>
@@ -255,9 +269,10 @@
 
                         <div class="mb-3">
                             <label for="normalAttackDescription" class="form-label">공격 설명</label>
-                            <textarea th:field="*{normalAttackDescription}" id="normalAttackDescription" name="normalAttackDescription"
+                            <textarea th:field="*{normalAttackDescription}" th:errorclass="field-error" id="normalAttackDescription" name="normalAttackDescription"
                                       class="form-control auto-resize"
                                       placeholder="기본 공격의 설명을 입력하세요"></textarea>
+                            <div class="field-error" th:errors="*{normalAttackDescription}"></div>
                         </div>
 
                         <label class="form-label">특성</label>
@@ -295,9 +310,10 @@
 
                         <div class="mb-3">
                             <label for="enhancedAttackDescription" class="form-label">공격 설명</label>
-                            <textarea th:field="*{enhancedAttackDescription}" id="enhancedAttackDescription" name="enhancedAttackDescription"
+                            <textarea th:field="*{enhancedAttackDescription}" th:errorclass="field-error" id="enhancedAttackDescription" name="enhancedAttackDescription"
                                       class="form-control auto-resize"
                                       placeholder="강화 공격의 설명을 입력하세요"></textarea>
+                            <div class="field-error" th:errors="*{enhancedAttackDescription}"></div>
                         </div>
 
                         <label class="form-label">특성</label>
@@ -333,13 +349,15 @@
                                 <!-- 스킬 이름 입력 -->
                                 <div class="mb-3">
                                     <label for="lowSkillName" class="form-label">스킬 이름</label>
-                                    <input th:field="*{lowSkillName}" type="text" id="lowSkillName" name="lowSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                                    <input th:field="*{lowSkillName}" th:errorclass="field-error" type="text" id="lowSkillName" name="lowSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                                    <div class="field-error" th:errors="*{lowSkillName}"></div>
                                 </div>
 
                                 <!-- 스킬 효과 입력 -->
                                 <div class="mb-3">
                                     <label for="lowSkillDescription" class="form-label">스킬 효과</label>
-                                    <textarea th:field="*{lowSkillDescription}" id="lowSkillDescription" name="lowSkillDescription" class="form-control auto-resize" placeholder="스킬 효과를 입력하세요"></textarea>
+                                    <textarea th:field="*{lowSkillDescription}" th:errorclass="field-error" id="lowSkillDescription" name="lowSkillDescription" class="form-control auto-resize" placeholder="스킬 효과를 입력하세요"></textarea>
+                                    <div class="field-error" th:errors="*{lowSkillDescription}"></div>
                                 </div>
                             </div>
                         </div>
@@ -365,23 +383,26 @@
                             <!-- 스킬 이름 입력 필드 -->
                             <div class="col-7">
                                 <label for="highSkillName" class="form-label">스킬 이름</label>
-                                <input th:field="*{highSkillName}" type="text" id="highSkillName" name="highSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                                <input th:field="*{highSkillName}" th:errorclass="field-error" type="text" id="highSkillName" name="highSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
+                                <div class="field-error" th:errors="*{highSkillName}"></div>
                             </div>
 
                             <!-- 재사용 대기시간 입력 필드 -->
                             <div class="col-5">
                                 <label for="highSkillCooldown" class="form-label">재사용 대기시간</label>
                                 <div class="input-group">
-                                    <input type="number" th:field="*{highSkillCooldown}" id="highSkillCooldown" name="highSkillCooldown" class="form-control" placeholder="쿨타임"
+                                    <input type="number" th:field="*{highSkillCooldown}" th:errorclass="field-error" id="highSkillCooldown" name="highSkillCooldown" class="form-control" placeholder="쿨타임"
                                            min="1" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '');">
                                     <span class="input-group-text">초</span>
                                 </div>
+                                <div class="field-error" th:errors="*{highSkillCooldown}"></div>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="highSkillDescription" class="form-label">스킬 설명</label>
-                            <textarea th:field="*{highSkillDescription}" id="highSkillDescription" name="highSkillDescription" class="form-control auto-resize" placeholder="스킬 설명을 입력하세요"></textarea>
+                            <textarea th:field="*{highSkillDescription}" th:errorclass="field-error" id="highSkillDescription" name="highSkillDescription" class="form-control auto-resize" placeholder="스킬 설명을 입력하세요"></textarea>
+                            <div class="field-error" th:errors="*{highSkillDescription}"></div>
                         </div>
 
                         <label class="form-label">특성</label>
@@ -444,12 +465,14 @@
                             <div class="col-md-9">
                                 <div class="mb-3">
                                     <label for="asideName" class="form-label">어사이드 이름</label>
-                                    <input th:field="*{asideName}" type="text" id="asideName" name="asideName" class="form-control" placeholder="이름을 입력하세요">
+                                    <input th:field="*{asideName}" th:errorclass="field-error" type="text" id="asideName" name="asideName" class="form-control" placeholder="이름을 입력하세요">
+                                    <div class="field-error" th:errors="*{asideName}"></div>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="asideDescription" class="form-label">어사이드 설명</label>
-                                    <textarea th:field="*{asideDescription}" id="asideDescription" name="asideDescription" class="form-control auto-resize" placeholder="설명을 입력하세요"></textarea>
+                                    <textarea th:field="*{asideDescription}" th:errorclass="field-error" id="asideDescription" name="asideDescription" class="form-control auto-resize" placeholder="설명을 입력하세요"></textarea>
+                                    <div class="field-error" th:errors="*{asideDescription}"></div>
                                 </div>
                             </div>
                         </div>
@@ -474,12 +497,14 @@
                             <div class="col-md-9">
                                 <div class="mb-3">
                                     <label for="asideLv1Name" class="form-label">어사이드 1단계 이름</label>
-                                    <input th:field="*{asideLv1Name}" type="text" id="asideLv1Name" name="asideLv1Name" class="form-control" placeholder="이름을 입력하세요">
+                                    <input th:field="*{asideLv1Name}" th:errorclass="field-error" type="text" id="asideLv1Name" name="asideLv1Name" class="form-control" placeholder="이름을 입력하세요">
+                                    <div class="field-error" th:errors="*{asideLv1Name}"></div>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="asideLv1Description" class="form-label">어사이드 설명</label>
-                                    <textarea th:field="*{asideLv1Description}" id="asideLv1Description" name="asideLv1Description" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                    <textarea th:field="*{asideLv1Description}" th:errorclass="field-error" id="asideLv1Description" name="asideLv1Description" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                    <div class="field-error" th:errors="*{asideLv1Description}"></div>
                                 </div>
                             </div>
                         </div>
@@ -513,12 +538,14 @@
                             <div class="col-md-9">
                                 <div class="mb-3">
                                     <label for="asideLv2Name" class="form-label">어사이드 2단계 이름</label>
-                                    <input th:field="*{asideLv2Name}" type="text" id="asideLv2Name" name="asideLv2Name" class="form-control" placeholder="이름을 입력하세요">
+                                    <input th:field="*{asideLv2Name}" th:errorclass="field-error" type="text" id="asideLv2Name" name="asideLv2Name" class="form-control" placeholder="이름을 입력하세요">
+                                    <div class="field-error" th:errors="*{asideLv2Name}"></div>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="asideLv2Description" class="form-label">어사이드 설명</label>
-                                    <textarea th:field="*{asideLv2Description}" id="asideLv2Description" name="asideLv2Description" class="form-control auto-resize" placeholder="설명을 입력하세요"></textarea>
+                                    <textarea th:field="*{asideLv2Description}" th:errorclass="field-error" id="asideLv2Description" name="asideLv2Description" class="form-control auto-resize" placeholder="설명을 입력하세요"></textarea>
+                                    <div class="field-error" th:errors="*{asideLv2Description}"></div>
                                 </div>
                             </div>
                         </div>
@@ -552,12 +579,14 @@
                             <div class="col-md-9">
                                 <div class="mb-3">
                                     <label for="asideLv3Name" class="form-label">어사이드 3단계 이름</label>
-                                    <input th:field="*{asideLv3Name}" type="text" id="asideLv3Name" name="asideLv3Name" class="form-control" placeholder="이름을 입력하세요">
+                                    <input th:field="*{asideLv3Name}" th:errorclass="field-error" type="text" id="asideLv3Name" name="asideLv3Name" class="form-control" placeholder="이름을 입력하세요">
+                                    <div class="field-error" th:errors="*{asideLv3Name}"></div>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="asideLv3Description" class="form-label">어사이드 설명</label>
-                                    <textarea th:field="*{asideLv3Description}" id="asideLv3Description" name="asideLv3Description" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                    <textarea th:field="*{asideLv3Description}" th:errorclass="field-error" id="asideLv3Description" name="asideLv3Description" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                    <div class="field-error" th:errors="*{asideLv3Description}"></div>
                                 </div>
                             </div>
                         </div>

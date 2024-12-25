@@ -251,20 +251,33 @@ public class CharacterMgController {
         return "management/characters/addChSummary";
     }
 
-    // TODO - @Validated 사용 안하고, Form마다 Validator 사용해서 개별 검증 수행하도록 설계 가능.
-    // Bean Validation도 가져다 쓸 수 있고, 커스텀 검증 로직 또한 추가 가능.
-    // 폼 객체마다 Validator 사용할꺼면 다른 컨트롤러 메서드들도 @Validated 빼는게 나음.
+    // TODO - 각 폼 객체마다 BindingResult 붙이거나, 통합 폼 객체 혹은 Validator 만들기
     @PostMapping("/new/complete")
     public String chAddComplete(HttpSession session,
                                 @RequestParam("action")String action,
-                                @ModelAttribute(CHFORM_STEP1) ChFormStep1 chForm1,
-                                @ModelAttribute(CHFORM_STEP2) ChFormStep2 chForm2,
-                                @ModelAttribute(CHFORM_STEP3) ChFormStep3 chForm3,
-                                @ModelAttribute(CHFORM_STEP4) ChFormStep4 chForm4) {
+                                @Validated @ModelAttribute(CHFORM_STEP1) ChFormStep1 chForm1, BindingResult br1,
+                                @Validated @ModelAttribute(CHFORM_STEP2) ChFormStep2 chForm2, BindingResult br2,
+                                @Validated @ModelAttribute(CHFORM_STEP3) ChFormStep3 chForm3, BindingResult br3,
+                                @ModelAttribute(CHFORM_STEP4) ChFormStep4 chForm4, BindingResult br4, Model model) {
 
         if (action.equals("cancel")) {
-            clearSessionAttributes(session);
             return "redirect:/management/characters";
+        }
+
+        // 이미지 url들 모델에 추가
+        addImageUrlsOnModelAllStep(session, model);
+
+        // chForm3의 강화 공격에 대한 추가 검증 수행
+        if (chForm3.isEnableEnhancedAttack()) {
+            if (!StringUtils.hasText(chForm3.getEnhancedAttackDescription()))
+                br3.rejectValue("enhancedAttackDescription", "NotBlank", "강화 공격 설명을 작성해주세요.");
+        }
+
+        // chForm4에 대한 검증 수행
+        chForm4Validator.validate(chForm4, br4);
+
+        if (br1.hasErrors() || br2.hasErrors() || br3.hasErrors() || br4.hasErrors()) {
+            return "management/characters/addChSummary";
         }
 
         // 마지막으로 제출된 이미지를 임시 경로에 저장
