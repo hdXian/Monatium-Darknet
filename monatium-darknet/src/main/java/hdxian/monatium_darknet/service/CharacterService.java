@@ -173,7 +173,7 @@ public class CharacterService {
     }
 
     @Transactional
-    public void deactivateCharacter(Long characterId) {
+    public void disableCharacter(Long characterId) {
         Character ch = findOne(characterId);
         ch.setStatus(CharacterStatus.DISABLED);
     }

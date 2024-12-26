@@ -370,16 +370,6 @@ public class CharacterMgController {
         // 1. 캐릭터들의 이미지 url을 모델에 추가 (프로필, 초상화, 전신, 저학년 스킬)
         addChUrlsOnModel_Edit(session, model, characterId);
         addAsideUrlsOnModel_Edit(session, model, characterId);
-//        if (chForm4.isEnableAside()) {
-//            addAsideUrlsOnModel_Edit(session, model, characterId);
-//        }
-//        else {
-//            String defaultUrl = imageUrlService.getDefaultThumbnailUrl();
-//            model.addAttribute(CH_EDIT_ASIDE_URL, defaultUrl);
-//            model.addAttribute(CH_EDIT_ASIDE_LV_1_URL, defaultUrl);
-//            model.addAttribute(CH_EDIT_ASIDE_LV_2_URL, defaultUrl);
-//            model.addAttribute(CH_EDIT_ASIDE_LV_3_URL, defaultUrl);
-//        }
 
         // chForm3의 강화 공격에 대한 추가 검증 수행
         if (chForm3.isEnableEnhancedAttack()) {
@@ -427,6 +417,18 @@ public class CharacterMgController {
             return "redirect:/management/characters/edit/" + characterId;
         }
 
+    }
+
+    @PostMapping("/activate/{characterId}")
+    public String activate(@PathVariable("characterId") Long characterId) {
+        characterService.activateCharacter(characterId);
+        return "redirect:/management/characters";
+    }
+
+    @PostMapping("/disable/{characterId}")
+    public String deactivate(@PathVariable("characterId") Long characterId) {
+        characterService.disableCharacter(characterId);
+        return "redirect:/management/characters";
     }
 
     @PostMapping("/delete/{characterId}")

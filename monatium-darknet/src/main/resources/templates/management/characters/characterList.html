@@ -60,10 +60,26 @@
 
             <!-- 변경 및 삭제 버튼 -->
             <div class="d-flex justify-content-between mt-2 mb-2">
+                <!-- 정보 수정 버튼 -->
                 <a th:href="@{/management/characters/edit/{id} (id=${character.id})}" class="btn btn-sm btn-primary">정보 수정</a>
-                <form th:action="@{/management/characters/delete/{id} (id=${character.id})}" method="post" th:onsubmit="return confirm('정말 삭제하시겠습니까?');">
-                    <button type="submit" class="btn btn-sm btn-danger">주말 농장</button>
+
+                <!-- 주말 농장 스위치 -->
+                <form th:action="${character.status.name() == 'ACTIVE'}
+                                    ? @{/management/characters/disable/{id} (id=${character.id})}
+                                    : @{/management/characters/activate/{id} (id=${character.id})}"
+                      method="post"
+                      th:onsubmit="${character.status.name() == 'ACTIVE'}
+                                    ? |return confirm('${character.name} 캐릭터를 비활성화 하시겠습니까?');|
+                                    : |return confirm('${character.name} 캐릭터를 활성화 하시겠습니까?');|">
+                    <button th:text="${character.status.name() == 'ACTIVE'} ? '활성화 중' : '비활성화 중'"
+                            th:classappend="${character.status.name() == 'ACTIVE'} ? 'btn-success' : 'btn-secondary'"
+                            type="submit"
+                            class="btn btn-sm">활성화 버튼</button>
                 </form>
+
+<!--                <form th:action="@{/management/characters/delete/{id} (id=${character.id})}" method="post" th:onsubmit="return confirm('정말 삭제하시겠습니까?');">-->
+<!--                    <button type="submit" class="btn btn-sm btn-danger">주말 농장</button>-->
+<!--                </form>-->
             </div>
 
         </div>
