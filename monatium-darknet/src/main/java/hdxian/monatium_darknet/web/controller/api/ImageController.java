@@ -1,9 +1,8 @@
 package hdxian.monatium_darknet.web.controller.api;
 
-import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
-import hdxian.monatium_darknet.service.ImageService;
+import hdxian.monatium_darknet.service.ImagePathService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -22,40 +21,21 @@ import java.io.IOException;
 public class ImageController {
 
     // TODO - IOException 나는것들 묶어서 처리하기
-    private final ImageService imageService;
     private final LocalFileStorageService fileStorageService;
 
-    @GetMapping("/icon/race/{race}")
-    public ResponseEntity<Resource> getIcon(@PathVariable("race")Race race) throws IOException {
-        return generateIconResponse(race);
-    }
-
-    @GetMapping("/icon/personality/{personality}")
-    public ResponseEntity<Resource> getIcon(@PathVariable("personality")Personality personality) throws IOException {
-        return generateIconResponse(personality);
-    }
-
-    @GetMapping("/icon/class/{class}")
-    public ResponseEntity<Resource> getIcon(@PathVariable("class")Role role) throws IOException {
-        return generateIconResponse(role);
-    }
-
-    @GetMapping("/icon/attackType/{attackType}")
-    public ResponseEntity<Resource> getIcon(@PathVariable("attackType")AttackType attackType) throws IOException {
-        return generateIconResponse(attackType);
-    }
-
-    @GetMapping("/icon/position/{position}")
-    public ResponseEntity<Resource> getIcon(@PathVariable("position")Position position) throws IOException {
-        return generateIconResponse(position);
-    }
+    private final ImagePathService imagePathService;
 
     // 임시 경로 이미지 요청
     @GetMapping("/tmp/{fileName}")
     public ResponseEntity<Resource> getImageFromTemp(@PathVariable("fileName") String fileName) throws IOException {
-        String filePath = fileStorageService.getFileFullPathFromTemp(fileName);
-        UrlResource resource = new UrlResource("file:" + filePath);
-        return ResponseEntity.ok(resource);
+        String fullPath = fileStorageService.getFileFullPathFromTemp(fileName);
+
+        String contentType = fileStorageService.getContentType(fullPath);
+        UrlResource resource = new UrlResource("file:" + fullPath);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(resource);
     }
 
     // 서버 임시 경로에 이미지를 업로드
@@ -71,17 +51,16 @@ public class ImageController {
         }
     }
 
-    private ResponseEntity<Resource> generateIconResponse(Enum<?> icon) throws IOException {
-        String iconFileName = imageService.getIconFileName(icon);
+    @GetMapping("/defaultThumbnail")
+    public ResponseEntity<Resource> getDefaultThumbNail() throws IOException {
+        String fullPath = fileStorageService.getFullPath(imagePathService.getDefaultThumbNailFileName());
 
-        String fullPath = fileStorageService.getFullPath(iconFileName);
-
-        UrlResource urlResource = new UrlResource("file:" + fullPath);
         String contentType = fileStorageService.getContentType(fullPath);
+        UrlResource resource = new UrlResource("file:" + fullPath);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
-                .body(urlResource);
+                .body(resource);
     }
 
 

@@ -24,6 +24,10 @@
 
         <form th:object="${chForm}" th:action="@{/management/characters/new/step1}" method="post" enctype="multipart/form-data">
 
+            <div th:replace="~{fragments/globalErrors :: global_errors_div}">
+                글로벌 오류 템플릿 조각
+            </div>
+
             <!-- 프로필 그룹 -->
             <div class="info-group mb-4">
                 <div class="info-title" data-bs-toggle="collapse" data-bs-target="#profileSection" aria-expanded="true">
@@ -39,43 +43,48 @@
                             <!-- 이름 -->
                             <div class="mb-3">
                                 <label for="name" class="form-label">이름</label>
-                                <input th:field="*{name}" type="text" id="name" name="name" class="form-control" placeholder="캐릭터의 이름을 입력하세요" required>
+                                <input th:field="*{name}" th:errorclass="field-error" type="text" id="name" name="name" class="form-control" placeholder="캐릭터의 이름을 입력하세요">
+                                <div class="field-error" th:errors="*{name}"></div>
                             </div>
     
                             <!-- 수식언 -->
                             <div class="mb-3">
                                 <label for="subtitle" class="form-label">수식언</label>
-                                <input th:field="*{subtitle}" type="text" id="subtitle" name="subtitle" class="form-control" placeholder="캐릭터의 수식언을 입력하세요">
+                                <input th:field="*{subtitle}" th:errorclass="field-error" type="text" id="subtitle" name="subtitle" class="form-control" placeholder="캐릭터의 수식언을 입력하세요">
+                                <div class="field-error" th:errors="*{subtitle}"></div>
                             </div>
     
                             <!-- 성급 -->
                             <div class="mb-3">
                                 <label for="star" class="form-label">성급</label>
-                                <select th:field="*{grade}" id="star" name="star" class="form-select">
+                                <select th:field="*{grade}" th:errorclass="field-error" id="star" name="star" class="form-select">
                                     <option value="3">3성</option>
                                     <option value="2">2성</option>
                                     <option value="1">1성</option>
                                 </select>
+                                <div class="field-error" th:errors="*{grade}"></div>
                             </div>
     
                             <!-- 종족 -->
                             <div class="mb-3">
                                 <label for="race" class="form-label">종족</label>
-                                <select th:field="*{race}" id="race" name="race" class="form-select">
+                                <select th:field="*{race}" th:errorclass="field-error" id="race" name="race" class="form-select">
                                     <option value="fairy">요정</option>
                                     <option value="witch">마녀</option>
-                                    <option value="beastman">수인</option>
+                                    <option value="furry">수인</option>
                                     <option value="dragon">용족</option>
                                     <option value="ghost">유령</option>
                                     <option value="spirit">정령</option>
                                     <option value="elf">엘프</option>
                                 </select>
+                                <div class="field-error" th:errors="*{race}"></div>
                             </div>
     
                             <!-- 성우 -->
                             <div class="mb-3">
                                 <label for="voiceActor" class="form-label">성우</label>
-                                <input th:field="*{cv}" type="text" id="voiceActor" name="voiceActor" class="form-control" placeholder="성우의 이름을 입력하세요">
+                                <input th:field="*{cv}" th:errorclass="field-error" type="text" id="voiceActor" name="voiceActor" class="form-control" placeholder="성우의 이름을 입력하세요">
+                                <div class="field-error" th:errors="*{cv}"></div>
                             </div>
                         </div>
                         
@@ -84,13 +93,15 @@
                             <!-- 한마디 -->
                             <div class="mb-3">
                                 <label for="quote" class="form-label">한마디</label>
-                                <textarea th:field="*{quote}" id="quote" name="quote" class="form-control" placeholder="캐릭터의 한마디를 입력하세요"></textarea>
+                                <textarea th:field="*{quote}" th:errorclass="field-error" id="quote" name="quote" class="form-control" placeholder="캐릭터의 한마디를 입력하세요"></textarea>
+                                <div class="field-error" th:errors="*{quote}"></div>
                             </div>
     
                             <!-- TMI -->
                             <div class="mb-3">
                                 <label for="tmi" class="form-label">TMI</label>
-                                <textarea th:field="*{tmi}" id="tmi" name="tmi" class="form-control" placeholder="캐릭터의 TMI를 입력하세요"></textarea>
+                                <textarea th:field="*{tmi}" th:errorclass="field-error" id="tmi" name="tmi" class="form-control" placeholder="캐릭터의 TMI를 입력하세요"></textarea>
+                                <div class="field-error" th:errors="*{tmi}"></div>
                             </div>
     
                             <!-- 좋아하는 것 -->
@@ -117,7 +128,7 @@
                                 <label for="profileImage" class="form-label">프로필 이미지</label>
                                 <div class="image-upload-wrapper">
                                     <img id="profileImagePreview" 
-                                        th:src="${profileImageUrl}"
+                                        th:src="${chAdd_profileUrl}"
                                         alt="프로필 이미지 미리보기" 
                                         class="img-thumbnail">
                                     <input th:field="*{profileImage}" type="file" id="profileImage" name="profileImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
@@ -129,7 +140,7 @@
                                 <label for="portraitImage" class="form-label">초상화 이미지</label>
                                 <div class="image-upload-wrapper">
                                     <img id="portraitImagePreview" 
-                                        th:src="${portraitImageUrl}"
+                                        th:src="${chAdd_portraitUrl}"
                                         alt="초상화 이미지 미리보기" 
                                         class="img-thumbnail">
                                     <input th:field="*{portraitImage}" type="file" id="portraitImage" name="portraitImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
@@ -141,7 +152,7 @@
                                 <label for="bodyImage" class="form-label">전신 이미지</label>
                                 <div class="image-upload-wrapper">
                                     <img id="fullBodyImagePreview" 
-                                        th:src="${bodyImageUrl}"
+                                        th:src="${chAdd_bodyUrl}"
                                         alt="전신 이미지 미리보기" 
                                         class="img-thumbnail">
                                     <input th:field="*{bodyImage}" type="file" id="bodyImage" name="bodyImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
@@ -154,7 +165,21 @@
             </div>
 
             <!-- 폼 제출 버튼 -->
-            <button type="submit" class="btn btn-primary">다음 단계로</button>
+            <div class="button-group d-flex justify-content-between mt-4">
+                <!-- 왼쪽 버튼 그룹 -->
+                <div class="d-flex gap-2">
+                    <!-- 취소 버튼 -->
+                    <button type="submit" name="action" value="cancel" class="btn btn-danger" onclick="confirmCancel()">취소</button>
+                    <!-- 저장 버튼 -->
+                    <button type="submit" name="action" value="save" class="btn btn-secondary">임시 저장</button>
+                </div>
+
+                <!-- 오른쪽 버튼 그룹 -->
+                <div class="d-flex gap-2">
+                    <!-- 다음 버튼 -->
+                    <button type="submit" name="action" value="next" class="btn btn-primary">다음 단계로</button>
+                </div>
+            </div>
 
         </form>
 

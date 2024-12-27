@@ -24,8 +24,25 @@
 
         <form th:object="${chForm}" th:action="@{/management/characters/new/step4}" method="post" enctype="multipart/form-data">
 
+            <!-- 어사이드 여부 -->
+            <div class="enable-radio mb-3 p-3 rounded border d-flex align-items-center">
+                <label class="form-label me-3 mb-0">어사이드</label>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="enableAside" name="enableAside"
+                               th:field="*{enableAside}" value="true">
+                        <label class="form-check-label" for="enableAside">있어요</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="disableAside" name="enableAside"
+                               th:field="*{enableAside}" value="false">
+                        <label class="form-check-label" for="disableAside">없어요</label>
+                    </div>
+                </div>
+            </div>
+
             <!-- 어사이드 그룹 -->
-            <div class="info-group mb-4">
+            <div class="info-group optional-info mb-4">
 
                 <div class="info-title" data-bs-toggle="collapse" data-bs-target="#asideSection" aria-expanded="true">
                     <span>어사이드</span>
@@ -43,7 +60,7 @@
                             <div class="col-md-3 text-center">
                                 <label for="asideImage" class="form-label">이미지</label>
                                 <div class="image-upload-wrapper">
-                                    <img id="asideImagePreview1" th:src="${asideImageUrl}"
+                                    <img id="asideImagePreview1" th:src="${chAdd_asideUrl}"
                                         alt="이미지 미리보기" class="img-thumbnail">
                                     <input th:field="*{asideImage}" type="file" id="asideImage" name="asideImage" class="form-control d-none"
                                         accept="image/*" onchange="previewImage(this)">
@@ -53,12 +70,14 @@
                             <div class="col-md-9">
                                 <div class="mb-3">
                                     <label for="asideName" class="form-label">어사이드 이름</label>
-                                    <input th:field="*{asideName}" type="text" id="asideName" name="asideName" class="form-control" placeholder="이름을 입력하세요">
+                                    <input th:field="*{asideName}" th:errorclass="field-error" type="text" id="asideName" name="asideName" class="form-control" placeholder="이름을 입력하세요">
+                                    <div th:class="field-error" th:errors="*{asideName}"></div>
                                 </div>
                 
                                 <div class="mb-3">
                                     <label for="asideDescription" class="form-label">어사이드 설명</label>
-                                    <textarea th:field="*{asideDescription}" id="asideDescription" name="asideDescription" class="form-control auto-resize" placeholder="설명을 입력하세요"></textarea>
+                                    <textarea th:field="*{asideDescription}" th:errorclass="field-error" id="asideDescription" name="asideDescription" class="form-control auto-resize" placeholder="설명을 입력하세요"></textarea>
+                                    <div th:class="field-error" th:errors="*{asideDescription}"></div>
                                 </div>
                             </div>
                         </div>
@@ -73,7 +92,7 @@
                             <div class="col-md-3 text-center">
                                 <label for="asideLv1Image" class="form-label">이미지</label>
                                 <div class="image-upload-wrapper">
-                                    <img id="aside1ImagePreview" th:src="${asideLv1ImageUrl}"
+                                    <img id="aside1ImagePreview" th:src="${chAdd_asideLv1Url}"
                                         alt="이미지 미리보기" class="img-thumbnail">
                                     <input th:field="*{asideLv1Image}" type="file" id="asideLv1Image" name="asideLv1Image" class="form-control d-none"
                                         accept="image/*" onchange="previewImage(this)">
@@ -83,12 +102,14 @@
                             <div class="col-md-9">
                                 <div class="mb-3">
                                     <label for="asideLv1Name" class="form-label">어사이드 1단계 이름</label>
-                                    <input th:field="*{asideLv1Name}" type="text" id="asideLv1Name" name="asideLv1Name" class="form-control" placeholder="이름을 입력하세요">
+                                    <input th:field="*{asideLv1Name}" th:errorclass="field-error" type="text" id="asideLv1Name" name="asideLv1Name" class="form-control" placeholder="이름을 입력하세요">
+                                    <div th:class="field-error" th:errors="*{asideLv1Name}"></div>
                                 </div>
                 
                                 <div class="mb-3">
                                     <label for="asideLv1Description" class="form-label">어사이드 설명</label>
-                                    <textarea th:field="*{asideLv1Description}" id="asideLv1Description" name="asideLv1Description" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                    <textarea th:field="*{asideLv1Description}" th:errorclass="field-error" id="asideLv1Description" name="asideLv1Description" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                    <div th:class="field-error" th:errors="*{asideLv1Description}"></div>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +133,7 @@
                             <div class="col-md-3 text-center">
                                 <label for="asideLv2Image" class="form-label">이미지</label>
                                 <div class="image-upload-wrapper">
-                                    <img id="aside2ImagePreview" th:src="${asideLv2ImageUrl}"
+                                    <img id="aside2ImagePreview" th:src="${chAdd_asideLv2Url}"
                                         alt="이미지 미리보기" class="img-thumbnail">
                                     <input th:field="*{asideLv2Image}" type="file" id="asideLv2Image" name="asideLv2Image" class="form-control d-none"
                                         accept="image/*" onchange="previewImage(this)">
@@ -122,12 +143,14 @@
                             <div class="col-md-9">
                                 <div class="mb-3">
                                     <label for="asideLv2Name" class="form-label">어사이드 2단계 이름</label>
-                                    <input th:field="*{asideLv2Name}" type="text" id="asideLv2Name" name="asideLv2Name" class="form-control" placeholder="이름을 입력하세요">
+                                    <input th:field="*{asideLv2Name}" th:errorclass="field-error" type="text" id="asideLv2Name" name="asideLv2Name" class="form-control" placeholder="이름을 입력하세요">
+                                    <div th:class="field-error" th:errors="*{asideLv2Name}"></div>
                                 </div>
                 
                                 <div class="mb-3">
                                     <label for="asideLv2Description" class="form-label">어사이드 설명</label>
-                                    <textarea th:field="*{asideLv2Description}" id="asideLv2Description" name="asideLv2Description" class="form-control auto-resize" placeholder="설명을 입력하세요"></textarea>
+                                    <textarea th:field="*{asideLv2Description}" th:errorclass="field-error" id="asideLv2Description" name="asideLv2Description" class="form-control auto-resize" placeholder="설명을 입력하세요"></textarea>
+                                    <div th:class="field-error" th:errors="*{asideLv2Description}"></div>
                                 </div>
                             </div>
                         </div>
@@ -151,7 +174,7 @@
                             <div class="col-md-3 text-center">
                                 <label for="asideLv3Image" class="form-label">이미지</label>
                                 <div class="image-upload-wrapper">
-                                    <img id="asideImagePreview4" th:src="${asideLv3ImageUrl}"
+                                    <img id="asideImagePreview4" th:src="${chAdd_asideLv3Url}"
                                         alt="이미지 미리보기" class="img-thumbnail">
                                     <input th:field="*{asideLv3Image}" type="file" id="asideLv3Image" name="asideLv3Image" class="form-control d-none"
                                         accept="image/*" onchange="previewImage(this)">
@@ -161,12 +184,14 @@
                             <div class="col-md-9">
                                 <div class="mb-3">
                                     <label for="asideLv3Name" class="form-label">어사이드 3단계 이름</label>
-                                    <input th:field="*{asideLv3Name}" type="text" id="asideLv3Name" name="asideLv3Name" class="form-control" placeholder="이름을 입력하세요">
+                                    <input th:field="*{asideLv3Name}" th:errorclass="field-error" type="text" id="asideLv3Name" name="asideLv3Name" class="form-control" placeholder="이름을 입력하세요">
+                                    <div th:class="field-error" th:errors="*{asideLv3Name}"></div>
                                 </div>
                 
                                 <div class="mb-3">
                                     <label for="asideLv3Description" class="form-label">어사이드 설명</label>
-                                    <textarea th:field="*{asideLv3Description}" id="asideLv3Description" name="asideLv3Description" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                    <textarea th:field="*{asideLv3Description}" th:errorclass="field-error" id="asideLv3Description" name="asideLv3Description" class="form-control auto-resize" placeholder="효과를 입력하세요"></textarea>
+                                    <div th:class="field-error" th:errors="*{asideLv3Description}"></div>
                                 </div>
                             </div>
                         </div>
@@ -186,11 +211,24 @@
             </div>
 
             <!-- 폼 제출 버튼 -->
-            <div class="d-flex justify-content-between mt-4">
-                <a th:href="@{/management/characters/new/step3}" class="btn btn-secondary">이전으로</a>
-                <button type="submit" class="btn btn-primary">마지막 확인하러 가기</button>
+            <div class="button-group d-flex justify-content-between mt-4">
+                <!-- 왼쪽 버튼 그룹 -->
+                <div class="d-flex gap-2">
+                    <!-- 취소 버튼 -->
+                    <button type="submit" name="action" value="cancel" class="btn btn-danger" onclick="confirmCancel()">취소</button>
+                    <!-- 저장 버튼 -->
+                    <button type="submit" name="action" value="save" class="btn btn-secondary">임시 저장</button>
+                </div>
+
+                <!-- 오른쪽 버튼 그룹 -->
+                <div class="d-flex gap-2">
+                    <!-- 이전 버튼 -->
+                    <button type="submit" name="action" value="prev" class="btn btn-secondary">이전으로</button>
+                    <!-- 다음 버튼 -->
+                    <button type="submit" name="action" value="next" class="btn btn-primary">마지막 확인하러 가기!</button>
+                </div>
             </div>
-            
+
         </form>
 
     </div>

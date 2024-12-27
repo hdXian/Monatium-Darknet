@@ -197,7 +197,7 @@
                         <a th:href="@{ /wiki/characters/{id} (id=${character.id}) }" class="card-link"> <!-- 누르면 넘어가는 이미지 -->
                             <div class="card">
                                 <!-- 캐릭터 이미지 -->
-                                <img th:src="@{ ${character.urls.profile_url} }" class="card-img-top" alt="캐릭터 프로필 이미지">
+                                <img th:src="@{ |${chBaseUrl}profile/${character.id}| }" class="card-img-top" alt="캐릭터 프로필 이미지">
 
                                 <!-- 캐릭터 이름, 종족 심볼, 성급 이미지 및 특성 -->
                                 <div class="card-body">
@@ -216,10 +216,10 @@
 
                                     <!-- 작은 이미지 4개 (특성) (|..| 구문으로 url 렌더링) -->
                                     <div class="small-images-container">
-                                        <img th:src="@{ |/imgs/wiki/icons/personality_${{character.personality}}.webp| }" class="small-image" alt="성격 이미지">
-                                        <img th:src="@{ |/imgs/wiki/icons/class_${{character.role}}.webp| }" class="small-image" alt="역할 이미지">
-                                        <img th:src="@{ |/imgs/wiki/icons/attackType_${{character.attackType}}.webp| }" class="small-image" alt="공격 방식 이미지">
-                                        <img th:src="@{ |/imgs/wiki/icons/position_${{character.position}}.webp| }" class="small-image" alt="위치 이미지">
+                                        <img th:src="@{ |${iconBaseUrl}personality/${{character.personality}}| }" class="small-image" alt="성격 이미지">
+                                        <img th:src="@{ |${iconBaseUrl}role/${{character.role}}| }" class="small-image" alt="역할 이미지">
+                                        <img th:src="@{ |${iconBaseUrl}attackType/${{character.attackType}}| }" class="small-image" alt="공격 방식 이미지">
+                                        <img th:src="@{ |${iconBaseUrl}position/${{character.position}}| }" class="small-image" alt="위치 이미지">
                                     </div>
                                 </div>
                             </div>

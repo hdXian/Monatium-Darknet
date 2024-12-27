@@ -2,7 +2,6 @@ package hdxian.monatium_darknet.domain.character;
 
 import hdxian.monatium_darknet.domain.*;
 import hdxian.monatium_darknet.domain.aside.Aside;
-import hdxian.monatium_darknet.domain.card.ArtifactCard;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -46,19 +45,19 @@ public class Character {
     @Embedded
     private CharacterStat stat;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "normal_attack_id")
     private Attack normalAttack; // 기본 공격
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "enhanced_attack_id")
     private Attack enhancedAttack; // 강화 공격
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "low_skill_id")
     private Skill lowSkill; // 저학년 스킬
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "high_skill_id")
     private Skill highSkill; // 고학년 스킬
 
@@ -69,8 +68,11 @@ public class Character {
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Skin> skins = new ArrayList<>();
 
-    @Embedded
-    private CharacterUrl urls; // 이미지 url
+    @Enumerated(EnumType.STRING)
+    private CharacterStatus status;
+
+//    @Embedded
+//    private CharacterUrl urls; // 이미지 url
 
     // for JPA spec (일반 비즈니스 로직에서 사용 x)
     protected Character() {
@@ -125,6 +127,8 @@ public class Character {
         character.setHighSkill(highSkill);
 
         character.setAside(aside);
+
+        character.setStatus(CharacterStatus.DISABLED); // 처음 생성할 땐 비활성화 상태
 
 //        character.setUrls(urls);
         return character;

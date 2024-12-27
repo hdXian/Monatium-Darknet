@@ -3,6 +3,9 @@ package hdxian.monatium_darknet.web.controller.management.character;
 import hdxian.monatium_darknet.domain.Attribute;
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.character.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +16,9 @@ import java.util.List;
 @Data
 public class ChFormStep3 {
     // 기본 공격
+    @NotBlank
     private String normalAttackDescription;
+
     private List<Attribute> normalAttributes = new ArrayList<>();
 
     // Getter
@@ -26,6 +31,7 @@ public class ChFormStep3 {
     }
 
     // 강화 공격
+    private boolean enableEnhancedAttack = true;
     private String enhancedAttackDescription;
     private List<Attribute> enhancedAttributes = new ArrayList<>();
 
@@ -39,8 +45,12 @@ public class ChFormStep3 {
     }
 
     // 저학년 스킬
+    @NotBlank
     private String lowSkillName;
+
+    @NotBlank
     private String lowSkillDescription;
+
     private MultipartFile lowSkillImage;
     private List<Attribute> lowSkillAttributes = new ArrayList<>();
 
@@ -52,9 +62,16 @@ public class ChFormStep3 {
     }
 
     // 고학년 스킬
+    @NotBlank
     private String highSkillName;
+
+    @NotBlank
     private String highSkillDescription;
+
+    @NotNull
+    @Min(1)
     private Integer highSkillCooldown;
+
     private List<Attribute> highSkillAttributes = new ArrayList<>();
 
     public List<Attribute> getHighSkillAttributes() {
@@ -70,7 +87,10 @@ public class ChFormStep3 {
     }
 
     public Attack generateEnhancedAttack() {
-        return Attack.createEnhancedAttack(enhancedAttackDescription, enhancedAttributes);
+        if (isEnableEnhancedAttack()) {
+            return Attack.createEnhancedAttack(enhancedAttackDescription, enhancedAttributes);
+        }
+        else return null;
     }
 
     public Skill generateLowSkill() {
@@ -81,6 +101,34 @@ public class ChFormStep3 {
     public Skill generateHighSkill() {
         return Skill.createHighSkill(highSkillName, highSkillDescription,
                 highSkillCooldown, "", highSkillAttributes);
+    }
+
+    // === 수정 페이지 등에서 Model에 정보를 담아 보낼 때 사용 ===
+    public void setNormalAttackFields(Attack normalAttack) {
+        this.normalAttackDescription = normalAttack.getDescription();
+        this.normalAttributes = normalAttack.getAttributes();
+    }
+
+    public void setEnhancedAttackFields(Attack enhancedAttack) {
+        if (enhancedAttack == null) {
+            enableEnhancedAttack = false;
+            return;
+        }
+        this.enhancedAttackDescription = enhancedAttack.getDescription();
+        this.enhancedAttributes = enhancedAttack.getAttributes();
+    }
+
+    public void setLowSkillFields(Skill lowSkill) {
+        this.lowSkillName = lowSkill.getName();
+        this.lowSkillDescription = lowSkill.getDescription();
+        this.lowSkillAttributes = lowSkill.getAttributes();
+    }
+
+    public void setHighSkillFields(Skill highSkill) {
+        this.highSkillName = highSkill.getName();
+        this.highSkillDescription = highSkill.getDescription();
+        this.highSkillCooldown = highSkill.getCooldown();
+        this.highSkillAttributes = highSkill.getAttributes();
     }
 
 }

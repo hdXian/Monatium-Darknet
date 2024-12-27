@@ -29,38 +29,55 @@
 
         <!-- 캐릭터 카드 (반복될 요소) -->
         <div th:each="character : ${characterList}"
-             class="col-6 col-sm-4 col-lg-2 mb-4 character-item"
+             class="col-6 col-sm-4 col-lg-2 mb-4 g-3 character-item"
              th:classappend="| ${{character.race}} ${{character.personality}} ${{character.role}} ${{character.attackType}} ${{character.position}}| ">
 
             <a th:href="@{ /wiki/characters/{id} (id=${character.id}) }" class="card-link">
                 <div class="card">
                     <!-- 캐릭터 이미지 -->
-                    <img th:src="@{ ${character.urls.profile_url} }" class="card-img-top" alt="캐릭터 프로필 이미지">
+                    <img th:src="@{ |${chBaseUrl}profile/${character.id}| }" class="card-img-top" alt="캐릭터 프로필 이미지">
 
                     <div class="card-body">
                         <!-- 캐릭터 이름과 종족 심볼 -->
                         <h5 class="card-title mb-2 d-inline-flex align-items-center">
                             <span th:text="${character.name}">캐릭터 이름</span>
-                            <img th:src="@{|/imgs/wiki/icons/symbol_${{character.race}}.webp|}" class="symbol-image ms-2" alt="종족 심볼 이미지">
+                            <img th:src="@{ |${iconBaseUrl}race/${{character.race}}| }" class="symbol-image ms-2" alt="종족 심볼 이미지">
                         </h5>
 
                         <!-- 성급 이미지 -->
-                        <th:block th:switch="${character.grade}">
-                            <img th:case="3" th:src="@{/imgs/wiki/icons/star_3.webp}" class="star-image mb-2" alt="3성 이미지">
-                            <!-- <img th:case="2" th:src="@{/imgs/wiki/icons/star_2.webp}" class="star-image mb-2" alt="2성 이미지">
-                            <img th:case="1" th:src="@{/imgs/wiki/icons/star_1.webp}" class="star-image mb-2" alt="1성 이미지"> -->
-                        </th:block>
+                        <img th:src="@{ |${iconBaseUrl}gradeStar/${character.grade}| }" class="star-image mb-2" alt="성급 이미지">
 
                         <!-- 작은 특성 이미지 -->
                         <div class="small-images-container">
-                            <img th:src="@{ |/imgs/wiki/icons/personality_${{character.personality}}.webp| }" class="small-image" alt="성격 이미지">
-                            <img th:src="@{ |/imgs/wiki/icons/class_${{character.role}}.webp| }" class="small-image" alt="역할 이미지">
-                            <img th:src="@{ |/imgs/wiki/icons/attackType_${{character.attackType}}.webp| }" class="small-image" alt="공격 타입 이미지">
-                            <img th:src="@{ |/imgs/wiki/icons/position_${{character.position}}.webp| }" class="small-image" alt="위치 이미지">
+                            <img th:src="@{ |${iconBaseUrl}personality/${{character.personality}}| }" class="small-image" alt="성격 이미지">
+                            <img th:src="@{ |${iconBaseUrl}role/${{character.role}}| }" class="small-image" alt="역할 이미지">
+                            <img th:src="@{ |${iconBaseUrl}attackType/${{character.attackType}}| }" class="small-image" alt="공격 타입 이미지">
+                            <img th:src="@{ |${iconBaseUrl}position/${{character.position}}| }" class="small-image" alt="위치 이미지">
                         </div>
                     </div>
                 </div>
             </a>
+
+            <!-- 변경 및 삭제 버튼 -->
+            <div class="d-flex justify-content-between mt-2 mb-2">
+                <!-- 정보 수정 버튼 -->
+                <a th:href="@{/management/characters/edit/{id} (id=${character.id})}" class="btn btn-sm btn-primary">정보 수정</a>
+
+                <!-- 주말 농장 스위치 -->
+                <form th:action="${character.status.name() == 'ACTIVE'}
+                                    ? @{/management/characters/disable/{id} (id=${character.id})}
+                                    : @{/management/characters/activate/{id} (id=${character.id})}"
+                      method="post"
+                      th:data-confirm-active="|${character.name} 캐릭터를 비활성화 하시겠습니까?|"
+                      th:data-confirm-inactive="|${character.name} 캐릭터를 활성화 하시겠습니까?|">
+
+                    <button th:text="${character.status.name() == 'ACTIVE'} ? '활성화 중' : '비활성화 중'"
+                            th:classappend="${character.status.name() == 'ACTIVE'} ? 'btn-success' : 'btn-secondary'"
+                            type="submit"
+                            class="btn btn-sm">활성화 버튼</button>
+                </form>
+            </div>
+
         </div>
 
     </div>
@@ -70,6 +87,8 @@
 <footer th:replace="~{fragments/footer :: management_footer}">
     하단 푸터 영역
 </footer>
+
+<script th:src="@{/js/management/characterList.js}"></script>
 
 </body>
 </html>

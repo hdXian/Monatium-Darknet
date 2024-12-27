@@ -7,6 +7,8 @@ server:
 spring:
   profiles:
     active: local
+  messages:
+    basename: messages, errors
 
   datasource:
     url: jdbc:h2:tcp://localhost/~/monatium-darknet
@@ -49,4 +51,8 @@ file:
   spellCardDir: imgs/wiki/cards/spell/
   artifactCardDir: imgs/wiki/cards/artifact/
   skinDir: imgs/wiki/skins/
+  defaultThumbnail: /imgs/defaultThumbnail.png
+
+url:
+  api_baseUrl: /api/
 

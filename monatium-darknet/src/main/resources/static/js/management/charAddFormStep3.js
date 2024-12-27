@@ -33,3 +33,23 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// 강화 공격 여부에 따라 입력 칸 노출, 숨김
+document.addEventListener('DOMContentLoaded', function () {
+    const radios = document.getElementsByName('enableEnhancedAttack');
+    const section = document.getElementById('enhancedAttackSection');
+
+    if (section && radios.length > 0) {
+        // 초기 상태 설정
+        section.style.display = radios[0].checked ? 'block' : 'none';
+
+        // 라디오 버튼 변경 시 표시/숨기기
+        radios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                section.style.display = radio.value === 'true' && radio.checked ? 'block' : 'none';
+            });
+        });
+    }
+});
+
+
+
