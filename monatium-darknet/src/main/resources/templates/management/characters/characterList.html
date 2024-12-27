@@ -68,18 +68,14 @@
                                     ? @{/management/characters/disable/{id} (id=${character.id})}
                                     : @{/management/characters/activate/{id} (id=${character.id})}"
                       method="post"
-                      th:onsubmit="${character.status.name() == 'ACTIVE'}
-                                    ? |return confirm('${character.name} 캐릭터를 비활성화 하시겠습니까?');|
-                                    : |return confirm('${character.name} 캐릭터를 활성화 하시겠습니까?');|">
+                      th:data-confirm-active="|${character.name} 캐릭터를 비활성화 하시겠습니까?|"
+                      th:data-confirm-inactive="|${character.name} 캐릭터를 활성화 하시겠습니까?|">
+
                     <button th:text="${character.status.name() == 'ACTIVE'} ? '활성화 중' : '비활성화 중'"
                             th:classappend="${character.status.name() == 'ACTIVE'} ? 'btn-success' : 'btn-secondary'"
                             type="submit"
                             class="btn btn-sm">활성화 버튼</button>
                 </form>
-
-<!--                <form th:action="@{/management/characters/delete/{id} (id=${character.id})}" method="post" th:onsubmit="return confirm('정말 삭제하시겠습니까?');">-->
-<!--                    <button type="submit" class="btn btn-sm btn-danger">주말 농장</button>-->
-<!--                </form>-->
             </div>
 
         </div>
@@ -91,6 +87,8 @@
 <footer th:replace="~{fragments/footer :: management_footer}">
     하단 푸터 영역
 </footer>
+
+<script th:src="@{/js/management/characterList.js}"></script>
 
 </body>
 </html>
