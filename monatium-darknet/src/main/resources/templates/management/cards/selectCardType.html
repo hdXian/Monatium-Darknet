@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
+  <title>카드 관리</title>
+  <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
+  <link rel="stylesheet" th:href="@{/css/management/cards/cards.css}">
+  <!-- 커스텀 css -->
+</head>
+
+<body>
+
+<!-- 상단 네비게이션 바 -->
+<nav th:replace="~{fragments/navbar :: management_navbar}">
+    상단 네비게이션 바 영역
+</nav>
+
+<div class="container-fluid d-flex justify-content-center align-items-center main-content">
+    <div class="row g-4 d-flex justify-content-center text-center">
+
+        <!-- 스펠 카드 -->
+        <div class="col-6">
+            <a th:href="@{/management/cards/spell}" class="card h-100 shadow">
+                <img th:src="@{|${spellIconUrl}|}" class="card-img-top" alt="스펠 카드">
+                <div class="card-body">
+                    <h5 class="card-title">스펠 카드</h5>
+                    <p class="card-text">스펠 카드 목록 보기</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- 아티팩트 카드 -->
+        <div class="col-6">
+            <a th:href="@{/management/cards/artifact}" class="card h-100 shadow">
+                <img th:src="@{|${artifactIconUrl}|}" class="card-img-top" alt="아티팩트 카드">
+                <div class="card-body">
+                    <h5 class="card-title">아티팩트 카드</h5>
+                    <p class="card-text">아티팩트 카드 목록 보기</p>
+                </div>
+            </a>
+        </div>
+
+  </div>
+</div>
+
+<!-- 하단 푸터 -->
+<footer th:replace="~{fragments/footer :: management_footer}">
+  하단 푸터 영역
+</footer>
+
+</body>
+
+</html>

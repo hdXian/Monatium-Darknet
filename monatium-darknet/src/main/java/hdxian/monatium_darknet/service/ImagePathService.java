@@ -47,6 +47,11 @@ public class ImagePathService {
 
     private final LocalFileStorageService fileStorageService;
 
+    // TODO - 근 시일 내에 이걸로 통합하는게 낫지 않을까?
+    public String getIconFileName(String fileName) {
+        return iconDir + fileName + ext;
+    }
+
     public String getIconFileName(Race race) {
         return iconDir + "symbol_" + race.name().toLowerCase() + ext;
     }
@@ -105,6 +110,14 @@ public class ImagePathService {
         String lv3Path = basePath + "asideLv3" + ext;
 
         return new AsideImageDto(asidePath, lv1Path, lv2Path, lv3Path);
+    }
+
+    public String getSpellCardFileName(Long cardId) {
+        return spellCardDir + cardId + ext;
+    }
+
+    public String getArtifactCardFileName(Long cardId) {
+        return artifactCardDir + cardId + ext;
     }
 
     // 캐릭터 이미지 정보 저장

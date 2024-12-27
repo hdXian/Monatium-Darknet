@@ -13,7 +13,7 @@ public class ImageUrlService {
     @Value("${url.api_baseUrl}")
     private String api_baseUrl;
 
-    // 클라이언트가 요청할 이미지 url을 리턴
+    // 클라이언트가 요청할 캐릭터 이미지 url을 리턴
     public CharacterImageDto generateCharacterImageUrls(Long characterId) {
         String baseUrl = api_baseUrl + "images/" + "character/";
 
@@ -25,6 +25,7 @@ public class ImageUrlService {
         return new CharacterImageDto(profile_url, portrait_url, body_url, lowSkill_url);
     }
 
+    // 클라이언트가 요청할 캐릭터 어사이드 이미지 url을 리턴
     public AsideImageDto generateAsideImageUrls(Long characterId) {
         String baseUrl = api_baseUrl + "images/" + "aside/";
 
@@ -50,6 +51,18 @@ public class ImageUrlService {
 
     public String getDefaultThumbnailUrl() {
         return api_baseUrl + "images/" + "defaultThumbnail";
+    }
+
+    public String getCardBaseUrl() {
+        return api_baseUrl + "images/" + "cards/";
+    }
+
+    public String getSpellIconUrl() {
+        return getIconBaseUrl() + "spell";
+    }
+
+    public String getArtifactIconUrl() {
+        return getIconBaseUrl() + "artifact";
     }
 
 
