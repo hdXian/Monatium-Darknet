@@ -100,29 +100,37 @@ public class CardMgController {
         // 2. 이미지를 임시 경로에서 정식 경로로 이동
         if (action.equals("complete")) {
             CardDto cardDto = cardForm.generateCardDto();
+            String defaultImagePath = imagePathService.getDefaultThumbNailFileName();
             Long cardId;
 
             // 스펠 카드인 경우
             if (cardForm.getCardType() == CardType.SPELL) {
                 cardId = cardService.createNewSpellCard(cardDto);
                 // TODO - 카드 이미지 저장
+                String tmpImageUrl = (String) Optional.ofNullable(session.getAttribute(CARD_IMAGE_URL)).orElse(defaultImagePath);
+                String tempFilePath = convertUrlToFilePathTemp(tmpImageUrl);
+                imagePathService.saveSpellCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
+                System.out.println("tempFilePath = " + tempFilePath);
             }
             // 아티팩트 카드인 경우
             else {
                 if (cardForm.isHasAttachment()) {
                     cardId = cardService.createNewArtifactCard(cardDto, cardForm.getCharacterId(), cardForm.generateAttachmentSkill());
                     // TODO - 카드 이미지 저장
+                    String tmpImageUrl = (String) Optional.ofNullable(session.getAttribute(CARD_IMAGE_URL)).orElse(defaultImagePath);
+                    String tempFilePath = convertUrlToFilePathTemp(tmpImageUrl);
+                    imagePathService.saveSpellCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
+                    System.out.println("tempFilePath = " + tempFilePath);
                 }
                 else {
                     cardId = cardService.createNewArtifactCard(cardDto);
                     // TODO - 카드 이미지 저장
+                    String tmpImageUrl = (String) Optional.ofNullable(session.getAttribute(CARD_IMAGE_URL)).orElse(defaultImagePath);
+                    String tempFilePath = convertUrlToFilePathTemp(tmpImageUrl);
+                    imagePathService.saveSpellCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
+                    System.out.println("tempFilePath = " + tempFilePath);
                 }
             }
-        }
-
-        String redirectUrl;
-        switch (action) {
-            case "save" -> redirectUrl = "redirect:/management/cards/new";
         }
 
         return "redirect:/management/cards";
@@ -142,6 +150,15 @@ public class CardMgController {
     }
 
     // === private ===
+
+    // === 임시 경로 이미지에 대한 url을 파일 경로로 변경 ===
+    private String convertUrlToFilePathTemp(String url) {
+        // ex) /api/images/tmp/abcd123 -> {baseDir}/temp/abcd123.png
+        String tempDir = fileStorageService.getTempDir();
+        String fileName = fileStorageService.extractFileName(url);
+        return tempDir + fileName;
+    }
+
     private String setCardImageUrl(HttpSession session) {
         return (String) Optional.ofNullable(session.getAttribute(CARD_IMAGE_URL)).orElse(imageUrlService.getDefaultThumbnailUrl());
     }

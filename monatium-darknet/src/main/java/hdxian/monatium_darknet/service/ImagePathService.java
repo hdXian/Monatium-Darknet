@@ -120,6 +120,38 @@ public class ImagePathService {
         return artifactCardDir + cardId + ext;
     }
 
+    @Transactional
+    public void saveSpellCardImage(Long cardId, String src) {
+        if (cardId == null || src == null) {
+            throw new IllegalArgumentException("cardId 또는 src가 null입니다.");
+        }
+
+        String dst = getSpellCardFileName(cardId);
+
+        try {
+            fileStorageService.copyFile(new FileDto(src), new FileDto(dst));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Transactional
+    public void saveArtifactCardImage(Long cardId, String src) {
+        if (cardId == null || src == null) {
+            throw new IllegalArgumentException("cardId 또는 src가 null입니다.");
+        }
+
+        String dst = getArtifactCardFileName(cardId);
+
+        try {
+            fileStorageService.copyFile(new FileDto(src), new FileDto(dst));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     // 캐릭터 이미지 정보 저장
     @Transactional // 예외 터지면 관련 트랜잭션 롤백
     public void saveCharacterImages(Long characterId, CharacterImageDto src) {
