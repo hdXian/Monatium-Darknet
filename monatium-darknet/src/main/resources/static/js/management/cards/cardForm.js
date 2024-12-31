@@ -142,7 +142,15 @@ document.addEventListener('DOMContentLoaded', function() {
         containerId: 'card-attributes-container',
         addButtonClass: 'btn-add-card-attribute',
         removeButtonClass: 'btn-remove-card-attribute',
-        inputNamePrefix: 'attributes'
+        inputNamePrefix: 'cardAttributes'
+    });
+
+    // 애착 아티팩트 스킬 특성
+    setupDynamicInputFields({
+        containerId: 'attachment-attributes-container',
+        addButtonClass: 'btn-add-attachment-attribute',
+        removeButtonClass: 'btn-remove-attachment-attribute',
+        inputNamePrefix: 'attachmentAttributes'
     });
 
 });

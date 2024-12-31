@@ -37,6 +37,11 @@
     border: 2px solid #0d6efd;
 }
 
+.enable-radio {
+    border: 2px solid #0d6efd;
+    background-color: #f9f9f9; /* 약간의 배경색 */
+}
+
 .info-title {
     font-weight: bold;
     font-size: 1.5rem;

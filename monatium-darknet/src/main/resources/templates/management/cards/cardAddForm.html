@@ -106,6 +106,25 @@
                         </div>
                     </div>
 
+                    <hr>
+
+                    <!-- 4-0. 애착 사도 존재 여부 -->
+                    <div class="enable-radio mb-3 p-3 rounded d-flex align-items-center">
+                        <label class="form-label me-3 mb-0">애착 사도</label>
+                        <div class="d-flex justify-content-end">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="hasAttachment" name="enableEnhancedAttack"
+                                       th:field="*{hasAttachment}" value="true">
+                                <label class="form-check-label" for="hasAttachment">있어요</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="nonAttachment" name="enableEnhancedAttack"
+                                       th:field="*{hasAttachment}" value="false">
+                                <label class="form-check-label" for="nonAttachment">없어요</label>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- 4. 애착 사도 정보 (선택사항) -->
                     <div id="attachmentSection" class="info-subgroup optional-info mb-3">
 
@@ -134,15 +153,6 @@
                                           class="form-control" rows="3" placeholder="스킬 설명을 입력하세요"></textarea>
                             </div>
                         </div>
-
-<!--                        <div class="row mb-3">-->
-<!--                            &lt;!&ndash; 애착 아티팩트 스킬 특성 &ndash;&gt;-->
-<!--                            <div class="col-md-12 mb-3">-->
-<!--                                <label for="attachmentSkillAttributes" class="form-label">애착 아티팩트 스킬 특성</label>-->
-<!--                                <textarea th:field="*{attachmentSkillAttributes}" id="attachmentSkillAttributes"-->
-<!--                                          class="form-control" rows="2" placeholder="스킬 특성을 입력하세요"></textarea>-->
-<!--                            </div>-->
-<!--                        </div>-->
 
                         <!-- 애착 아티팩트 스킬 특성 -->
                         <div id="attachment-attributes-container" class="col-md-6 mb-3">
