@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/images/cards")
+@RequestMapping("/api/images/card")
 public class CardImageController {
 
     private final LocalFileStorageService fileStorageService;

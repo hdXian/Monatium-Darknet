@@ -37,6 +37,10 @@ public class ImageUrlService {
         return new AsideImageDto(asideUrl, lv1Url, lv2Url, lv3Url);
     }
 
+    public String getTempBaseUrl() {
+        return api_baseUrl + "images/" + "tmp/";
+    }
+
     public String getIconBaseUrl() {
         return api_baseUrl + "images/" + "icon/";
     }
@@ -53,8 +57,13 @@ public class ImageUrlService {
         return api_baseUrl + "images/" + "defaultThumbnail";
     }
 
-    public String getCardBaseUrl() {
-        return api_baseUrl + "images/" + "cards/";
+    // 카드 이미지 -> /api/images/card/{id}
+    public String getSpellCardBaseUrl() {
+        return api_baseUrl + "images/" + "card/" + "spell/";
+    }
+
+    public String getArtifactCardBaseUrl() {
+        return api_baseUrl + "images/" + "card/" + "artifact/";
     }
 
     public String getSpellIconUrl() {

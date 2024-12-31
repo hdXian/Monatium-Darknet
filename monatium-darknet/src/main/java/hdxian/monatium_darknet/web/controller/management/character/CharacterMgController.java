@@ -898,7 +898,7 @@ public class CharacterMgController {
 
         try {
             FileDto fileDto = fileStorageService.saveFileToTemp(multipartFile);
-            String tempImageUrl = "/api/images/tmp/" + fileDto.getFileName();
+            String tempImageUrl = imageUrlService.getTempBaseUrl() + fileDto.getFileName();
             session.setAttribute(attrName, tempImageUrl);
             log.info("setAttribute attrName = {}, tempImageUrl = {}", attrName, tempImageUrl);
         } catch (IOException e) {

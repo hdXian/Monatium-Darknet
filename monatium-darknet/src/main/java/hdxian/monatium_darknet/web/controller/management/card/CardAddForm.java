@@ -1,7 +1,9 @@
 package hdxian.monatium_darknet.web.controller.management.card;
 
 import hdxian.monatium_darknet.domain.Attribute;
+import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.card.CardGrade;
+import hdxian.monatium_darknet.service.dto.CardDto;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,6 +41,25 @@ public class CardAddForm {
         if (attachmentAttributes.isEmpty())
             attachmentAttributes.add(new Attribute("", ""));
         return attachmentAttributes;
+    }
+
+    public CardDto generateCardDto() {
+        CardDto dto = new CardDto();
+        dto.setName(name);
+        dto.setGrade(grade);
+        dto.setDescription(description);
+        dto.setStory(story);
+        dto.setCost(cost);
+        dto.setAttributes(cardAttributes);
+
+        return dto;
+    }
+
+    public Skill generateAttachmentSkill() {
+        if (hasAttachment)
+            return Skill.createAttachmentSkill(attachmentSkillName, attachmentSkillDescription, "", attachmentAttributes);
+        else
+            return null;
     }
 
 }

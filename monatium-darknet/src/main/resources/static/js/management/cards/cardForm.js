@@ -154,3 +154,47 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 });
+
+
+// 아티팩트 카드인 경우 애착 사도 정보 입력 칸 노출
+document.addEventListener('DOMContentLoaded', () => {
+    const cardTypeSelect = document.getElementById('cardType');
+    const attachmentSection = document.getElementById('attachmentSection');
+
+    // 초기 상태 설정
+    if (cardTypeSelect.value === 'ARTIFACT') {
+        attachmentSection.style.display = 'block';
+    } else {
+        attachmentSection.style.display = 'none';
+    }
+
+    // 변경 이벤트 핸들러 추가
+    cardTypeSelect.addEventListener('change', () => {
+        if (cardTypeSelect.value === 'ARTIFACT') {
+            attachmentSection.style.display = 'block';
+        } else {
+            attachmentSection.style.display = 'none';
+        }
+    });
+
+});
+
+
+// 아티팩트 카드인 경우, 애착 사도 여부에 따라 입력 칸 노출, 숨김
+document.addEventListener('DOMContentLoaded', function () {
+    const radios = document.getElementsByName('hasAttachment');
+    const targetDiv = document.getElementById('attachmentInfo');
+
+    if (targetDiv && radios.length > 0) {
+        // 초기 상태 설정
+        targetDiv.style.display = radios[0].checked ? 'block' : 'none';
+
+        // 라디오 버튼 변경 시 표시/숨기기
+        radios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                targetDiv.style.display = radio.value === 'true' && radio.checked ? 'block' : 'none';
+            });
+        });
+    }
+});
+

@@ -16,7 +16,7 @@
     <div class="form-section">
 
         <h2 class="form-title">신규 카드 추가</h2>
-        <form th:action="@{/management/cards/spell/new}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/management/cards/new}" method="post" enctype="multipart/form-data">
 
             <div class="info-group mb-4">
                 <div class="info-title" aria-expanded="true">
@@ -108,66 +108,80 @@
 
                     <hr>
 
-                    <!-- 4-0. 애착 사도 존재 여부 -->
-                    <div class="enable-radio mb-3 p-3 rounded d-flex align-items-center">
-                        <label class="form-label me-3 mb-0">애착 사도</label>
-                        <div class="d-flex justify-content-end">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="hasAttachment" name="enableEnhancedAttack"
-                                       th:field="*{hasAttachment}" value="true">
-                                <label class="form-check-label" for="hasAttachment">있어요</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="nonAttachment" name="enableEnhancedAttack"
-                                       th:field="*{hasAttachment}" value="false">
-                                <label class="form-check-label" for="nonAttachment">없어요</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 4. 애착 사도 정보 (선택사항) -->
+                    <!-- 4. 애착 아티팩트 정보 (선택사항) -->
                     <div id="attachmentSection" class="info-subgroup optional-info mb-3">
 
-                        <!-- 애착 사도, 애착 아티팩트 스킬 이름 -->
-                        <div class="row mb-3">
-                            <!-- 애착 사도 -->
-                            <div class="col-md-4 mb-3">
-                                <label for="attachmentCh" class="form-label">애착 사도</label>
-                                <input th:field="*{characterId}" id="attachmentCh" type="text"
-                                       class="form-control" placeholder="애착 사도를 입력하세요">
-                            </div>
+                        <div class="info-title mb-3" aria-expanded="true">
+                            <span>애착 아티팩트 정보</span>
+                        </div>
 
-                            <!-- 애착 아티팩트 스킬 이름 -->
-                            <div class="col-md-8 mb-3">
-                                <label for="attachmentSkillName" class="form-label">애착 아티팩트 스킬 이름</label>
-                                <input th:field="*{attachmentSkillName}" id="attachmentSkillName" type="text"
-                                       class="form-control" placeholder="스킬 이름을 입력하세요">
+                        <!-- 4-1. 애착 사도 존재 여부 -->
+                        <div class="enable-radio mb-3 p-3 rounded d-flex align-items-center">
+                            <label class="form-label me-3 mb-0">애착 사도</label>
+                            <div class="d-flex justify-content-end">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="hasAttachment" name="hasAttachment"
+                                           th:field="*{hasAttachment}" value="true">
+                                    <label class="form-check-label" for="hasAttachment">있어요</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="nonAttachment" name="hasAttachment"
+                                           th:field="*{hasAttachment}" value="false">
+                                    <label class="form-check-label" for="nonAttachment">없어요</label>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <!-- 애착 아티팩트 스킬 설명 -->
-                            <div class="col-md-12 mb-3">
-                                <label for="attachmentSkillDescription" class="form-label">애착 아티팩트 스킬 설명</label>
-                                <textarea th:field="*{attachmentSkillDescription}" id="attachmentSkillDescription"
-                                          class="form-control" rows="3" placeholder="스킬 설명을 입력하세요"></textarea>
-                            </div>
-                        </div>
+                        <!-- 4-2. 애착 사도, 애착 스킬, 특성 정보 -->
+                        <div id="attachmentInfo" class="info-subgroup optional-info mb-3">
 
-                        <!-- 애착 아티팩트 스킬 특성 -->
-                        <div id="attachment-attributes-container" class="col-md-6 mb-3">
-                            <label class="form-label">애착 아티팩트 스킬 속성</label>
-                            <div th:each="attribute, stat : *{attachmentAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-                                <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
-                                <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
-                                <button type="button" class="btn btn-success btn-add-attachment-attribute">+</button>
-                                <button type="button" class="btn btn-danger btn-remove-attachment-attribute">-</button>
-                            </div>
-                        </div>
+                            <!-- 애착 사도, 애착 아티팩트 스킬 이름 -->
+                            <div class="row mb-3">
 
-                    </div>
+                                <!-- 애착 사도 -->
+                                <div class="col-md-4 mb-3">
+                                    <label for="attachmentCh" class="form-label">애착 사도</label>
+                                    <select th:field="*{characterId}" id="attachmentCh" class="form-select">
+                                        <option value="">애착 사도를 선택하세요</option>
+                                        <option th:each="ch : ${characterList}" th:value="${ch.id}" th:text="${ch.name}">캐릭터 이름</option>
+                                        <!-- 필요한 추가 옵션을 여기에 나열 -->
+                                    </select>
+                                </div>
+
+                                <!-- 애착 아티팩트 스킬 이름 -->
+                                <div class="col-md-8 mb-3">
+                                    <label for="attachmentSkillName" class="form-label">애착 아티팩트 스킬 이름</label>
+                                    <input th:field="*{attachmentSkillName}" id="attachmentSkillName" type="text"
+                                           class="form-control" placeholder="스킬 이름을 입력하세요">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <!-- 애착 아티팩트 스킬 설명 -->
+                                <div class="col-md-12 mb-3">
+                                    <label for="attachmentSkillDescription" class="form-label">애착 아티팩트 스킬 설명</label>
+                                    <textarea th:field="*{attachmentSkillDescription}" id="attachmentSkillDescription"
+                                              class="form-control" rows="3" placeholder="스킬 설명을 입력하세요"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- 애착 아티팩트 스킬 특성 -->
+                            <div id="attachment-attributes-container" class="col-md-12 mb-3">
+                                <label class="form-label">애착 아티팩트 스킬 속성</label>
+                                <div th:each="attribute, stat : *{attachmentAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                    <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                    <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                    <button type="button" class="btn btn-success btn-add-attachment-attribute">+</button>
+                                    <button type="button" class="btn btn-danger btn-remove-attachment-attribute">-</button>
+                                </div>
+                            </div>
+
+                        </div> <!-- attachmentInfo -->
+
+                    </div> <!-- attachmentSection -->
 
                 </div>
+
             </div>
 
             <!-- 폼 제출 버튼 -->
@@ -184,7 +198,7 @@
                 <!-- 오른쪽 버튼 그룹 -->
                 <div class="d-flex gap-2">
                     <!-- 다음 버튼 -->
-                    <button type="submit" name="action" value="next" class="btn btn-primary">신규 카드 생성</button>
+                    <button type="submit" name="action" value="complete" class="btn btn-primary">신규 카드 생성</button>
                 </div>
 
             </div>

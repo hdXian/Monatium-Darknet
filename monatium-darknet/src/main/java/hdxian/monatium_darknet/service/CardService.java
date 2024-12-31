@@ -8,8 +8,8 @@ import hdxian.monatium_darknet.domain.card.SpellCard;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.repository.CardRepository;
 import hdxian.monatium_darknet.repository.CharacterRepository;
-import hdxian.monatium_darknet.service.dto.ArtifactCardDto;
-import hdxian.monatium_darknet.service.dto.SpellCardDto;
+import hdxian.monatium_darknet.service.dto.CardDto;
+import hdxian.monatium_darknet.service.dto.CardDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +33,7 @@ public class CardService {
 
     // 카드 저장 기능
     @Transactional
-    public Long createNewSpellCard(SpellCardDto cardDto) {
+    public Long createNewSpellCard(CardDto cardDto) {
         checkCardName(cardDto.getName());
 
         SpellCard spellCard = SpellCard.createSpellCard(
@@ -50,7 +50,7 @@ public class CardService {
     }
 
     @Transactional
-    public Long createNewArtifactCard(ArtifactCardDto cardDto) {
+    public Long createNewArtifactCard(CardDto cardDto) {
         checkCardName(cardDto.getName());
 
         ArtifactCard artifactCard = ArtifactCard.createArtifactCard(
@@ -74,7 +74,7 @@ public class CardService {
     }
 
     @Transactional
-    public Long createNewArtifactCard(ArtifactCardDto cardDto, Long characterId, Skill attachmentSkill) {
+    public Long createNewArtifactCard(CardDto cardDto, Long characterId, Skill attachmentSkill) {
         checkCardName(cardDto.getName());
 
         Optional<Character> findCharacter = characterRepository.findOne(characterId);
@@ -99,7 +99,7 @@ public class CardService {
     }
 
     @Transactional
-    public Long updateSpellCard(Long cardId, SpellCardDto updateParam) {
+    public Long updateSpellCard(Long cardId, CardDto updateParam) {
         SpellCard spellCard = findOneSpellCard(cardId);
 
         // 이름을 변경하려고 한다면 기존에 같은 이름이 있는지 확인
@@ -113,7 +113,7 @@ public class CardService {
     }
 
     @Transactional
-    public Long updateArtifactCard(Long cardId, ArtifactCardDto updateParam) {
+    public Long updateArtifactCard(Long cardId, CardDto updateParam) {
         ArtifactCard artifactCard = findOneArtifactCard(cardId);
 
         // 이름을 변경하려고 한다면 기존에 같은 이름이 있는지 확인
@@ -128,7 +128,7 @@ public class CardService {
 
     // 아티팩트 카드 업데이트 하는데 캐릭터까지 함께 받아야 하나? 이거 바뀔 일 사실상 없는데? TODO - 업데이트에 캐릭터 제외하기
     @Transactional
-    public Long updateArtifactCard(Long cardId, ArtifactCardDto updateParam, Long updateCharacterId, Skill updateSkill) {
+    public Long updateArtifactCard(Long cardId, CardDto updateParam, Long updateCharacterId, Skill updateSkill) {
         ArtifactCard artifactCard = findOneArtifactCard(cardId);
 
         Optional<Character> findCharacter = characterRepository.findOne(updateCharacterId);
@@ -198,7 +198,7 @@ public class CardService {
         return cardRepository.findAllArtifacts();
     }
 
-    private static void updateCard(SpellCard spellCard, SpellCardDto updateParam) {
+    private static void updateCard(SpellCard spellCard, CardDto updateParam) {
         spellCard.setName(updateParam.getName());
         spellCard.setGrade(updateParam.getGrade());
         spellCard.setDescription(updateParam.getDescription());
@@ -211,7 +211,7 @@ public class CardService {
         attributes.addAll(updateParam.getAttributes());
     }
 
-    private static void updateCard(ArtifactCard artifactCard, ArtifactCardDto updateParam) {
+    private static void updateCard(ArtifactCard artifactCard, CardDto updateParam) {
         artifactCard.setName(updateParam.getName());
         artifactCard.setGrade(updateParam.getGrade());
         artifactCard.setDescription(updateParam.getDescription());
@@ -224,7 +224,7 @@ public class CardService {
         attributes.addAll(updateParam.getAttributes());
     }
 
-    private static void updateCard(ArtifactCard artifactCard, ArtifactCardDto updateParam, Character updateCharacter, Skill updateSkill) {
+    private static void updateCard(ArtifactCard artifactCard, CardDto updateParam, Character updateCharacter, Skill updateSkill) {
         // 카드 정보 업데이트
         updateCard(artifactCard, updateParam);
 

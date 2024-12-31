@@ -78,28 +78,28 @@ public class TestDataInit {
         skinService.updateImageUrl(skinId, skinBaseUrl + 1L + "/" + skinId + ".webp");
 
         // 아티팩트 카드 테스트 데이터 추가
-        ArtifactCardDto cardDto1 = generateArtifactDto("벨리타의 지팡이", CardGrade.LEGENDARY); // 벨리타는 2번
-        ArtifactCardDto cardDto2 = generateArtifactDto("엘다인 램프", CardGrade.LEGENDARY);
-        ArtifactCardDto cardDto3 = generateArtifactDto("용광검", CardGrade.LEGENDARY);
+        CardDto cardDto1 = generateArtifactDto("벨리타의 지팡이", CardGrade.LEGENDARY); // 벨리타는 2번
+        CardDto cardDto2 = generateArtifactDto("엘다인 램프", CardGrade.LEGENDARY);
+        CardDto cardDto3 = generateArtifactDto("용광검", CardGrade.LEGENDARY);
 
-        ArtifactCardDto cardDto4 = generateArtifactDto("날카로운 지팡이", CardGrade.RARE);
-        ArtifactCardDto cardDto5 = generateArtifactDto("참회의 메이스", CardGrade.RARE);
+        CardDto cardDto4 = generateArtifactDto("날카로운 지팡이", CardGrade.RARE);
+        CardDto cardDto5 = generateArtifactDto("참회의 메이스", CardGrade.RARE);
 
-        ArtifactCardDto cardDto6 = generateArtifactDto("엘프산 요술봉", CardGrade.ADVANCED);
-        ArtifactCardDto cardDto7 = generateArtifactDto("급조한 목검", CardGrade.NORMAL);
+        CardDto cardDto6 = generateArtifactDto("엘프산 요술봉", CardGrade.ADVANCED);
+        CardDto cardDto7 = generateArtifactDto("급조한 목검", CardGrade.NORMAL);
 
         // 스펠 카드 테스트 데이터 추가
-        SpellCardDto spellDto1 = generateSpellDto("단체 월반", CardGrade.LEGENDARY);
-        SpellCardDto spellDto2 = generateSpellDto("수상한 물약", CardGrade.LEGENDARY);
+        CardDto spellDto1 = generateSpellDto("단체 월반", CardGrade.LEGENDARY);
+        CardDto spellDto2 = generateSpellDto("수상한 물약", CardGrade.LEGENDARY);
 
-        SpellCardDto spellDto3 = generateSpellDto("사기진작", CardGrade.RARE);
-        SpellCardDto spellDto4 = generateSpellDto("효율적인 회복", CardGrade.RARE);
+        CardDto spellDto3 = generateSpellDto("사기진작", CardGrade.RARE);
+        CardDto spellDto4 = generateSpellDto("효율적인 회복", CardGrade.RARE);
 
-        SpellCardDto spellDto5 = generateSpellDto("학자", CardGrade.ADVANCED);
-        SpellCardDto spellDto6 = generateSpellDto("회심의 일격", CardGrade.ADVANCED);
+        CardDto spellDto5 = generateSpellDto("학자", CardGrade.ADVANCED);
+        CardDto spellDto6 = generateSpellDto("회심의 일격", CardGrade.ADVANCED);
 
-        SpellCardDto spellDto7 = generateSpellDto("자기 계발", CardGrade.NORMAL);
-        SpellCardDto spellDto8 = generateSpellDto("그건 내 잔상", CardGrade.NORMAL);
+        CardDto spellDto7 = generateSpellDto("자기 계발", CardGrade.NORMAL);
+        CardDto spellDto8 = generateSpellDto("그건 내 잔상", CardGrade.NORMAL);
 
         Skill attachmentSkill = generateAttachmentSkill("블랙홀 오브 위치");
         Long cardId1 = cardService.createNewArtifactCard(cardDto1, 2L, attachmentSkill);
@@ -147,8 +147,8 @@ public class TestDataInit {
         return attachmentSkill;
     }
 
-    private static SpellCardDto generateSpellDto(String name, CardGrade grade) {
-        SpellCardDto dto = new SpellCardDto();
+    private static CardDto generateSpellDto(String name, CardGrade grade) {
+        CardDto dto = new CardDto();
         dto.setName(name);
         dto.setDescription(name + "스펠카드 설명");
         dto.setStory(name + "스펠카드 이야기");
@@ -162,8 +162,8 @@ public class TestDataInit {
         return dto;
     }
 
-    private static ArtifactCardDto generateArtifactDto(String name, CardGrade grade) {
-        ArtifactCardDto dto = new ArtifactCardDto();
+    private static CardDto generateArtifactDto(String name, CardGrade grade) {
+        CardDto dto = new CardDto();
         dto.setName(name);
         dto.setDescription(name + "아티팩트카드 설명");
         dto.setStory(name + "아티팩트카드 이야기");
