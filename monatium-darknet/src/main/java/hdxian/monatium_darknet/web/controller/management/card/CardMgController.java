@@ -44,6 +44,14 @@ public class CardMgController {
         return "management/cards/spellCardList";
     }
 
+    @GetMapping("/spell/new")
+    public String addSpellForm(Model model) {
+        CardAddForm cardForm = new CardAddForm();
+
+        model.addAttribute("cardForm", cardForm);
+        return "management/cards/cardAddForm";
+    }
+
     @GetMapping("/artifact")
     public String artifactList(Model model) {
         List<ArtifactCard> cardList = cardService.findAllArtifactCards();

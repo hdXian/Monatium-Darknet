@@ -1,28 +1,4 @@
 
-// 각 그룹 내용 접기/펼치기
-document.addEventListener('DOMContentLoaded', function() {
-    const titles = document.querySelectorAll('.info-title');
-
-    titles.forEach(title => {
-        const icon = title.querySelector('.toggle-icon');
-        const targetId = title.getAttribute('data-bs-target');
-        const targetElement = document.querySelector(targetId);
-
-        // 열림 이벤트 (⏴ → ⏷)
-        targetElement.addEventListener('shown.bs.collapse', function() {
-            icon.classList.remove('fa-angle-left');
-            icon.classList.add('fa-angle-down');
-        });
-
-        // 닫힘 이벤트 (⏷ → ⏴)
-        targetElement.addEventListener('hidden.bs.collapse', function() {
-            icon.classList.remove('fa-angle-down');
-            icon.classList.add('fa-angle-left');
-        });
-    });
-});
-
-
 /**
  * 특성 입력 필드 추가/삭제 기능을 추가하는 범용 함수
  * @param {string} containerId - 특성 컨테이너의 ID
@@ -156,3 +132,16 @@ function confirmCancel() {
         document.querySelector('form').submit();
     }
 }
+
+// 특성 입력 란 필드 구성
+document.addEventListener('DOMContentLoaded', function() {
+
+    // 카드 특성
+    setupDynamicInputFields({
+        containerId: 'card-attributes-container',
+        addButtonClass: 'btn-add-card-attribute',
+        removeButtonClass: 'btn-remove-card-attribute',
+        inputNamePrefix: 'attributes'
+    });
+
+});
