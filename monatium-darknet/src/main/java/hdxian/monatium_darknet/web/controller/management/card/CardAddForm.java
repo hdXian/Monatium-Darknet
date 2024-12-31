@@ -18,14 +18,27 @@ public class CardAddForm {
     private String story;
     private Integer cost;
 
-    private List<Attribute> attributes = new ArrayList<>();
-    public List<Attribute> getAttributes() {
-        if (attributes.isEmpty())
-            attributes.add(new Attribute("", ""));
+    private List<Attribute> cardAttributes = new ArrayList<>();
+    public List<Attribute> getCardAttributes() {
+        if (cardAttributes.isEmpty())
+            cardAttributes.add(new Attribute("", ""));
 
-        return attributes;
+        return cardAttributes;
     }
 
     private MultipartFile image;
+
+    // 애착 사도 관련 정보
+    private boolean hasAttachment = false;
+    private Long characterId;
+    private String attachmentSkillName;
+    private String attachmentSkillDescription;
+
+    private List<Attribute> attachmentAttributes = new ArrayList<>();
+    public List<Attribute> getAttachmentAttributes() {
+        if (attachmentAttributes.isEmpty())
+            attachmentAttributes.add(new Attribute("", ""));
+        return attachmentAttributes;
+    }
 
 }

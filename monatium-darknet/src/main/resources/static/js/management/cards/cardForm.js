@@ -126,9 +126,10 @@ function previewImage(input) {
 }
 
 function confirmCancel() {
+    // 기본 동작(폼 제출) 막기
+    event.preventDefault();
+
     if (confirm("정말 취소하시겠습니까? 현재 작성된 데이터는 저장되지 않습니다.")) {
-        // 취소를 확인한 경우, 실제 취소 작업 수행
-//        document.querySelector('form').action = '/management/characters/new/cancel';
         document.querySelector('form').submit();
     }
 }

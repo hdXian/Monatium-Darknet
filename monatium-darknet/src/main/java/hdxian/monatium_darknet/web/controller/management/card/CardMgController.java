@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -44,12 +46,20 @@ public class CardMgController {
         return "management/cards/spellCardList";
     }
 
+    // 카드 추가 폼 (스펠, 아티팩트 통합)
     @GetMapping("/spell/new")
-    public String addSpellForm(Model model) {
+    public String addForm(Model model) {
         CardAddForm cardForm = new CardAddForm();
 
         model.addAttribute("cardForm", cardForm);
         return "management/cards/cardAddForm";
+    }
+
+    // 카드 추가 요청 (스펠, 아티팩트 통합)
+    @PostMapping("/new")
+    public String addCard(@ModelAttribute("cardForm") CardAddForm cardForm) {
+
+        return "";
     }
 
     @GetMapping("/artifact")
