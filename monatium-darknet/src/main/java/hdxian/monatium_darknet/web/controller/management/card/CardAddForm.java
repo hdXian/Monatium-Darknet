@@ -35,6 +35,7 @@ public class CardAddForm {
     private Long characterId;
     private String attachmentSkillName;
     private String attachmentSkillDescription;
+    private String attachmentLv3Description; // 애착 아티팩트 레벨 3 달성 시 효과
 
     private List<Attribute> attachmentAttributes = new ArrayList<>();
     public List<Attribute> getAttachmentAttributes() {
@@ -57,7 +58,7 @@ public class CardAddForm {
 
     public Skill generateAttachmentSkill() {
         if (hasAttachment)
-            return Skill.createAttachmentSkill(attachmentSkillName, attachmentSkillDescription, attachmentAttributes, "");
+            return Skill.createAttachmentSkill(attachmentSkillName, attachmentSkillDescription, attachmentAttributes, attachmentLv3Description);
         else
             return null;
     }

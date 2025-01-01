@@ -166,13 +166,24 @@
                             </div>
 
                             <!-- 애착 아티팩트 스킬 특성 -->
-                            <div id="attachment-attributes-container" class="col-md-12 mb-3">
-                                <label class="form-label">애착 아티팩트 스킬 속성</label>
-                                <div th:each="attribute, stat : *{attachmentAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-                                    <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
-                                    <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
-                                    <button type="button" class="btn btn-success btn-add-attachment-attribute">+</button>
-                                    <button type="button" class="btn btn-danger btn-remove-attachment-attribute">-</button>
+                            <div class="row mb-3">
+                                <div id="attachment-attributes-container" class="col-md-12 mb-3">
+                                    <label class="form-label">애착 아티팩트 스킬 속성</label>
+                                    <div th:each="attribute, stat : *{attachmentAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
+                                        <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                        <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                        <button type="button" class="btn btn-success btn-add-attachment-attribute">+</button>
+                                        <button type="button" class="btn btn-danger btn-remove-attachment-attribute">-</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <!-- 애착 아티팩트 스킬 설명 -->
+                                <div class="col-md-12 mb-3">
+                                    <label for="attachmentLv3Description" class="form-label">레벨 3 달성 시 효과</label>
+                                    <textarea th:field="*{attachmentLv3Description}" id="attachmentLv3Description"
+                                              class="form-control" rows="3" placeholder="애착 아티팩트 레벨 3 효과를 입력하세요"></textarea>
                                 </div>
                             </div>
 
