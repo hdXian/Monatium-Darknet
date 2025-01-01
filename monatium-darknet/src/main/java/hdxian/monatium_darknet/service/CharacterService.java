@@ -227,7 +227,7 @@ public class CharacterService {
     private static void updateSkill(Skill skill, Skill updateParam) {
         skill.setName(updateParam.getName());
         skill.setDescription(updateParam.getDescription());
-        skill.setImageUrl(updateParam.getImageUrl());
+//        skill.setImageUrl(updateParam.getImageUrl());
 
         if(skill.getCategory() == SkillCategory.HIGH) {
             skill.setCooldown(updateParam.getCooldown());

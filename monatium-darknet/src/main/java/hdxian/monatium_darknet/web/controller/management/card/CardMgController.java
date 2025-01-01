@@ -60,8 +60,19 @@ public class CardMgController {
         return "management/cards/spellCardList";
     }
 
+    // 아티팩트 카드 리스트
+    @GetMapping("/artifact")
+    public String artifactList(Model model) {
+        List<ArtifactCard> cardList = cardService.findAllArtifactCards();
+        String baseUrl = imageUrlService.getArtifactCardBaseUrl();
+
+        model.addAttribute("cardList", cardList);
+        model.addAttribute("baseUrl", baseUrl);
+        return "management/cards/artifactCardList";
+    }
+
     // 카드 추가 폼 (스펠, 아티팩트 통합)
-    @GetMapping("/spell/new")
+    @GetMapping("/new")
     public String addForm(HttpSession session, Model model) {
         // 세션에 있으면 (임시저장 등으로 리다이렉트) 가져오고, 없으면 (최초 요청) 새로운 객체를 생성.
         CardAddForm cardForm = (CardAddForm) Optional.ofNullable(session.getAttribute(CARD_FORM)).orElse(new CardAddForm());
@@ -103,6 +114,9 @@ public class CardMgController {
         // 4. 완료 버튼을 누른 경우 카드 정보를 저장하고 목록으로 리다이렉트
         if (action.equals("complete")) {
             Long cardId = saveCard(session, cardForm);
+
+            clearSessionAttributes(session);
+
             // 스펠 카드 목록 혹은 아티팩트 카드 목록으로 리다이렉트
             if (cardForm.getCardType() == CardType.SPELL) {
                 return "redirect:/management/cards/spell";
@@ -117,18 +131,6 @@ public class CardMgController {
         }
 
     }
-
-    @GetMapping("/artifact")
-    public String artifactList(Model model) {
-        List<ArtifactCard> cardList = cardService.findAllArtifactCards();
-        String baseUrl = imageUrlService.getArtifactCardBaseUrl();
-
-        model.addAttribute("cardList", cardList);
-        model.addAttribute("baseUrl", baseUrl);
-        return "management/cards/artifactCardList";
-    }
-
-
 
 
     // === private ===

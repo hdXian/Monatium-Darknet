@@ -57,7 +57,7 @@ public class CardAddForm {
 
     public Skill generateAttachmentSkill() {
         if (hasAttachment)
-            return Skill.createAttachmentSkill(attachmentSkillName, attachmentSkillDescription, "", attachmentAttributes);
+            return Skill.createAttachmentSkill(attachmentSkillName, attachmentSkillDescription, attachmentAttributes, "");
         else
             return null;
     }

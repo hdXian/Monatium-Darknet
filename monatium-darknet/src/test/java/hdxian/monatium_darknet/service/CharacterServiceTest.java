@@ -242,11 +242,11 @@ class CharacterServiceTest {
         enhancedAttack.addAttribute(name+" 강화공격 속성2", "40%");
 
         // 저학년 스킬
-        Skill lowSkill = Skill.createLowSkill(name+" 저학년스킬", name + "저학년스킬 설명", name + "저학년스킬 이미지 url");
+        Skill lowSkill = Skill.createLowSkill(name+" 저학년스킬", name + "저학년스킬 설명");
         lowSkill.addAttribute(name+" 저학년스킬 속성", "350%");
 
         // 고학년 스킬
-        Skill highSkill = Skill.createHighSkill(name+" 고학년스킬", name+" 고학년스킬 설명", 15, "고학년스킬 이미지 url");
+        Skill highSkill = Skill.createHighSkill(name+" 고학년스킬", name+" 고학년스킬 설명", 15);
         highSkill.addAttribute(name+"고학년스킬 속성", "525%");
 
         // 이미지 url들

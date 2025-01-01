@@ -240,7 +240,7 @@ public class CardService {
     private static void updateAttachmentSkill(Skill skill, Skill updateParam) {
         skill.setName(updateParam.getName());
         skill.setDescription(updateParam.getDescription());
-        skill.setImageUrl(updateParam.getImageUrl());
+//        skill.setImageUrl(updateParam.getImageUrl());
 
         List<Attribute> attributes = skill.getAttributes();
         attributes.clear();

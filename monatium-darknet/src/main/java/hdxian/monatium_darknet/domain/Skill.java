@@ -23,7 +23,9 @@ public class Skill {
     private String name;
     private String description;
     private Integer cooldown;
-    private String imageUrl;
+//    private String imageUrl;
+
+    private String attachmentLv3Description; // 애착 아티팩트 레벨 3 효과
 
     @ElementCollection
     @CollectionTable(name = "skill_attributes", joinColumns = @JoinColumn(name = "skill_id"))
@@ -38,72 +40,74 @@ public class Skill {
     }
 
     // 생성 메서드 (저학년 스킬)
-    public static Skill createLowSkill(String name, String description, String imageUrl) {
+    public static Skill createLowSkill(String name, String description) {
         Skill skill = new Skill();
         skill.setName(name);
         skill.setCategory(SkillCategory.LOW); // 저학년 스킬 설정
         skill.setDescription(description);
         skill.setCooldown(null);
-        skill.setImageUrl(imageUrl);
+//        skill.setImageUrl(imageUrl);
 
         return skill;
     }
 
-    public static Skill createLowSkill(String name, String description, String imageUrl, List<Attribute> attributes) {
+    public static Skill createLowSkill(String name, String description, List<Attribute> attributes) {
         Skill skill = new Skill();
         skill.setName(name);
         skill.setCategory(SkillCategory.LOW); // 저학년 스킬 설정
         skill.setDescription(description);
         skill.setCooldown(null);
-        skill.setImageUrl(imageUrl);
+//        skill.setImageUrl(imageUrl);
 
         skill.attributes.addAll(attributes);
         return skill;
     }
 
     // 생성 메서드 (고학년 스킬)
-    public static Skill createHighSkill(String name, String description, Integer cooldown, String imageUrl) {
+    public static Skill createHighSkill(String name, String description, Integer cooldown) {
         Skill skill = new Skill();
         skill.setName(name);
         skill.setCategory(SkillCategory.HIGH); // 고학년 스킬 설정
         skill.setDescription(description);
         skill.setCooldown(cooldown);
-        skill.setImageUrl(imageUrl);
+//        skill.setImageUrl(imageUrl);
 
         return skill;
     }
 
-    public static Skill createHighSkill(String name, String description, Integer cooldown, String imageUrl, List<Attribute> attributes) {
+    public static Skill createHighSkill(String name, String description, Integer cooldown, List<Attribute> attributes) {
         Skill skill = new Skill();
         skill.setName(name);
         skill.setCategory(SkillCategory.HIGH); // 고학년 스킬 설정
         skill.setDescription(description);
         skill.setCooldown(cooldown);
-        skill.setImageUrl(imageUrl);
+//        skill.setImageUrl(imageUrl);
 
         skill.attributes.addAll(attributes);
         return skill;
     }
 
     // 생성 메서드 (애착 아티팩트 스킬)
-    public static Skill createAttachmentSkill(String name, String description, String imageUrl) {
+    public static Skill createAttachmentSkill(String name, String description, String attLv3Description) {
         Skill skill = new Skill();
         skill.setName(name);
         skill.setCategory(SkillCategory.ATTACHMENT); // 고학년 스킬 설정
         skill.setDescription(description);
         skill.setCooldown(null);
-        skill.setImageUrl(imageUrl);
+//        skill.setImageUrl(imageUrl);
+        skill.setAttachmentLv3Description(attLv3Description);
 
         return skill;
     }
 
-    public static Skill createAttachmentSkill(String name, String description, String imageUrl, List<Attribute> attributes) {
+    public static Skill createAttachmentSkill(String name, String description, List<Attribute> attributes, String attLv3Description) {
         Skill skill = new Skill();
         skill.setName(name);
         skill.setCategory(SkillCategory.ATTACHMENT); // 고학년 스킬 설정
         skill.setDescription(description);
         skill.setCooldown(null);
-        skill.setImageUrl(imageUrl);
+//        skill.setImageUrl(imageUrl);
+        skill.setAttachmentLv3Description(attLv3Description);
 
         skill.attributes.addAll(attributes);
         return skill;

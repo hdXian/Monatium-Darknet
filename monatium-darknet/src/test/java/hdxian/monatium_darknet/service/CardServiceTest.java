@@ -314,7 +314,7 @@ class CardServiceTest {
         // 애착 스킬 변경사항 확인
         assertThat(updatedCard.getAttachmentSkill().getName()).isEqualTo(updateSkill.getName());
         assertThat(updatedCard.getAttachmentSkill().getDescription()).isEqualTo(updateSkill.getDescription());
-        assertThat(updatedCard.getAttachmentSkill().getImageUrl()).isEqualTo(updateSkill.getImageUrl());
+//        assertThat(updatedCard.getAttachmentSkill().getImageUrl()).isEqualTo(updateSkill.getImageUrl());
 
         // 같은 엔티티가 변경된 것이어야 함
         assertThat(updatedCard).isEqualTo(originCard);
@@ -446,11 +446,11 @@ class CardServiceTest {
         enhancedAttack.addAttribute(name+" 강화공격 속성2", "40%");
 
         // 저학년 스킬
-        Skill lowSkill = Skill.createLowSkill(name+" 저학년스킬", name + "저학년스킬 설명", name + "저학년스킬 이미지 url");
+        Skill lowSkill = Skill.createLowSkill(name+" 저학년스킬", name + "저학년스킬 설명");
         lowSkill.addAttribute(name+" 저학년스킬 속성", "350%");
 
         // 고학년 스킬
-        Skill highSkill = Skill.createHighSkill(name+" 고학년스킬", name+" 고학년스킬 설명", 15, "고학년스킬 이미지 url");
+        Skill highSkill = Skill.createHighSkill(name+" 고학년스킬", name+" 고학년스킬 설명", 15);
         highSkill.addAttribute(name+"고학년스킬 속성", "525%");
 
         // 이미지 url들
@@ -493,7 +493,7 @@ class CardServiceTest {
     }
 
     static Skill generateAttachmentSkill(String name) {
-        Skill attachmentSkill = Skill.createAttachmentSkill(name, name + " 설명", name + " url");
+        Skill attachmentSkill = Skill.createAttachmentSkill(name, name + " 설명", name + "애착 아티팩트 레벨 3 효과");
         attachmentSkill.addAttribute(name + " 속성1 이름", name + " 속성1 수치");
         attachmentSkill.addAttribute(name + " 속성2 이름", name + " 속성2 수치");
         return attachmentSkill;
