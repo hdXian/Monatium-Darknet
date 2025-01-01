@@ -63,10 +63,12 @@ public class CardMgController {
     // 카드 추가 폼 (스펠, 아티팩트 통합)
     @GetMapping("/spell/new")
     public String addForm(HttpSession session, Model model) {
-        CardAddForm cardForm = new CardAddForm();
+        // 세션에 있으면 (임시저장 등으로 리다이렉트) 가져오고, 없으면 (최초 요청) 새로운 객체를 생성.
+        CardAddForm cardForm = (CardAddForm) Optional.ofNullable(session.getAttribute(CARD_FORM)).orElse(new CardAddForm());
         List<Character> characterList = characterService.findCharacters();
 
-        String cardImageUrl = setCardImageUrl(session);
+        // 세션에 있으면 (임시저장 등으로 리다이렉트) 가져오고, 없으면 (최초 요청) 새로운 디폴트 url 지정
+        String cardImageUrl = getImageUrl(session);
 
         model.addAttribute("cardForm", cardForm);
         model.addAttribute("characterList", characterList);
@@ -82,62 +84,39 @@ public class CardMgController {
 
         log.info("cardForm = {}", cardForm);
 
-        // 취소 버튼 클릭 시
+        // 0. 취소 버튼 클릭 시 세션 데이터를 초기화하고 목록으로 리다이렉트
         if (action.equals("cancel")) {
             clearSessionAttributes(session);
             return "redirect:/management/cards";
         }
 
-        cardImageProcess(session, cardForm.getImage()); // 1. 이미지를 임시 경로에 저장하고 url을 세션에 추가
+        // 1. 이미지를 임시경로에 저장하고, url을 세션에 업데이트 한다.
+        saveCardImageToTemp(session, cardForm.getImage());
 
-        String cardImageUrl = setCardImageUrl(session); // 2. 카드 이미지 url 세팅
-        model.addAttribute(CARD_IMAGE_URL, cardImageUrl);
+        // 2. 임시경로 이미지에 대한 url을 생성하고 모델에 추가한다.
+        String tempImageUrl = getImageUrl(session);
+        model.addAttribute(CARD_IMAGE_URL, tempImageUrl);
 
-        session.setAttribute(CARD_FORM, cardForm); // 3. 세션의 폼 데이터 업데이트
+        // 3. 세션의 폼 데이터를 업데이트한다.
+        session.setAttribute(CARD_FORM, cardForm);
 
-        // 카드 생성 완료인 경우
-        // 1. 카드 데이터 저장
-        // 2. 이미지를 임시 경로에서 정식 경로로 이동
+        // 4. 완료 버튼을 누른 경우 카드 정보를 저장하고 목록으로 리다이렉트
         if (action.equals("complete")) {
-            CardDto cardDto = cardForm.generateCardDto();
-            String defaultImagePath = imagePathService.getDefaultThumbNailFileName();
-            Long cardId;
-
-            // 스펠 카드인 경우
+            Long cardId = saveCard(session, cardForm);
+            // 스펠 카드 목록 혹은 아티팩트 카드 목록으로 리다이렉트
             if (cardForm.getCardType() == CardType.SPELL) {
-                cardId = cardService.createNewSpellCard(cardDto);
-                // TODO - 카드 이미지 저장
-                String tmpImageUrl = (String) Optional.ofNullable(session.getAttribute(CARD_IMAGE_URL)).orElse(defaultImagePath);
-                String tempFilePath = convertUrlToFilePathTemp(tmpImageUrl);
-                imagePathService.saveSpellCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
-                System.out.println("tempFilePath = " + tempFilePath);
+                return "redirect:/management/cards/spell";
             }
-            // 아티팩트 카드인 경우
             else {
-                if (cardForm.isHasAttachment()) {
-                    cardId = cardService.createNewArtifactCard(cardDto, cardForm.getCharacterId(), cardForm.generateAttachmentSkill());
-                    // TODO - 카드 이미지 저장
-                    String tmpImageUrl = (String) Optional.ofNullable(session.getAttribute(CARD_IMAGE_URL)).orElse(defaultImagePath);
-                    String tempFilePath = convertUrlToFilePathTemp(tmpImageUrl);
-                    imagePathService.saveSpellCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
-                    System.out.println("tempFilePath = " + tempFilePath);
-                }
-                else {
-                    cardId = cardService.createNewArtifactCard(cardDto);
-                    // TODO - 카드 이미지 저장
-                    String tmpImageUrl = (String) Optional.ofNullable(session.getAttribute(CARD_IMAGE_URL)).orElse(defaultImagePath);
-                    String tempFilePath = convertUrlToFilePathTemp(tmpImageUrl);
-                    imagePathService.saveSpellCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
-                    System.out.println("tempFilePath = " + tempFilePath);
-                }
+                return "redirect:/management/cards/artifact";
             }
         }
+        // 5. 중간 저장 버튼을 누른 경우 폼 페이지로 리다이렉트
+        else {
+            return "redirect:/management/cards/spell/new";
+        }
 
-        return "redirect:/management/cards";
     }
-
-
-
 
     @GetMapping("/artifact")
     public String artifactList(Model model) {
@@ -149,31 +128,79 @@ public class CardMgController {
         return "management/cards/artifactCardList";
     }
 
+
+
+
     // === private ===
 
-    // === 임시 경로 이미지에 대한 url을 파일 경로로 변경 ===
-    private String convertUrlToFilePathTemp(String url) {
-        // ex) /api/images/tmp/abcd123 -> {baseDir}/temp/abcd123.png
-        String tempDir = fileStorageService.getTempDir();
-        String fileName = fileStorageService.extractFileName(url);
-        return tempDir + fileName;
+    private Long saveCard(HttpSession session, CardAddForm cardForm) {
+        // 1. 카드 데이터 저장
+        // 2. 이미지를 임시 경로에서 정식 경로로 이동
+        CardDto cardDto = cardForm.generateCardDto();
+        String tempFilePath = getImagePath(session);
+        Long cardId;
+
+        // 스펠 카드인 경우
+        if (cardForm.getCardType() == CardType.SPELL) {
+            cardId = cardService.createNewSpellCard(cardDto);
+            // 카드 이미지 저장
+            imagePathService.saveSpellCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
+            System.out.println("tempFilePath = " + tempFilePath);
+        }
+        // 아티팩트 카드인 경우
+        else {
+            if (cardForm.isHasAttachment()) { // 애착 사도가 있는 경우
+                cardId = cardService.createNewArtifactCard(cardDto, cardForm.getCharacterId(), cardForm.generateAttachmentSkill());
+                // 카드 이미지 저장
+                imagePathService.saveArtifactCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
+                System.out.println("tempFilePath = " + tempFilePath);
+            }
+            else { // 애착 사도가 없는 경우
+                cardId = cardService.createNewArtifactCard(cardDto);
+                // 카드 이미지 저장
+                imagePathService.saveArtifactCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
+                System.out.println("tempFilePath = " + tempFilePath);
+            }
+        }
+
+        return cardId;
     }
 
-    private String setCardImageUrl(HttpSession session) {
-        return (String) Optional.ofNullable(session.getAttribute(CARD_IMAGE_URL)).orElse(imageUrlService.getDefaultThumbnailUrl());
+    private String getImagePath(HttpSession session) {
+        String imageUrl = (String) session.getAttribute(CARD_IMAGE_URL);
+
+        // 해당 이미지가 있으면 (세션에 url이 있으면), url에서 파일명을 뽑아 temp 경로와 합쳐서 파일 경로를 리턴
+        if (imageUrl != null) {
+            String fileName = fileStorageService.extractFileName(imageUrl);
+            return fileStorageService.getTempDir() + fileName;
+        }
+        // 지정한 이미지가 없으면 (세션에 url이 없으면) 기본 썸네일 경로를 리턴
+        else {
+            return imagePathService.getDefaultThumbNailFilePath();
+        }
+
     }
 
-    private void cardImageProcess(HttpSession session, MultipartFile imageFile) {
+    // 세션에 이미지 url이 있으면 해당 url을 리턴, 없으면 디폴트 썸네일 url을 리턴
+    private String getImageUrl(HttpSession session) {
+        String defaultUrl = imageUrlService.getDefaultThumbnailUrl();
+        return (String) Optional.ofNullable(session.getAttribute(CARD_IMAGE_URL)).orElse(defaultUrl);
+    }
 
+    // MultipartFile을 temp 경로에 저장하고 파일명을 리턴한다.
+    private void saveCardImageToTemp(HttpSession session, MultipartFile imageFile) {
+
+        // 파일이 없을 경우 동작 x.
         if (imageFile == null || imageFile.isEmpty()) {
-            log.info("imageFile is null or empty");
+            log.info("[saveCardImageToTemp()] imageFile is null or empty");
             return;
         }
 
+        // 파일을 저장하고 이미지 url을 세션에 저장.
         try {
-            FileDto fileDto = fileStorageService.saveFileToTemp(imageFile); // 이미지를 임시 경로에 저장하고 파일명 리턴 (fileDto)
-            String tmpUrl = imageUrlService.getTempBaseUrl() + fileDto.getFileName(); // 임시 경로 + 파일명으로 url 생성
-            session.setAttribute(CARD_IMAGE_URL, tmpUrl); // 생성한 경로를 세션에 저장
+            FileDto fileDto = fileStorageService.saveFileToTemp(imageFile);
+            String tempUrl = imageUrlService.getTempImageBaseUrl() + fileDto.getFileName();
+            session.setAttribute(CARD_IMAGE_URL, tempUrl);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

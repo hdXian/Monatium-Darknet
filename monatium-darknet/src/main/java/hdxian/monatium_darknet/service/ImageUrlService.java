@@ -37,7 +37,11 @@ public class ImageUrlService {
         return new AsideImageDto(asideUrl, lv1Url, lv2Url, lv3Url);
     }
 
-    public String getTempBaseUrl() {
+    public String getImageBaseUrl() {
+        return api_baseUrl + "images/";
+    }
+
+    public String getTempImageBaseUrl() {
         return api_baseUrl + "images/" + "tmp/";
     }
 

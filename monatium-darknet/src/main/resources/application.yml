@@ -42,6 +42,7 @@ logging.level:
 # file path (local, for test)
 file:
   dir: D:/Dev/trickcal_unofficial/files/
+  imgDir: imgs/
   tempDir: temp/
   noticeDir: imgs/notices/
   wikiDir: imgs/wiki/
@@ -51,7 +52,7 @@ file:
   spellCardDir: imgs/wiki/cards/spell/
   artifactCardDir: imgs/wiki/cards/artifact/
   skinDir: imgs/wiki/skins/
-  defaultThumbnail: /imgs/defaultThumbnail.png
+  defaultThumbnail: defaultThumbnail.png
 
 url:
   api_baseUrl: /api/

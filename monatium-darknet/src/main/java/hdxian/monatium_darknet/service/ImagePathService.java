@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ImagePathService {
+
+    @Value("${file.imgDir}")
+    private String imgDir;
 
     @Value("${file.wikiDir}")
     private String wikiDir;
@@ -84,8 +86,8 @@ public class ImagePathService {
         return iconDir + "star_" + isFilled + ext;
     }
 
-    public String getDefaultThumbNailFileName() {
-        return defaultThumbNail;
+    public String getDefaultThumbNailFilePath() {
+        return imgDir + defaultThumbNail;
     }
 
     // 서버 스토리지 내 이미지 저장 경로를 리턴

@@ -496,7 +496,7 @@ public class CharacterMgController {
     // === 1-2. 임시 경로에 저장돼있는 캐릭터 이미지들의 파일 경로를 추출해 리턴 ===
     private CharacterImageDto generateChImagePathsFromTemp(HttpSession session) {
 
-        String defaultImagePath = imagePathService.getDefaultThumbNailFileName();
+        String defaultImagePath = imagePathService.getDefaultThumbNailFilePath();
 
         // 임시 경로에 이미지가 없다면 -> 신규 캐릭터 생성 시점에서 이미지가 임시경로에 없다 (세션에 url이 없다) -> 디폴트 이미지를 넣어놨다
         String profilePath;
@@ -529,7 +529,7 @@ public class CharacterMgController {
     // === 1-3. 임시 경로에 저장돼있는 어사이드 이미지들의 파일 경로를 추출해 리턴 ===
     private AsideImageDto generateAsideImagePathsFromTemp(HttpSession session) {
 
-        String defaultImagePath = imagePathService.getDefaultThumbNailFileName();
+        String defaultImagePath = imagePathService.getDefaultThumbNailFilePath();
 
         String asidePath;
         if (session.getAttribute(CH_ADD_ASIDE_URL) == null) {
@@ -898,7 +898,7 @@ public class CharacterMgController {
 
         try {
             FileDto fileDto = fileStorageService.saveFileToTemp(multipartFile);
-            String tempImageUrl = imageUrlService.getTempBaseUrl() + fileDto.getFileName();
+            String tempImageUrl = imageUrlService.getTempImageBaseUrl() + fileDto.getFileName();
             session.setAttribute(attrName, tempImageUrl);
             log.info("setAttribute attrName = {}, tempImageUrl = {}", attrName, tempImageUrl);
         } catch (IOException e) {
