@@ -127,13 +127,13 @@ public class CardMgController {
         }
         // 5. 중간 저장 버튼을 누른 경우 폼 페이지로 리다이렉트
         else {
-            return "redirect:/management/cards/spell/new";
+            return "redirect:/management/cards/new";
         }
 
     }
 
 
-    // === private ===
+    // ===== private =====
 
     private Long saveCard(HttpSession session, CardAddForm cardForm) {
         // 1. 카드 데이터 저장

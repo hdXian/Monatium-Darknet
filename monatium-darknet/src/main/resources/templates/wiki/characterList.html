@@ -204,15 +204,11 @@
                                     <!-- 캐릭터 이름과 종족 심볼 -->
                                     <h5 class="card-title mb-2 d-inline-flex align-items-center">
                                         <span th:text="${character.name}">캐릭터 이름</span>
-                                        <img th:src="@{|/imgs/wiki/icons/symbol_${{character.race}}.webp|}" class="symbol-image ms-2" alt="종족 심볼 이미지"> <!-- 종족 심볼 추가 -->
+                                        <img th:src="@{ |${iconBaseUrl}race/${{character.race}}| }" class="symbol-image ms-2" alt="종족 심볼 이미지"> <!-- 종족 심볼 추가 -->
                                     </h5>
 
-                                    <!-- 성급 이미지 (switch 사용) -->
-                                    <th:block th:switch="${character.grade}">
-                                        <img th:case="3" th:src="@{/imgs/wiki/icons/star_3.webp}" class="star-image mb-2" alt="성급 이미지">
-                                        <img th:case="2" th:src="@{/imgs/wiki/icons/star_2.webp}" class="star-image mb-2" alt="성급 이미지">
-                                        <img th:case="1" th:src="@{/imgs/wiki/icons/star_1.webp}" class="star-image mb-2" alt="성급 이미지">
-                                    </th:block>
+                                    <!-- 성급 이미지 -->
+                                    <img th:src="@{ |${iconBaseUrl}gradeStar/${character.grade}| }" class="star-image mb-2" alt="성급 이미지">
 
                                     <!-- 작은 이미지 4개 (특성) (|..| 구문으로 url 렌더링) -->
                                     <div class="small-images-container">

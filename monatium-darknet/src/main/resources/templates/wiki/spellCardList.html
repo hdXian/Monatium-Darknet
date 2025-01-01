@@ -77,7 +77,7 @@
                     <div th:each="card: ${cardList}" class="col-md-6 my-3 spell-item" th:data-grade="${{card.grade}}" th:data-name="${card.name}">
                         <div class="card card-custom">
                             <div class="card-body d-flex align-items-start">
-                                <img th:src="@{/imgs/wiki/card/spell/{id}.webp (id=${card.id})}"
+                                <img th:src="@{ |${baseUrl}${card.id}| }"
                                      th:classappend="| ${{card.grade}}-border |"
                                      class="card-img-top spell-image"
                                      alt="아이템 1">

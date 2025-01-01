@@ -315,7 +315,7 @@
                 <h2 class="mb-4">어사이드</h2>
                 <hr class="title-underline">
 
-                <div class="container aside-content">
+                <div th:if="${character.aside != null}" class="container aside-content">
                     <!-- 어사이드의 전체 이름, 설명, 그리고 이미지 -->
                     <div class="mb-4">
                         <div class="row g-0">
