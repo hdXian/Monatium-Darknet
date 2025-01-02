@@ -15,7 +15,7 @@ public class CardDto {
     private String description;
     private String story;
     private Integer cost;
-    private String imageUrl;
+//    private String imageUrl;
     private List<Attribute> attributes = new ArrayList<>();
 
     public void addAttribute(String name, String value) {

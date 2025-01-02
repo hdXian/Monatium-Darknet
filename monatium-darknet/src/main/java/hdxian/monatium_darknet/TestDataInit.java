@@ -122,22 +122,22 @@ public class TestDataInit {
 
         String cardBaseUrl = "/imgs/wiki/card/";
 
-        cardService.updateImageUrl(cardId1, cardBaseUrl + "artifact/" + cardId1 + ".webp");
-        cardService.updateImageUrl(cardId2, cardBaseUrl + "artifact/" + cardId2 + ".webp");
-        cardService.updateImageUrl(cardId3, cardBaseUrl + "artifact/" + cardId3 + ".webp");
-        cardService.updateImageUrl(cardId4, cardBaseUrl + "artifact/" + cardId4 + ".webp");
-        cardService.updateImageUrl(cardId5, cardBaseUrl + "artifact/" + cardId5 + ".webp");
-        cardService.updateImageUrl(cardId6, cardBaseUrl + "artifact/" + cardId6 + ".webp");
-        cardService.updateImageUrl(cardId7, cardBaseUrl + "artifact/" + cardId7 + ".webp");
-
-        cardService.updateImageUrl(spellId1, cardBaseUrl + "spell/" + spellId1 + ".webp");
-        cardService.updateImageUrl(spellId2, cardBaseUrl + "spell/" + spellId2 + ".webp");
-        cardService.updateImageUrl(spellId3, cardBaseUrl + "spell/" + spellId3 + ".webp");
-        cardService.updateImageUrl(spellId4, cardBaseUrl + "spell/" + spellId4 + ".webp");
-        cardService.updateImageUrl(spellId5, cardBaseUrl + "spell/" + spellId5 + ".webp");
-        cardService.updateImageUrl(spellId6, cardBaseUrl + "spell/" + spellId6 + ".webp");
-        cardService.updateImageUrl(spellId7, cardBaseUrl + "spell/" + spellId7 + ".webp");
-        cardService.updateImageUrl(spellId8, cardBaseUrl + "spell/" + spellId8 + ".webp");
+//        cardService.updateImageUrl(cardId1, cardBaseUrl + "artifact/" + cardId1 + ".webp");
+//        cardService.updateImageUrl(cardId2, cardBaseUrl + "artifact/" + cardId2 + ".webp");
+//        cardService.updateImageUrl(cardId3, cardBaseUrl + "artifact/" + cardId3 + ".webp");
+//        cardService.updateImageUrl(cardId4, cardBaseUrl + "artifact/" + cardId4 + ".webp");
+//        cardService.updateImageUrl(cardId5, cardBaseUrl + "artifact/" + cardId5 + ".webp");
+//        cardService.updateImageUrl(cardId6, cardBaseUrl + "artifact/" + cardId6 + ".webp");
+//        cardService.updateImageUrl(cardId7, cardBaseUrl + "artifact/" + cardId7 + ".webp");
+//
+//        cardService.updateImageUrl(spellId1, cardBaseUrl + "spell/" + spellId1 + ".webp");
+//        cardService.updateImageUrl(spellId2, cardBaseUrl + "spell/" + spellId2 + ".webp");
+//        cardService.updateImageUrl(spellId3, cardBaseUrl + "spell/" + spellId3 + ".webp");
+//        cardService.updateImageUrl(spellId4, cardBaseUrl + "spell/" + spellId4 + ".webp");
+//        cardService.updateImageUrl(spellId5, cardBaseUrl + "spell/" + spellId5 + ".webp");
+//        cardService.updateImageUrl(spellId6, cardBaseUrl + "spell/" + spellId6 + ".webp");
+//        cardService.updateImageUrl(spellId7, cardBaseUrl + "spell/" + spellId7 + ".webp");
+//        cardService.updateImageUrl(spellId8, cardBaseUrl + "spell/" + spellId8 + ".webp");
     }
 
     private static Skill generateAttachmentSkill(String name) {
@@ -154,7 +154,7 @@ public class TestDataInit {
         dto.setStory(name + "스펠카드 이야기");
         dto.setCost(14);
         dto.setGrade(grade);
-        dto.setImageUrl(name + "스펠카드이미지url");
+//        dto.setImageUrl(name + "스펠카드이미지url");
 
         dto.addAttribute(name + "스펠카드 효과1", name + "스펠카드 효과1 수치");
         dto.addAttribute(name + "스펠카드 효과2", name + "스펠카드 효과2 수치");
@@ -169,7 +169,7 @@ public class TestDataInit {
         dto.setStory(name + "아티팩트카드 이야기");
         dto.setCost(14);
         dto.setGrade(grade);
-        dto.setImageUrl(name + "아티팩트카드이미지url");
+//        dto.setImageUrl(name + "아티팩트카드이미지url");
 
         dto.addAttribute(name + "아티팩트카드 효과1", name + "아티팩트카드 효과1 수치");
         dto.addAttribute(name + "아티팩트카드 효과2", name + "아티팩트카드 효과2 수치");

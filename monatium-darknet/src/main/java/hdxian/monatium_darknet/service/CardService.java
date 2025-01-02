@@ -70,11 +70,11 @@ public class CardService {
     }
 
     // TODO - Card 도메인의 imageUrl 비활성화
-    @Transactional
-    public void updateImageUrl(Long cardId, String imageUrl) {
-        Card card = findOneCard(cardId);
-        card.setImageUrl(imageUrl);
-    }
+//    @Transactional
+//    public void updateImageUrl(Long cardId, String imageUrl) {
+//        Card card = findOneCard(cardId);
+//        card.setImageUrl(imageUrl);
+//    }
 
     @Transactional
     public Long createNewArtifactCard(CardDto cardDto, Long characterId, Skill attachmentSkill) {
@@ -193,9 +193,19 @@ public class CardService {
     public Long updateArtifactCard(Long cardId, CardDto updateParam, Long updateCharacterId, Skill updateSkill, String imagePath) {
         ArtifactCard artifactCard = findOneArtifactCard(cardId);
 
-        Optional<Character> findCharacter = characterRepository.findOne(updateCharacterId);
-        if (findCharacter.isEmpty()) {
-            throw new NoSuchElementException("해당 캐릭터가 존재하지 않습니다. updateCharacterId=" + updateCharacterId);
+        Character updateCharacter;
+
+        // 지정한 캐릭터 id가 있을 경우
+        if (updateCharacterId != null) {
+            Optional<Character> findCharacter = characterRepository.findOne(updateCharacterId);
+            if (findCharacter.isEmpty()) {
+                throw new NoSuchElementException("해당 캐릭터가 존재하지 않습니다. updateCharacterId=" + updateCharacterId);
+            }
+            updateCharacter = findCharacter.get();
+        }
+        // 지정한 캐릭터 id가 없을 경우
+        else {
+            updateCharacter = null;
         }
 
         // 이름을 변경하려고 한다면 기존에 같은 이름이 있는지 확인
@@ -203,9 +213,7 @@ public class CardService {
             checkCardName(updateParam.getName());
         }
 
-        Character updateCharacter = findCharacter.get();
-
-        updateCard(artifactCard, updateParam, updateCharacter, updateSkill);
+        updateCard(artifactCard, updateParam, updateCharacter, updateSkill); // character와 skill은 인자로 null이 전달되면 null로 세팅됨 (애착 사도 효과 제거)
 
         if (imagePath != null) {
             imagePathService.saveArtifactCardImage(cardId, imagePath);
@@ -270,7 +278,7 @@ public class CardService {
         spellCard.setDescription(updateParam.getDescription());
         spellCard.setStory(updateParam.getStory());
         spellCard.setCost(updateParam.getCost());
-        spellCard.setImageUrl(updateParam.getImageUrl());
+//        spellCard.setImageUrl(updateParam.getImageUrl());
 
         List<Attribute> attributes = spellCard.getAttributes();
         attributes.clear();
@@ -283,7 +291,7 @@ public class CardService {
         artifactCard.setDescription(updateParam.getDescription());
         artifactCard.setStory(updateParam.getStory());
         artifactCard.setCost(updateParam.getCost());
-        artifactCard.setImageUrl(updateParam.getImageUrl());
+//        artifactCard.setImageUrl(updateParam.getImageUrl());
 
         List<Attribute> attributes = artifactCard.getAttributes();
         attributes.clear();
@@ -295,7 +303,8 @@ public class CardService {
         updateCard(artifactCard, updateParam);
 
         // 애착 스킬 정보 업데이트
-        updateAttachmentSkill(artifactCard.getAttachmentSkill(), updateSkill);
+//        updateAttachmentSkill(artifactCard.getAttachmentSkill(), updateSkill);
+        artifactCard.setAttachmentSkill(updateSkill);
 
         // 애착 사도 정보 업데이트
         artifactCard.setCharacter(updateCharacter);

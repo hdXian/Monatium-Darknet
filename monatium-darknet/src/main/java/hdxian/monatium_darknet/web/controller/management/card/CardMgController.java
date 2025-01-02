@@ -254,7 +254,7 @@ public class CardMgController {
             // 애착 사도가 없는 경우
             else {
                 // 아티팩트 카드 업데이트 (이미지 업데이트 포함)
-                return cardService.updateArtifactCard(cardId, cardDto, imagePath_Edit);
+                return cardService.updateArtifactCard(cardId, cardDto, null, null, imagePath_Edit);
             }
 
         }
