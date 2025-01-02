@@ -14,6 +14,7 @@ import hdxian.monatium_darknet.web.validator.ChFormStep4Validator;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -420,15 +421,15 @@ public class CharacterMgController {
     }
 
     @PostMapping("/activate/{characterId}")
-    public String activate(@PathVariable("characterId") Long characterId) {
+    public ResponseEntity<Void> activate(@PathVariable("characterId") Long characterId) {
         characterService.activateCharacter(characterId);
-        return "redirect:/management/characters";
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/disable/{characterId}")
-    public String deactivate(@PathVariable("characterId") Long characterId) {
+    public ResponseEntity<Void> deactivate(@PathVariable("characterId") Long characterId) {
         characterService.disableCharacter(characterId);
-        return "redirect:/management/characters";
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/delete/{characterId}")

@@ -227,9 +227,15 @@ public class CardMgController {
     }
 
     @PostMapping("/delete/{cardId}")
-    public ResponseEntity<Void> deleteCard(@PathVariable("cardId") Long cardId) {
+    public String deleteCard(@PathVariable("cardId") Long cardId) {
         cardService.deleteCard(cardId);
-        return ResponseEntity.ok().build();
+        Card card = cardService.findOneCard(cardId);
+        if (card instanceof SpellCard) {
+            return "redirect:/management/cards/spell";
+        }
+        else {
+            return "redirect:/management/cards/artifact";
+        }
     }
 
     // ===== private =====
