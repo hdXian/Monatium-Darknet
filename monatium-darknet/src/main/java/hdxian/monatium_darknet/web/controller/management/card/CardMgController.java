@@ -79,7 +79,7 @@ public class CardMgController {
     @GetMapping("/new")
     public String addForm(HttpSession session, Model model) {
         // 세션에 있으면 (임시저장 등으로 리다이렉트) 가져오고, 없으면 (최초 요청) 새로운 객체를 생성.
-        CardAddForm cardForm = (CardAddForm) Optional.ofNullable(session.getAttribute(CARD_FORM)).orElse(new CardAddForm());
+        CardForm cardForm = (CardForm) Optional.ofNullable(session.getAttribute(CARD_FORM)).orElse(new CardForm());
         List<Character> characterList = characterService.findCharacters();
 
         // 세션에 있으면 (임시저장 등으로 리다이렉트) 가져오고, 없으면 (최초 요청) 새로운 디폴트 url 지정
@@ -95,7 +95,7 @@ public class CardMgController {
     // 카드 추가 요청 처리 (스펠, 아티팩트 통합)
     @PostMapping("/new")
     public String addCard(HttpSession session, @RequestParam("action") String action,
-                          @ModelAttribute("cardForm") CardAddForm cardForm, Model model) {
+                          @ModelAttribute("cardForm") CardForm cardForm, Model model) {
 
         log.info("cardForm = {}", cardForm);
 
@@ -141,7 +141,7 @@ public class CardMgController {
     public String editForm(HttpSession session, @PathVariable("cardId") Long cardId, Model model) {
 
         // 세션에 수정하던 폼이 없으면 수정할 카드 id로 새로운 폼 객체를 생성
-        CardAddForm cardForm = (CardAddForm) Optional.ofNullable(session.getAttribute(CARD_FORM)).orElse(generateNewCardForm(cardId, model));
+        CardForm cardForm = (CardForm) Optional.ofNullable(session.getAttribute(CARD_FORM)).orElse(generateNewCardForm(cardId, model));
 
         List<Character> characterList = characterService.findCharacters();
 
@@ -164,7 +164,7 @@ public class CardMgController {
     // 카드 수정 요청
     @PostMapping("/edit/{cardId}")
     public String edit(HttpSession session, @PathVariable("cardId") Long cardId, @RequestParam("action") String action,
-                       @ModelAttribute("cardForm") CardAddForm cardForm, Model model) {
+                       @ModelAttribute("cardForm") CardForm cardForm, Model model) {
 
         log.info("edit cardForm = {}", cardForm);
 
@@ -215,7 +215,7 @@ public class CardMgController {
 
     // ===== private =====
 
-    private Long updateCard(HttpSession session, Long cardId, CardAddForm cardForm) {
+    private Long updateCard(HttpSession session, Long cardId, CardForm cardForm) {
 
         // 카드 타입은 바뀌면 안됨 (타입 체크용)
         Card card = cardService.findOneCard(cardId);
@@ -261,7 +261,7 @@ public class CardMgController {
 
     }
 
-    private Long saveCard(HttpSession session, CardAddForm cardForm) {
+    private Long saveCard(HttpSession session, CardForm cardForm) {
         // 1. 카드 데이터 저장
         // 2. 이미지를 임시 경로에서 정식 경로로 이동
         CardDto cardDto = cardForm.generateCardDto();
@@ -294,10 +294,10 @@ public class CardMgController {
         return cardId;
     }
 
-    private CardAddForm generateNewCardForm(Long cardId, Model model) {
+    private CardForm generateNewCardForm(Long cardId, Model model) {
         Card card = cardService.findOneCard(cardId);
 
-        CardAddForm cardForm = new CardAddForm();
+        CardForm cardForm = new CardForm();
 
         // 공통 부분 처리
         cardForm.setGrade(card.getGrade());

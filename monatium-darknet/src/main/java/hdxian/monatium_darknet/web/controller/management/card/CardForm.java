@@ -12,7 +12,7 @@ import java.util.List;
 
 // TODO - Validation 추가
 @Data
-public class CardAddForm {
+public class CardForm {
 
     private CardType cardType;
     private CardGrade grade;
