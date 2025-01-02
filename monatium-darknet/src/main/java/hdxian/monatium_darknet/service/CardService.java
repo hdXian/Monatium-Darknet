@@ -29,6 +29,8 @@ public class CardService {
     private final CharacterRepository characterRepository;
     private final CardRepository cardRepository;
 
+    private final ImagePathService imagePathService;
+
     // TODO - 카드 이름 중복 체크 필요할듯
 
     // 카드 저장 기능
@@ -67,6 +69,7 @@ public class CardService {
         return cardRepository.save(artifactCard);
     }
 
+    // TODO - Card 도메인의 imageUrl 비활성화
     @Transactional
     public void updateImageUrl(Long cardId, String imageUrl) {
         Card card = findOneCard(cardId);
@@ -107,7 +110,26 @@ public class CardService {
             checkCardName(updateParam.getName());
         }
 
-        updateCard(spellCard, updateParam);
+        updateCard(spellCard, updateParam); // 더티 체킹 업데이트
+
+        return spellCard.getId();
+    }
+
+    @Transactional
+    public Long updateSpellCard(Long cardId, CardDto updateParam, String imagePath) {
+        SpellCard spellCard = findOneSpellCard(cardId);
+
+        // 이름을 변경하려고 한다면 기존에 같은 이름이 있는지 확인
+        if (!(spellCard.getName().equals(updateParam.getName()))) {
+            checkCardName(updateParam.getName());
+        }
+
+        updateCard(spellCard, updateParam); // 더티 체킹 업데이트
+
+        // 이미지가 바뀌지 않았으면 imagePath는 null로 넘어옴
+        if (imagePath != null) {
+            imagePathService.saveSpellCardImage(cardId, imagePath); // 카드 이미지 업데이트
+        }
 
         return spellCard.getId();
     }

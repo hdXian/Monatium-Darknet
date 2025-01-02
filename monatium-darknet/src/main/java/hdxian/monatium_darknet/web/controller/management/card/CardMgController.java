@@ -140,6 +140,7 @@ public class CardMgController {
     @GetMapping("/edit/{cardId}")
     public String editForm(HttpSession session, @PathVariable("cardId") Long cardId, Model model) {
 
+        // 세션에 수정하던 폼이 없으면 수정할 카드 id로 새로운 폼 객체를 생성
         CardAddForm cardForm = (CardAddForm) Optional.ofNullable(session.getAttribute(CARD_FORM)).orElse(generateNewCardForm(cardId, model));
 
         if (cardForm.getCardType() == CardType.SPELL) {
@@ -189,9 +190,23 @@ public class CardMgController {
         // 3. 세션의 폼 데이터를 업데이트한다.
         session.setAttribute(CARD_FORM, cardForm);
 
-        // 4. 완료 버튼을 누른 경우 카드 정보를 저장하고 목록으로 리다이렉트
+        // TODO 4. 완료 버튼을 누른 경우 카드 정보를 저장하고 목록으로 리다이렉트
+        if (action.equals("complete")) { // 수정 완료 버튼을 누른 경우
+            Long updatedCardId = updateCard(session, cardId, cardForm);
 
-        return "redirect:/management/cards/edit/" + cardId;
+            clearSessionAttributes(session);
+
+            if (cardForm.getCardType() == CardType.SPELL) {
+                return "redirect:/management/cards/spell";
+            }
+            else {
+                return "redirect:/management/cards/artifact";
+            }
+        }
+        else { // 임시저장 버튼을 누른 경우
+            return "redirect:/management/cards/edit/" + cardId;
+        }
+
     }
 
     private CardAddForm generateNewCardForm(Long cardId, Model model) {
@@ -245,6 +260,31 @@ public class CardMgController {
 
     // ===== private =====
 
+    private Long updateCard(HttpSession session, Long cardId, CardAddForm cardForm) {
+
+        // 카드 타입은 바뀌면 안됨
+        Card card = cardService.findOneCard(cardId);
+        if (card instanceof SpellCard) { // 스펠 카드 업데이트
+            CardDto cardDto = new CardDto();
+            cardDto.setName(cardForm.getName());
+            cardDto.setGrade(cardForm.getGrade());
+            cardDto.setDescription(cardForm.getDescription());
+            cardDto.setStory(cardForm.getStory());
+            cardDto.setCost(cardForm.getCost());
+            cardDto.setAttributes(cardForm.getCardAttributes());
+
+            // 업데이트할 이미지 가져오기 (세션에서 가져옴. 바뀐거 없으면 null)
+            String imageUrl_Edit = getImagePath_Edit(session);
+
+            // 스펠 카드 업데이트 (이미지 업데이트 포함)
+            return cardService.updateSpellCard(cardId, cardDto, imageUrl_Edit);
+        }
+        else { // 아티팩트 카드 업데이트
+            return null;
+        }
+
+    }
+
     private Long saveCard(HttpSession session, CardAddForm cardForm) {
         // 1. 카드 데이터 저장
         // 2. 이미지를 임시 경로에서 정식 경로로 이동
@@ -278,19 +318,34 @@ public class CardMgController {
         return cardId;
     }
 
+    private String getImagePath_Edit(HttpSession session) {
+        String imageUrl = (String) session.getAttribute(CARD_IMAGE_URL);
+
+        // 해당 이미지가 있으면 파일명을 뽑아 temp 경로와 합쳐 리턴
+        if (imageUrl != null) {
+            return convertUrlToTempPath(imageUrl);
+        }
+        else // 없으면 null 리턴 (업데이트할 이미지 x)
+            return null;
+    }
+
     private String getImagePath(HttpSession session) {
         String imageUrl = (String) session.getAttribute(CARD_IMAGE_URL);
 
         // 해당 이미지가 있으면 (세션에 url이 있으면), url에서 파일명을 뽑아 temp 경로와 합쳐서 파일 경로를 리턴
         if (imageUrl != null) {
-            String fileName = fileStorageService.extractFileName(imageUrl);
-            return fileStorageService.getTempDir() + fileName;
+            return convertUrlToTempPath(imageUrl);
         }
         // 지정한 이미지가 없으면 (세션에 url이 없으면) 기본 썸네일 경로를 리턴
         else {
             return imagePathService.getDefaultThumbNailFilePath();
         }
 
+    }
+
+    private String convertUrlToTempPath(String imageUrl) {
+        String fileName = fileStorageService.extractFileName(imageUrl);
+        return fileStorageService.getTempDir() + fileName;
     }
 
     // 세션에 이미지 url이 있으면 해당 url을 리턴, 없으면 디폴트 썸네일 url을 리턴
