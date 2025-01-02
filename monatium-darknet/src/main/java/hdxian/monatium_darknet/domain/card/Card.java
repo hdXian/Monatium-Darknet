@@ -26,6 +26,7 @@ public abstract class Card {
     private String story;
     private Integer cost;
 //    private String imageUrl;
+    private CardStatus status;
 
     @ElementCollection
     @CollectionTable(name = "card_attributes", joinColumns = @JoinColumn(name = "card_id"))

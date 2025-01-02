@@ -46,6 +46,7 @@ public class ArtifactCard extends Card{
         card.setStory(story);
         card.setCost(cost);
 //        card.setImageUrl(imageUrl);
+        card.setStatus(CardStatus.DISABLED);
         card.setCharacter(character);
         card.setAttachmentSkill(attachmentSkill);
 

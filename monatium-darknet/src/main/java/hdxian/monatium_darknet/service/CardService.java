@@ -4,6 +4,7 @@ import hdxian.monatium_darknet.domain.Attribute;
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.card.ArtifactCard;
 import hdxian.monatium_darknet.domain.card.Card;
+import hdxian.monatium_darknet.domain.card.CardStatus;
 import hdxian.monatium_darknet.domain.card.SpellCard;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.repository.CardRepository;
@@ -222,7 +223,25 @@ public class CardService {
         return artifactCard.getId();
     }
 
+    @Transactional
+    public void activateCard(Long cardId) {
+        Card card = findOneCard(cardId);
+        card.setStatus(CardStatus.ACTIVE);
+    }
+
+    @Transactional
+    public void disableCard(Long cardId) {
+        Card card = findOneCard(cardId);
+        card.setStatus(CardStatus.DISABLED);
+    }
+
     // 카드 삭제 기능
+    @Transactional // 소프트 삭제
+    public void deleteCard(Long cardId) {
+        Card card = findOneCard(cardId);
+        card.setStatus(CardStatus.DELETED);
+    }
+
     @Transactional
     public void deleteSpellCard(Long id) {
         SpellCard spellCard = findOneSpellCard(id);

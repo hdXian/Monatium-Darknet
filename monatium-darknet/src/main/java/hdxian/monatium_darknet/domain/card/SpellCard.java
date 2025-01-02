@@ -30,6 +30,7 @@ public class SpellCard extends Card{
         card.setStory(story);
         card.setCost(cost);
 //        card.setImageUrl(imageUrl);
+        card.setStatus(CardStatus.DISABLED);
 
         List<Attribute> cardAttributes = card.getAttributes();
         cardAttributes.addAll(Arrays.asList(attributes));
