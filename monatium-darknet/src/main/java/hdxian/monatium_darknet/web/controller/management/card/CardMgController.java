@@ -85,7 +85,7 @@ public class CardMgController {
         // 세션에 있으면 (임시저장 등으로 리다이렉트) 가져오고, 없으면 (최초 요청) 새로운 디폴트 url 지정
         String cardImageUrl = getImageUrl(session, imageUrlService.getDefaultThumbnailUrl());
 
-        model.addAttribute("cardForm", cardForm);
+        model.addAttribute(CARD_FORM, cardForm);
         model.addAttribute("characterList", characterList);
         model.addAttribute(CARD_IMAGE_URL, cardImageUrl);
 
@@ -143,6 +143,8 @@ public class CardMgController {
         // 세션에 수정하던 폼이 없으면 수정할 카드 id로 새로운 폼 객체를 생성
         CardAddForm cardForm = (CardAddForm) Optional.ofNullable(session.getAttribute(CARD_FORM)).orElse(generateNewCardForm(cardId, model));
 
+        List<Character> characterList = characterService.findCharacters();
+
         if (cardForm.getCardType() == CardType.SPELL) {
             String imageUrl = getImageUrl(session, imageUrlService.getSpellCardBaseUrl() + cardId);
             model.addAttribute(CARD_IMAGE_URL, imageUrl);
@@ -154,6 +156,7 @@ public class CardMgController {
 
         model.addAttribute("cardId", cardId);
         model.addAttribute(CARD_FORM, cardForm);
+        model.addAttribute("characterList", characterList);
 
         return "management/cards/cardEditForm";
     }
@@ -209,6 +212,88 @@ public class CardMgController {
 
     }
 
+
+    // ===== private =====
+
+    private Long updateCard(HttpSession session, Long cardId, CardAddForm cardForm) {
+
+        // 카드 타입은 바뀌면 안됨 (타입 체크용)
+        Card card = cardService.findOneCard(cardId);
+
+        // CardDto (공통 부분) 생성
+        CardDto cardDto = cardForm.generateCardDto();
+
+        // 업데이트할 이미지 가져오기 (세션에서 가져옴. 바뀐거 없으면 null)
+        String imagePath_Edit = getImagePath_Edit(session);
+
+        if (card instanceof SpellCard) { // 스펠 카드 업데이트
+
+            // DB 업데이트 전 마지막 타입 체크
+            if (cardForm.getCardType() != CardType.SPELL) {
+                throw new IllegalArgumentException("카드의 타입이 맞지 않습니다. cardId = " + cardId);
+            }
+
+            // 스펠 카드 업데이트 (이미지 업데이트 포함)
+            return cardService.updateSpellCard(cardId, cardDto, imagePath_Edit);
+        }
+        else { // 아티팩트 카드 업데이트
+
+            // DB 업데이트 전 마지막 타입 체크
+            if (cardForm.getCardType() != CardType.ARTIFACT) {
+                throw new IllegalArgumentException("아티팩트 카드의 타입이 맞지 않습니다. cardId = " + cardId);
+            }
+
+            // 애착 사도가 있는 경우
+            if (cardForm.isHasAttachment()) {
+                Long chId = cardForm.getCharacterId();
+                Skill attachmentSkill = cardForm.generateAttachmentSkill();
+
+                // 아티팩트 카드 업데이트 (이미지 업데이트 포함)
+                return cardService.updateArtifactCard(cardId, cardDto, chId, attachmentSkill, imagePath_Edit);
+            }
+            // 애착 사도가 없는 경우
+            else {
+                // 아티팩트 카드 업데이트 (이미지 업데이트 포함)
+                return cardService.updateArtifactCard(cardId, cardDto, imagePath_Edit);
+            }
+
+        }
+
+    }
+
+    private Long saveCard(HttpSession session, CardAddForm cardForm) {
+        // 1. 카드 데이터 저장
+        // 2. 이미지를 임시 경로에서 정식 경로로 이동
+        CardDto cardDto = cardForm.generateCardDto();
+        String tempFilePath = getImagePath(session);
+        Long cardId;
+
+        // 스펠 카드인 경우
+        if (cardForm.getCardType() == CardType.SPELL) {
+            cardId = cardService.createNewSpellCard(cardDto);
+            // 카드 이미지 저장
+            imagePathService.saveSpellCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
+            System.out.println("tempFilePath = " + tempFilePath);
+        }
+        // 아티팩트 카드인 경우
+        else {
+            if (cardForm.isHasAttachment()) { // 애착 사도가 있는 경우
+                cardId = cardService.createNewArtifactCard(cardDto, cardForm.getCharacterId(), cardForm.generateAttachmentSkill());
+                // 카드 이미지 저장
+                imagePathService.saveArtifactCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
+                System.out.println("tempFilePath = " + tempFilePath);
+            }
+            else { // 애착 사도가 없는 경우
+                cardId = cardService.createNewArtifactCard(cardDto);
+                // 카드 이미지 저장
+                imagePathService.saveArtifactCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
+                System.out.println("tempFilePath = " + tempFilePath);
+            }
+        }
+
+        return cardId;
+    }
+
     private CardAddForm generateNewCardForm(Long cardId, Model model) {
         Card card = cardService.findOneCard(cardId);
 
@@ -255,67 +340,6 @@ public class CardMgController {
 
         }
         return cardForm;
-    }
-
-
-    // ===== private =====
-
-    private Long updateCard(HttpSession session, Long cardId, CardAddForm cardForm) {
-
-        // 카드 타입은 바뀌면 안됨
-        Card card = cardService.findOneCard(cardId);
-        if (card instanceof SpellCard) { // 스펠 카드 업데이트
-            CardDto cardDto = new CardDto();
-            cardDto.setName(cardForm.getName());
-            cardDto.setGrade(cardForm.getGrade());
-            cardDto.setDescription(cardForm.getDescription());
-            cardDto.setStory(cardForm.getStory());
-            cardDto.setCost(cardForm.getCost());
-            cardDto.setAttributes(cardForm.getCardAttributes());
-
-            // 업데이트할 이미지 가져오기 (세션에서 가져옴. 바뀐거 없으면 null)
-            String imageUrl_Edit = getImagePath_Edit(session);
-
-            // 스펠 카드 업데이트 (이미지 업데이트 포함)
-            return cardService.updateSpellCard(cardId, cardDto, imageUrl_Edit);
-        }
-        else { // 아티팩트 카드 업데이트
-            return null;
-        }
-
-    }
-
-    private Long saveCard(HttpSession session, CardAddForm cardForm) {
-        // 1. 카드 데이터 저장
-        // 2. 이미지를 임시 경로에서 정식 경로로 이동
-        CardDto cardDto = cardForm.generateCardDto();
-        String tempFilePath = getImagePath(session);
-        Long cardId;
-
-        // 스펠 카드인 경우
-        if (cardForm.getCardType() == CardType.SPELL) {
-            cardId = cardService.createNewSpellCard(cardDto);
-            // 카드 이미지 저장
-            imagePathService.saveSpellCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
-            System.out.println("tempFilePath = " + tempFilePath);
-        }
-        // 아티팩트 카드인 경우
-        else {
-            if (cardForm.isHasAttachment()) { // 애착 사도가 있는 경우
-                cardId = cardService.createNewArtifactCard(cardDto, cardForm.getCharacterId(), cardForm.generateAttachmentSkill());
-                // 카드 이미지 저장
-                imagePathService.saveArtifactCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
-                System.out.println("tempFilePath = " + tempFilePath);
-            }
-            else { // 애착 사도가 없는 경우
-                cardId = cardService.createNewArtifactCard(cardDto);
-                // 카드 이미지 저장
-                imagePathService.saveArtifactCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
-                System.out.println("tempFilePath = " + tempFilePath);
-            }
-        }
-
-        return cardId;
     }
 
     private String getImagePath_Edit(HttpSession session) {

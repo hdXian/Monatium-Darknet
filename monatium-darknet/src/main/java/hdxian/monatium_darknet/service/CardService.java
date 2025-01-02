@@ -148,7 +148,26 @@ public class CardService {
         return artifactCard.getId();
     }
 
-    // 아티팩트 카드 업데이트 하는데 캐릭터까지 함께 받아야 하나? 이거 바뀔 일 사실상 없는데? TODO - 업데이트에 캐릭터 제외하기
+    @Transactional
+    public Long updateArtifactCard(Long cardId, CardDto updateParam, String imagePath) {
+        ArtifactCard artifactCard = findOneArtifactCard(cardId);
+
+        // 이름을 변경하려고 한다면 기존에 같은 이름이 있는지 확인
+        if (!(artifactCard.getName().equals(updateParam.getName()))) {
+            checkCardName(updateParam.getName());
+        }
+
+        updateCard(artifactCard, updateParam);
+
+        if (imagePath != null) {
+            imagePathService.saveArtifactCardImage(cardId, imagePath);
+        }
+
+        return artifactCard.getId();
+    }
+
+    // 아티팩트 카드 업데이트 하는데 캐릭터까지 함께 받아야 하나? 이거 바뀔 일 사실상 없는데? -> 바뀌거나 추가될 수 있음.
+    // 또는 아티팩트 카드 자체가 수정될 때 폼에서 캐릭터Id도 다 받아와야 함. 검증 때문에.
     @Transactional
     public Long updateArtifactCard(Long cardId, CardDto updateParam, Long updateCharacterId, Skill updateSkill) {
         ArtifactCard artifactCard = findOneArtifactCard(cardId);
@@ -166,6 +185,31 @@ public class CardService {
         Character updateCharacter = findCharacter.get();
 
         updateCard(artifactCard, updateParam, updateCharacter, updateSkill);
+
+        return artifactCard.getId();
+    }
+
+    @Transactional
+    public Long updateArtifactCard(Long cardId, CardDto updateParam, Long updateCharacterId, Skill updateSkill, String imagePath) {
+        ArtifactCard artifactCard = findOneArtifactCard(cardId);
+
+        Optional<Character> findCharacter = characterRepository.findOne(updateCharacterId);
+        if (findCharacter.isEmpty()) {
+            throw new NoSuchElementException("해당 캐릭터가 존재하지 않습니다. updateCharacterId=" + updateCharacterId);
+        }
+
+        // 이름을 변경하려고 한다면 기존에 같은 이름이 있는지 확인
+        if (!(artifactCard.getName().equals(updateParam.getName()))) {
+            checkCardName(updateParam.getName());
+        }
+
+        Character updateCharacter = findCharacter.get();
+
+        updateCard(artifactCard, updateParam, updateCharacter, updateSkill);
+
+        if (imagePath != null) {
+            imagePathService.saveArtifactCardImage(cardId, imagePath);
+        }
 
         return artifactCard.getId();
     }
@@ -258,7 +302,7 @@ public class CardService {
     }
 
     // 스킬 변경
-    // 카드 타입 체크하는게 나으려나?
+    // 카드 타입 체크하는게 나으려나? -> 컨트롤러 계층에서 일단 하는 중
     private static void updateAttachmentSkill(Skill skill, Skill updateParam) {
         skill.setName(updateParam.getName());
         skill.setDescription(updateParam.getDescription());
