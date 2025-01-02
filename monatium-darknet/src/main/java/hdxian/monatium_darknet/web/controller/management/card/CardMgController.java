@@ -15,6 +15,7 @@ import hdxian.monatium_darknet.service.dto.CardDto;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -212,6 +213,24 @@ public class CardMgController {
 
     }
 
+
+    @PostMapping("/activate/{cardId}")
+    public ResponseEntity<Void> activateCard(@PathVariable("cardId") Long cardId) {
+        cardService.activateCard(cardId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/disable/{cardId}")
+    public ResponseEntity<Void> disableCard(@PathVariable("cardId") Long cardId) {
+        cardService.disableCard(cardId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/delete/{cardId}")
+    public ResponseEntity<Void> deleteCard(@PathVariable("cardId") Long cardId) {
+        cardService.deleteCard(cardId);
+        return ResponseEntity.ok().build();
+    }
 
     // ===== private =====
 
