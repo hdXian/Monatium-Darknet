@@ -26,6 +26,8 @@ public abstract class Card {
     private String story;
     private Integer cost;
 //    private String imageUrl;
+
+    @Enumerated(EnumType.STRING)
     private CardStatus status;
 
     @ElementCollection
