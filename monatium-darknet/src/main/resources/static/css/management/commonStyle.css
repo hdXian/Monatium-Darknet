@@ -12,3 +12,7 @@ body {
 .main-content {
     flex-grow: 1;
 }
+
+.field-error {
+    color: red;
+}

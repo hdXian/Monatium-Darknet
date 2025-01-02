@@ -31,27 +31,30 @@
                         <!-- 카드 종류 -->
                         <div class="col-md-4 mb-3">
                             <label for="cardType" class="form-label">카드 종류</label>
-                            <select th:field="*{{cardType}}" class="form-select" id="cardType">
+                            <select th:field="*{{cardType}}" th:errorclass="field-error" class="form-select" id="cardType">
                                 <option value="SPELL">스펠 카드</option>
                                 <option value="ARTIFACT">아티팩트 카드</option>
                             </select>
+                            <div class="field-error" th:errors="*{cardType}"></div>
                         </div>
 
                         <!-- 카드 등급 -->
                         <div class="col-md-4 mb-3">
                             <label for="grade" class="form-label">카드 등급</label>
-                            <select th:field="*{grade}" id="grade" class="form-select">
+                            <select th:field="*{grade}" th:errorclass="field-error" id="grade" class="form-select">
                                 <option value="NORMAL">일반</option>
                                 <option value="ADVANCED">고급</option>
                                 <option value="RARE">희귀</option>
                                 <option value="LEGENDARY">전설</option>
                             </select>
+                            <div class="field-error" th:errors="*{grade}"></div>
                         </div>
 
                         <!-- 카드 비용 -->
                         <div class="col-md-4 mb-3">
                             <label for="cost" class="form-label">카드 비용</label>
-                            <input th:field="*{cost}" id="cost" type="number" class="form-control" placeholder="카드 비용을 입력하세요">
+                            <input th:field="*{cost}" th:errorclass="field-error" id="cost" type="number" class="form-control" placeholder="카드 비용을 입력하세요">
+                            <div class="field-error" th:errors="*{cost}"></div>
                         </div>
                     </div>
 
@@ -75,12 +78,14 @@
                             <div class="mb-3">
                                 <label for="name" class="form-label">카드 이름</label>
                                 <input th:field="*{name}" th:errorclass="field-error" type="text" id="name" name="name" class="form-control" placeholder="카드 이름을 입력하세요">
+                                <div class="field-error" th:errors="*{name}"></div>
                             </div>
 
                             <!-- 카드 효과 입력 -->
                             <div class="mb-3">
                                 <label for="description" class="form-label">카드 효과</label>
                                 <textarea th:field="*{description}" th:errorclass="field-error" id="description" name="description" class="form-control auto-resize" placeholder="카드 효과를 입력하세요"></textarea>
+                                <div class="field-error" th:errors="*{description}"></div>
                             </div>
                         </div>
 
@@ -91,19 +96,23 @@
                         <!-- 카드 이야기 -->
                         <div class="col-md-6 mb-3">
                             <label for="story" class="form-label">카드 이야기</label>
-                            <textarea th:field="*{story}" id="story" class="form-control" placeholder="카드 이야기를 입력하세요"></textarea>
+                            <textarea th:field="*{story}" th:errorclass="field-error" id="story" class="form-control" placeholder="카드 이야기를 입력하세요"></textarea>
+                            <div class="field-error" th:errors="*{story}"></div>
                         </div>
 
                         <!-- 카드 속성 -->
                         <div id="card-attributes-container" class="col-md-6 mb-3">
                             <label class="form-label">카드 속성</label>
                             <div th:each="attribute, stat : *{cardAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-                                <input type="text" th:field="*{cardAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
-                                <input type="text" th:field="*{cardAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <input type="text" th:field="*{cardAttributes[__${stat.index}__].attrName}" th:errorclass="field-error" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                <div class="field-error" th:errors="*{cardAttributes[__${stat.index}__].attrName}"></div>
+                                <input type="text" th:field="*{cardAttributes[__${stat.index}__].attrValue}" th:errorclass="field-error" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <div class="field-error" th:errors="*{cardAttributes[__${stat.index}__].attrValue}"></div>
                                 <button type="button" class="btn btn-success btn-add-card-attribute">+</button>
                                 <button type="button" class="btn btn-danger btn-remove-card-attribute">-</button>
                             </div>
                         </div>
+
                     </div>
 
                     <hr>
@@ -141,18 +150,20 @@
                                 <!-- 애착 사도 -->
                                 <div class="col-md-4 mb-3">
                                     <label for="attachmentCh" class="form-label">애착 사도</label>
-                                    <select th:field="*{characterId}" id="attachmentCh" class="form-select">
+                                    <select th:field="*{characterId}" th:errorclass="field-error" id="attachmentCh" class="form-select">
                                         <option value="">애착 사도를 선택하세요</option>
                                         <option th:each="ch : ${characterList}" th:value="${ch.id}" th:text="${ch.name}">캐릭터 이름</option>
                                         <!-- 필요한 추가 옵션을 여기에 나열 -->
                                     </select>
+                                    <div class="field-error" th:errors="*{characterId}"></div>
                                 </div>
 
                                 <!-- 애착 아티팩트 스킬 이름 -->
                                 <div class="col-md-8 mb-3">
                                     <label for="attachmentSkillName" class="form-label">애착 아티팩트 스킬 이름</label>
-                                    <input th:field="*{attachmentSkillName}" id="attachmentSkillName" type="text"
+                                    <input th:field="*{attachmentSkillName}" th:errorclass="field-error" id="attachmentSkillName" type="text"
                                            class="form-control" placeholder="스킬 이름을 입력하세요">
+                                    <div class="field-error" th:errors="*{attachmentSkillName}"></div>
                                 </div>
                             </div>
 
@@ -160,8 +171,9 @@
                                 <!-- 애착 아티팩트 스킬 설명 -->
                                 <div class="col-md-12 mb-3">
                                     <label for="attachmentSkillDescription" class="form-label">애착 아티팩트 스킬 설명</label>
-                                    <textarea th:field="*{attachmentSkillDescription}" id="attachmentSkillDescription"
+                                    <textarea th:field="*{attachmentSkillDescription}" th:errorclass="field-error" id="attachmentSkillDescription"
                                               class="form-control" rows="3" placeholder="스킬 설명을 입력하세요"></textarea>
+                                    <div class="field-error" th:errors="*{attachmentSkillDescription}"></div>
                                 </div>
                             </div>
 
@@ -170,8 +182,11 @@
                                 <div id="attachment-attributes-container" class="col-md-12 mb-3">
                                     <label class="form-label">애착 아티팩트 스킬 속성</label>
                                     <div th:each="attribute, stat : *{attachmentAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-                                        <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
-                                        <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                        <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrName}" th:errorclass="field-error" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
+                                        <div class="field-error" th:errors="*{attachmentAttributes[__${stat.index}__].attrName}"></div>
+                                        <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrValue}" th:errorclass="field-error" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                        <div class="field-error" th:errors="*{attachmentAttributes[__${stat.index}__].attrValue}"></div>
+
                                         <button type="button" class="btn btn-success btn-add-attachment-attribute">+</button>
                                         <button type="button" class="btn btn-danger btn-remove-attachment-attribute">-</button>
                                     </div>
@@ -182,8 +197,9 @@
                                 <!-- 애착 아티팩트 스킬 설명 -->
                                 <div class="col-md-12 mb-3">
                                     <label for="attachmentLv3Description" class="form-label">레벨 3 달성 시 효과</label>
-                                    <textarea th:field="*{attachmentLv3Description}" id="attachmentLv3Description"
+                                    <textarea th:field="*{attachmentLv3Description}" th:errorclass="field-error" id="attachmentLv3Description"
                                               class="form-control" rows="3" placeholder="애착 아티팩트 레벨 3 효과를 입력하세요"></textarea>
+                                    <div class="field-error" th:errors="*{attachmentLv3Description}"></div>
                                 </div>
                             </div>
 

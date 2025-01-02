@@ -4,6 +4,9 @@ import hdxian.monatium_darknet.domain.Attribute;
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.card.CardGrade;
 import hdxian.monatium_darknet.service.dto.CardDto;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,13 +17,25 @@ import java.util.List;
 @Data
 public class CardForm {
 
+    @NotNull
     private CardType cardType;
+
+    @NotNull
     private CardGrade grade;
+
+    @NotBlank
     private String name;
+
+    @NotBlank
     private String description;
+
+    @NotBlank
     private String story;
+
+    @Min(1)
     private Integer cost;
 
+    // TODO - attribute 객체에 대한 validation 설정
     private List<Attribute> cardAttributes = new ArrayList<>();
     public List<Attribute> getCardAttributes() {
         if (cardAttributes.isEmpty())
@@ -38,6 +53,7 @@ public class CardForm {
     private String attachmentSkillDescription;
     private String attachmentLv3Description; // 애착 아티팩트 레벨 3 달성 시 효과
 
+    // TODO - attribute 객체에 대한 validation 설정
     private List<Attribute> attachmentAttributes = new ArrayList<>();
     public List<Attribute> getAttachmentAttributes() {
         if (attachmentAttributes.isEmpty())

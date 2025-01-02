@@ -12,12 +12,15 @@ import hdxian.monatium_darknet.service.CharacterService;
 import hdxian.monatium_darknet.service.ImagePathService;
 import hdxian.monatium_darknet.service.ImageUrlService;
 import hdxian.monatium_darknet.service.dto.CardDto;
+import hdxian.monatium_darknet.web.validator.CardFormValidator;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,6 +42,8 @@ public class CardMgController {
     private final LocalFileStorageService fileStorageService;
     private final ImageUrlService imageUrlService;
     private final ImagePathService imagePathService;
+
+    private final CardFormValidator formValidator;
 
     // 아티팩트 카드 리스트
     @GetMapping
@@ -96,9 +101,18 @@ public class CardMgController {
     // 카드 추가 요청 처리 (스펠, 아티팩트 통합)
     @PostMapping("/new")
     public String addCard(HttpSession session, @RequestParam("action") String action,
-                          @ModelAttribute("cardForm") CardForm cardForm, Model model) {
+                          @Validated @ModelAttribute("cardForm") CardForm cardForm, BindingResult bindingResult,
+                          Model model) {
 
         log.info("cardForm = {}", cardForm);
+
+        formValidator.validate(cardForm, bindingResult); // 폼 검증 추가
+
+        if (bindingResult.hasErrors()) {
+            String tempImageUrl = getImageUrl(session, imageUrlService.getDefaultThumbnailUrl());
+            model.addAttribute(CARD_IMAGE_URL, tempImageUrl);
+            return "management/cards/cardAddForm";
+        }
 
         // 0. 취소 버튼 클릭 시 세션 데이터를 초기화하고 목록으로 리다이렉트
         if (action.equals("cancel")) {
