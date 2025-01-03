@@ -7,7 +7,7 @@ document.addEventListener('click', function(event) {
 
         const isActive = button.getAttribute('data-status') === 'ACTIVE';
 
-        const confirmMessage = isActive ? `${characterName} 카드를 비활성화하시겠습니까?` : `${characterName} 카드를 활성화하시겠습니까?`;
+        const confirmMessage = isActive ? `${characterName} 캐릭터를 비활성화하시겠습니까?` : `${characterName} 캐릭터를 활성화하시겠습니까?`;
 
         if (!confirm(confirmMessage)) {
             return;
