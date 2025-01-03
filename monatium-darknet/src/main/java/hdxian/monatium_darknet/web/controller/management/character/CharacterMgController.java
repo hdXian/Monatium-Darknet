@@ -269,12 +269,14 @@ public class CharacterMgController {
         addImageUrlsOnModelAllStep(session, model);
 
         // chForm3의 강화 공격에 대한 추가 검증 수행
-        if (chForm3.isEnableEnhancedAttack()) {
-            if (!StringUtils.hasText(chForm3.getEnhancedAttackDescription()))
-                br3.rejectValue("enhancedAttackDescription", "NotBlank", "강화 공격 설명을 작성해주세요.");
-        }
+//        if (chForm3.isEnableEnhancedAttack()) {
+//            if (!StringUtils.hasText(chForm3.getEnhancedAttackDescription()))
+//                br3.rejectValue("enhancedAttackDescription", "NotBlank", "강화 공격 설명을 작성해주세요.");
+//        }
 
-        // chForm4에 대한 검증 수행
+        // 폼 객체들에 대한 검증 수행
+        chForm1Validator.validate(chForm1, br1);
+        chForm3Validator.validate(chForm3, br3);
         chForm4Validator.validate(chForm4, br4);
 
         if (br1.hasErrors() || br2.hasErrors() || br3.hasErrors() || br4.hasErrors()) {
