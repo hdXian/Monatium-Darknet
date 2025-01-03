@@ -11,6 +11,7 @@ import hdxian.monatium_darknet.service.dto.AsideImageDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
 import hdxian.monatium_darknet.web.validator.ChFormStep1Validator;
+import hdxian.monatium_darknet.web.validator.ChFormStep3Validator;
 import hdxian.monatium_darknet.web.validator.ChFormStep4Validator;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,7 @@ public class CharacterMgController {
     private final ImagePathService imagePathService;
 
     private final ChFormStep1Validator chForm1Validator;
+    private final ChFormStep3Validator chForm3Validator;
     private final ChFormStep4Validator chForm4Validator;
 
     // TODO - url 옮겨다니면 세션 데이터 꼬이는 문제 해결 필요
@@ -173,13 +175,7 @@ public class CharacterMgController {
         // 모델에 이미지 url 추가 (검증 실패 대비)
         addImageUrlsOnModelStep3(session, model);
 
-        // 강화 공격이 활성화된 상태라면 해당 필드 입력을 검증해야 함
-        if (chForm.isEnableEnhancedAttack()) {
-            if (!StringUtils.hasText(chForm.getEnhancedAttackDescription())) {
-                // NotBlank.chForm.enhancedAttackDescription
-                bindingResult.rejectValue("enhancedAttackDescription", "NotBlank", "강화 공격 설명을 작성해주세요.");
-            }
-        }
+        chForm3Validator.validate(chForm, bindingResult); // Attribute 배열과 강화 공격 필드에 대한 검증
 
         if (bindingResult.hasErrors()) {
             return "management/characters/addChStep3";

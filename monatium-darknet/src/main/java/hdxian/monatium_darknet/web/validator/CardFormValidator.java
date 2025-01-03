@@ -25,7 +25,7 @@ public class CardFormValidator implements Validator {
         // 카드 특성 검증
         List<Attribute> cardAttributes = cardForm.getCardAttributes();
         if (cardAttributes == null || cardAttributes.isEmpty()) {
-            errors.rejectValue("cardAttributes", "NotEmpty.attributes", "카드 특성은 하나 이상 존재해야 합니다.");
+            errors.rejectValue("cardAttributes", "NotEmpty.attributes", new String[]{"카드"}, "카드 특성은 하나 이상 존재해야 합니다.");
         }
 
         // 카드 특성 검증 (빈 값 허용 x)
@@ -63,7 +63,7 @@ public class CardFormValidator implements Validator {
         // 애착 아티팩트 스킬 특성 검증
         List<Attribute> attachmentAttributes = cardForm.getAttachmentAttributes();
         if (attachmentAttributes == null || attachmentAttributes.isEmpty()) {
-            errors.rejectValue("attachmentAttributes", "NotEmpty.attributes", "애착 아티팩트 스킬 특성은 하나 이상 존재해야 합니다.");
+            errors.rejectValue("attachmentAttributes", "NotEmpty.attributes", new String[]{"애착 아티팩트 스킬"}, "애착 아티팩트 스킬 특성은 하나 이상 존재해야 합니다.");
         }
 
         // 애착 아티팩트 특성 검증 (빈 값 허용 x)

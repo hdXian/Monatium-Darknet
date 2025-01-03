@@ -117,20 +117,6 @@ textarea.auto-resize {
     padding-right: 10px;
 }
 
-/*
-.d-flex > .form-control {
-    flex: 1;
-}
-
-.d-flex > .form-control:first-child {
-    max-width: 70%;
-}
-
-.d-flex > .form-control:last-child {
-    max-width: 30%;
-}
-*/
-
 .status-num {
     width: 60px;
 }
@@ -141,7 +127,7 @@ textarea.auto-resize {
 }
 
 .attribute-value {
-    max-width: 25%; /* 특성 수치의 너비를 줄여 공간 확보 */
+    max-width: 50%; /* 특성 수치의 너비를 줄여 공간 확보 */
 }
 
 .attribute-input-container button {
