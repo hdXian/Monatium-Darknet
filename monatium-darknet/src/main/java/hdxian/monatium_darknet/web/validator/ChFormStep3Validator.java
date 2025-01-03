@@ -4,6 +4,7 @@ import hdxian.monatium_darknet.domain.Attribute;
 import hdxian.monatium_darknet.web.controller.management.character.ChFormStep3;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import java.util.List;
@@ -91,6 +92,8 @@ public class ChFormStep3Validator implements Validator {
         if (!chForm.isEnableEnhancedAttack()) {
             return;
         }
+
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "enhancedAttackDescription", "NotBlank");
 
         List<Attribute> enhancedAttributes = chForm.getEnhancedAttributes();
         if (enhancedAttributes == null || enhancedAttributes.isEmpty()) {
