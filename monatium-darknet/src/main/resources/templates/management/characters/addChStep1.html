@@ -109,7 +109,10 @@
                                 <label class="form-label">좋아하는 것</label>
                                 <div id="likes-container">
                                     <div th:each="favorite, stat : *{favorites}" class="d-flex mb-2 like-input-container">
-                                        <input th:field="*{favorites[__${stat.index}__]}" class="form-control me-2" placeholder="좋아하는 것을 입력하세요">
+                                        <div class="favorite-field">
+                                            <input type="text" th:field="*{favorites[__${stat.index}__]}" th:errorclass="field-error" class="form-control me-2" placeholder="좋아하는 것을 입력하세요">
+                                            <div class="field-error" th:errors="*{favorites[__${stat.index}__]}"></div>
+                                        </div>
                                         <button type="button" class="btn btn-success btn-add-like">+</button>
                                         <button th:if="${stat.index > 0}" type="button" class="btn btn-danger btn-remove-like ms-2">-</button>
                                     </div>

@@ -10,6 +10,7 @@ import hdxian.monatium_darknet.service.ImageUrlService;
 import hdxian.monatium_darknet.service.dto.AsideImageDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
+import hdxian.monatium_darknet.web.validator.ChFormStep1Validator;
 import hdxian.monatium_darknet.web.validator.ChFormStep4Validator;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,7 @@ public class CharacterMgController {
     private final ImageUrlService imageUrlService;
     private final ImagePathService imagePathService;
 
+    private final ChFormStep1Validator chForm1Validator;
     private final ChFormStep4Validator chForm4Validator;
 
     // TODO - url 옮겨다니면 세션 데이터 꼬이는 문제 해결 필요
@@ -88,6 +90,8 @@ public class CharacterMgController {
         }
 
         addImageUrlsOnModelStep1(session, model); // 이미지 url 처리 (검증 전에 url은 처리해야 함)
+
+        chForm1Validator.validate(chForm, bindingResult); // step1에 좋아하는 것 리스트 커스텀 검증 추가
 
         if (bindingResult.hasErrors()) {
             return "management/characters/addChStep1";
