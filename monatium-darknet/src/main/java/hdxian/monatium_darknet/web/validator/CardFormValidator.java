@@ -25,7 +25,7 @@ public class CardFormValidator implements Validator {
         // 카드 특성 검증
         List<Attribute> cardAttributes = cardForm.getCardAttributes();
         if (cardAttributes == null || cardAttributes.isEmpty()) {
-            errors.rejectValue("cardAttributes", "NotEmpty", "카드 특성은 하나 이상 존재해야 합니다.");
+            errors.rejectValue("cardAttributes", "NotEmpty.attributes", "카드 특성은 하나 이상 존재해야 합니다.");
         }
 
         // 카드 특성 검증 (빈 값 허용 x)
@@ -36,13 +36,11 @@ public class CardFormValidator implements Validator {
                 String attrValue = cardAttribute.getAttrValue();
 
                 if (attrName == null || attrName.isBlank()) {
-                    System.out.println("attrName is blank");
-                    errors.rejectValue("cardAttributes[" + i + "].attrName", "NotBlank", new String[] {"속성 이름"}, "속성 이름은 비어있을 수 없습니다.");
+                    errors.rejectValue("cardAttributes[" + i + "].attrName", "NotBlank.attrName", new String[] {"속성 이름"}, "속성 이름은 비어있을 수 없습니다.");
                 }
 
                 if (attrValue == null || attrValue.isBlank()) {
-                    System.out.println("attrValue is blank");
-                    errors.rejectValue("cardAttributes[" + i + "].attrValue", "NotBlank", new String[] {"속성 값"}, "속성 값은 비어있을 수 없습니다.");
+                    errors.rejectValue("cardAttributes[" + i + "].attrValue", "NotBlank.attrValue", new String[] {"속성 값"}, "속성 값은 비어있을 수 없습니다.");
                 }
 
             }
@@ -65,7 +63,7 @@ public class CardFormValidator implements Validator {
         // 애착 아티팩트 스킬 특성 검증
         List<Attribute> attachmentAttributes = cardForm.getAttachmentAttributes();
         if (attachmentAttributes == null || attachmentAttributes.isEmpty()) {
-            errors.rejectValue("attachmentAttributes", "NotEmpty", "애착 아티팩트 스킬 특성은 하나 이상 존재해야 합니다.");
+            errors.rejectValue("attachmentAttributes", "NotEmpty.attributes", "애착 아티팩트 스킬 특성은 하나 이상 존재해야 합니다.");
         }
 
         // 애착 아티팩트 특성 검증 (빈 값 허용 x)
@@ -76,13 +74,11 @@ public class CardFormValidator implements Validator {
                 String attrValue = attachmentAttribute.getAttrValue();
 
                 if (attrName == null || attrName.isBlank()) {
-                    System.out.println("attrName is blank");
-                    errors.rejectValue("attachmentAttributes[" + i + "].attrName", "NotBlank", new String[] {"속성 이름"}, "속성 이름은 비어있을 수 없습니다.");
+                    errors.rejectValue("attachmentAttributes[" + i + "].attrName", "NotBlank", new String[] {"속성 이름", String.valueOf(i)}, "속성 이름은 비어있을 수 없습니다.");
                 }
 
                 if (attrValue == null || attrValue.isBlank()) {
-                    System.out.println("attrValue is blank");
-                    errors.rejectValue("attachmentAttributes[" + i + "].attrValue", "NotBlank", new String[] {"속성 값"}, "속성 값은 비어있을 수 없습니다.");
+                    errors.rejectValue("attachmentAttributes[" + i + "].attrValue", "NotBlank", new String[] {"속성 값", String.valueOf(i)}, "속성 값은 비어있을 수 없습니다.");
                 }
 
             }

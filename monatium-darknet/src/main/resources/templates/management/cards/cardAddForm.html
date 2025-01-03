@@ -104,10 +104,14 @@
                         <div id="card-attributes-container" class="col-md-6 mb-3">
                             <label class="form-label">카드 속성</label>
                             <div th:each="attribute, stat : *{cardAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-                                <input type="text" th:field="*{cardAttributes[__${stat.index}__].attrName}" th:errorclass="field-error" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
-                                <div class="field-error" th:errors="*{cardAttributes[__${stat.index}__].attrName}"></div>
-                                <input type="text" th:field="*{cardAttributes[__${stat.index}__].attrValue}" th:errorclass="field-error" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
-                                <div class="field-error" th:errors="*{cardAttributes[__${stat.index}__].attrValue}"></div>
+                                <div class="me-2 attribute-name">
+                                    <input type="text" th:field="*{cardAttributes[__${stat.index}__].attrName}" th:errorclass="field-error" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                    <div class="field-error" th:errors="*{cardAttributes[__${stat.index}__].attrName}"></div>
+                                </div>
+                                <div class="me-2 attribute-value">
+                                    <input type="text" th:field="*{cardAttributes[__${stat.index}__].attrValue}" th:errorclass="field-error" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                    <div class="field-error" th:errors="*{cardAttributes[__${stat.index}__].attrValue}"></div>
+                                </div>
                                 <button type="button" class="btn btn-success btn-add-card-attribute">+</button>
                                 <button type="button" class="btn btn-danger btn-remove-card-attribute">-</button>
                             </div>
@@ -150,7 +154,7 @@
                                 <!-- 애착 사도 -->
                                 <div class="col-md-4 mb-3">
                                     <label for="attachmentCh" class="form-label">애착 사도</label>
-                                    <select th:field="*{characterId}" th:errorclass="field-error" id="attachmentCh" class="form-select">
+                                    <select th:field="*{characterId}" id="attachmentCh" class="form-select">
                                         <option value="">애착 사도를 선택하세요</option>
                                         <option th:each="ch : ${characterList}" th:value="${ch.id}" th:text="${ch.name}">캐릭터 이름</option>
                                         <!-- 필요한 추가 옵션을 여기에 나열 -->
@@ -182,10 +186,20 @@
                                 <div id="attachment-attributes-container" class="col-md-12 mb-3">
                                     <label class="form-label">애착 아티팩트 스킬 속성</label>
                                     <div th:each="attribute, stat : *{attachmentAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-                                        <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrName}" th:errorclass="field-error" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
-                                        <div class="field-error" th:errors="*{attachmentAttributes[__${stat.index}__].attrName}"></div>
-                                        <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrValue}" th:errorclass="field-error" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
-                                        <div class="field-error" th:errors="*{attachmentAttributes[__${stat.index}__].attrValue}"></div>
+
+                                        <div class="me-2 attribute-name">
+                                            <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrName}" th:errorclass="field-error" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                            <div class="field-error" th:errors="*{attachmentAttributes[__${stat.index}__].attrName}"></div>
+                                        </div>
+                                        <div class="me-2 attribute-value">
+                                            <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrValue}" th:errorclass="field-error" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                            <div class="field-error" th:errors="*{attachmentAttributes[__${stat.index}__].attrValue}"></div>
+                                        </div>
+
+<!--                                        <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrName}" th:errorclass="field-error" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">-->
+<!--                                        <div class="field-error" th:errors="*{attachmentAttributes[__${stat.index}__].attrName}"></div>-->
+<!--                                        <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrValue}" th:errorclass="field-error" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">-->
+<!--                                        <div class="field-error" th:errors="*{attachmentAttributes[__${stat.index}__].attrValue}"></div>-->
 
                                         <button type="button" class="btn btn-success btn-add-attachment-attribute">+</button>
                                         <button type="button" class="btn btn-danger btn-remove-attachment-attribute">-</button>

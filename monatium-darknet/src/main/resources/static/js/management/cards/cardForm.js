@@ -27,10 +27,14 @@ function setupDynamicInputFields({ containerId, addButtonClass, removeButtonClas
             newTraitInput.classList.add('d-flex', 'align-items-center', 'mb-2', 'attribute-input-container');
 
             newTraitInput.innerHTML = `
-                <input type="text" name="${inputNamePrefix}[${currentIndex}].attrName"
-                       class="form-control me-2 attribute-name" placeholder="특성 이름">
-                <input type="text" name="${inputNamePrefix}[${currentIndex}].attrValue"
-                       class="form-control me-2 attribute-value" placeholder="특성 수치">
+                <div class="me-2 attribute-name">
+                    <input type="text" name="${inputNamePrefix}[${currentIndex}].attrName"
+                                           class="form-control me-2" placeholder="특성 이름">
+                </div>
+                <div class="me-2 attribute-value">
+                    <input type="text" name="${inputNamePrefix}[${currentIndex}].attrValue"
+                                           class="form-control me-2" placeholder="특성 수치">
+                </div>
                 <button type="button" class="btn btn-success ${addButtonClass}">+</button>
                 <button type="button" class="btn btn-danger ${removeButtonClass}">-</button>
             `;

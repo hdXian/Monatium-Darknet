@@ -111,6 +111,9 @@ public class CardMgController {
         if (bindingResult.hasErrors()) {
             String tempImageUrl = getImageUrl(session, imageUrlService.getDefaultThumbnailUrl());
             model.addAttribute(CARD_IMAGE_URL, tempImageUrl);
+
+            List<Character> characterList = characterService.findCharacters();
+            model.addAttribute("characterList", characterList);
             return "management/cards/cardAddForm";
         }
 
