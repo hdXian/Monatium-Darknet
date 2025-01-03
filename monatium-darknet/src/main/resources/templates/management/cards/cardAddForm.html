@@ -186,7 +186,6 @@
                                 <div id="attachment-attributes-container" class="col-md-12 mb-3">
                                     <label class="form-label">애착 아티팩트 스킬 속성</label>
                                     <div th:each="attribute, stat : *{attachmentAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-
                                         <div class="me-2 attribute-name">
                                             <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrName}" th:errorclass="field-error" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
                                             <div class="field-error" th:errors="*{attachmentAttributes[__${stat.index}__].attrName}"></div>
@@ -195,12 +194,6 @@
                                             <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrValue}" th:errorclass="field-error" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
                                             <div class="field-error" th:errors="*{attachmentAttributes[__${stat.index}__].attrValue}"></div>
                                         </div>
-
-<!--                                        <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrName}" th:errorclass="field-error" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">-->
-<!--                                        <div class="field-error" th:errors="*{attachmentAttributes[__${stat.index}__].attrName}"></div>-->
-<!--                                        <input type="text" th:field="*{attachmentAttributes[__${stat.index}__].attrValue}" th:errorclass="field-error" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">-->
-<!--                                        <div class="field-error" th:errors="*{attachmentAttributes[__${stat.index}__].attrValue}"></div>-->
-
                                         <button type="button" class="btn btn-success btn-add-attachment-attribute">+</button>
                                         <button type="button" class="btn btn-danger btn-remove-attachment-attribute">-</button>
                                     </div>

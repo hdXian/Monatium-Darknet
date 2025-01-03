@@ -43,7 +43,7 @@ public class CardMgController {
     private final ImageUrlService imageUrlService;
     private final ImagePathService imagePathService;
 
-    private final CardFormValidator formValidator;
+    private final CardFormValidator cardFormValidator;
 
     // 아티팩트 카드 리스트
     @GetMapping
@@ -106,7 +106,7 @@ public class CardMgController {
 
         log.info("cardForm = {}", cardForm);
 
-        formValidator.validate(cardForm, bindingResult); // 폼 검증 추가
+        cardFormValidator.validate(cardForm, bindingResult); // 폼 검증 추가
 
         if (bindingResult.hasErrors()) {
             String tempImageUrl = getImageUrl(session, imageUrlService.getDefaultThumbnailUrl());
@@ -181,10 +181,28 @@ public class CardMgController {
 
     // 카드 수정 요청
     @PostMapping("/edit/{cardId}")
-    public String edit(HttpSession session, @PathVariable("cardId") Long cardId, @RequestParam("action") String action,
-                       @ModelAttribute("cardForm") CardForm cardForm, Model model) {
+    public String editCard(HttpSession session, @PathVariable("cardId") Long cardId, @RequestParam("action") String action,
+                           @Validated @ModelAttribute("cardForm") CardForm cardForm, BindingResult bindingResult,
+                           Model model) {
 
         log.info("edit cardForm = {}", cardForm);
+
+        cardFormValidator.validate(cardForm, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            String imageUrl;
+            if (cardForm.getCardType() == CardType.SPELL) {
+                imageUrl = getImageUrl(session, imageUrlService.getSpellCardBaseUrl() + cardId);
+            }
+            else {
+                imageUrl = getImageUrl(session, imageUrlService.getArtifactCardBaseUrl() + cardId);
+            }
+            model.addAttribute(CARD_IMAGE_URL, imageUrl);
+
+            List<Character> characterList = characterService.findCharacters();
+            model.addAttribute("characterList", characterList);
+            return "management/cards/cardEditForm";
+        }
 
         // 0. 취소 버튼 클릭 시 세션 데이터를 초기화하고 목록으로 리다이렉트
         if (action.equals("cancel")) {
@@ -199,19 +217,19 @@ public class CardMgController {
         saveCardImageToTemp(session, cardForm.getImage());
 
         // 2. 임시경로 이미지에 대한 url을 생성하고 모델에 추가한다.
+        String imageUrl;
         if (cardForm.getCardType() == CardType.SPELL) {
-            String imageUrl = getImageUrl(session, imageUrlService.getSpellCardBaseUrl() + cardId);
-            model.addAttribute(CARD_IMAGE_URL, imageUrl);
+            imageUrl = getImageUrl(session, imageUrlService.getSpellCardBaseUrl() + cardId);
         }
         else {
-            String imageUrl = getImageUrl(session, imageUrlService.getArtifactCardBaseUrl() + cardId);
-            model.addAttribute(CARD_IMAGE_URL, imageUrl);
+            imageUrl = getImageUrl(session, imageUrlService.getArtifactCardBaseUrl() + cardId);
         }
+        model.addAttribute(CARD_IMAGE_URL, imageUrl);
 
         // 3. 세션의 폼 데이터를 업데이트한다.
         session.setAttribute(CARD_FORM, cardForm);
 
-        // TODO 4. 완료 버튼을 누른 경우 카드 정보를 저장하고 목록으로 리다이렉트
+        // 4. 완료 버튼을 누른 경우 카드 정보를 저장하고 목록으로 리다이렉트
         if (action.equals("complete")) { // 수정 완료 버튼을 누른 경우
             Long updatedCardId = updateCard(session, cardId, cardForm);
 
@@ -224,7 +242,7 @@ public class CardMgController {
                 return "redirect:/management/cards/artifact";
             }
         }
-        else { // 임시저장 버튼을 누른 경우
+        else { // 임시저장 버튼을 누른 경우 수정 중인 페이지로 리다이렉트
             return "redirect:/management/cards/edit/" + cardId;
         }
 
