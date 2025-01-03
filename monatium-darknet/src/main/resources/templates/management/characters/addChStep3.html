@@ -98,11 +98,11 @@
                         <div id="enhancedAttack-attributes-container">
                             <div th:each="attribute, stat : *{enhancedAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
                                 <div class="me-2 attribute-name">
-                                    <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                    <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name-field" placeholder="특성 이름">
                                     <div class="field-error" th:errors="*{enhancedAttributes[__${stat.index}__].attrName}"></div>
                                 </div>
                                 <div class="me-2 attribute-value">
-                                    <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                    <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value-field" placeholder="특성 수치">
                                     <div class="field-error" th:errors="*{enhancedAttributes[__${stat.index}__].attrValue}"></div>
                                 </div>
                                 <button type="button" class="btn btn-success btn-add-enhanced-attribute">+</button>

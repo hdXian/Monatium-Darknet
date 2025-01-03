@@ -90,32 +90,20 @@ function setupDynamicInputFields({ containerId, addButtonClass, removeButtonClas
     function updateFieldNames(container, inputNamePrefix) {
         const traitContainers = container.querySelectorAll('.attribute-input-container');
 
-        // **방식 2 적용: 모든 입력 필드 삭제 후 보장**
-        if (traitContainers.length === 0) {
-            const newTraitInput = document.createElement('div');
-            newTraitInput.classList.add('d-flex', 'align-items-center', 'mb-2', 'attribute-input-container');
-
-            newTraitInput.innerHTML = `
-                <input type="text" name="${inputNamePrefix}[0].attrName"
-                       class="form-control me-2 attribute-name" placeholder="특성 이름">
-                <input type="text" name="${inputNamePrefix}[0].attrValue"
-                       class="form-control me-2 attribute-value" placeholder="특성 수치">
-                <button type="button" class="btn btn-success ${addButtonClass}">+</button>
-                <button type="button" class="btn btn-danger ${removeButtonClass}">-</button>
-            `;
-
-            container.appendChild(newTraitInput);
-        }
-
         // 필드의 name 속성을 다시 정렬
         traitContainers.forEach((container, index) => {
-            const nameInput = container.querySelector('.attribute-name');
-            const valueInput = container.querySelector('.attribute-value');
+            const nameInput = container.querySelector('.attribute-name input');
+            const valueInput = container.querySelector('.attribute-value input');
 
-            nameInput.name = `${inputNamePrefix}[${index}].attrName`;
-            valueInput.name = `${inputNamePrefix}[${index}].attrValue`;
+            if (nameInput) {
+                nameInput.name = `${inputNamePrefix}[${index}].attrName`;
+            }
+            if (valueInput) {
+                valueInput.name = `${inputNamePrefix}[${index}].attrValue`;
+            }
         });
     }
+
 }
 
 // textarea 크기 자동 조절
