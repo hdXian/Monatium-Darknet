@@ -32,6 +32,7 @@ public class CardForm {
     @NotBlank
     private String story;
 
+    @NotNull
     @Min(1)
     private Integer cost;
 
