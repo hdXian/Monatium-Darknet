@@ -23,6 +23,21 @@ h2 {
     background-color: #218838;
 }
 
+#filtering-options {
+    border: 3px solid #28A745;
+    border-radius: 5px;
+}
+
+/* 필터링 섹션 */
+.form-check-inline {
+    border: 3px solid #4CAF50;
+    border-radius: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
 
 /* 캐릭터 카드 스타일 */
 
