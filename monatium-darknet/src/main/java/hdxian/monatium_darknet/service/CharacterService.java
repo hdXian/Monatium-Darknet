@@ -210,7 +210,7 @@ public class CharacterService {
         return characterRepository.findByName(name);
     }
 
-    public List<Character> findCharacters() {
+    public List<Character> findAll() {
         return characterRepository.findAll();
     }
 

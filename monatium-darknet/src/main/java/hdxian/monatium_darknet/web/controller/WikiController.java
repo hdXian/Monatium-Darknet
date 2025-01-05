@@ -30,7 +30,7 @@ public class WikiController {
     @GetMapping("/characters")
     public String characterList(Model model) {
 
-        List<Character> characterList = characterService.findCharacters();
+        List<Character> characterList = characterService.findAll();
 
         model.addAttribute("characterList", characterList);
 

@@ -86,7 +86,7 @@ public class CardMgController {
     public String addForm(HttpSession session, Model model) {
         // 세션에 있으면 (임시저장 등으로 리다이렉트) 가져오고, 없으면 (최초 요청) 새로운 객체를 생성.
         CardForm cardForm = (CardForm) Optional.ofNullable(session.getAttribute(CARD_FORM)).orElse(new CardForm());
-        List<Character> characterList = characterService.findCharacters();
+        List<Character> characterList = characterService.findAll();
 
         // 세션에 있으면 (임시저장 등으로 리다이렉트) 가져오고, 없으면 (최초 요청) 새로운 디폴트 url 지정
         String cardImageUrl = getImageUrl(session, imageUrlService.getDefaultThumbnailUrl());
@@ -112,7 +112,7 @@ public class CardMgController {
             String tempImageUrl = getImageUrl(session, imageUrlService.getDefaultThumbnailUrl());
             model.addAttribute(CARD_IMAGE_URL, tempImageUrl);
 
-            List<Character> characterList = characterService.findCharacters();
+            List<Character> characterList = characterService.findAll();
             model.addAttribute("characterList", characterList);
             return "management/cards/cardAddForm";
         }
@@ -161,7 +161,7 @@ public class CardMgController {
         // 세션에 수정하던 폼이 없으면 수정할 카드 id로 새로운 폼 객체를 생성
         CardForm cardForm = (CardForm) Optional.ofNullable(session.getAttribute(CARD_FORM)).orElse(generateNewCardForm(cardId, model));
 
-        List<Character> characterList = characterService.findCharacters();
+        List<Character> characterList = characterService.findAll();
 
         if (cardForm.getCardType() == CardType.SPELL) {
             String imageUrl = getImageUrl(session, imageUrlService.getSpellCardBaseUrl() + cardId);
@@ -199,7 +199,7 @@ public class CardMgController {
             }
             model.addAttribute(CARD_IMAGE_URL, imageUrl);
 
-            List<Character> characterList = characterService.findCharacters();
+            List<Character> characterList = characterService.findAll();
             model.addAttribute("characterList", characterList);
             return "management/cards/cardEditForm";
         }

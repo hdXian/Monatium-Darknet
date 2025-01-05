@@ -26,7 +26,7 @@ public class HomeController {
     public String home(Model model) {
 
         List<Notice> noticeList = noticeService.findAll();
-        List<Character> characterList = characterService.findCharacters();
+        List<Character> characterList = characterService.findAll();
 
         model.addAttribute("noticeList", noticeList);
         model.addAttribute("characterList", characterList);

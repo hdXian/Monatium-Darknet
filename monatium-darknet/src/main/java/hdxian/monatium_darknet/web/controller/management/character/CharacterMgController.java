@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -52,11 +51,9 @@ public class CharacterMgController {
     // TODO - url 옮겨다니면 세션 데이터 꼬이는 문제 해결 필요
     // ex) 수정 페이지에서 임시저장 한 뒤 (세션에 데이터 저장) 다른 캐릭터 정보 수정 페이지에 진입
 
-    // 일단 어사이드, 강화공격 등 선택적 요소에 따라 구성하는 로직부터 짜야 함.
-
     @GetMapping
     public String characterList(HttpSession session, Model model) {
-        List<Character> characterList = characterService.findCharacters();
+        List<Character> characterList = characterService.findAll();
 
         clearSessionAttributes(session); // 다른 페이지에 머물다 돌아온 경우에도 세션 데이터 초기화 (redirect, url 직접 입력 등)
         model.addAttribute("characterList", characterList);
@@ -99,10 +96,10 @@ public class CharacterMgController {
             return "management/characters/addChStep1";
         }
 
-        log.info("chForm1 = {}", chForm);
-        for (String favorite : chForm.getFavorites()) {
-            log.info("favorite = {}", favorite);
-        }
+//        log.info("chForm1 = {}", chForm);
+//        for (String favorite : chForm.getFavorites()) {
+//            log.info("favorite = {}", favorite);
+//        }
 
         uploadImagesToTemp(session, chForm); // 이미지 임시경로 업로드 처리
 
@@ -139,7 +136,7 @@ public class CharacterMgController {
             return "management/characters/addChStep2";
         }
 
-        log.info("chForm2 = {}", chForm);
+//        log.info("chForm2 = {}", chForm);
         session.setAttribute(CHFORM_STEP2, chForm);
 
         String redirectUrl;
@@ -183,7 +180,7 @@ public class CharacterMgController {
 
         uploadImagesToTemp(session, chForm); // 이미지 임시경로 업로드 처리
 
-        log.info("chForm3 = {}", chForm);
+//        log.info("chForm3 = {}", chForm);
         session.setAttribute(CHFORM_STEP3, chForm); // 세션에 폼 데이터 저장
 
         String redirectUrl;
@@ -229,7 +226,7 @@ public class CharacterMgController {
 
         uploadImagesToTemp(session, chForm);
 
-        log.info("chForm4 = {}", chForm);
+//        log.info("chForm4 = {}", chForm);
         session.setAttribute(CHFORM_STEP4, chForm);
 
         String redirectUrl;
@@ -366,12 +363,6 @@ public class CharacterMgController {
         // 1. 캐릭터들의 이미지 url을 모델에 추가 (프로필, 초상화, 전신, 저학년 스킬)
         addChUrlsOnModel_Edit(session, model, characterId);
         addAsideUrlsOnModel_Edit(session, model, characterId);
-
-        // chForm3의 강화 공격에 대한 추가 검증 수행
-//        if (chForm3.isEnableEnhancedAttack()) {
-//            if (!StringUtils.hasText(chForm3.getEnhancedAttackDescription()))
-//                br3.rejectValue("enhancedAttackDescription", "NotBlank", "강화 공격 설명을 작성해주세요.");
-//        }
 
         // 폼 객체들에 대한 검증 수행
         chForm1Validator.validate(chForm1, br1);
@@ -794,7 +785,7 @@ public class CharacterMgController {
         model.addAttribute(CH_EDIT_ASIDE_LV_1_URL, asideImageUrls.getLv1Image());
         model.addAttribute(CH_EDIT_ASIDE_LV_2_URL, asideImageUrls.getLv2Image());
         model.addAttribute(CH_EDIT_ASIDE_LV_3_URL, asideImageUrls.getLv3Image());
-        log.info("asideImageUrls = {}", asideImageUrls);
+//        log.info("asideImageUrls = {}", asideImageUrls);
     }
 
 
@@ -825,7 +816,7 @@ public class CharacterMgController {
         session.removeAttribute(CH_EDIT_ASIDE_LV_2_URL);
         session.removeAttribute(CH_EDIT_ASIDE_LV_3_URL);
 
-        log.info("clear all form data in session");
+//        log.info("clear all form data in session");
     }
 
     private void updateFormDataOnSession(HttpSession session, ChFormStep1 form1, ChFormStep2 form2, ChFormStep3 form3, ChFormStep4 form4) {
@@ -898,7 +889,7 @@ public class CharacterMgController {
             FileDto fileDto = fileStorageService.saveFileToTemp(multipartFile);
             String tempImageUrl = imageUrlService.getTempImageBaseUrl() + fileDto.getFileName();
             session.setAttribute(attrName, tempImageUrl);
-            log.info("setAttribute attrName = {}, tempImageUrl = {}", attrName, tempImageUrl);
+//            log.info("setAttribute attrName = {}, tempImageUrl = {}", attrName, tempImageUrl);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

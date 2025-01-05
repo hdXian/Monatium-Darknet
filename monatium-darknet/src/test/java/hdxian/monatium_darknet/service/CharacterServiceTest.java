@@ -116,7 +116,7 @@ class CharacterServiceTest {
 
         // then
         // 전체 캐릭터를 검색했을 때 3명의 캐릭터, 그리고 에르핀, 에슈르, 티그가 정확히 포함되어 있어야 한다.
-        List<Character> findResult = characterService.findCharacters();
+        List<Character> findResult = characterService.findAll();
         assertThat(findResult.size()).isEqualTo(3);
         assertThat(findResult).containsExactlyInAnyOrder(erpin, ashur, tig);
     }
