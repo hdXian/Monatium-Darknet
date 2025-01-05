@@ -420,8 +420,9 @@ public class CharacterMgController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/delete/{characterId}")
+    @PostMapping("/del/{characterId}")
     public String delete(@PathVariable("characterId")Long characterId) {
+        log.info("del req received: characterId = {}", characterId);
         characterService.deleteCharacter(characterId);
         return "redirect:/management/characters";
     }

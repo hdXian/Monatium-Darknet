@@ -671,6 +671,13 @@
 
     </div>
 
+    <!-- 여기 -->
+    <div class="d-flex justify-content-start mb-4">
+        <button id="delChar-btn" class="btn btn-danger" th:data-id="${characterId}">
+            주말 농장 보내기
+        </button>
+    </div>
+
 </div>
 
 <!-- 하단 푸터 -->
@@ -678,11 +685,12 @@
     하단 푸터 영역
 </footer>
 
-<script th:src="@{/js/management/characters/chFormCommon.js}"></script>
-<script th:src="@{/js/management/characters/chFormStep1.js}"></script>
-<script th:src="@{/js/management/characters/chFormStep2.js}"></script>
-<script th:src="@{/js/management/characters/chFormStep3.js}"></script>
-<script th:src="@{/js/management/characters/chFormStep4.js}"></script>
+<script th:src="@{/js/management/characters/chFormCommon.js}" defer></script>
+<script th:src="@{/js/management/characters/chFormStep1.js}" defer></script>
+<script th:src="@{/js/management/characters/chFormStep2.js}" defer></script>
+<script th:src="@{/js/management/characters/chFormStep3.js}" defer></script>
+<script th:src="@{/js/management/characters/chFormStep4.js}" defer></script>
+<script th:src="@{/js/management/characters/chDelete.js}" defer></script>
 
 </body>
 
