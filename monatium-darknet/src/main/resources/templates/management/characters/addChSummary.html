@@ -5,7 +5,7 @@
 <head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
     <title>캐릭터 추가</title>
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
-    <link rel="stylesheet" th:href="@{/css/management/charAddForm.css}">
+    <link rel="stylesheet" th:href="@{/css/management/characters/characterForm.css}">
     <!-- 커스텀 css -->
 </head>
 
@@ -105,7 +105,10 @@
                                 <label class="form-label">좋아하는 것</label>
                                 <div id="likes-container">
                                     <div th:each="favorite, stat : *{favorites}" class="d-flex mb-2 like-input-container">
-                                        <input th:field="*{favorites[__${stat.index}__]}" class="form-control me-2" placeholder="좋아하는 것을 입력하세요">
+                                        <div class="favorite-field">
+                                            <input type="text" th:field="*{favorites[__${stat.index}__]}" th:errorclass="field-error" class="form-control me-2" placeholder="좋아하는 것을 입력하세요">
+                                            <div class="field-error" th:errors="*{favorites[__${stat.index}__]}"></div>
+                                        </div>
                                         <button type="button" class="btn btn-success btn-add-like">+</button>
                                         <button th:if="${stat.index > 0}" type="button" class="btn btn-danger btn-remove-like ms-2">-</button>
                                     </div>
@@ -278,8 +281,14 @@
                         <label class="form-label">특성</label>
                         <div id="normalAttack-attributes-container">
                             <div th:each="attribute, stat : *{normalAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-                                <input type="text" th:field="*{normalAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
-                                <input type="text" th:field="*{normalAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <div class="me-2 attribute-name">
+                                    <input type="text" th:field="*{normalAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                    <div class="field-error" th:errors="*{normalAttributes[__${stat.index}__].attrName}"></div>
+                                </div>
+                                <div class="me-2 attribute-value">
+                                    <input type="text" th:field="*{normalAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                    <div class="field-error" th:errors="*{normalAttributes[__${stat.index}__].attrValue}"></div>
+                                </div>
                                 <button type="button" class="btn btn-success btn-add-normal-attribute">+</button>
                                 <button type="button" class="btn btn-danger btn-remove-normal-attribute">-</button>
                             </div>
@@ -319,8 +328,14 @@
                         <label class="form-label">특성</label>
                         <div id="enhancedAttack-attributes-container">
                             <div th:each="attribute, stat : *{enhancedAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-                                <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
-                                <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <div class="me-2 attribute-name">
+                                    <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                    <div class="field-error" th:errors="*{enhancedAttributes[__${stat.index}__].attrName}"></div>
+                                </div>
+                                <div class="me-2 attribute-value">
+                                    <input type="text" th:field="*{enhancedAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                    <div class="field-error" th:errors="*{enhancedAttributes[__${stat.index}__].attrValue}"></div>
+                                </div>
                                 <button type="button" class="btn btn-success btn-add-enhanced-attribute">+</button>
                                 <button type="button" class="btn btn-danger btn-remove-enhanced-attribute">-</button>
                             </div>
@@ -366,8 +381,14 @@
                         <label class="form-label">특성</label>
                         <div id="lowSkill-attributes-container">
                             <div th:each="attribute, stat : *{lowSkillAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-                                <input type="text" th:field="*{lowSkillAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
-                                <input type="text" th:field="*{lowSkillAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <div class="me-2 attribute-name">
+                                    <input type="text" th:field="*{lowSkillAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                    <div class="field-error" th:errors="*{lowSkillAttributes[__${stat.index}__].attrName}"></div>
+                                </div>
+                                <div class="me-2 attribute-value">
+                                    <input type="text" th:field="*{lowSkillAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                    <div class="field-error" th:errors="*{lowSkillAttributes[__${stat.index}__].attrValue}"></div>
+                                </div>
                                 <button type="button" class="btn btn-success btn-add-lowSkill-attribute">+</button>
                                 <button type="button" class="btn btn-danger btn-remove-lowSkill-attribute">-</button>
                             </div>
@@ -408,8 +429,14 @@
                         <label class="form-label">특성</label>
                         <div id="highSkill-attributes-container">
                             <div th:each="attribute, stat : *{highSkillAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-                                <input type="text" th:field="*{highSkillAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
-                                <input type="text" th:field="*{highSkillAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <div class="me-2 attribute-name">
+                                    <input type="text" th:field="*{highSkillAttributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                    <div class="field-error" th:errors="*{highSkillAttributes[__${stat.index}__].attrName}"></div>
+                                </div>
+                                <div class="me-2 attribute-value">
+                                    <input type="text" th:field="*{highSkillAttributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                    <div class="field-error" th:errors="*{highSkillAttributes[__${stat.index}__].attrValue}"></div>
+                                </div>
                                 <button type="button" class="btn btn-success btn-add-highSkill-attribute">+</button>
                                 <button type="button" class="btn btn-danger btn-remove-highSkill-attribute">-</button>
                             </div>
@@ -512,8 +539,14 @@
                         <label class="form-label">특성</label>
                         <div id="aside1-attributes-container">
                             <div th:each="attribute, stat : *{asideLv1Attributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-                                <input type="text" th:field="*{asideLv1Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
-                                <input type="text" th:field="*{asideLv1Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <div class="me-2 attribute-name">
+                                    <input type="text" th:field="*{asideLv1Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                    <div class="field-error" th:errors="*{asideLv1Attributes[__${stat.index}__].attrName}"></div>
+                                </div>
+                                <div class="me-2 attribute-value">
+                                    <input type="text" th:field="*{asideLv1Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                    <div class="field-error" th:errors="*{asideLv1Attributes[__${stat.index}__].attrValue}"></div>
+                                </div>
                                 <button type="button" class="btn btn-success btn-add-aside1-attribute">+</button>
                                 <button type="button" class="btn btn-danger btn-remove-aside1-attribute">-</button>
                             </div>
@@ -553,8 +586,14 @@
                         <label class="form-label">특성</label>
                         <div id="aside2-attributes-container">
                             <div th:each="attribute, stat : *{asideLv2Attributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-                                <input type="text" th:field="*{asideLv2Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
-                                <input type="text" th:field="*{asideLv2Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <div class="me-2 attribute-name">
+                                    <input type="text" th:field="*{asideLv2Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                    <div class="field-error" th:errors="*{asideLv2Attributes[__${stat.index}__].attrName}"></div>
+                                </div>
+                                <div class="me-2 attribute-value">
+                                    <input type="text" th:field="*{asideLv2Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                    <div class="field-error" th:errors="*{asideLv2Attributes[__${stat.index}__].attrValue}"></div>
+                                </div>
                                 <button type="button" class="btn btn-success btn-add-aside2-attribute">+</button>
                                 <button type="button" class="btn btn-danger btn-remove-aside2-attribute">-</button>
                             </div>
@@ -594,8 +633,14 @@
                         <label class="form-label">특성</label>
                         <div id="aside3-attributes-container">
                             <div th:each="attribute, stat : *{asideLv3Attributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-                                <input type="text" th:field="*{asideLv3Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
-                                <input type="text" th:field="*{asideLv3Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <div class="me-2 attribute-name">
+                                    <input type="text" th:field="*{asideLv3Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                    <div class="field-error" th:errors="*{asideLv3Attributes[__${stat.index}__].attrName}"></div>
+                                </div>
+                                <div class="me-2 attribute-value">
+                                    <input type="text" th:field="*{asideLv3Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                    <div class="field-error" th:errors="*{asideLv3Attributes[__${stat.index}__].attrValue}"></div>
+                                </div>
                                 <button type="button" class="btn btn-success btn-add-aside3-attribute">+</button>
                                 <button type="button" class="btn btn-danger btn-remove-aside3-attribute">-</button>
                             </div>
@@ -635,12 +680,11 @@
     하단 푸터 영역
 </footer>
 
-<script th:src="@{/js/management/charAddFormCommon.js}"></script>
-<script th:src="@{/js/management/charAddFormStep1.js}"></script>
-<script th:src="@{/js/management/charAddFormStep2.js}"></script>
-<script th:src="@{/js/management/charAddFormStep3.js}"></script>
-<script th:src="@{/js/management/charAddFormStep4.js}"></script>
-<!--<script th:src="@{/js/management/charAddFormSummary.js}"></script>-->
+<script th:src="@{/js/management/characters/chFormCommon.js}"></script>
+<script th:src="@{/js/management/characters/chFormStep1.js}"></script>
+<script th:src="@{/js/management/characters/chFormStep2.js}"></script>
+<script th:src="@{/js/management/characters/chFormStep3.js}"></script>
+<script th:src="@{/js/management/characters/chFormStep4.js}"></script>
 
 </body>
 

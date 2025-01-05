@@ -25,7 +25,10 @@ public abstract class Card {
     private String description;
     private String story;
     private Integer cost;
-    private String imageUrl;
+//    private String imageUrl;
+
+    @Enumerated(EnumType.STRING)
+    private CardStatus status;
 
     @ElementCollection
     @CollectionTable(name = "card_attributes", joinColumns = @JoinColumn(name = "card_id"))

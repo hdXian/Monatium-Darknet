@@ -78,28 +78,28 @@ public class TestDataInit {
         skinService.updateImageUrl(skinId, skinBaseUrl + 1L + "/" + skinId + ".webp");
 
         // 아티팩트 카드 테스트 데이터 추가
-        ArtifactCardDto cardDto1 = generateArtifactDto("벨리타의 지팡이", CardGrade.LEGENDARY); // 벨리타는 2번
-        ArtifactCardDto cardDto2 = generateArtifactDto("엘다인 램프", CardGrade.LEGENDARY);
-        ArtifactCardDto cardDto3 = generateArtifactDto("용광검", CardGrade.LEGENDARY);
+        CardDto cardDto1 = generateArtifactDto("벨리타의 지팡이", CardGrade.LEGENDARY); // 벨리타는 2번
+        CardDto cardDto2 = generateArtifactDto("엘다인 램프", CardGrade.LEGENDARY);
+        CardDto cardDto3 = generateArtifactDto("용광검", CardGrade.LEGENDARY);
 
-        ArtifactCardDto cardDto4 = generateArtifactDto("날카로운 지팡이", CardGrade.RARE);
-        ArtifactCardDto cardDto5 = generateArtifactDto("참회의 메이스", CardGrade.RARE);
+        CardDto cardDto4 = generateArtifactDto("날카로운 지팡이", CardGrade.RARE);
+        CardDto cardDto5 = generateArtifactDto("참회의 메이스", CardGrade.RARE);
 
-        ArtifactCardDto cardDto6 = generateArtifactDto("엘프산 요술봉", CardGrade.ADVANCED);
-        ArtifactCardDto cardDto7 = generateArtifactDto("급조한 목검", CardGrade.NORMAL);
+        CardDto cardDto6 = generateArtifactDto("엘프산 요술봉", CardGrade.ADVANCED);
+        CardDto cardDto7 = generateArtifactDto("급조한 목검", CardGrade.NORMAL);
 
         // 스펠 카드 테스트 데이터 추가
-        SpellCardDto spellDto1 = generateSpellDto("단체 월반", CardGrade.LEGENDARY);
-        SpellCardDto spellDto2 = generateSpellDto("수상한 물약", CardGrade.LEGENDARY);
+        CardDto spellDto1 = generateSpellDto("단체 월반", CardGrade.LEGENDARY);
+        CardDto spellDto2 = generateSpellDto("수상한 물약", CardGrade.LEGENDARY);
 
-        SpellCardDto spellDto3 = generateSpellDto("사기진작", CardGrade.RARE);
-        SpellCardDto spellDto4 = generateSpellDto("효율적인 회복", CardGrade.RARE);
+        CardDto spellDto3 = generateSpellDto("사기진작", CardGrade.RARE);
+        CardDto spellDto4 = generateSpellDto("효율적인 회복", CardGrade.RARE);
 
-        SpellCardDto spellDto5 = generateSpellDto("학자", CardGrade.ADVANCED);
-        SpellCardDto spellDto6 = generateSpellDto("회심의 일격", CardGrade.ADVANCED);
+        CardDto spellDto5 = generateSpellDto("학자", CardGrade.ADVANCED);
+        CardDto spellDto6 = generateSpellDto("회심의 일격", CardGrade.ADVANCED);
 
-        SpellCardDto spellDto7 = generateSpellDto("자기 계발", CardGrade.NORMAL);
-        SpellCardDto spellDto8 = generateSpellDto("그건 내 잔상", CardGrade.NORMAL);
+        CardDto spellDto7 = generateSpellDto("자기 계발", CardGrade.NORMAL);
+        CardDto spellDto8 = generateSpellDto("그건 내 잔상", CardGrade.NORMAL);
 
         Skill attachmentSkill = generateAttachmentSkill("블랙홀 오브 위치");
         Long cardId1 = cardService.createNewArtifactCard(cardDto1, 2L, attachmentSkill);
@@ -122,39 +122,39 @@ public class TestDataInit {
 
         String cardBaseUrl = "/imgs/wiki/card/";
 
-        cardService.updateImageUrl(cardId1, cardBaseUrl + "artifact/" + cardId1 + ".webp");
-        cardService.updateImageUrl(cardId2, cardBaseUrl + "artifact/" + cardId2 + ".webp");
-        cardService.updateImageUrl(cardId3, cardBaseUrl + "artifact/" + cardId3 + ".webp");
-        cardService.updateImageUrl(cardId4, cardBaseUrl + "artifact/" + cardId4 + ".webp");
-        cardService.updateImageUrl(cardId5, cardBaseUrl + "artifact/" + cardId5 + ".webp");
-        cardService.updateImageUrl(cardId6, cardBaseUrl + "artifact/" + cardId6 + ".webp");
-        cardService.updateImageUrl(cardId7, cardBaseUrl + "artifact/" + cardId7 + ".webp");
-
-        cardService.updateImageUrl(spellId1, cardBaseUrl + "spell/" + spellId1 + ".webp");
-        cardService.updateImageUrl(spellId2, cardBaseUrl + "spell/" + spellId2 + ".webp");
-        cardService.updateImageUrl(spellId3, cardBaseUrl + "spell/" + spellId3 + ".webp");
-        cardService.updateImageUrl(spellId4, cardBaseUrl + "spell/" + spellId4 + ".webp");
-        cardService.updateImageUrl(spellId5, cardBaseUrl + "spell/" + spellId5 + ".webp");
-        cardService.updateImageUrl(spellId6, cardBaseUrl + "spell/" + spellId6 + ".webp");
-        cardService.updateImageUrl(spellId7, cardBaseUrl + "spell/" + spellId7 + ".webp");
-        cardService.updateImageUrl(spellId8, cardBaseUrl + "spell/" + spellId8 + ".webp");
+//        cardService.updateImageUrl(cardId1, cardBaseUrl + "artifact/" + cardId1 + ".webp");
+//        cardService.updateImageUrl(cardId2, cardBaseUrl + "artifact/" + cardId2 + ".webp");
+//        cardService.updateImageUrl(cardId3, cardBaseUrl + "artifact/" + cardId3 + ".webp");
+//        cardService.updateImageUrl(cardId4, cardBaseUrl + "artifact/" + cardId4 + ".webp");
+//        cardService.updateImageUrl(cardId5, cardBaseUrl + "artifact/" + cardId5 + ".webp");
+//        cardService.updateImageUrl(cardId6, cardBaseUrl + "artifact/" + cardId6 + ".webp");
+//        cardService.updateImageUrl(cardId7, cardBaseUrl + "artifact/" + cardId7 + ".webp");
+//
+//        cardService.updateImageUrl(spellId1, cardBaseUrl + "spell/" + spellId1 + ".webp");
+//        cardService.updateImageUrl(spellId2, cardBaseUrl + "spell/" + spellId2 + ".webp");
+//        cardService.updateImageUrl(spellId3, cardBaseUrl + "spell/" + spellId3 + ".webp");
+//        cardService.updateImageUrl(spellId4, cardBaseUrl + "spell/" + spellId4 + ".webp");
+//        cardService.updateImageUrl(spellId5, cardBaseUrl + "spell/" + spellId5 + ".webp");
+//        cardService.updateImageUrl(spellId6, cardBaseUrl + "spell/" + spellId6 + ".webp");
+//        cardService.updateImageUrl(spellId7, cardBaseUrl + "spell/" + spellId7 + ".webp");
+//        cardService.updateImageUrl(spellId8, cardBaseUrl + "spell/" + spellId8 + ".webp");
     }
 
     private static Skill generateAttachmentSkill(String name) {
-        Skill attachmentSkill = Skill.createAttachmentSkill(name, name + " 설명", name + " url");
+        Skill attachmentSkill = Skill.createAttachmentSkill(name, name + " 설명", name + "애착 아티팩트 레벨 3 효과");
         attachmentSkill.addAttribute(name + " 속성1 이름", name + " 속성1 수치");
         attachmentSkill.addAttribute(name + " 속성2 이름", name + " 속성2 수치");
         return attachmentSkill;
     }
 
-    private static SpellCardDto generateSpellDto(String name, CardGrade grade) {
-        SpellCardDto dto = new SpellCardDto();
+    private static CardDto generateSpellDto(String name, CardGrade grade) {
+        CardDto dto = new CardDto();
         dto.setName(name);
         dto.setDescription(name + "스펠카드 설명");
         dto.setStory(name + "스펠카드 이야기");
         dto.setCost(14);
         dto.setGrade(grade);
-        dto.setImageUrl(name + "스펠카드이미지url");
+//        dto.setImageUrl(name + "스펠카드이미지url");
 
         dto.addAttribute(name + "스펠카드 효과1", name + "스펠카드 효과1 수치");
         dto.addAttribute(name + "스펠카드 효과2", name + "스펠카드 효과2 수치");
@@ -162,14 +162,14 @@ public class TestDataInit {
         return dto;
     }
 
-    private static ArtifactCardDto generateArtifactDto(String name, CardGrade grade) {
-        ArtifactCardDto dto = new ArtifactCardDto();
+    private static CardDto generateArtifactDto(String name, CardGrade grade) {
+        CardDto dto = new CardDto();
         dto.setName(name);
         dto.setDescription(name + "아티팩트카드 설명");
         dto.setStory(name + "아티팩트카드 이야기");
         dto.setCost(14);
         dto.setGrade(grade);
-        dto.setImageUrl(name + "아티팩트카드이미지url");
+//        dto.setImageUrl(name + "아티팩트카드이미지url");
 
         dto.addAttribute(name + "아티팩트카드 효과1", name + "아티팩트카드 효과1 수치");
         dto.addAttribute(name + "아티팩트카드 효과2", name + "아티팩트카드 효과2 수치");
@@ -209,11 +209,11 @@ public class TestDataInit {
 
         // 저학년 스킬
         // TODO - 캐릭터 이미지 url처럼 이미지 경로 관리 방식을 업데이트 해야함 (현재 thymeleaf로 반쯤 하드코딩 중)
-        Skill lowSkill = Skill.createLowSkill(name+" 저학년스킬", name + "저학년스킬 설명", name + "저학년스킬 이미지 url");
+        Skill lowSkill = Skill.createLowSkill(name+" 저학년스킬", name + "저학년스킬 설명");
         lowSkill.addAttribute(name+" 저학년스킬 속성", "350%");
 
         // 고학년 스킬
-        Skill highSkill = Skill.createHighSkill(name+" 고학년스킬", name+" 고학년스킬 설명", 15, "고학년스킬 이미지 url");
+        Skill highSkill = Skill.createHighSkill(name+" 고학년스킬", name+" 고학년스킬 설명", 15);
         highSkill.addAttribute(name+"고학년스킬 속성", "525%");
 
         // 이미지 url들

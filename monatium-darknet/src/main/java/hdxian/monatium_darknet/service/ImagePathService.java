@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ImagePathService {
+
+    @Value("${file.imgDir}")
+    private String imgDir;
 
     @Value("${file.wikiDir}")
     private String wikiDir;
@@ -46,6 +48,11 @@ public class ImagePathService {
     private static final String ext = ".webp";
 
     private final LocalFileStorageService fileStorageService;
+
+    // TODO - 근 시일 내에 이걸로 통합하는게 낫지 않을까?
+    public String getIconFileName(String fileName) {
+        return iconDir + fileName + ext;
+    }
 
     public String getIconFileName(Race race) {
         return iconDir + "symbol_" + race.name().toLowerCase() + ext;
@@ -79,8 +86,8 @@ public class ImagePathService {
         return iconDir + "star_" + isFilled + ext;
     }
 
-    public String getDefaultThumbNailFileName() {
-        return defaultThumbNail;
+    public String getDefaultThumbNailFilePath() {
+        return imgDir + defaultThumbNail;
     }
 
     // 서버 스토리지 내 이미지 저장 경로를 리턴
@@ -105,6 +112,46 @@ public class ImagePathService {
         String lv3Path = basePath + "asideLv3" + ext;
 
         return new AsideImageDto(asidePath, lv1Path, lv2Path, lv3Path);
+    }
+
+    public String getSpellCardFileName(Long cardId) {
+        return spellCardDir + cardId + ext;
+    }
+
+    public String getArtifactCardFileName(Long cardId) {
+        return artifactCardDir + cardId + ext;
+    }
+
+    @Transactional
+    public void saveSpellCardImage(Long cardId, String src) {
+        if (cardId == null || src == null) {
+            throw new IllegalArgumentException("cardId 또는 src가 null입니다.");
+        }
+
+        String dst = getSpellCardFileName(cardId);
+
+        try {
+            fileStorageService.copyFile(new FileDto(src), new FileDto(dst));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Transactional
+    public void saveArtifactCardImage(Long cardId, String src) {
+        if (cardId == null || src == null) {
+            throw new IllegalArgumentException("cardId 또는 src가 null입니다.");
+        }
+
+        String dst = getArtifactCardFileName(cardId);
+
+        try {
+            fileStorageService.copyFile(new FileDto(src), new FileDto(dst));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     // 캐릭터 이미지 정보 저장

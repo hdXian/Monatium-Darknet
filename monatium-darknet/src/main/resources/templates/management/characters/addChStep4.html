@@ -5,7 +5,7 @@
 <head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
     <title>캐릭터 추가</title>
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
-    <link rel="stylesheet" th:href="@{/css/management/charAddForm.css}">
+    <link rel="stylesheet" th:href="@{/css/management/characters/characterForm.css}">
     <!-- 커스텀 css -->
 </head>
 
@@ -117,8 +117,14 @@
                         <label class="form-label">특성</label>
                         <div id="aside1-attributes-container">
                             <div th:each="attribute, stat : *{asideLv1Attributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-                                <input type="text" th:field="*{asideLv1Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
-                                <input type="text" th:field="*{asideLv1Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <div class="me-2 attribute-name">
+                                    <input type="text" th:field="*{asideLv1Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                    <div class="field-error" th:errors="*{asideLv1Attributes[__${stat.index}__].attrName}"></div>
+                                </div>
+                                <div class="me-2 attribute-value">
+                                    <input type="text" th:field="*{asideLv1Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                    <div class="field-error" th:errors="*{asideLv1Attributes[__${stat.index}__].attrValue}"></div>
+                                </div>
                                 <button type="button" class="btn btn-success btn-add-aside1-attribute">+</button>
                                 <button type="button" class="btn btn-danger btn-remove-aside1-attribute">-</button>
                             </div>
@@ -158,8 +164,14 @@
                         <label class="form-label">특성</label>
                         <div id="aside2-attributes-container">
                             <div th:each="attribute, stat : *{asideLv2Attributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-                                <input type="text" th:field="*{asideLv2Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
-                                <input type="text" th:field="*{asideLv2Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <div class="me-2 attribute-name">
+                                    <input type="text" th:field="*{asideLv2Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                    <div class="field-error" th:errors="*{asideLv2Attributes[__${stat.index}__].attrName}"></div>
+                                </div>
+                                <div class="me-2 attribute-value">
+                                    <input type="text" th:field="*{asideLv2Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                    <div class="field-error" th:errors="*{asideLv2Attributes[__${stat.index}__].attrValue}"></div>
+                                </div>
                                 <button type="button" class="btn btn-success btn-add-aside2-attribute">+</button>
                                 <button type="button" class="btn btn-danger btn-remove-aside2-attribute">-</button>
                             </div>
@@ -199,8 +211,14 @@
                         <label class="form-label">특성</label>
                         <div id="aside3-attributes-container">
                             <div th:each="attribute, stat : *{asideLv3Attributes}" class="d-flex align-items-center mb-2 attribute-input-container">
-                                <input type="text" th:field="*{asideLv3Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2 attribute-name" placeholder="특성 이름">
-                                <input type="text" th:field="*{asideLv3Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2 attribute-value" placeholder="특성 수치">
+                                <div class="me-2 attribute-name">
+                                    <input type="text" th:field="*{asideLv3Attributes[__${stat.index}__].attrName}" name="attribute-name" class="form-control me-2" placeholder="특성 이름">
+                                    <div class="field-error" th:errors="*{asideLv3Attributes[__${stat.index}__].attrName}"></div>
+                                </div>
+                                <div class="me-2 attribute-value">
+                                    <input type="text" th:field="*{asideLv3Attributes[__${stat.index}__].attrValue}" name="attribute-value" class="form-control me-2" placeholder="특성 수치">
+                                    <div class="field-error" th:errors="*{asideLv3Attributes[__${stat.index}__].attrValue}"></div>
+                                </div>
                                 <button type="button" class="btn btn-success btn-add-aside3-attribute">+</button>
                                 <button type="button" class="btn btn-danger btn-remove-aside3-attribute">-</button>
                             </div>
@@ -240,8 +258,8 @@
     하단 푸터 영역
 </footer>
 
-<script th:src="@{/js/management/charAddFormCommon.js}"></script>
-<script th:src="@{/js/management/charAddFormStep4.js}"></script>
+<script th:src="@{/js/management/characters/chFormCommon.js}"></script>
+<script th:src="@{/js/management/characters/chFormStep4.js}"></script>
 
 </body>
 

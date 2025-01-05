@@ -10,10 +10,13 @@ import hdxian.monatium_darknet.service.ImageUrlService;
 import hdxian.monatium_darknet.service.dto.AsideImageDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
+import hdxian.monatium_darknet.web.validator.ChFormStep1Validator;
+import hdxian.monatium_darknet.web.validator.ChFormStep3Validator;
 import hdxian.monatium_darknet.web.validator.ChFormStep4Validator;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -42,6 +45,8 @@ public class CharacterMgController {
     private final ImageUrlService imageUrlService;
     private final ImagePathService imagePathService;
 
+    private final ChFormStep1Validator chForm1Validator;
+    private final ChFormStep3Validator chForm3Validator;
     private final ChFormStep4Validator chForm4Validator;
 
     // TODO - url 옮겨다니면 세션 데이터 꼬이는 문제 해결 필요
@@ -87,6 +92,8 @@ public class CharacterMgController {
         }
 
         addImageUrlsOnModelStep1(session, model); // 이미지 url 처리 (검증 전에 url은 처리해야 함)
+
+        chForm1Validator.validate(chForm, bindingResult); // step1에 좋아하는 것 리스트 커스텀 검증 추가
 
         if (bindingResult.hasErrors()) {
             return "management/characters/addChStep1";
@@ -168,13 +175,7 @@ public class CharacterMgController {
         // 모델에 이미지 url 추가 (검증 실패 대비)
         addImageUrlsOnModelStep3(session, model);
 
-        // 강화 공격이 활성화된 상태라면 해당 필드 입력을 검증해야 함
-        if (chForm.isEnableEnhancedAttack()) {
-            if (!StringUtils.hasText(chForm.getEnhancedAttackDescription())) {
-                // NotBlank.chForm.enhancedAttackDescription
-                bindingResult.rejectValue("enhancedAttackDescription", "NotBlank", "강화 공격 설명을 작성해주세요.");
-            }
-        }
+        chForm3Validator.validate(chForm, bindingResult); // Attribute 배열과 강화 공격 필드에 대한 검증
 
         if (bindingResult.hasErrors()) {
             return "management/characters/addChStep3";
@@ -251,7 +252,6 @@ public class CharacterMgController {
         return "management/characters/addChSummary";
     }
 
-    // TODO - 각 폼 객체마다 BindingResult 붙이거나, 통합 폼 객체 혹은 Validator 만들기
     @PostMapping("/new/complete")
     public String chAddComplete(HttpSession session,
                                 @RequestParam("action")String action,
@@ -267,13 +267,9 @@ public class CharacterMgController {
         // 이미지 url들 모델에 추가
         addImageUrlsOnModelAllStep(session, model);
 
-        // chForm3의 강화 공격에 대한 추가 검증 수행
-        if (chForm3.isEnableEnhancedAttack()) {
-            if (!StringUtils.hasText(chForm3.getEnhancedAttackDescription()))
-                br3.rejectValue("enhancedAttackDescription", "NotBlank", "강화 공격 설명을 작성해주세요.");
-        }
-
-        // chForm4에 대한 검증 수행
+        // 폼 객체들에 대한 검증 수행
+        chForm1Validator.validate(chForm1, br1);
+        chForm3Validator.validate(chForm3, br3);
         chForm4Validator.validate(chForm4, br4);
 
         if (br1.hasErrors() || br2.hasErrors() || br3.hasErrors() || br4.hasErrors()) {
@@ -372,12 +368,14 @@ public class CharacterMgController {
         addAsideUrlsOnModel_Edit(session, model, characterId);
 
         // chForm3의 강화 공격에 대한 추가 검증 수행
-        if (chForm3.isEnableEnhancedAttack()) {
-            if (!StringUtils.hasText(chForm3.getEnhancedAttackDescription()))
-                br3.rejectValue("enhancedAttackDescription", "NotBlank", "강화 공격 설명을 작성해주세요.");
-        }
+//        if (chForm3.isEnableEnhancedAttack()) {
+//            if (!StringUtils.hasText(chForm3.getEnhancedAttackDescription()))
+//                br3.rejectValue("enhancedAttackDescription", "NotBlank", "강화 공격 설명을 작성해주세요.");
+//        }
 
-        // chForm4에 대한 검증 수행
+        // 폼 객체들에 대한 검증 수행
+        chForm1Validator.validate(chForm1, br1);
+        chForm3Validator.validate(chForm3, br3);
         chForm4Validator.validate(chForm4, br4);
 
         if (br1.hasErrors() || br2.hasErrors() || br3.hasErrors() || br4.hasErrors()) {
@@ -420,15 +418,15 @@ public class CharacterMgController {
     }
 
     @PostMapping("/activate/{characterId}")
-    public String activate(@PathVariable("characterId") Long characterId) {
+    public ResponseEntity<Void> activate(@PathVariable("characterId") Long characterId) {
         characterService.activateCharacter(characterId);
-        return "redirect:/management/characters";
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/disable/{characterId}")
-    public String deactivate(@PathVariable("characterId") Long characterId) {
+    public ResponseEntity<Void> deactivate(@PathVariable("characterId") Long characterId) {
         characterService.disableCharacter(characterId);
-        return "redirect:/management/characters";
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/delete/{characterId}")
@@ -496,7 +494,7 @@ public class CharacterMgController {
     // === 1-2. 임시 경로에 저장돼있는 캐릭터 이미지들의 파일 경로를 추출해 리턴 ===
     private CharacterImageDto generateChImagePathsFromTemp(HttpSession session) {
 
-        String defaultImagePath = imagePathService.getDefaultThumbNailFileName();
+        String defaultImagePath = imagePathService.getDefaultThumbNailFilePath();
 
         // 임시 경로에 이미지가 없다면 -> 신규 캐릭터 생성 시점에서 이미지가 임시경로에 없다 (세션에 url이 없다) -> 디폴트 이미지를 넣어놨다
         String profilePath;
@@ -529,7 +527,7 @@ public class CharacterMgController {
     // === 1-3. 임시 경로에 저장돼있는 어사이드 이미지들의 파일 경로를 추출해 리턴 ===
     private AsideImageDto generateAsideImagePathsFromTemp(HttpSession session) {
 
-        String defaultImagePath = imagePathService.getDefaultThumbNailFileName();
+        String defaultImagePath = imagePathService.getDefaultThumbNailFilePath();
 
         String asidePath;
         if (session.getAttribute(CH_ADD_ASIDE_URL) == null) {
@@ -898,7 +896,7 @@ public class CharacterMgController {
 
         try {
             FileDto fileDto = fileStorageService.saveFileToTemp(multipartFile);
-            String tempImageUrl = "/api/images/tmp/" + fileDto.getFileName();
+            String tempImageUrl = imageUrlService.getTempImageBaseUrl() + fileDto.getFileName();
             session.setAttribute(attrName, tempImageUrl);
             log.info("setAttribute attrName = {}, tempImageUrl = {}", attrName, tempImageUrl);
         } catch (IOException e) {

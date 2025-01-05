@@ -5,7 +5,7 @@
 <head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
     <title>관리자 - 캐릭터 관리</title>
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
-    <link rel="stylesheet" th:href="@{/css/management/characterList.css}">
+    <link rel="stylesheet" th:href="@{/css/management/characters/characterList.css}">
     <!-- 커스텀 css -->
 </head>
 
@@ -64,18 +64,14 @@
                 <a th:href="@{/management/characters/edit/{id} (id=${character.id})}" class="btn btn-sm btn-primary">정보 수정</a>
 
                 <!-- 주말 농장 스위치 -->
-                <form th:action="${character.status.name() == 'ACTIVE'}
-                                    ? @{/management/characters/disable/{id} (id=${character.id})}
-                                    : @{/management/characters/activate/{id} (id=${character.id})}"
-                      method="post"
-                      th:data-confirm-active="|${character.name} 캐릭터를 비활성화 하시겠습니까?|"
-                      th:data-confirm-inactive="|${character.name} 캐릭터를 활성화 하시겠습니까?|">
-
-                    <button th:text="${character.status.name() == 'ACTIVE'} ? '활성화 중' : '비활성화 중'"
-                            th:classappend="${character.status.name() == 'ACTIVE'} ? 'btn-success' : 'btn-secondary'"
-                            type="submit"
-                            class="btn btn-sm">활성화 버튼</button>
-                </form>
+                <button th:classappend="${character.status.name() == 'ACTIVE' ? 'btn-success' : 'btn-secondary'}"
+                        th:data-character-id="${character.id}"
+                        th:data-character-name="${character.name}"
+                        th:data-status="${character.status.name()}"
+                        th:text="${character.status.name() == 'ACTIVE' ? '활성화 중' : '비활성화 중'}"
+                        class="btn btn-sm toggle-character-status">
+                    활성화 버튼
+                </button>
             </div>
 
         </div>
@@ -88,7 +84,7 @@
     하단 푸터 영역
 </footer>
 
-<script th:src="@{/js/management/characterList.js}"></script>
+<script th:src="@{/js/management/characters/characterList.js}"></script>
 
 </body>
 </html>

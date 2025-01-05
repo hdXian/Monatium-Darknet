@@ -94,13 +94,12 @@ public class ChFormStep3 {
     }
 
     public Skill generateLowSkill() {
-        return Skill.createLowSkill(lowSkillName, lowSkillDescription,
-                "", lowSkillAttributes);
+        return Skill.createLowSkill(lowSkillName, lowSkillDescription, lowSkillAttributes);
     }
 
     public Skill generateHighSkill() {
         return Skill.createHighSkill(highSkillName, highSkillDescription,
-                highSkillCooldown, "", highSkillAttributes);
+                highSkillCooldown, highSkillAttributes);
     }
 
     // === 수정 페이지 등에서 Model에 정보를 담아 보낼 때 사용 ===

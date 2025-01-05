@@ -1,28 +1,4 @@
 
-// 각 그룹 내용 접기/펼치기
-document.addEventListener('DOMContentLoaded', function() {
-    const titles = document.querySelectorAll('.info-title');
-
-    titles.forEach(title => {
-        const icon = title.querySelector('.toggle-icon');
-        const targetId = title.getAttribute('data-bs-target');
-        const targetElement = document.querySelector(targetId);
-
-        // 열림 이벤트 (⏴ → ⏷)
-        targetElement.addEventListener('shown.bs.collapse', function() {
-            icon.classList.remove('fa-angle-left');
-            icon.classList.add('fa-angle-down');
-        });
-
-        // 닫힘 이벤트 (⏷ → ⏴)
-        targetElement.addEventListener('hidden.bs.collapse', function() {
-            icon.classList.remove('fa-angle-down');
-            icon.classList.add('fa-angle-left');
-        });
-    });
-});
-
-
 /**
  * 특성 입력 필드 추가/삭제 기능을 추가하는 범용 함수
  * @param {string} containerId - 특성 컨테이너의 ID
@@ -51,10 +27,14 @@ function setupDynamicInputFields({ containerId, addButtonClass, removeButtonClas
             newTraitInput.classList.add('d-flex', 'align-items-center', 'mb-2', 'attribute-input-container');
 
             newTraitInput.innerHTML = `
-                <input type="text" name="${inputNamePrefix}[${currentIndex}].attrName"
-                       class="form-control me-2 attribute-name" placeholder="특성 이름">
-                <input type="text" name="${inputNamePrefix}[${currentIndex}].attrValue"
-                       class="form-control me-2 attribute-value" placeholder="특성 수치">
+                <div class="me-2 attribute-name">
+                    <input type="text" name="${inputNamePrefix}[${currentIndex}].attrName"
+                                           class="form-control me-2" placeholder="특성 이름">
+                </div>
+                <div class="me-2 attribute-value">
+                    <input type="text" name="${inputNamePrefix}[${currentIndex}].attrValue"
+                                           class="form-control me-2" placeholder="특성 수치">
+                </div>
                 <button type="button" class="btn btn-success ${addButtonClass}">+</button>
                 <button type="button" class="btn btn-danger ${removeButtonClass}">-</button>
             `;
@@ -86,32 +66,20 @@ function setupDynamicInputFields({ containerId, addButtonClass, removeButtonClas
     function updateFieldNames(container, inputNamePrefix) {
         const traitContainers = container.querySelectorAll('.attribute-input-container');
 
-        // **방식 2 적용: 모든 입력 필드 삭제 후 보장**
-        if (traitContainers.length === 0) {
-            const newTraitInput = document.createElement('div');
-            newTraitInput.classList.add('d-flex', 'align-items-center', 'mb-2', 'attribute-input-container');
-
-            newTraitInput.innerHTML = `
-                <input type="text" name="${inputNamePrefix}[0].attrName"
-                       class="form-control me-2 attribute-name" placeholder="특성 이름">
-                <input type="text" name="${inputNamePrefix}[0].attrValue"
-                       class="form-control me-2 attribute-value" placeholder="특성 수치">
-                <button type="button" class="btn btn-success ${addButtonClass}">+</button>
-                <button type="button" class="btn btn-danger ${removeButtonClass}">-</button>
-            `;
-
-            container.appendChild(newTraitInput);
-        }
-
         // 필드의 name 속성을 다시 정렬
         traitContainers.forEach((container, index) => {
-            const nameInput = container.querySelector('.attribute-name');
-            const valueInput = container.querySelector('.attribute-value');
+            const nameInput = container.querySelector('.attribute-name input');
+            const valueInput = container.querySelector('.attribute-value input');
 
-            nameInput.name = `${inputNamePrefix}[${index}].attrName`;
-            valueInput.name = `${inputNamePrefix}[${index}].attrValue`;
+            if (nameInput) {
+                nameInput.name = `${inputNamePrefix}[${index}].attrName`;
+            }
+            if (valueInput) {
+                valueInput.name = `${inputNamePrefix}[${index}].attrValue`;
+            }
         });
     }
+
 }
 
 // textarea 크기 자동 조절
@@ -128,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // 이미지 미리보기 기능
-// TODO - 이미지 기본 썸네일 src 서버 리소스로 대체 필요
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.image-upload-wrapper img').forEach(img => {
         img.addEventListener('click', function() {
@@ -151,9 +118,75 @@ function previewImage(input) {
 }
 
 function confirmCancel() {
+    // 기본 동작(폼 제출) 막기
+    event.preventDefault();
+
     if (confirm("정말 취소하시겠습니까? 현재 작성된 데이터는 저장되지 않습니다.")) {
-        // 취소를 확인한 경우, 실제 취소 작업 수행
-//        document.querySelector('form').action = '/management/characters/new/cancel';
         document.querySelector('form').submit();
     }
 }
+
+// 특성 입력 란 필드 구성
+document.addEventListener('DOMContentLoaded', function() {
+
+    // 카드 특성
+    setupDynamicInputFields({
+        containerId: 'card-attributes-container',
+        addButtonClass: 'btn-add-card-attribute',
+        removeButtonClass: 'btn-remove-card-attribute',
+        inputNamePrefix: 'cardAttributes'
+    });
+
+    // 애착 아티팩트 스킬 특성
+    setupDynamicInputFields({
+        containerId: 'attachment-attributes-container',
+        addButtonClass: 'btn-add-attachment-attribute',
+        removeButtonClass: 'btn-remove-attachment-attribute',
+        inputNamePrefix: 'attachmentAttributes'
+    });
+
+});
+
+
+// 아티팩트 카드인 경우 애착 사도 정보 입력 칸 노출
+document.addEventListener('DOMContentLoaded', () => {
+    const cardTypeSelect = document.getElementById('cardType');
+    const attachmentSection = document.getElementById('attachmentSection');
+
+    // 초기 상태 설정
+    if (cardTypeSelect.value === 'ARTIFACT') {
+        attachmentSection.style.display = 'block';
+    } else {
+        attachmentSection.style.display = 'none';
+    }
+
+    // 변경 이벤트 핸들러 추가
+    cardTypeSelect.addEventListener('change', () => {
+        if (cardTypeSelect.value === 'ARTIFACT') {
+            attachmentSection.style.display = 'block';
+        } else {
+            attachmentSection.style.display = 'none';
+        }
+    });
+
+});
+
+
+// 아티팩트 카드인 경우, 애착 사도 여부에 따라 입력 칸 노출, 숨김
+document.addEventListener('DOMContentLoaded', function () {
+    const radios = document.getElementsByName('hasAttachment');
+    const targetDiv = document.getElementById('attachmentInfo');
+
+    if (targetDiv && radios.length > 0) {
+        // 초기 상태 설정
+        targetDiv.style.display = radios[0].checked ? 'block' : 'none';
+
+        // 라디오 버튼 변경 시 표시/숨기기
+        radios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                targetDiv.style.display = radio.value === 'true' && radio.checked ? 'block' : 'none';
+            });
+        });
+    }
+});
+

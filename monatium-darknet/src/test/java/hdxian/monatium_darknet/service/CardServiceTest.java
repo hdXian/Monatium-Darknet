@@ -9,14 +9,12 @@ import hdxian.monatium_darknet.domain.card.CardGrade;
 import hdxian.monatium_darknet.domain.card.SpellCard;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.domain.character.Character;
-import hdxian.monatium_darknet.service.dto.ArtifactCardDto;
+import hdxian.monatium_darknet.service.dto.CardDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
-import hdxian.monatium_darknet.service.dto.SpellCardDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -40,7 +38,7 @@ class CardServiceTest {
 //    @Rollback(value = false)
     void addArtifact() {
         // given
-        ArtifactCardDto artifactDto = generateArtifactDto("날씨는 맑음 카드", CardGrade.LEGENDARY);
+        CardDto artifactDto = generateArtifactDto("날씨는 맑음 카드", CardGrade.LEGENDARY);
 
         // when
         // 카드 정보, 애착 사도, 애착 아티팩트 스킬
@@ -66,7 +64,7 @@ class CardServiceTest {
         Skill attachmentSkill = generateAttachmentSkill("그림 스크래치");
 
         // Dto 생성
-        ArtifactCardDto artifactDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
+        CardDto artifactDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
 
         // when
         Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, attachmentSkill);
@@ -90,7 +88,7 @@ class CardServiceTest {
 //    @Rollback(value = false)
     void addSpellCard() {
         // given
-        SpellCardDto spellDto = generateSpellDto("사기진작", CardGrade.RARE);
+        CardDto spellDto = generateSpellDto("사기진작", CardGrade.RARE);
 
         // when
         Long savedId = cardService.createNewSpellCard(spellDto);
@@ -105,8 +103,8 @@ class CardServiceTest {
     @DisplayName("중복 이름 스펠 카드 추가")
     void duplicateSpell() {
         // given
-        SpellCardDto spellDto = generateSpellDto("사기진작", CardGrade.RARE);
-        SpellCardDto dupDto = generateSpellDto("사기진작", CardGrade.NORMAL);
+        CardDto spellDto = generateSpellDto("사기진작", CardGrade.RARE);
+        CardDto dupDto = generateSpellDto("사기진작", CardGrade.NORMAL);
 
         // when
         Long savedId = cardService.createNewSpellCard(spellDto);
@@ -121,8 +119,8 @@ class CardServiceTest {
     @DisplayName("중복 이름 아티팩트 카드 추가 (애착x)")
     void dupArtifact() {
         // given
-        ArtifactCardDto artifactDto = generateArtifactDto("날씨는 맑음 카드", CardGrade.LEGENDARY);
-        ArtifactCardDto dupDto = generateArtifactDto("날씨는 맑음 카드", CardGrade.LEGENDARY);
+        CardDto artifactDto = generateArtifactDto("날씨는 맑음 카드", CardGrade.LEGENDARY);
+        CardDto dupDto = generateArtifactDto("날씨는 맑음 카드", CardGrade.LEGENDARY);
 
         // when
         // 카드 정보, 애착 사도, 애착 아티팩트 스킬
@@ -150,8 +148,8 @@ class CardServiceTest {
         Skill attachmentSkill = generateAttachmentSkill("그림 스크래치");
 
         // Dto 생성
-        ArtifactCardDto artifactDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
-        ArtifactCardDto dupDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
+        CardDto artifactDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
+        CardDto dupDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
 
         // when
         Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, attachmentSkill);
@@ -169,7 +167,7 @@ class CardServiceTest {
         // given
 
         // 스펠 카드 생성
-        SpellCardDto spellDto = generateSpellDto("중앙GOOD", CardGrade.RARE);
+        CardDto spellDto = generateSpellDto("중앙GOOD", CardGrade.RARE);
 
         Long spellId = cardService.createNewSpellCard(spellDto);
         SpellCard spellCard = cardService.findOneSpellCard(spellId); // spell 1
@@ -183,14 +181,14 @@ class CardServiceTest {
         // 애착 아티팩트 스킬
         Skill attachmentSkill = generateAttachmentSkill("레비드 더 섀도우");
 
-        ArtifactCardDto artifactDto = generateArtifactDto("레비의 단도", CardGrade.LEGENDARY);
+        CardDto artifactDto = generateArtifactDto("레비의 단도", CardGrade.LEGENDARY);
 
         Long artifactId_1 = cardService.createNewArtifactCard(artifactDto, levi_id, attachmentSkill);
         ArtifactCard artifact_1 = cardService.findOneArtifactCard(artifactId_1); // artifact 1
 
 
         // 아티팩트 카드 (애착 사도 X)
-        ArtifactCardDto artifactDto2 = generateArtifactDto("30KG 케틀벨", CardGrade.LEGENDARY);
+        CardDto artifactDto2 = generateArtifactDto("30KG 케틀벨", CardGrade.LEGENDARY);
 
         Long artifactId_2 = cardService.createNewArtifactCard(artifactDto2);
         ArtifactCard artifact_2 = cardService.findOneArtifactCard(artifactId_2); // artifact 2
@@ -212,10 +210,10 @@ class CardServiceTest {
     @DisplayName("없는 카드 조회")
     void findNone() {
         // given
-        SpellCardDto spellDto = generateSpellDto("사기진작", CardGrade.RARE);
+        CardDto spellDto = generateSpellDto("사기진작", CardGrade.RARE);
         Long saved_spell_id = cardService.createNewSpellCard(spellDto);
 
-        ArtifactCardDto artifactDto2 = generateArtifactDto("30KG 케틀벨", CardGrade.LEGENDARY);
+        CardDto artifactDto2 = generateArtifactDto("30KG 케틀벨", CardGrade.LEGENDARY);
         Long saved_artifact_id = cardService.createNewArtifactCard(artifactDto2);
 
         // when
@@ -236,13 +234,13 @@ class CardServiceTest {
 //    @Rollback(value = false)
     void updateSpell() {
         // given
-        SpellCardDto spellDto = generateSpellDto("중앙GOOD", CardGrade.RARE);
+        CardDto spellDto = generateSpellDto("중앙GOOD", CardGrade.RARE);
         Long spellId = cardService.createNewSpellCard(spellDto);
         SpellCard originSpell = cardService.findOneSpellCard(spellId);
 
         // when
         // varchar 데이터들(name+...)과 등급이 바뀌었음
-        SpellCardDto updateDto = generateSpellDto("수정된중앙GOOD", CardGrade.NORMAL);
+        CardDto updateDto = generateSpellDto("수정된중앙GOOD", CardGrade.NORMAL);
         Long updatedId = cardService.updateSpellCard(spellId, updateDto);
 
         // then
@@ -261,13 +259,13 @@ class CardServiceTest {
 //    @Rollback(value = false)
     void updateArtifact() {
         // given
-        ArtifactCardDto artifactDto = generateArtifactDto("30KG 케틀벨", CardGrade.LEGENDARY);
+        CardDto artifactDto = generateArtifactDto("30KG 케틀벨", CardGrade.LEGENDARY);
         Long originId = cardService.createNewArtifactCard(artifactDto);
         ArtifactCard originArtifact = cardService.findOneArtifactCard(originId);
 
         // when
         // varchar 데이터들(name+...)과 등급이 바뀌었음
-        ArtifactCardDto updateDto = generateArtifactDto("수정된 30KG 케틀벨", CardGrade.RARE);
+        CardDto updateDto = generateArtifactDto("수정된 30KG 케틀벨", CardGrade.RARE);
         Long updatedId = cardService.updateArtifactCard(originId, updateDto);
 
         // then
@@ -295,7 +293,7 @@ class CardServiceTest {
         Skill skill = generateAttachmentSkill("그림 스크래치");
 
         // 아티팩트 카드 생성
-        ArtifactCardDto artifactDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
+        CardDto artifactDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
         Long originId = cardService.createNewArtifactCard(artifactDto, rim_id, skill); // 새로운 아티팩트 카드 생성
         ArtifactCard originCard = cardService.findOneArtifactCard(originId);
 
@@ -303,7 +301,7 @@ class CardServiceTest {
         Skill updateSkill = generateAttachmentSkill("수정된 그림 스크래치");
 
         // 카드 정보 업데이트
-        ArtifactCardDto updateDto = generateArtifactDto("수정된 림의 낫", CardGrade.RARE);
+        CardDto updateDto = generateArtifactDto("수정된 림의 낫", CardGrade.RARE);
         Long updatedId = cardService.updateArtifactCard(originId, updateDto, rim_id, updateSkill); // 아티팩트 카드 업데이트
 
         // then
@@ -316,7 +314,7 @@ class CardServiceTest {
         // 애착 스킬 변경사항 확인
         assertThat(updatedCard.getAttachmentSkill().getName()).isEqualTo(updateSkill.getName());
         assertThat(updatedCard.getAttachmentSkill().getDescription()).isEqualTo(updateSkill.getDescription());
-        assertThat(updatedCard.getAttachmentSkill().getImageUrl()).isEqualTo(updateSkill.getImageUrl());
+//        assertThat(updatedCard.getAttachmentSkill().getImageUrl()).isEqualTo(updateSkill.getImageUrl());
 
         // 같은 엔티티가 변경된 것이어야 함
         assertThat(updatedCard).isEqualTo(originCard);
@@ -326,7 +324,7 @@ class CardServiceTest {
     @DisplayName("스펠 카드 삭제")
     void deleteSpell() {
         // given
-        SpellCardDto spellDto = generateSpellDto("사기진작", CardGrade.NORMAL);
+        CardDto spellDto = generateSpellDto("사기진작", CardGrade.NORMAL);
         Long savedId = cardService.createNewSpellCard(spellDto);
 
         // when
@@ -342,7 +340,7 @@ class CardServiceTest {
     @DisplayName("아티팩트 카드 삭제 (애착 x)")
     void deleteArtifact() {
         // given
-        ArtifactCardDto artifactDto = generateArtifactDto("30GK 케틀벨", CardGrade.LEGENDARY);
+        CardDto artifactDto = generateArtifactDto("30GK 케틀벨", CardGrade.LEGENDARY);
         Long savedId = cardService.createNewArtifactCard(artifactDto);
 
         // when
@@ -364,7 +362,7 @@ class CardServiceTest {
 
         Skill skill = generateAttachmentSkill("그림 스크래치");
 
-        ArtifactCardDto cardDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
+        CardDto cardDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
 
         Long savedId = cardService.createNewArtifactCard(cardDto, rim_id, skill);
 
@@ -391,7 +389,7 @@ class CardServiceTest {
 
         Skill skill = generateAttachmentSkill("그림 스크래치");
 
-        ArtifactCardDto artifactDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
+        CardDto artifactDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
         Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, skill);
 
         // when
@@ -404,8 +402,8 @@ class CardServiceTest {
     }
 
 
-    static SpellCardDto generateSpellDto(String name, CardGrade grade) {
-        SpellCardDto dto = new SpellCardDto();
+    static CardDto generateSpellDto(String name, CardGrade grade) {
+        CardDto dto = new CardDto();
         dto.setName(name);
         dto.setDescription(name + "스펠카드 설명");
         dto.setStory(name + "스펠카드 이야기");
@@ -419,8 +417,8 @@ class CardServiceTest {
         return dto;
     }
 
-    static ArtifactCardDto generateArtifactDto(String name, CardGrade grade) {
-        ArtifactCardDto dto = new ArtifactCardDto();
+    static CardDto generateArtifactDto(String name, CardGrade grade) {
+        CardDto dto = new CardDto();
         dto.setName(name);
         dto.setDescription(name + "아티팩트카드 설명");
         dto.setStory(name + "아티팩트카드 이야기");
@@ -448,11 +446,11 @@ class CardServiceTest {
         enhancedAttack.addAttribute(name+" 강화공격 속성2", "40%");
 
         // 저학년 스킬
-        Skill lowSkill = Skill.createLowSkill(name+" 저학년스킬", name + "저학년스킬 설명", name + "저학년스킬 이미지 url");
+        Skill lowSkill = Skill.createLowSkill(name+" 저학년스킬", name + "저학년스킬 설명");
         lowSkill.addAttribute(name+" 저학년스킬 속성", "350%");
 
         // 고학년 스킬
-        Skill highSkill = Skill.createHighSkill(name+" 고학년스킬", name+" 고학년스킬 설명", 15, "고학년스킬 이미지 url");
+        Skill highSkill = Skill.createHighSkill(name+" 고학년스킬", name+" 고학년스킬 설명", 15);
         highSkill.addAttribute(name+"고학년스킬 속성", "525%");
 
         // 이미지 url들
@@ -495,7 +493,7 @@ class CardServiceTest {
     }
 
     static Skill generateAttachmentSkill(String name) {
-        Skill attachmentSkill = Skill.createAttachmentSkill(name, name + " 설명", name + " url");
+        Skill attachmentSkill = Skill.createAttachmentSkill(name, name + " 설명", name + "애착 아티팩트 레벨 3 효과");
         attachmentSkill.addAttribute(name + " 속성1 이름", name + " 속성1 수치");
         attachmentSkill.addAttribute(name + " 속성2 이름", name + " 속성2 수치");
         return attachmentSkill;

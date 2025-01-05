@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class ArtifactCardDto {
+public class CardDto {
 
     private String name;
     private CardGrade grade;
     private String description;
     private String story;
     private Integer cost;
-    private String imageUrl;
+//    private String imageUrl;
     private List<Attribute> attributes = new ArrayList<>();
 
     public void addAttribute(String name, String value) {

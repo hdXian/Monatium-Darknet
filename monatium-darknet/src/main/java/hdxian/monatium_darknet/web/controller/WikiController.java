@@ -52,18 +52,23 @@ public class WikiController {
     @GetMapping("/cards/artifact")
     public String artifactList(Model model) {
         List<ArtifactCard> cardList = cardService.findAllArtifactCards();
+        String cardBaseUrl = imageUrlService.getArtifactCardBaseUrl();
+        String portraitBaseUrl = imageUrlService.getChBaseUrl() + "portrait/";
 
         model.addAttribute("cardList", cardList);
+        model.addAttribute("cardBaseUrl", cardBaseUrl);
+        model.addAttribute("portraitBaseUrl", portraitBaseUrl);
 
         return "wiki/artifactCardList";
     }
 
     @GetMapping("/cards/spell")
     public String spellList(Model model) {
-
         List<SpellCard> cardList = cardService.findAllSpellCards();
+        String baseUrl = imageUrlService.getSpellCardBaseUrl();
 
         model.addAttribute("cardList", cardList);
+        model.addAttribute("baseUrl", baseUrl);
 
         return "wiki/spellCardList";
     }

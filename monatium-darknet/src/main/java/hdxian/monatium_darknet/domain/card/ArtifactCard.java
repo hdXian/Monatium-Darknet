@@ -21,7 +21,7 @@ public class ArtifactCard extends Card{
     @JoinColumn(name = "attachment_character_id")
     private Character character; // 애착 사도
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true) // 스킬 업데이트되면 객체 갈아끼울 거임. 기존 객체는 테이블에서 제거.
     @JoinColumn(name = "attachment_skill_id")
     private Skill attachmentSkill; // 애착 아티팩트 스킬
 
@@ -46,6 +46,7 @@ public class ArtifactCard extends Card{
         card.setStory(story);
         card.setCost(cost);
 //        card.setImageUrl(imageUrl);
+        card.setStatus(CardStatus.DISABLED);
         card.setCharacter(character);
         card.setAttachmentSkill(attachmentSkill);
 

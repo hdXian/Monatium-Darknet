@@ -16,7 +16,9 @@ document.addEventListener('DOMContentLoaded', function() {
             newLikeInput.classList.add('d-flex', 'mb-2', 'like-input-container');
 
             newLikeInput.innerHTML = `
-                <input type="text" name="favorites[${currentIndex}]" class="form-control me-2" placeholder="좋아하는 것을 입력하세요">
+                <div class="favorite-field">
+                    <input type="text" class="form-control me-2" name="favorites[${currentIndex}]"  placeholder="좋아하는 것을 입력하세요">
+                </div>
                 <button type="button" class="btn btn-success btn-add-like">+</button>
                 <button type="button" class="btn btn-danger btn-remove-like ms-2">-</button>
             `;

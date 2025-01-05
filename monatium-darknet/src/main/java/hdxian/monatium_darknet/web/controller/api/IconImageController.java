@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -28,6 +29,19 @@ public class IconImageController {
 
     private final ImagePathService imagePathService;
     private final LocalFileStorageService fileStorageService;
+
+    // TODO - 언젠가 이걸로 통합하는게 낫지 않을까..
+    @GetMapping("/{fileName}")
+    public ResponseEntity<Resource> getIcon(@PathVariable("fileName") String fileName) throws IOException {
+        String fullPath = fileStorageService.getFullPath(imagePathService.getIconFileName(fileName));
+
+        UrlResource resource = new UrlResource("file:" + fullPath);
+        String contentType = fileStorageService.getContentType(fullPath);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(resource);
+    }
 
     // 종족
     @GetMapping("/race/{race}")
