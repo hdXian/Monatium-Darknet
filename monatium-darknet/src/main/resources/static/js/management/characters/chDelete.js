@@ -1,6 +1,11 @@
 document.getElementById('delChar-btn').addEventListener('click', function (event) {
-    // 첫 번째 확인 메시지
-    if (confirm('정말 삭제하시겠습니까?')) {
+
+    const characterName = event.target.getAttribute('data-name');
+
+    // 확인 메시지
+    const message = `정말 ${characterName} 캐릭터를 삭제하시겠습니까?`
+
+    if (confirm(message)) {
         const characterId = event.target.getAttribute('data-id');
         const deleteUrl = `/management/characters/del/${characterId}`;
 
