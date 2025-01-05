@@ -15,11 +15,43 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const userConfirmed = confirm(confirmMessage);
             if (!userConfirmed) {
-                return; // 사용자가 취소를 누르면 상태 전환을 중단합니다.
+                return; // 사용자가 취소를 누르면 상태 전환을 중단
             }
 
+            const requestUrl = isPublic ? `/management/notices/unpublish/${noticeId}`
+                                        : `/management/notices/publish/${noticeId}`;
+
+            fetch(requestUrl, { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    // 성공적으로 처리된 경우 상태 변경
+                    const newStatus = isPublic ? 'PRIVATE' : 'PUBLIC';
+                    //
+                    button.setAttribute('data-status', newStatus);
+
+                    // 클래스 업데이트
+                    if (newStatus === 'PUBLIC') {
+                        button.classList.add('btn-success');
+                        button.classList.remove('btn-secondary');
+                    } else {
+                        button.classList.add('btn-secondary');
+                        button.classList.remove('btn-success');
+                    }
+
+                    // 버튼 텍스트 업데이트
+                    button.textContent = (newStatus === 'PUBLIC') ? '공개 중' : '비공개 중';
+
+                } else {
+                    throw new Error('서버 오류가 발생했습니다.');
+                }
+            })
+            .catch(error => {
+                alert('상태 변경에 실패했습니다: ' + error.message);
+            });
+
             // 상태 전환 로직 호출
-            updateStatus(noticeId);
+            // updateStatus(noticeId);
+
         });
     });
 
@@ -55,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// 상태 전환 함수 (변경 사항 없음)
+// 상태 전환 함수
 function updateStatus(noticeId) {
     const button = document.querySelector(`button[data-id="${noticeId}"]`);
     if (!button) {

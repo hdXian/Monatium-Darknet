@@ -28,7 +28,6 @@ public class NoticeService {
 
     private final NoticeRepository noticeRepository;
     private final MemberService memberService;
-//    private final LocalFileStorageService fileStorageService;
     private final LocalFileStorageService fileStorageService;
 
     private final HtmlContentUtil htmlContentUtil;
@@ -122,10 +121,15 @@ public class NoticeService {
     }
 
     @Transactional
-    public NoticeStatus updateNoticeStatus(Long noticeId, NoticeStatus status) {
+    public void publishNotice(Long noticeId) {
         Notice notice = findOne(noticeId);
-        notice.updateStatus(status);
-        return notice.getStatus();
+        notice.setStatus(NoticeStatus.PUBLIC);
+    }
+
+    @Transactional
+    public void unPublishNotice(Long noticeId) {
+        Notice notice = findOne(noticeId);
+        notice.setStatus(NoticeStatus.PRIVATE);
     }
 
     @Transactional
