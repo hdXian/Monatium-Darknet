@@ -214,6 +214,7 @@ public class CardMgController {
 
         // 0. 취소 버튼 클릭 시 세션 데이터를 초기화하고 목록으로 리다이렉트
         if (action.equals("cancel")) {
+            log.info("cancel button clicked on card edit form");
             clearSessionAttributes(session);
             if (cardForm.getCardType() == CardType.SPELL)
                 return "redirect:/management/cards/spell";
