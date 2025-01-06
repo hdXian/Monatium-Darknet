@@ -9,6 +9,7 @@ import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.character.CharacterStatus;
 import hdxian.monatium_darknet.repository.CardRepository;
 import hdxian.monatium_darknet.repository.CharacterRepository;
+import hdxian.monatium_darknet.repository.dto.CharacterSearchCond;
 import hdxian.monatium_darknet.service.dto.AsideImageDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
@@ -206,15 +207,27 @@ public class CharacterService {
         return find.get();
     }
 
+    public Character findOneWiki(Long id) {
+        Character character = findOne(id);
+        if (character.getStatus() != CharacterStatus.ACTIVE) {
+            throw new NoSuchElementException("해당 캐릭터가 없습니다. id=" + id);
+        }
+        return character;
+    }
+
+
     public List<Character> findByName(String name) {
         return characterRepository.findByName(name);
     }
 
     public List<Character> findAll() {
-        return characterRepository.findAll();
+        CharacterSearchCond searchCond = new CharacterSearchCond();
+        return characterRepository.findAll(searchCond);
     }
 
-    // TODO - 조건별 캐릭터 검색 기능 추가 필요
+    public List<Character> findAll(CharacterSearchCond searchCond) {
+        return characterRepository.findAll(searchCond);
+    }
 
     //    @Transactional
 //    public void updateCharacterUrls(Long characterId, CharacterUrl urls) {
