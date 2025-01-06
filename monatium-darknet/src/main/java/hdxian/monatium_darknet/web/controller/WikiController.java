@@ -1,10 +1,10 @@
 package hdxian.monatium_darknet.web.controller;
 
-import hdxian.monatium_darknet.domain.card.ArtifactCard;
-import hdxian.monatium_darknet.domain.card.SpellCard;
+import hdxian.monatium_darknet.domain.card.*;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.character.CharacterStatus;
 import hdxian.monatium_darknet.domain.skin.Skin;
+import hdxian.monatium_darknet.repository.dto.CardSearchCond;
 import hdxian.monatium_darknet.repository.dto.CharacterSearchCond;
 import hdxian.monatium_darknet.service.*;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +56,11 @@ public class WikiController {
 
     @GetMapping("/cards/artifact")
     public String artifactList(Model model) {
-        List<ArtifactCard> cardList = cardService.findAllArtifactCards();
+        CardSearchCond searchCond = new CardSearchCond();
+        searchCond.setCardType(CardType.ARTIFACT);
+        searchCond.setStatus(CardStatus.ACTIVE);
+        List<Card> cardList = cardService.findAll(searchCond);
+
         String cardBaseUrl = imageUrlService.getArtifactCardBaseUrl();
         String portraitBaseUrl = imageUrlService.getChBaseUrl() + "portrait/";
 
@@ -69,7 +73,11 @@ public class WikiController {
 
     @GetMapping("/cards/spell")
     public String spellList(Model model) {
-        List<SpellCard> cardList = cardService.findAllSpellCards();
+        CardSearchCond searchCond = new CardSearchCond();
+        searchCond.setCardType(CardType.SPELL);
+        searchCond.setStatus(CardStatus.ACTIVE);
+        List<Card> cardList = cardService.findAll(searchCond);
+
         String baseUrl = imageUrlService.getSpellCardBaseUrl();
 
         model.addAttribute("cardList", cardList);

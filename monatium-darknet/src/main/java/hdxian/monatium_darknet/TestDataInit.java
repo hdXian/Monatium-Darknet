@@ -57,10 +57,10 @@ public class TestDataInit {
         dtos.add(generateCharDto("셀리네"));
         dtos.add(generateCharDto("엘레나"));
 
-        List<Long> Ids = new ArrayList<>();
+//        List<Long> Ids = new ArrayList<>();
         for (CharacterDto dto : dtos) {
             Long chId = characterService.createNewCharacter(dto);
-            Ids.add(chId);
+//            Ids.add(chId);
         }
 
 //        String baseUrl = "/imgs/wiki/characters/";

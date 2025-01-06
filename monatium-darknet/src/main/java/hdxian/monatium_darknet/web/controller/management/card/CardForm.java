@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.web.controller.management.card;
 import hdxian.monatium_darknet.domain.Attribute;
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.card.CardGrade;
+import hdxian.monatium_darknet.domain.card.CardType;
 import hdxian.monatium_darknet.service.dto.CardDto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

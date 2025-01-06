@@ -11,7 +11,8 @@ import lombok.Setter;
 import java.util.Arrays;
 import java.util.List;
 
-@Entity
+@Deprecated
+//@Entity
 @DiscriminatorValue("S")
 @Getter @Setter
 public class SpellCard extends Card{

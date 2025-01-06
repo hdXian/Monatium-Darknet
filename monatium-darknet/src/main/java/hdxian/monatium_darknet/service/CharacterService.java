@@ -4,6 +4,7 @@ import hdxian.monatium_darknet.domain.Attribute;
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.SkillCategory;
 import hdxian.monatium_darknet.domain.card.ArtifactCard;
+import hdxian.monatium_darknet.domain.card.Card;
 import hdxian.monatium_darknet.domain.character.Attack;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.character.CharacterStatus;
@@ -184,13 +185,13 @@ public class CharacterService {
         Character ch = findOne(characterId);
         ch.setStatus(CharacterStatus.DELETED);
 
-        Optional<ArtifactCard> findCard = cardRepository.findOneArtifactByCharacterId(characterId);
+        Optional<Card> findCard = cardRepository.findOneArtifactByCharacterId(characterId);
 
         // 그럼 아티팩트 카드 추가할 때도 이미 애착 사도가 있는지 확인해야 하나? 아티팩트 카드에 @OneToOne이 걸려있기는 함.
 
         // 애착 아티팩트 카드가 있을 경우에만 제거
         if (findCard.isPresent()) {
-            ArtifactCard artifactCard = findCard.get();
+            Card artifactCard = findCard.get();
             artifactCard.removeCharacter(); // 애착 사도, 애착 스킬 제거
             cardRepository.save(artifactCard);
         }
