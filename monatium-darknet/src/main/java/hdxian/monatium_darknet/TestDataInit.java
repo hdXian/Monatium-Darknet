@@ -42,10 +42,28 @@ public class TestDataInit {
         NoticeDto noticeDto2 = generateNoticeDto("테스트 공지사항2 제목 (업데이트)", NoticeCategory.UPDATE, "테스트 공지사항2 본문");
         NoticeDto noticeDto3 = generateNoticeDto("테스트 공지사항3 제목 (이벤트)", NoticeCategory.EVENT, "테스트 공지사항3 본문");
         NoticeDto noticeDto4 = generateNoticeDto("테스트 공지사항4 제목 (개발자노트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+
+        NoticeDto noticeDto5 = generateNoticeDto("테스트 공지사항5 제목 (공지사항)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+        NoticeDto noticeDto6 = generateNoticeDto("테스트 공지사항6 제목 (업데이트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+        NoticeDto noticeDto7 = generateNoticeDto("테스트 공지사항7 제목 (이벤트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+        NoticeDto noticeDto8 = generateNoticeDto("테스트 공지사항8 제목 (개발자노트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+
+        NoticeDto noticeDto9 = generateNoticeDto("테스트 공지사항9 제목 (공지사항)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+        NoticeDto noticeDto10 = generateNoticeDto("테스트 공지사항10 제목 (업데이트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+        NoticeDto noticeDto11 = generateNoticeDto("테스트 공지사항11 제목 (이벤트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+        NoticeDto noticeDto12 = generateNoticeDto("테스트 공지사항12 제목 (개발자노트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
         Long noticeId1 = noticeService.createNewNotice(memberId, noticeDto1);
         Long noticeId2 = noticeService.createNewNotice(memberId, noticeDto2);
         Long noticeId3 = noticeService.createNewNotice(memberId, noticeDto3);
         Long noticeId4 = noticeService.createNewNotice(memberId, noticeDto4);
+        Long noticeId5 = noticeService.createNewNotice(memberId, noticeDto5);
+        Long noticeId6 = noticeService.createNewNotice(memberId, noticeDto6);
+        Long noticeId7 = noticeService.createNewNotice(memberId, noticeDto7);
+        Long noticeId8 = noticeService.createNewNotice(memberId, noticeDto8);
+        Long noticeId9 = noticeService.createNewNotice(memberId, noticeDto9);
+        Long noticeId10 = noticeService.createNewNotice(memberId, noticeDto10);
+        Long noticeId11 = noticeService.createNewNotice(memberId, noticeDto11);
+        Long noticeId12 = noticeService.createNewNotice(memberId, noticeDto12);
 
         // 캐릭터 추가
         List<CharacterDto> dtos = new ArrayList<>();

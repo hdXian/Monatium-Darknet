@@ -13,6 +13,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,7 +37,7 @@ public class NoticeMgController {
     private final NoticeService noticeService;
 
     // 공지사항 목록 (대시보드 -> 공지사항 관리)
-    @GetMapping
+//    @GetMapping
     public String noticeList(@RequestParam(value = "category", required = false) NoticeCategory category, Model model) {
         NoticeSearchCond searchCond = new NoticeSearchCond();
         searchCond.setCategory(category);
@@ -41,6 +45,32 @@ public class NoticeMgController {
 
         model.addAttribute("noticeList", noticeList);
         model.addAttribute("curCategory", category);
+        return "management/notice/noticeList";
+    }
+
+    @GetMapping
+    public String noticeList_Paging(@RequestParam(value = "page", required = false, defaultValue = "1") Integer pageNumber,
+                                    @RequestParam(value = "category", required = false) NoticeCategory category, Model model) {
+        NoticeSearchCond searchCond = new NoticeSearchCond();
+        searchCond.setCategory(category);
+//        List<Notice> noticeList = noticeService.findAll(searchCond);
+        Page<Notice> noticePage = noticeService.findAll_Paging(searchCond, pageNumber);
+
+        // 한번에 페이지가 5개씩만 나오도록 조정
+        int maxPages = 5;
+        int idx = pageNumber-1;
+        int startPage = (maxPages * (idx / 5)) + 1; // 5 * (현재 페이지를 maxPage로 나눈 몫)을 시작 페이지 번호로 지정
+        int endPage = Math.min((noticePage.getTotalPages()), (startPage + maxPages - 1));
+        if (endPage == 0)
+            endPage = 1;
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        List<Notice> noticeList = noticePage.getContent();
+        model.addAttribute("noticeList", noticeList);
+
+        model.addAttribute("curCategory", category);
+        model.addAttribute("page", noticePage);
         return "management/notice/noticeList";
     }
 

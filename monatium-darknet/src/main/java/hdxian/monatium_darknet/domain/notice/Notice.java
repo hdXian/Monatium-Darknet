@@ -24,7 +24,8 @@ public class Notice {
     private LocalDateTime date;
     private Long views;
 
-    private String content; // 추후 json 등 변경 예정
+    @Column(length = 1000)
+    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
