@@ -5,9 +5,6 @@ import lombok.Data;
 
 @Data
 public class SkinDto {
-
     private String name;
-    private SkinGrade grade;
     private String description;
-
 }

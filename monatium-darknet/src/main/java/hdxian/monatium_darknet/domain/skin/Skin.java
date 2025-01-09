@@ -22,8 +22,8 @@ public class Skin {
     private String description;
     private String imageUrl;
 
-    @Enumerated(EnumType.STRING)
-    private SkinGrade grade;
+//    @Enumerated(EnumType.STRING)
+//    private SkinGrade grade;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id")
@@ -46,10 +46,10 @@ public class Skin {
     }
 
     // 생성 메서드
-    public static Skin createSkin(String name, SkinGrade grade, String description, Character character) {
+    public static Skin createSkin(String name, String description, Character character) {
         Skin skin = new Skin();
         skin.setName(name);
-        skin.setGrade(grade);
+//        skin.setGrade(grade);
         skin.setDescription(description);
 //        skin.setCharacter(character);
         character.addSkin(skin); // 연관관계 메서드

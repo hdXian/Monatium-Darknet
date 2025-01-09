@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
+    <title th:text="${pageTitle}">카드 목록</title>
+    <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/management/skins/skinList.css}">
+    <!-- 커스텀 css -->
+</head>
+
+<body>
+
+<!-- 상단 네비게이션 바 -->
+<nav th:replace="~{fragments/navbar :: management_navbar}">
+    상단 네비게이션 바 영역
+</nav>
+
+<!-- 메인 콘텐츠 영역 -->
+<div class="container mt-4 main-content">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>사복 관리</h2>
+        <a th:href="@{/management/skins/new}">
+            <button class="btn btn-success">+ 사복 추가</button>
+        </a>
+    </div>
+
+    <!-- 필터링 섹션 -->
+    <section id="filtering-options" class="d-flex justify-content-end align-items-center mb-3">
+        <!-- 등급 필터링 (체크박스) -->
+        <div class="me-3">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="legendaryFilter" value="legendary">
+                <label class="form-check-label" for="legendaryFilter">전설</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="rareFilter" value="rare">
+                <label class="form-check-label" for="rareFilter">희귀</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="advancedFilter" value="advanced">
+                <label class="form-check-label" for="advancedFilter">고급</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="normalFilter" value="normal">
+                <label class="form-check-label" for="normalFilter">일반</label>
+            </div>
+        </div>
+
+        <!-- 이름 검색창 -->
+        <div class="me-3">
+            <label for="searchName" class="form-label visually-hidden">이름 검색</label>
+            <input type="text" class="form-control form-control-sm" id="searchName" placeholder="이름 검색" onkeyup="handleEnter(event)">
+        </div>
+
+        <!-- 검색 버튼 -->
+        <button type="button" class="btn btn-primary btn-sm" onclick="filterItems()">검색</button>
+    </section>
+
+    <!-- 카드 목록 -->
+    <div class="row g-4">
+        <div th:each="skin : ${skinList}" class="col-md-6 my-3 spell-item" th:data-grade="${{skin.grade}}" th:data-name="${skin.name}">
+
+            <div class="card card-custom">
+
+                <div class="card-body d-flex align-items-start">
+
+                    <img th:src="@{|${baseUrl}${skin.id}|}"
+                         th:classappend="| ${{skin.grade}}-border |"
+                         class="card-img-top spell-image"
+                         alt="카드 이미지">
+
+                    <div class="spell-content">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 th:text="${card.name}" class="card-title">카드 이름</h5>
+                            <div th:switch="${{card.grade}}" class="spell-info">
+                                등급:
+                                <span th:case="'KKOGGA'" th:text="전설" th:classappend="| ${{card.grade}}-text |" class="me-3">카드 등급</span>
+                                <span th:case="'NORMAL'" th:text="희귀" th:classappend="| ${{card.grade}}-text |" class="me-3">카드 등급</span>
+
+                                코스트: <span th:text="${card.cost}" class="green-text">카드 비용</span>
+                            </div>
+                        </div>
+
+                        <p class="spell-stats">
+                            <th:block th:each="attribute: ${card.attributes}">
+                                <span th:text="|${attribute.attrName} ${attribute.attrValue}|" class="me-2">카드 능력치</span>
+                            </th:block>
+                        </p>
+
+                        <hr>
+
+                        <div th:text="${card.description}" class="spell-effect mb-3">카드 설명</div>
+                        <div th:text="${card.story}" class="spell-story">카드 이야기</div>
+                    </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-between mt-2 mb-2">
+                    <!-- 정보 수정 버튼 -->
+                    <a th:href="@{/management/cards/edit/{id} (id=${card.id})}" class="btn btn-sm btn-primary">정보 수정</a>
+
+                    <!-- 주말 농장 스위치 -->
+                    <button th:classappend="${card.status.name() == 'ACTIVE' ? 'btn-success' : 'btn-secondary'}"
+                            th:data-card-id="${card.id}"
+                            th:data-card-name="${card.name}"
+                            th:data-status="${card.status.name()}"
+                            th:text="${card.status.name() == 'ACTIVE' ? '활성화 중' : '비활성화 중'}"
+                            class="btn btn-sm toggle-card-status">
+                        활성화 버튼
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+<!-- 하단 푸터 -->
+<footer th:replace="~{fragments/footer :: management_footer}">
+    하단 푸터 영역
+</footer>
+
+<!--<script th:src="@{/js/management/skins/skinList.js}"></script>-->
+
+</body>
+</html>

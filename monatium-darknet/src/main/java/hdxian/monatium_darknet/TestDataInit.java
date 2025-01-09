@@ -91,7 +91,7 @@ public class TestDataInit {
 //        }
 
         // 스킨 테스트 데이터 추가 (하드코딩, 1개 넣었음)
-        SkinDto skinDto1 = generateSkinDto("하드워킹 홀리데이", SkinGrade.NORMAL);
+        SkinDto skinDto1 = generateSkinDto("하드워킹 홀리데이");
         Long skinId = skinService.createNewSkin(1L, skinDto1);
 
         String skinBaseUrl = "/imgs/wiki/skin/";
@@ -198,10 +198,10 @@ public class TestDataInit {
         return dto;
     }
 
-    private static SkinDto generateSkinDto(String name, SkinGrade grade) {
+    private static SkinDto generateSkinDto(String name) {
         SkinDto dto = new SkinDto();
         dto.setName(name);
-        dto.setGrade(grade);
+//        dto.setGrade(grade);
         dto.setDescription(name + " 스킨 설명");
 
         return dto;

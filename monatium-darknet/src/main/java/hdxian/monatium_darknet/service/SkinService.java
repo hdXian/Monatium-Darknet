@@ -32,7 +32,6 @@ public class SkinService {
 
         Skin skin = Skin.createSkin(
                 skinDto.getName(),
-                skinDto.getGrade(),
                 skinDto.getDescription(),
                 character
         );
@@ -52,7 +51,7 @@ public class SkinService {
         Skin skin = findOneSkin(skinId);
 
         skin.setName(updateParam.getName());
-        skin.setGrade(updateParam.getGrade());
+//        skin.setGrade(updateParam.getGrade());
         skin.setDescription(updateParam.getDescription());
 
         return skin.getId(); // save() 호출 x. merge가 필요한 로직이 아님.
