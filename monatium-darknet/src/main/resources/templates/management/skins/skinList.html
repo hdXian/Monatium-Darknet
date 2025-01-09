@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+<!--v3-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
-    <title th:text="${pageTitle}">카드 목록</title>
+    <title>사복 관리</title>
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
     <link rel="stylesheet" th:href="@{/css/management/skins/skinList.css}">
     <!-- 커스텀 css -->
@@ -24,95 +25,212 @@
         </a>
     </div>
 
-    <!-- 필터링 섹션 -->
-    <section id="filtering-options" class="d-flex justify-content-end align-items-center mb-3">
-        <!-- 등급 필터링 (체크박스) -->
-        <div class="me-3">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="legendaryFilter" value="legendary">
-                <label class="form-check-label" for="legendaryFilter">전설</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="rareFilter" value="rare">
-                <label class="form-check-label" for="rareFilter">희귀</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="advancedFilter" value="advanced">
-                <label class="form-check-label" for="advancedFilter">고급</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="normalFilter" value="normal">
-                <label class="form-check-label" for="normalFilter">일반</label>
-            </div>
-        </div>
-
-        <!-- 이름 검색창 -->
-        <div class="me-3">
-            <label for="searchName" class="form-label visually-hidden">이름 검색</label>
-            <input type="text" class="form-control form-control-sm" id="searchName" placeholder="이름 검색" onkeyup="handleEnter(event)">
-        </div>
-
-        <!-- 검색 버튼 -->
-        <button type="button" class="btn btn-primary btn-sm" onclick="filterItems()">검색</button>
-    </section>
-
-    <!-- 카드 목록 -->
-    <div class="row g-4">
-        <div th:each="skin : ${skinList}" class="col-md-6 my-3 spell-item" th:data-grade="${{skin.grade}}" th:data-name="${skin.name}">
-
-            <div class="card card-custom">
-
-                <div class="card-body d-flex align-items-start">
-
-                    <img th:src="@{|${baseUrl}${skin.id}|}"
-                         th:classappend="| ${{skin.grade}}-border |"
-                         class="card-img-top spell-image"
-                         alt="카드 이미지">
-
-                    <div class="spell-content">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 th:text="${card.name}" class="card-title">카드 이름</h5>
-                            <div th:switch="${{card.grade}}" class="spell-info">
-                                등급:
-                                <span th:case="'KKOGGA'" th:text="전설" th:classappend="| ${{card.grade}}-text |" class="me-3">카드 등급</span>
-                                <span th:case="'NORMAL'" th:text="희귀" th:classappend="| ${{card.grade}}-text |" class="me-3">카드 등급</span>
-
-                                코스트: <span th:text="${card.cost}" class="green-text">카드 비용</span>
-                            </div>
-                        </div>
-
-                        <p class="spell-stats">
-                            <th:block th:each="attribute: ${card.attributes}">
-                                <span th:text="|${attribute.attrName} ${attribute.attrValue}|" class="me-2">카드 능력치</span>
-                            </th:block>
-                        </p>
-
-                        <hr>
-
-                        <div th:text="${card.description}" class="spell-effect mb-3">카드 설명</div>
-                        <div th:text="${card.story}" class="spell-story">카드 이야기</div>
-                    </div>
-                </div>
-
-                <div class="card-footer d-flex justify-content-between mt-2 mb-2">
-                    <!-- 정보 수정 버튼 -->
-                    <a th:href="@{/management/cards/edit/{id} (id=${card.id})}" class="btn btn-sm btn-primary">정보 수정</a>
-
-                    <!-- 주말 농장 스위치 -->
-                    <button th:classappend="${card.status.name() == 'ACTIVE' ? 'btn-success' : 'btn-secondary'}"
-                            th:data-card-id="${card.id}"
-                            th:data-card-name="${card.name}"
-                            th:data-status="${card.status.name()}"
-                            th:text="${card.status.name() == 'ACTIVE' ? '활성화 중' : '비활성화 중'}"
-                            class="btn btn-sm toggle-card-status">
-                        활성화 버튼
-                    </button>
-                </div>
-            </div>
-
-        </div>
+    <!-- 캐릭터 목록 제목과 필터링 토글 버튼을 같은 줄에 배치 -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <!-- 필터링 토글 버튼 -->
+        <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#filtering-options" aria-expanded="false" aria-controls="filtering-options">
+            필터링 옵션 보기
+        </button>
     </div>
 
+    <!-- 필터링 섹션 -->
+    <div class="collapse" id="filtering-options">
+        <section class="p-3 bg-light rounded shadow-sm d-flex flex-wrap ms-auto">
+            <!-- 성격 필터링 -->
+            <div class="mb-3">
+                <span class="form-label me-2 mb-0">성격:</span>
+                <div class="form-check-group">
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="personalityPure" value="pure">
+                        <label class="form-check-label" for="personalityPure">순수</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="personalityCool" value="cool">
+                        <label class="form-check-label" for="personalityCool">냉정</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="personalityMadness" value="madness">
+                        <label class="form-check-label" for="personalityMadness">광기</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="personalityLively" value="lively">
+                        <label class="form-check-label" for="personalityLively">활발</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="personalityDepressed" value="depressed">
+                        <label class="form-check-label" for="personalityDepressed">우울</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 줄바꿈 -->
+            <div class="w-100"></div> <!-- 여기서 줄바꿈을 추가 -->
+
+            <!-- 역할군 필터링 -->
+            <div class="mb-3">
+                <span class="form-label me-2 mb-0">역할군:</span>
+                <div class="form-check-group">
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="roleDealer" value="dealer">
+                        <label class="form-check-label" for="roleDealer">딜러</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="roleTanker" value="tanker">
+                        <label class="form-check-label" for="roleTanker">탱커</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="roleSupporter" value="supporter">
+                        <label class="form-check-label" for="roleSupporter">서포터</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 줄바꿈 -->
+            <div class="w-100"></div> <!-- 여기서 줄바꿈을 추가 -->
+
+            <!-- 배치 열 필터링 -->
+            <div class="mb-3">
+                <span class="form-label me-2 mb-0">배치 열:</span>
+                <div class="form-check-group">
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="positionFront" value="front">
+                        <label class="form-check-label" for="positionFront">전열</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="positionMiddle" value="middle">
+                        <label class="form-check-label" for="positionMiddle">중열</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="positionBack" value="back">
+                        <label class="form-check-label" for="positionBack">후열</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 줄바꿈 -->
+            <div class="w-100"></div> <!-- 여기서 줄바꿈을 추가 -->
+
+            <!-- 종족 필터링 -->
+            <div class="mb-3">
+                <span class="form-label me-2 mb-0">종족:</span>
+                <div class="form-check-group">
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="raceFairy" value="fairy">
+                        <label class="form-check-label" for="raceFairy">요정</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="raceBeast" value="beast">
+                        <label class="form-check-label" for="raceBeast">수인</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="raceElf" value="elf">
+                        <label class="form-check-label" for="raceElf">엘프</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="raceSpirit" value="spirit">
+                        <label class="form-check-label" for="raceSpirit">정령</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="raceGhost" value="ghost">
+                        <label class="form-check-label" for="raceGhost">유령</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="raceDragon" value="dragon">
+                        <label class="form-check-label" for="raceDragon">용족</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="raceWitch" value="witch">
+                        <label class="form-check-label" for="raceWitch">마녀</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 줄바꿈 -->
+            <div class="w-100"></div> <!-- 여기서 줄바꿈을 추가 -->
+
+            <!-- 공격 타입 필터링 -->
+            <div class="mb-3">
+                <span class="form-label me-2 mb-0">공격 타입:</span>
+                <div class="form-check-group">
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="attackPhysical" value="physical">
+                        <label class="form-check-label" for="attackPhysical">물리</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="attackMagical" value="magical">
+                        <label class="form-check-label" for="attackMagical">마법</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 줄바꿈 -->
+            <div class="w-100"></div> <!-- 여기서 줄바꿈을 추가 -->
+
+            <!-- 검색 및 초기화 버튼 -->
+            <div class="d-flex align-items-center mt-3">
+                <button type="button" class="btn btn-primary me-2" onclick="filterCharacters()">검색</button>
+                <button type="button" class="btn btn-secondary" onclick="resetFilters()">초기화</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- 카드 리스트 컨테이너 -->
+<!--    <div class="card-container d-flex flex-wrap gap-3">-->
+
+<!--        <div class="card" th:each="skin : ${skinList}">-->
+
+<!--            <img th:src="@{ |${skinBaseUrl}${skin.id}| }" class="card-img-top" alt="스킨 이미지">-->
+
+<!--            <div class="card-body">-->
+<!--                <h5 class="card-title" th:text="${skin.name}">사복 이름</h5>-->
+<!--                <p class="card-text">스킨 설명</p>-->
+<!--            </div>-->
+
+<!--        </div>-->
+
+<!--    </div>-->
+
+
+    <!-- 사복 목록 -->
+    <div class="row" id="skinList">
+
+        <!-- 사복 카드 (반복될 요소) -->
+        <div th:each="skin : ${skinList}" class="col-6 col-sm-4 col-lg-2 mb-4 g-3 skin-item">
+
+            <div class="card h-100">
+                <!-- 사복 이미지 -->
+                <img th:src="@{ |${skinBaseUrl}${skin.id}| }" class="card-img-top" alt="스킨 이미지">
+
+                <!-- 사복 이름 -->
+                <div class="card-body">
+                    <div class="card-title mb-2 d-inline-flex align-items-center">
+                        <span th:text="${skin.name}">사복 이름</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 변경 및 삭제 버튼 -->
+            <div class="d-flex justify-content-between mt-2 mb-2">
+                <!-- 정보 수정 버튼 -->
+                <a th:href="@{/management/skins/edit/{id} (id=${skin.id})}" class="btn btn-sm btn-primary">정보 수정</a>
+
+                <!-- 활성화 스위치 -->
+                <button class="btn btn-sm btn-success">
+                    활성화 버튼
+                </button>
+<!--                <button th:classappend="${skin.status.name() == 'ACTIVE' ? 'btn-success' : 'btn-secondary'}"-->
+<!--                        th:data-character-id="${skin.id}"-->
+<!--                        th:data-character-name="${skin.name}"-->
+<!--                        th:data-status="${skin.status.name()}"-->
+<!--                        th:text="${skin.status.name() == 'ACTIVE' ? '활성화 중' : '비활성화 중'}"-->
+<!--                        class="btn btn-sm toggle-character-status">-->
+<!--                    활성화 버튼-->
+<!--                </button>-->
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
@@ -121,7 +239,7 @@
     하단 푸터 영역
 </footer>
 
-<!--<script th:src="@{/js/management/skins/skinList.js}"></script>-->
+<!--<script th:src="@{/js/management/characters/characterList.js}" defer></script>-->
 
 </body>
 </html>
