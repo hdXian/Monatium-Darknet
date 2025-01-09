@@ -92,7 +92,16 @@ public class TestDataInit {
 
         // 스킨 테스트 데이터 추가 (하드코딩, 1개 넣었음)
         SkinDto skinDto1 = generateSkinDto("하드워킹 홀리데이");
-        Long skinId = skinService.createNewSkin(1L, skinDto1);
+        SkinDto skinDto2 = generateSkinDto("세이프티 가드");
+        SkinDto skinDto3 = generateSkinDto("학생회장의 품격");
+        SkinDto skinDto4 = generateSkinDto("무미호의 전설");
+        SkinDto skinDto5 = generateSkinDto("파티 나잇 모나티엄");
+
+        Long skinId1 = skinService.createNewSkin(1L, skinDto1);
+        Long skinId2 = skinService.createNewSkin(3L, skinDto2);
+        Long skinId3 = skinService.createNewSkin(4L, skinDto3);
+        Long skinId4 = skinService.createNewSkin(6L, skinDto4);
+        Long skinId5 = skinService.createNewSkin(7L, skinDto5);
 
 //        String skinBaseUrl = "/imgs/wiki/skin/";
 //        skinService.updateImageUrl(skinId, skinBaseUrl + 1L + "/" + skinId + ".webp");
