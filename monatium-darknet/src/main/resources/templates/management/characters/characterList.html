@@ -181,7 +181,7 @@
              class="col-6 col-sm-4 col-lg-2 mb-4 g-3 character-item"
              th:classappend="| ${{character.race}} ${{character.personality}} ${{character.role}} ${{character.attackType}} ${{character.position}}| ">
 
-            <a th:href="@{ /wiki/characters/{id} (id=${character.id}) }" class="card-link">
+            <a th:href="@{ /management/characters/preview/{id} (id=${character.id}) }" class="card-link">
                 <div class="card">
                     <!-- 캐릭터 이미지 -->
                     <img th:src="@{ |${chBaseUrl}profile/${character.id}| }" class="card-img-top" alt="캐릭터 프로필 이미지">

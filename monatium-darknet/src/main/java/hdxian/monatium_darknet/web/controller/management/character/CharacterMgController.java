@@ -60,6 +60,14 @@ public class CharacterMgController {
         return "management/characters/characterList";
     }
 
+    @GetMapping("/preview/{characterId}")
+    public String preView(@PathVariable("characterId") Long characterId, Model model) {
+        Character character = characterService.findOne(characterId);
+
+        model.addAttribute("character", character);
+        return "/management/characters/characterPreview";
+    }
+
     @GetMapping("/new")
     public String newForm(HttpSession session) {
         clearSessionAttributes(session); // 세션 데이터 초기화
