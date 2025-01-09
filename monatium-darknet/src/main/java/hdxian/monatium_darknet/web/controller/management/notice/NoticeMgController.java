@@ -13,6 +13,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,7 +37,7 @@ public class NoticeMgController {
     private final NoticeService noticeService;
 
     // 공지사항 목록 (대시보드 -> 공지사항 관리)
-    @GetMapping
+//    @GetMapping
     public String noticeList(@RequestParam(value = "category", required = false) NoticeCategory category, Model model) {
         NoticeSearchCond searchCond = new NoticeSearchCond();
         searchCond.setCategory(category);
@@ -44,6 +48,32 @@ public class NoticeMgController {
         return "management/notice/noticeList";
     }
 
+    @GetMapping
+    public String noticeList_Paging(@RequestParam(value = "page", required = false, defaultValue = "1") Integer pageNumber,
+                                    @RequestParam(value = "category", required = false) NoticeCategory category, Model model) {
+        NoticeSearchCond searchCond = new NoticeSearchCond();
+        searchCond.setCategory(category);
+//        List<Notice> noticeList = noticeService.findAll(searchCond);
+        Page<Notice> noticePage = noticeService.findAll_Paging(searchCond, pageNumber);
+
+        // 한번에 페이지가 5개씩만 나오도록 조정
+        int maxPages = 5;
+        int idx = pageNumber-1;
+        int startPage = (maxPages * (idx / 5)) + 1; // 5 * (현재 페이지를 maxPage로 나눈 몫)을 시작 페이지 번호로 지정
+        int endPage = Math.min((noticePage.getTotalPages()), (startPage + maxPages - 1));
+        if (endPage == 0)
+            endPage = 1;
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        List<Notice> noticeList = noticePage.getContent();
+        model.addAttribute("noticeList", noticeList);
+
+        model.addAttribute("curCategory", category);
+        model.addAttribute("page", noticePage);
+        return "management/notice/noticeList";
+    }
+
     // 공지사항 작성 페이지
     @GetMapping("/new")
     public String noticeForm(@ModelAttribute("noticeForm") NoticeForm form) {
@@ -51,7 +81,6 @@ public class NoticeMgController {
     }
 
     // 공지사항 작성 기능
-    // 로그인 처리 선처리 필요 (memberId)
     @PostMapping("/new")
     public String createNotice(@ModelAttribute("noticeForm") NoticeForm form,
                                @SessionAttribute(SessionConst.LOGIN_MEMBER) Member member) throws IOException
@@ -84,24 +113,31 @@ public class NoticeMgController {
     // 공지사항 수정
     @PostMapping("/{noticeId}/edit")
     public String edit(@PathVariable("noticeId")Long noticeId, @ModelAttribute("noticeForm") NoticeForm form) {
-
-        System.out.println("post edit request received");
-        System.out.println("form.getTitle() = " + form.getTitle());
-        System.out.println("form.getCategory() = " + form.getCategory());
-        System.out.println("form.getContent() = " + form.getContent());
-
         NoticeDto updateParam = new NoticeDto(form.getCategory(), form.getTitle(), form.getContent());
         noticeService.updateNotice(noticeId, updateParam);
 
         return "redirect:/management/notices";
     }
 
-    // 공지사항 공개/비공개 변경
-    @PostMapping("/{noticeId}/update-status")
-    @ResponseBody // http body로 응답
-    public NoticeStatusResponseDto updateStatus(@PathVariable("noticeId")Long noticeId, @RequestParam("t") NoticeStatus status) {
-        NoticeStatus updatedStatus = noticeService.updateNoticeStatus(noticeId, status);
-        return new NoticeStatusResponseDto(true, updatedStatus);
+    // 공지사항 공개 설정
+    @PostMapping("/publish/{noticeId}")
+    public ResponseEntity<Void> publish(@PathVariable("noticeId") Long noticeId) {
+        noticeService.publishNotice(noticeId);
+        return ResponseEntity.ok().build();
+    }
+
+    // 공지사항 공개 설정
+    @PostMapping("/unpublish/{noticeId}")
+    public ResponseEntity<Void> unPublish(@PathVariable("noticeId") Long noticeId) {
+        noticeService.unPublishNotice(noticeId);
+        return ResponseEntity.ok().build();
+    }
+
+    // 공지사항 삭제 요청 -> 페이지 쪽에서 delete 메서드로 요청 보내도록 구현할 것
+    @DeleteMapping("/{noticeId}")
+    public ResponseEntity<Void> deleteNotice(@PathVariable("noticeId")Long noticeId) {
+        noticeService.deleteNotice(noticeId);
+        return ResponseEntity.ok().build();
     }
 
     @Data
@@ -111,11 +147,6 @@ public class NoticeMgController {
         private NoticeStatus newStatus;
     }
 
-    // 공지사항 삭제 요청 -> 페이지 쪽에서 delete 메서드로 요청 보내도록 구현할 것
-    @DeleteMapping("/{noticeId}")
-    public ResponseEntity<Void> deleteNotice(@PathVariable("noticeId")Long noticeId) {
-        noticeService.deleteNotice(noticeId);
-        return ResponseEntity.ok().build();
-    }
+
 
 }

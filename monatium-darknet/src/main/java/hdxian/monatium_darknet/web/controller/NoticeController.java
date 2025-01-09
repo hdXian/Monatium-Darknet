@@ -7,6 +7,7 @@ import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +26,7 @@ public class NoticeController {
 
     private final NoticeService noticeService;
 
-    @GetMapping
+//    @GetMapping
     public String noticeList(@RequestParam(value = "category", required = false) NoticeCategory category, Model model) {
         NoticeSearchCond searchCond = new NoticeSearchCond();
         searchCond.setCategory(category);
@@ -34,6 +35,33 @@ public class NoticeController {
 
         model.addAttribute("noticeList", noticeList);
         
+        return "notice/noticeList";
+    }
+
+    @GetMapping
+    public String noticeList(@RequestParam(value = "page", required = false, defaultValue = "1") Integer pageNumber,
+                             @RequestParam(value = "category", required = false) NoticeCategory category, Model model) {
+        NoticeSearchCond searchCond = new NoticeSearchCond();
+        searchCond.setCategory(category);
+        searchCond.setStatus(NoticeStatus.PUBLIC); // 공개 상태인 공지사항만 노출
+//        List<Notice> noticeList = noticeService.findAll(searchCond);
+        Page<Notice> noticePage = noticeService.findAll_Paging(searchCond, pageNumber);
+
+        // 한번에 페이지가 5개씩만 나오도록 조정
+        int maxPages = 5;
+        int idx = pageNumber-1;
+        int startPage = (maxPages * (idx / 5)) + 1; // 5 * (현재 페이지를 maxPage로 나눈 몫)을 시작 페이지 번호로 지정
+        int endPage = Math.min((noticePage.getTotalPages()), (startPage + maxPages - 1));
+        if (endPage == 0)
+            endPage = 1;
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        List<Notice> noticeList = noticePage.getContent();
+        model.addAttribute("noticeList", noticeList);
+
+        model.addAttribute("page", noticePage);
+
         return "notice/noticeList";
     }
 

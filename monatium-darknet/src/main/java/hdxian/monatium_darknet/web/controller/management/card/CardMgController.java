@@ -3,10 +3,12 @@ package hdxian.monatium_darknet.web.controller.management.card;
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.card.ArtifactCard;
 import hdxian.monatium_darknet.domain.card.Card;
+import hdxian.monatium_darknet.domain.card.CardType;
 import hdxian.monatium_darknet.domain.card.SpellCard;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
+import hdxian.monatium_darknet.repository.dto.CardSearchCond;
 import hdxian.monatium_darknet.service.CardService;
 import hdxian.monatium_darknet.service.CharacterService;
 import hdxian.monatium_darknet.service.ImagePathService;
@@ -60,7 +62,10 @@ public class CardMgController {
     // 스펠 카드 리스트
     @GetMapping("/spell")
     public String spellList(Model model) {
-        List<SpellCard> cardList = cardService.findAllSpellCards();
+        CardSearchCond searchCond = new CardSearchCond();
+        searchCond.setCardType(CardType.SPELL);
+        List<Card> cardList = cardService.findAll(searchCond);
+
         String baseUrl = imageUrlService.getSpellCardBaseUrl();
 
         model.addAttribute("cardList", cardList);
@@ -72,7 +77,10 @@ public class CardMgController {
     // 아티팩트 카드 리스트
     @GetMapping("/artifact")
     public String artifactList(Model model) {
-        List<ArtifactCard> cardList = cardService.findAllArtifactCards();
+        CardSearchCond searchCond = new CardSearchCond();
+        searchCond.setCardType(CardType.ARTIFACT);
+        List<Card> cardList = cardService.findAll(searchCond);
+
         String baseUrl = imageUrlService.getArtifactCardBaseUrl();
 
         model.addAttribute("cardList", cardList);
@@ -86,7 +94,7 @@ public class CardMgController {
     public String addForm(HttpSession session, Model model) {
         // 세션에 있으면 (임시저장 등으로 리다이렉트) 가져오고, 없으면 (최초 요청) 새로운 객체를 생성.
         CardForm cardForm = (CardForm) Optional.ofNullable(session.getAttribute(CARD_FORM)).orElse(new CardForm());
-        List<Character> characterList = characterService.findCharacters();
+        List<Character> characterList = characterService.findAll();
 
         // 세션에 있으면 (임시저장 등으로 리다이렉트) 가져오고, 없으면 (최초 요청) 새로운 디폴트 url 지정
         String cardImageUrl = getImageUrl(session, imageUrlService.getDefaultThumbnailUrl());
@@ -112,7 +120,7 @@ public class CardMgController {
             String tempImageUrl = getImageUrl(session, imageUrlService.getDefaultThumbnailUrl());
             model.addAttribute(CARD_IMAGE_URL, tempImageUrl);
 
-            List<Character> characterList = characterService.findCharacters();
+            List<Character> characterList = characterService.findAll();
             model.addAttribute("characterList", characterList);
             return "management/cards/cardAddForm";
         }
@@ -161,7 +169,7 @@ public class CardMgController {
         // 세션에 수정하던 폼이 없으면 수정할 카드 id로 새로운 폼 객체를 생성
         CardForm cardForm = (CardForm) Optional.ofNullable(session.getAttribute(CARD_FORM)).orElse(generateNewCardForm(cardId, model));
 
-        List<Character> characterList = characterService.findCharacters();
+        List<Character> characterList = characterService.findAll();
 
         if (cardForm.getCardType() == CardType.SPELL) {
             String imageUrl = getImageUrl(session, imageUrlService.getSpellCardBaseUrl() + cardId);
@@ -199,13 +207,14 @@ public class CardMgController {
             }
             model.addAttribute(CARD_IMAGE_URL, imageUrl);
 
-            List<Character> characterList = characterService.findCharacters();
+            List<Character> characterList = characterService.findAll();
             model.addAttribute("characterList", characterList);
             return "management/cards/cardEditForm";
         }
 
         // 0. 취소 버튼 클릭 시 세션 데이터를 초기화하고 목록으로 리다이렉트
         if (action.equals("cancel")) {
+            log.info("cancel button clicked on card edit form");
             clearSessionAttributes(session);
             if (cardForm.getCardType() == CardType.SPELL)
                 return "redirect:/management/cards/spell";
@@ -261,11 +270,11 @@ public class CardMgController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/delete/{cardId}")
+    @PostMapping("/del/{cardId}")
     public String deleteCard(@PathVariable("cardId") Long cardId) {
         cardService.deleteCard(cardId);
-        Card card = cardService.findOneCard(cardId);
-        if (card instanceof SpellCard) {
+        Card card = cardService.findOne(cardId);
+        if (card.getType() == CardType.SPELL) {
             return "redirect:/management/cards/spell";
         }
         else {
@@ -278,7 +287,12 @@ public class CardMgController {
     private Long updateCard(HttpSession session, Long cardId, CardForm cardForm) {
 
         // 카드 타입은 바뀌면 안됨 (타입 체크용)
-        Card card = cardService.findOneCard(cardId);
+        Card card = cardService.findOne(cardId);
+
+        // DB 업데이트 전 마지막 타입 체크
+        if (card.getType() != cardForm.getCardType()) {
+            throw new IllegalArgumentException("카드의 타입이 맞지 않습니다. cardId = " + cardId);
+        }
 
         // CardDto (공통 부분) 생성
         CardDto cardDto = cardForm.generateCardDto();
@@ -286,23 +300,12 @@ public class CardMgController {
         // 업데이트할 이미지 가져오기 (세션에서 가져옴. 바뀐거 없으면 null)
         String imagePath_Edit = getImagePath_Edit(session);
 
-        if (card instanceof SpellCard) { // 스펠 카드 업데이트
-
-            // DB 업데이트 전 마지막 타입 체크
-            if (cardForm.getCardType() != CardType.SPELL) {
-                throw new IllegalArgumentException("카드의 타입이 맞지 않습니다. cardId = " + cardId);
-            }
-
-            // 스펠 카드 업데이트 (이미지 업데이트 포함)
+        // 스펠 카드 업데이트 (이미지 업데이트 포함)
+        if (cardForm.getCardType() == CardType.SPELL) { // 스펠 카드 업데이트
             return cardService.updateSpellCard(cardId, cardDto, imagePath_Edit);
         }
-        else { // 아티팩트 카드 업데이트
-
-            // DB 업데이트 전 마지막 타입 체크
-            if (cardForm.getCardType() != CardType.ARTIFACT) {
-                throw new IllegalArgumentException("아티팩트 카드의 타입이 맞지 않습니다. cardId = " + cardId);
-            }
-
+        // 아티팩트 카드 업데이트
+        else {
             // 애착 사도가 있는 경우
             if (cardForm.isHasAttachment()) {
                 Long chId = cardForm.getCharacterId();
@@ -330,24 +333,24 @@ public class CardMgController {
 
         // 스펠 카드인 경우
         if (cardForm.getCardType() == CardType.SPELL) {
-            cardId = cardService.createNewSpellCard(cardDto);
-            // 카드 이미지 저장
-            imagePathService.saveSpellCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
-            System.out.println("tempFilePath = " + tempFilePath);
+            cardId = cardService.createNewSpellCard(cardDto, tempFilePath);
+//            // 카드 이미지 저장
+//            imagePathService.saveSpellCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
+//            System.out.println("tempFilePath = " + tempFilePath);
         }
         // 아티팩트 카드인 경우
         else {
             if (cardForm.isHasAttachment()) { // 애착 사도가 있는 경우
-                cardId = cardService.createNewArtifactCard(cardDto, cardForm.getCharacterId(), cardForm.generateAttachmentSkill());
+                cardId = cardService.createNewArtifactCard(cardDto, cardForm.getCharacterId(), cardForm.generateAttachmentSkill(), tempFilePath);
                 // 카드 이미지 저장
-                imagePathService.saveArtifactCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
-                System.out.println("tempFilePath = " + tempFilePath);
+//                imagePathService.saveArtifactCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
+//                System.out.println("tempFilePath = " + tempFilePath);
             }
             else { // 애착 사도가 없는 경우
-                cardId = cardService.createNewArtifactCard(cardDto);
+                cardId = cardService.createNewArtifactCard(cardDto, tempFilePath);
                 // 카드 이미지 저장
-                imagePathService.saveArtifactCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
-                System.out.println("tempFilePath = " + tempFilePath);
+//                imagePathService.saveArtifactCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
+//                System.out.println("tempFilePath = " + tempFilePath);
             }
         }
 
@@ -355,11 +358,12 @@ public class CardMgController {
     }
 
     private CardForm generateNewCardForm(Long cardId, Model model) {
-        Card card = cardService.findOneCard(cardId);
+        Card card = cardService.findOne(cardId);
 
         CardForm cardForm = new CardForm();
 
         // 공통 부분 처리
+        cardForm.setCardType(card.getType());
         cardForm.setGrade(card.getGrade());
         cardForm.setName(card.getName());
         cardForm.setDescription(card.getDescription());
@@ -367,28 +371,15 @@ public class CardMgController {
         cardForm.setCost(card.getCost());
         cardForm.setCardAttributes(card.getAttributes());
 
-        // 카드가 스펠 카드인 경우
-        if (card instanceof SpellCard) {
-            cardForm.setCardType(CardType.SPELL);
-//            String imageUrl = imageUrlService.getSpellCardBaseUrl() + cardId;
-//            model.addAttribute(CARD_IMAGE_URL, imageUrl);
-        }
         // 카드가 아티팩트 카드인 경우
-        else {
-            // 아티팩트 카드인 경우 애착 사도에 대한 정보 처리 필요
-            cardForm.setCardType(CardType.ARTIFACT);
-//            String imageUrl = imageUrlService.getArtifactCardBaseUrl() + cardId;
-//            model.addAttribute(CARD_IMAGE_URL, imageUrl);
-
-            ArtifactCard artifactCard = (ArtifactCard) card;
-
+        if (card.getType() == CardType.ARTIFACT) {
             // 애착 사도가 있다면
-            if (artifactCard.getCharacter() != null) {
+            if (card.getCharacter() != null) {
                 cardForm.setHasAttachment(true);
 
-                cardForm.setCharacterId(artifactCard.getCharacter().getId());
+                cardForm.setCharacterId(card.getCharacter().getId());
 
-                Skill attachmentSkill = artifactCard.getAttachmentSkill();
+                Skill attachmentSkill = card.getAttachmentSkill();
                 cardForm.setAttachmentSkillName(attachmentSkill.getName());
                 cardForm.setAttachmentSkillDescription(attachmentSkill.getDescription());
                 cardForm.setAttachmentLv3Description(attachmentSkill.getAttachmentLv3Description());

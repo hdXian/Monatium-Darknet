@@ -29,17 +29,33 @@ document.addEventListener('DOMContentLoaded', function() {
 // 어사이드 여부에 따라 입력 칸 노출, 숨김
 document.addEventListener('DOMContentLoaded', function () {
     const radios = document.getElementsByName('enableAside');
+    const asideToggle = document.getElementById('aside-toggle');
     const asideSection = document.getElementById('asideSection');
 
     if (radios && asideSection) {
         // 초기 상태 설정
         const isEnabled = Array.from(radios).find(radio => radio.checked && radio.value === 'true');
-        asideSection.style.display = isEnabled ? 'block' : 'none';
+        if (isEnabled) {
+            asideSection.classList.add('show'); // Bootstrap의 show 클래스 추가
+            asideToggle.style.display = 'block';
+        } else {
+            asideSection.classList.remove('show'); // Bootstrap의 show 클래스 제거
+            asideToggle.style.display = 'none';
+        }
+
+        // asideSection.style.display = isEnabled ? 'block' : 'none';
 
         // 라디오 버튼 변경 시 표시/숨기기
         radios.forEach(radio => {
             radio.addEventListener('change', function () {
-                asideSection.style.display = radio.value === 'true' ? 'block' : 'none';
+                if (radio.value === 'true') {
+                    asideSection.classList.add('show'); // show 클래스 추가
+                    asideToggle.style.display = 'block';
+                } else {
+                    asideSection.classList.remove('show'); // show 클래스 제거
+                    asideToggle.style.display = 'none';
+                }
+                // asideSection.style.display = radio.value === 'true' ? 'block' : 'none';
             });
         });
     }

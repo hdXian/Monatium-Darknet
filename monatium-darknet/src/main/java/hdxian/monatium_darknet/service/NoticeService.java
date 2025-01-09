@@ -11,6 +11,10 @@ import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +32,6 @@ public class NoticeService {
 
     private final NoticeRepository noticeRepository;
     private final MemberService memberService;
-//    private final LocalFileStorageService fileStorageService;
     private final LocalFileStorageService fileStorageService;
 
     private final HtmlContentUtil htmlContentUtil;
@@ -122,10 +125,15 @@ public class NoticeService {
     }
 
     @Transactional
-    public NoticeStatus updateNoticeStatus(Long noticeId, NoticeStatus status) {
+    public void publishNotice(Long noticeId) {
         Notice notice = findOne(noticeId);
-        notice.updateStatus(status);
-        return notice.getStatus();
+        notice.setStatus(NoticeStatus.PUBLIC);
+    }
+
+    @Transactional
+    public void unPublishNotice(Long noticeId) {
+        Notice notice = findOne(noticeId);
+        notice.setStatus(NoticeStatus.PRIVATE);
     }
 
     @Transactional
@@ -151,6 +159,13 @@ public class NoticeService {
 
     public List<Notice> findAll(NoticeSearchCond searchCond) {
         return noticeRepository.findAll(searchCond);
+    }
+
+    public Page<Notice> findAll_Paging(NoticeSearchCond searchCond, Integer pageNumber) {
+        int pageSize = 1; // 기본 페이지 사이즈는 10
+
+        PageRequest request = PageRequest.of(pageNumber-1, pageSize, Sort.by("id").descending());
+        return noticeRepository.findAll(searchCond, request);
     }
 
     public String getNoticeImageUrl(Long noticeId, String imageName) {

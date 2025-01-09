@@ -167,7 +167,7 @@
             <div th:object="${chFormStep2}" class="info-group mb-4">
                 <div class="info-title" data-bs-toggle="collapse" data-bs-target="#traitSection" aria-expanded="true">
                     <span>특성 정보</span>
-                    <i class="fas fa-angle-left toggle-icon"></i>
+                    <i class="fas fa-angle-down toggle-icon"></i>
                 </div>
 
                 <div id="traitSection" class="collapse show">
@@ -261,7 +261,7 @@
 
                 <div class="info-title" data-bs-toggle="collapse" data-bs-target="#skillSection" aria-expanded="true">
                     <span>스킬 정보</span>
-                    <i class="fas fa-angle-left toggle-icon"></i>
+                    <i class="fas fa-angle-down toggle-icon"></i>
                 </div>
 
                 <div id="skillSection" class="collapse show">
@@ -466,9 +466,9 @@
                     </div>
                 </div>
 
-                <div class="info-title" data-bs-toggle="collapse" data-bs-target="#asideSection" aria-expanded="true">
+                <div id="aside-toggle" class="info-title d-flex justify-content-between" data-bs-toggle="collapse" data-bs-target="#asideSection" aria-expanded="true">
                     <span>어사이드</span>
-                    <i class="fas fa-angle-left toggle-icon"></i>
+                    <i class="fas fa-angle-down toggle-icon"></i>
                 </div>
 
                 <div id="asideSection" class="collapse show">
@@ -655,7 +655,7 @@
                 <!-- 왼쪽 버튼 그룹 -->
                 <div class="d-flex gap-2">
                     <!-- 취소 버튼 -->
-                    <button type="submit" name="action" value="cancel" class="btn btn-danger" onclick="confirmCancel()">취소</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmCancel(this)">취소</button>
                     <!-- 저장 버튼 -->
                     <button type="submit" name="action" value="save" class="btn btn-secondary">임시 저장</button>
                 </div>
@@ -671,6 +671,13 @@
 
     </div>
 
+    <!-- 주말 농장 스위치 -->
+    <div class="d-flex justify-content-start mb-4">
+        <button id="delChar-btn" class="btn btn-danger" th:data-id="${characterId}" th:data-name="${chFormStep1.name}">
+            주말 농장
+        </button>
+    </div>
+
 </div>
 
 <!-- 하단 푸터 -->
@@ -678,11 +685,12 @@
     하단 푸터 영역
 </footer>
 
-<script th:src="@{/js/management/characters/chFormCommon.js}"></script>
-<script th:src="@{/js/management/characters/chFormStep1.js}"></script>
-<script th:src="@{/js/management/characters/chFormStep2.js}"></script>
-<script th:src="@{/js/management/characters/chFormStep3.js}"></script>
-<script th:src="@{/js/management/characters/chFormStep4.js}"></script>
+<script th:src="@{/js/management/characters/chFormCommon.js}" defer></script>
+<script th:src="@{/js/management/characters/chFormStep1.js}" defer></script>
+<script th:src="@{/js/management/characters/chFormStep2.js}" defer></script>
+<script th:src="@{/js/management/characters/chFormStep3.js}" defer></script>
+<script th:src="@{/js/management/characters/chFormStep4.js}" defer></script>
+<script th:src="@{/js/management/characters/chDelete.js}" defer></script>
 
 </body>
 

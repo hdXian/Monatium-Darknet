@@ -9,6 +9,7 @@ import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinGrade;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
+import hdxian.monatium_darknet.service.dto.CharacterImageDto;
 import hdxian.monatium_darknet.service.dto.SkinDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,12 @@ class SkinServiceTest {
     @Autowired
     SkinService skinService;
 
+    @Autowired
+    ImagePathService imagePathService;
+
+    @Autowired
+    ImageUrlService imageUrlService;
+
     // 스킨 추가
     @Test
     @DisplayName("스킨 추가")
@@ -38,7 +45,7 @@ class SkinServiceTest {
     void createNewSkin() {
         // given
         CharacterDto rimDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(rimDto);
+        Long rim_id = characterService.createNewCharacter(rimDto, generateMockChImage(), null);
         Character rim = characterService.findOne(rim_id);
 
         // when
@@ -90,11 +97,11 @@ class SkinServiceTest {
     void addCategories() {
         // given
         CharacterDto rimDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(rimDto);
+        Long rim_id = characterService.createNewCharacter(rimDto, generateMockChImage(), null);
         Character rim = characterService.findOne(rim_id);
 
         CharacterDto erpinDto = generateCharDto("에르핀");
-        Long erpin_id = characterService.createNewCharacter(erpinDto);
+        Long erpin_id = characterService.createNewCharacter(erpinDto, generateMockChImage(), null);
         Character erpin = characterService.findOne(erpin_id);
 
         // 카테고리 3개
@@ -168,11 +175,11 @@ class SkinServiceTest {
     void findByCharacter() {
         // given
         CharacterDto rimDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(rimDto);
+        Long rim_id = characterService.createNewCharacter(rimDto, generateMockChImage(), null);
         Character rim = characterService.findOne(rim_id);
 
         CharacterDto erpinDto = generateCharDto("에르핀");
-        Long erpin_id = characterService.createNewCharacter(erpinDto);
+        Long erpin_id = characterService.createNewCharacter(erpinDto, generateMockChImage(), null);
         Character erpin = characterService.findOne(erpin_id);
 
         Long category_id = skinService.createNewSkinCategory("상시판매");
@@ -214,7 +221,7 @@ class SkinServiceTest {
     void update() {
         // given
         CharacterDto rimDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(rimDto);
+        Long rim_id = characterService.createNewCharacter(rimDto, generateMockChImage(), null);
 
         Long categoryId = skinService.createNewSkinCategory("상시판매");
 
@@ -269,8 +276,8 @@ class SkinServiceTest {
         // given
         CharacterDto charDto1 = generateCharDto("사도1");
         CharacterDto charDto2 = generateCharDto("사도2");
-        Long charId1 = characterService.createNewCharacter(charDto1);
-        Long charId2 = characterService.createNewCharacter(charDto2);
+        Long charId1 = characterService.createNewCharacter(charDto1, generateMockChImage(), null);
+        Long charId2 = characterService.createNewCharacter(charDto2, generateMockChImage(), null);
 
         // 카테고리 2개
         Long cateId1 = skinService.createNewSkinCategory("상시판매");
@@ -312,7 +319,7 @@ class SkinServiceTest {
     void deleteSkin() {
         // given
         CharacterDto rimDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(rimDto);
+        Long rim_id = characterService.createNewCharacter(rimDto, generateMockChImage(), null);
 
         Long categoryId = skinService.createNewSkinCategory("상시판매");
 
@@ -348,7 +355,7 @@ class SkinServiceTest {
     void deleteCategory() {
         // given
         CharacterDto rimDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(rimDto);
+        Long rim_id = characterService.createNewCharacter(rimDto, generateMockChImage(), null);
 
         Long categoryId = skinService.createNewSkinCategory("상시판매");
 
@@ -374,6 +381,10 @@ class SkinServiceTest {
         Skin findSkin = skinService.findOneSkin(skinId);
         assertThat(findSkin.getName()).isEqualTo("라크로스 림크로스");
 
+    }
+
+    static CharacterImageDto generateMockChImage() {
+        return new CharacterImageDto(null, null, null, null);
     }
 
     static SkinDto generateSkinDto(String name, SkinGrade grade) {

@@ -10,7 +10,8 @@ import lombok.Setter;
 import java.util.Arrays;
 import java.util.List;
 
-@Entity
+@Deprecated
+//@Entity
 @DiscriminatorValue("A")
 @Getter @Setter
 public class ArtifactCard extends Card{

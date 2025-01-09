@@ -1,9 +1,11 @@
 package hdxian.monatium_darknet.web.controller;
 
-import hdxian.monatium_darknet.domain.card.ArtifactCard;
-import hdxian.monatium_darknet.domain.card.SpellCard;
+import hdxian.monatium_darknet.domain.card.*;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.domain.character.CharacterStatus;
 import hdxian.monatium_darknet.domain.skin.Skin;
+import hdxian.monatium_darknet.repository.dto.CardSearchCond;
+import hdxian.monatium_darknet.repository.dto.CharacterSearchCond;
 import hdxian.monatium_darknet.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Controller
@@ -30,7 +33,9 @@ public class WikiController {
     @GetMapping("/characters")
     public String characterList(Model model) {
 
-        List<Character> characterList = characterService.findCharacters();
+        CharacterSearchCond searchCond = new CharacterSearchCond();
+        searchCond.setStatus(CharacterStatus.ACTIVE); // 활성화 캐릭터만 조회
+        List<Character> characterList = characterService.findAll(searchCond);
 
         model.addAttribute("characterList", characterList);
 
@@ -40,7 +45,7 @@ public class WikiController {
     @GetMapping("/characters/{id}")
     public String characterInfo(@PathVariable("id") Long characterId, Model model) {
 
-        Character character = characterService.findOne(characterId);
+        Character character = characterService.findOneWiki(characterId);
         List<Skin> skinList = skinService.findSkinsByCharacter(characterId);
 
         model.addAttribute("character", character);
@@ -51,7 +56,11 @@ public class WikiController {
 
     @GetMapping("/cards/artifact")
     public String artifactList(Model model) {
-        List<ArtifactCard> cardList = cardService.findAllArtifactCards();
+        CardSearchCond searchCond = new CardSearchCond();
+        searchCond.setCardType(CardType.ARTIFACT);
+        searchCond.setStatus(CardStatus.ACTIVE);
+        List<Card> cardList = cardService.findAll(searchCond);
+
         String cardBaseUrl = imageUrlService.getArtifactCardBaseUrl();
         String portraitBaseUrl = imageUrlService.getChBaseUrl() + "portrait/";
 
@@ -64,7 +73,11 @@ public class WikiController {
 
     @GetMapping("/cards/spell")
     public String spellList(Model model) {
-        List<SpellCard> cardList = cardService.findAllSpellCards();
+        CardSearchCond searchCond = new CardSearchCond();
+        searchCond.setCardType(CardType.SPELL);
+        searchCond.setStatus(CardStatus.ACTIVE);
+        List<Card> cardList = cardService.findAll(searchCond);
+
         String baseUrl = imageUrlService.getSpellCardBaseUrl();
 
         model.addAttribute("cardList", cardList);

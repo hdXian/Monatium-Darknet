@@ -7,12 +7,15 @@ import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinGrade;
+import hdxian.monatium_darknet.repository.dto.CharacterSearchCond;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
+import hdxian.monatium_darknet.service.dto.CharacterImageDto;
 import hdxian.monatium_darknet.service.dto.SkinDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -30,6 +33,12 @@ class CharacterServiceTest {
     @Autowired
     CharacterService characterService;
 
+    @Autowired
+    ImagePathService imagePathService;
+
+    @Autowired
+    ImageUrlService imageUrlService;
+
     @Test
     @DisplayName("캐릭터 추가(Dto)")
 //    @Rollback(value = false)
@@ -38,7 +47,7 @@ class CharacterServiceTest {
         CharacterDto erpinDto = generateCharDto("에르핀");
 
         // when
-        Long erpin_id = characterService.createNewCharacter(erpinDto);
+        Long erpin_id = characterService.createNewCharacter(erpinDto, generateMockChImageDto(), null);
 
         // then
         Character find_erpin = characterService.findOne(erpin_id);
@@ -58,19 +67,22 @@ class CharacterServiceTest {
         CharacterDto tigDto = generateCharDto("티그");
 
         // when
-        Long erpin_id = characterService.createNewCharacter(erpinDto);
-        Long ashur_id = characterService.createNewCharacter(ashurDto);
-        Long tig_id = characterService.createNewCharacter(tigDto);
+        Long erpin_id = characterService.createNewCharacter(erpinDto, generateMockChImageDto(), null);
+        Long ashur_id = characterService.createNewCharacter(ashurDto, generateMockChImageDto(), null);
+        Long tig_id = characterService.createNewCharacter(tigDto, generateMockChImageDto(), null);
         Character erpin = characterService.findOne(erpin_id);
         Character ashur = characterService.findOne(ashur_id);
         Character tig = characterService.findOne(tig_id);
 
         // then
         // "에"를 검색했을 때 "에르핀", "에슈르"가 검색되어야 한다.
-        List<Character> findResult = characterService.findByName("에");
+        CharacterSearchCond searchCond = new CharacterSearchCond();
+        searchCond.setName("에");
+        List<Character> findResult = characterService.findAll(searchCond);
         assertThat(findResult).containsExactlyInAnyOrder(erpin, ashur);
 
-        List<Character> find_tig = characterService.findByName("티그");
+        searchCond.setName("티그");
+        List<Character> find_tig = characterService.findAll(searchCond);
         assertThat(find_tig).containsExactly(tig);
     }
 
@@ -83,12 +95,14 @@ class CharacterServiceTest {
         CharacterDto butterDto = generateCharDto("버터");
 
         // when
-        Long butter_id = characterService.createNewCharacter(butterDto);
+        Long butter_id = characterService.createNewCharacter(butterDto, generateMockChImageDto(), null);
         Long madeleine_id = -1L; // 없는 캐릭터 id
 
         // then
         // "마들렌"으로 검색한 결과가 없어야 한다.
-        List<Character> result = characterService.findByName("마들렌");
+        CharacterSearchCond searchCond = new CharacterSearchCond();
+        searchCond.setName("마들렌");
+        List<Character> result = characterService.findAll(searchCond);
         assertThat(result).isEmpty();
 
         // 없는 아이디로 검색하면 NoSuchElementException 예외가 터져나와야 함.
@@ -107,16 +121,16 @@ class CharacterServiceTest {
         CharacterDto tigDto = generateCharDto("티그");
 
         // when
-        Long erpin_id = characterService.createNewCharacter(erpinDto);
-        Long ashur_id = characterService.createNewCharacter(ashurDto);
-        Long tig_id = characterService.createNewCharacter(tigDto);
+        Long erpin_id = characterService.createNewCharacter(erpinDto, generateMockChImageDto(), null);
+        Long ashur_id = characterService.createNewCharacter(ashurDto, generateMockChImageDto(), null);
+        Long tig_id = characterService.createNewCharacter(tigDto, generateMockChImageDto(), null);
         Character erpin = characterService.findOne(erpin_id);
         Character ashur = characterService.findOne(ashur_id);
         Character tig = characterService.findOne(tig_id);
 
         // then
         // 전체 캐릭터를 검색했을 때 3명의 캐릭터, 그리고 에르핀, 에슈르, 티그가 정확히 포함되어 있어야 한다.
-        List<Character> findResult = characterService.findCharacters();
+        List<Character> findResult = characterService.findAll();
         assertThat(findResult.size()).isEqualTo(3);
         assertThat(findResult).containsExactlyInAnyOrder(erpin, ashur, tig);
     }
@@ -131,8 +145,8 @@ class CharacterServiceTest {
 
         Attack originNormalAttack = erpinDto.getNormalAttack();
         originNormalAttack.getAttributes().clear();
-        originNormalAttack.addAttribute("기존속성1", "기존속성1 수치");
-        originNormalAttack.addAttribute("기존속성2", "기존속성2 수치");
+        originNormalAttack.addAttribute("기존 일반공격 속성1", "기존 일반공격 속성1 수치");
+        originNormalAttack.addAttribute("기존 일반공격 속성2", "기존 일반공격 속성2 수치");
 
         Skill originHighSkill = erpinDto.getHighSkill();
         originHighSkill.setName("기존고학년스킬이름");
@@ -140,7 +154,7 @@ class CharacterServiceTest {
         originHighSkill.addAttribute("기존 고학년스킬 속성1", "기존고학년스킬 속성1 수치");
         originHighSkill.addAttribute("기존 고학년스킬 속성2", "기존고학년스킬 속성2 수치");
 
-        Long erpin_id = characterService.createNewCharacter(erpinDto);
+        Long erpin_id = characterService.createNewCharacter(erpinDto, generateMockChImageDto(), null);
 
         // 수정 전 정보 확인
         Character erpin = characterService.findOne(erpin_id);
@@ -155,15 +169,15 @@ class CharacterServiceTest {
 
         Attack updateNormalAttack = updateDto.getNormalAttack();
         updateNormalAttack.getAttributes().clear();
-        updateNormalAttack.addAttribute("수정속성1", "수정속성1 수치");
-        updateNormalAttack.addAttribute("수정속성2", "수정속성2 수치");
+        updateNormalAttack.addAttribute("수정 일반공격 속성1", "수정 일반공격 속성1 수치");
+        updateNormalAttack.addAttribute("수정 일반공격 속성2", "수정 일반공격 속성2 수치");
 
         Skill updateHighSkill = updateDto.getHighSkill();
         updateHighSkill.getAttributes().clear();
         updateHighSkill.addAttribute("수정 고학년스킬 속성1", "수정 고학년스킬 속성1 수치");
         updateHighSkill.addAttribute("수정 고학년스킬 속성2", "수정 고학년스킬 속성2 수치");
 
-        Long updated_id = characterService.updateCharacter(erpin_id, updateDto);
+        Long updated_id = characterService.updateCharacter(erpin_id, updateDto, generateMockChImageDto(), null);
 
         // 수정 후 정보 확인
         Character updated_erpin = characterService.findOne(updated_id);
@@ -192,7 +206,7 @@ class CharacterServiceTest {
     void delete() {
         // given
         CharacterDto charDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(charDto);
+        Long rim_id = characterService.createNewCharacter(charDto, generateMockChImageDto(), null);
 
         SkinDto skinDto = generateSkinDto("라크로스 림크로스", SkinGrade.NORMAL);
         Long skin_id = skinService.createNewSkin(rim_id, skinDto); // 림 스킨 추가
@@ -205,17 +219,20 @@ class CharacterServiceTest {
 
         // then
         // 삭제된 캐릭터는 조회되지 않아야 함
-        assertThatThrownBy(() ->  characterService.findOne(rim_id))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 캐릭터가 없습니다. id=" + rim_id);
+        Character rim = characterService.findOne(rim_id);
+        assertThat(rim.getStatus()).isEqualTo(CharacterStatus.DELETED);
 
         // 삭제된 캐릭터의 스킨도 함께 삭제되어야 함. (카테고리는 삭제 안됨)
-        assertThatThrownBy(() -> skinService.findOneSkin(skin_id))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 스킨이 존재하지 않습니다. skinId=" + skin_id);
+//        assertThatThrownBy(() -> skinService.findOneSkin(skin_id))
+//                .isInstanceOf(NoSuchElementException.class)
+//                .hasMessage("해당 스킨이 존재하지 않습니다. skinId=" + skin_id);
 
         SkinCategory category = skinService.findOneCategory(category_id);
         assertThat(category).isNotNull();
+    }
+
+    static CharacterImageDto generateMockChImageDto() {
+        return new CharacterImageDto(null, null, null, null);
     }
 
     static SkinDto generateSkinDto(String name, SkinGrade grade) {
@@ -226,7 +243,6 @@ class CharacterServiceTest {
 
         return dto;
     }
-
 
     static CharacterDto generateCharDto(String name) {
         // 능력치 (하드코딩)

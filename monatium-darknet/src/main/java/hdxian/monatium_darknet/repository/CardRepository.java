@@ -1,20 +1,25 @@
 package hdxian.monatium_darknet.repository;
 
-import hdxian.monatium_darknet.domain.card.ArtifactCard;
-import hdxian.monatium_darknet.domain.card.Card;
-import hdxian.monatium_darknet.domain.card.SpellCard;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import hdxian.monatium_darknet.domain.card.*;
+import hdxian.monatium_darknet.repository.dto.CardSearchCond;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
+
+import static hdxian.monatium_darknet.domain.card.QCard.*;
 
 @Repository
 @RequiredArgsConstructor
 public class CardRepository {
 
     private final EntityManager em;
+    private final JPAQueryFactory queryFactory;
 
     // 카드 저장
     public Long save(Card card) {
@@ -51,6 +56,19 @@ public class CardRepository {
         return Optional.ofNullable(find);
     }
 
+    public Optional<Card> findOne(Long id, CardType cardType) {
+        // 없으면 null 반환, 결과가 여러 개면 NonUniqueEx 던짐. (id 기반이라 중복 예외 터지면 큰 오류이긴 할듯.)
+        return Optional.ofNullable(
+                queryFactory.select(card)
+                        .from(card)
+                        .where(
+                                equalsId(id),
+                                equalsType(cardType)
+                        )
+                        .fetchOne()
+        );
+    }
+
     public Optional<Card> findByName(String name) {
         String jpql = "select c from Card c where c.name = :name";
         return em.createQuery(jpql, Card.class)
@@ -59,40 +77,78 @@ public class CardRepository {
                 .findFirst();
     }
 
-    public Optional<SpellCard> findOneSpell(Long id) {
-        SpellCard find = em.find(SpellCard.class, id);
-        return Optional.ofNullable(find);
+    public Optional<Card> findOneArtifactByCharacterId(Long characterId) {
+        // 없으면 null 반환, 결과가 여러 개면 NonUniqueEx 던짐. (애착 사도도 하나뿐이라 중복 예외 터지면 큰 오류이긴 할듯.)
+        return Optional.ofNullable(
+                queryFactory.select(card)
+                        .from(card)
+                        .where(
+                                equalsCharacterId(characterId)
+                        )
+                        .fetchOne()
+        );
     }
 
-    public Optional<ArtifactCard> findOneArtifact(Long id) {
-        ArtifactCard find = em.find(ArtifactCard.class, id);
-        return Optional.ofNullable(find);
+    public List<Card> findAll(CardSearchCond searchCond) {
+        CardType cardType = searchCond.getCardType();
+        String name = searchCond.getName();
+        List<CardGrade> gradeList = searchCond.getGradeList();
+        CardStatus status = searchCond.getStatus();
+
+        return queryFactory.select(card)
+                .from(card)
+                .where(
+                        equalsType(cardType),
+                        likeName(name),
+                        inGradeList(gradeList),
+                        equalsStatus(status)
+                )
+                .fetch();
     }
 
-    public Optional<ArtifactCard> findOneArtifactByCharacterId(Long characterId) {
-        String jpql = "select ac from ArtifactCard ac where ac.character.id = :characterId";
-        return em.createQuery(jpql, ArtifactCard.class)
-                .setParameter("characterId", characterId)
-                .getResultStream()
-                .findFirst();
+    // === private BooleanExpression ===
+    private BooleanExpression equalsId(Long cardId) {
+        if (cardId != null)
+            return card.id.eq(cardId);
+        return null;
     }
 
-    public List<Card> findAll() {
-        String jpql = "select c from Card c";
-        return em.createQuery(jpql, Card.class).getResultList();
+    private BooleanExpression equalsType(CardType cardType) {
+        if (cardType != null)
+            return card.type.eq(cardType);
+        return null;
     }
 
-    public List<ArtifactCard> findAllArtifacts() {
-        String jpql = "select ac from ArtifactCard ac";
-        return em.createQuery(jpql, ArtifactCard.class).getResultList();
+    private BooleanExpression likeName(String name) {
+        if (StringUtils.hasText(name)) {
+            return card.name.like("%" + name + "%");
+        }
+        return null;
     }
 
-    public List<SpellCard> findAllSpells() {
-        String jpql = "select sc from SpellCard sc";
-        return em.createQuery(jpql, SpellCard.class).getResultList();
+    private BooleanExpression inGradeList(List<CardGrade> gradeList) {
+        if (gradeList == null || gradeList.isEmpty())
+            return null;
+
+        return card.grade.in(gradeList);
     }
 
-    // TODO - 조건별 검색 기능 추가
-    // searchCond 등을 통해 하나로 관리하는게 훨씬 나아보임.
+    private BooleanExpression equalsStatus(CardStatus status) {
+        if (status != null) {
+            if (status == CardStatus.DELETED)
+                return card.status.eq(CardStatus.DELETED);
+            else
+                return card.status.eq(status).and(card.status.ne(CardStatus.DELETED));
+        }
+        return card.status.ne(CardStatus.DELETED);
+    }
+
+    // 아티팩트 카드 검색 조건
+    private BooleanExpression equalsCharacterId(Long characterId) {
+        if (characterId != null) {
+            return card.character.id.eq(characterId);
+        }
+        return null;
+    }
 
 }

@@ -3,14 +3,13 @@ package hdxian.monatium_darknet.service;
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.aside.AsideSpec;
-import hdxian.monatium_darknet.domain.card.ArtifactCard;
-import hdxian.monatium_darknet.domain.card.Card;
-import hdxian.monatium_darknet.domain.card.CardGrade;
-import hdxian.monatium_darknet.domain.card.SpellCard;
+import hdxian.monatium_darknet.domain.card.*;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.repository.dto.CardSearchCond;
 import hdxian.monatium_darknet.service.dto.CardDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
+import hdxian.monatium_darknet.service.dto.CharacterImageDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,12 @@ class CardServiceTest {
     @Autowired
     CardService cardService;
 
+    @Autowired
+    ImagePathService imagePathService;
+
+    @Autowired
+    ImageUrlService imageUrlService;
+
     @Test
     @DisplayName("아티팩트 카드 추가(애착사도 X)")
 //    @Rollback(value = false)
@@ -42,10 +47,10 @@ class CardServiceTest {
 
         // when
         // 카드 정보, 애착 사도, 애착 아티팩트 스킬
-        Long saved_id = cardService.createNewArtifactCard(artifactDto);
+        Long saved_id = cardService.createNewArtifactCard(artifactDto, null);
 
         // then
-        ArtifactCard artifactCard = cardService.findOneArtifactCard(saved_id); // artifact 1
+        Card artifactCard = cardService.findOneArtifact(saved_id); // artifact 1
         assertThat(artifactCard.getName()).isEqualTo(artifactDto.getName());
     }
 
@@ -57,7 +62,7 @@ class CardServiceTest {
 
         // 애착 사도 생성
         CharacterDto charDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(charDto);
+        Long rim_id = characterService.createNewCharacter(charDto, generateMockChImageDto(), null);
         Character rim = characterService.findOne(rim_id);
 
         // 애착 아티팩트 스킬 생성
@@ -67,10 +72,10 @@ class CardServiceTest {
         CardDto artifactDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
 
         // when
-        Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, attachmentSkill);
+        Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, attachmentSkill, null);
 
         // then
-        ArtifactCard artifactCard = cardService.findOneArtifactCard(savedId);
+        Card artifactCard = cardService.findOneArtifact(savedId);
         assertThat(artifactCard.getName()).isEqualTo(artifactDto.getName());
         assertThat(artifactCard.getGrade()).isEqualTo(artifactDto.getGrade());
 
@@ -91,10 +96,10 @@ class CardServiceTest {
         CardDto spellDto = generateSpellDto("사기진작", CardGrade.RARE);
 
         // when
-        Long savedId = cardService.createNewSpellCard(spellDto);
+        Long savedId = cardService.createNewSpellCard(spellDto, null);
 
         // then
-        SpellCard findSpell = cardService.findOneSpellCard(savedId);
+        Card findSpell = cardService.findOneSpell(savedId);
         assertThat(findSpell.getName()).isEqualTo(spellDto.getName());
         assertThat(findSpell.getGrade()).isEqualTo(spellDto.getGrade());
     }
@@ -107,10 +112,10 @@ class CardServiceTest {
         CardDto dupDto = generateSpellDto("사기진작", CardGrade.NORMAL);
 
         // when
-        Long savedId = cardService.createNewSpellCard(spellDto);
+        Long savedId = cardService.createNewSpellCard(spellDto, null);
 
         // then
-        assertThatThrownBy(() -> cardService.createNewSpellCard(dupDto))
+        assertThatThrownBy(() -> cardService.createNewSpellCard(dupDto, null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 이름의 카드가 이미 있습니다. cardName=" + dupDto.getName());
     }
@@ -124,10 +129,10 @@ class CardServiceTest {
 
         // when
         // 카드 정보, 애착 사도, 애착 아티팩트 스킬
-        Long saved_id = cardService.createNewArtifactCard(artifactDto);
+        Long saved_id = cardService.createNewArtifactCard(artifactDto, null);
 
         // then
-        assertThatThrownBy(() -> cardService.createNewArtifactCard(dupDto))
+        assertThatThrownBy(() -> cardService.createNewArtifactCard(dupDto, null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 이름의 카드가 이미 있습니다. cardName=" + dupDto.getName());
     }
@@ -137,11 +142,11 @@ class CardServiceTest {
     void dupArtifact2() {
         // 애착 사도 생성
         CharacterDto charDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(charDto);
+        Long rim_id = characterService.createNewCharacter(charDto, generateMockChImageDto(), null);
         Character rim = characterService.findOne(rim_id);
 
         CharacterDto charDto2 = generateCharDto("레비");
-        Long levi_id = characterService.createNewCharacter(charDto2);
+        Long levi_id = characterService.createNewCharacter(charDto2, generateMockChImageDto(), null);
         Character levi = characterService.findOne(levi_id);
 
         // 애착 아티팩트 스킬 생성
@@ -152,10 +157,10 @@ class CardServiceTest {
         CardDto dupDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
 
         // when
-        Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, attachmentSkill);
+        Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, attachmentSkill, null);
 
         // then
-        assertThatThrownBy(() -> cardService.createNewArtifactCard(dupDto, levi_id, attachmentSkill))
+        assertThatThrownBy(() -> cardService.createNewArtifactCard(dupDto, levi_id, attachmentSkill, null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 이름의 카드가 이미 있습니다. cardName=" + dupDto.getName());
     }
@@ -169,39 +174,42 @@ class CardServiceTest {
         // 스펠 카드 생성
         CardDto spellDto = generateSpellDto("중앙GOOD", CardGrade.RARE);
 
-        Long spellId = cardService.createNewSpellCard(spellDto);
-        SpellCard spellCard = cardService.findOneSpellCard(spellId); // spell 1
+        Long spellId = cardService.createNewSpellCard(spellDto, null);
+        Card spellCard = cardService.findOneSpell(spellId); // spell 1
 
 
         // 아티팩트 카드 생성 (애착 사도 O)
         // 애착 사도 생성
         CharacterDto charDto = generateCharDto("레비");
-        Long levi_id = characterService.createNewCharacter(charDto);
+        Long levi_id = characterService.createNewCharacter(charDto, generateMockChImageDto(), null);
 
         // 애착 아티팩트 스킬
         Skill attachmentSkill = generateAttachmentSkill("레비드 더 섀도우");
 
         CardDto artifactDto = generateArtifactDto("레비의 단도", CardGrade.LEGENDARY);
 
-        Long artifactId_1 = cardService.createNewArtifactCard(artifactDto, levi_id, attachmentSkill);
-        ArtifactCard artifact_1 = cardService.findOneArtifactCard(artifactId_1); // artifact 1
+        Long artifactId_1 = cardService.createNewArtifactCard(artifactDto, levi_id, attachmentSkill, null);
+        Card artifact_1 = cardService.findOneArtifact(artifactId_1); // artifact 1
 
 
         // 아티팩트 카드 (애착 사도 X)
         CardDto artifactDto2 = generateArtifactDto("30KG 케틀벨", CardGrade.LEGENDARY);
 
-        Long artifactId_2 = cardService.createNewArtifactCard(artifactDto2);
-        ArtifactCard artifact_2 = cardService.findOneArtifactCard(artifactId_2); // artifact 2
+        Long artifactId_2 = cardService.createNewArtifactCard(artifactDto2, null);
+        Card artifact_2 = cardService.findOneArtifact(artifactId_2); // artifact 2
 
         // when
         // then
-        List<SpellCard> spellCards = cardService.findAllSpellCards();
+        CardSearchCond searchCond = new CardSearchCond();
+        searchCond.setCardType(CardType.SPELL);
+        List<Card> spellCards = cardService.findAll(searchCond);
         assertThat(spellCards).containsExactly(spellCard);
 
-        List<ArtifactCard> artifactCards = cardService.findAllArtifactCards();
+        searchCond.setCardType(CardType.ARTIFACT);
+        List<Card> artifactCards = cardService.findAll(searchCond);
         assertThat(artifactCards).containsExactlyInAnyOrder(artifact_1, artifact_2);
 
-        List<Card> cards = cardService.findAllCards();
+        List<Card> cards = cardService.findAll(new CardSearchCond());
         assertThat(cards.size()).isEqualTo(3);
         assertThat(cards).containsExactlyInAnyOrder(spellCard, artifact_1, artifact_2);
     }
@@ -211,19 +219,19 @@ class CardServiceTest {
     void findNone() {
         // given
         CardDto spellDto = generateSpellDto("사기진작", CardGrade.RARE);
-        Long saved_spell_id = cardService.createNewSpellCard(spellDto);
+        Long saved_spell_id = cardService.createNewSpellCard(spellDto, null);
 
         CardDto artifactDto2 = generateArtifactDto("30KG 케틀벨", CardGrade.LEGENDARY);
-        Long saved_artifact_id = cardService.createNewArtifactCard(artifactDto2);
+        Long saved_artifact_id = cardService.createNewArtifactCard(artifactDto2, null);
 
         // when
         // then
         // 아티팩트 카드 id로 스펠 카드를 검색
-        assertThatThrownBy(() -> cardService.findOneSpellCard(saved_artifact_id))
+        assertThatThrownBy(() -> cardService.findOneSpell(saved_artifact_id))
                 .isInstanceOf(NoSuchElementException.class);
 
         // 스펠 카드 id로 아티팩트 카드를 검색
-        assertThatThrownBy(() -> cardService.findOneArtifactCard(saved_spell_id))
+        assertThatThrownBy(() -> cardService.findOneArtifact(saved_spell_id))
                 .isInstanceOf(NoSuchElementException.class);
 
     }
@@ -235,16 +243,16 @@ class CardServiceTest {
     void updateSpell() {
         // given
         CardDto spellDto = generateSpellDto("중앙GOOD", CardGrade.RARE);
-        Long spellId = cardService.createNewSpellCard(spellDto);
-        SpellCard originSpell = cardService.findOneSpellCard(spellId);
+        Long spellId = cardService.createNewSpellCard(spellDto, null);
+        Card originSpell = cardService.findOneSpell(spellId);
 
         // when
         // varchar 데이터들(name+...)과 등급이 바뀌었음
         CardDto updateDto = generateSpellDto("수정된중앙GOOD", CardGrade.NORMAL);
-        Long updatedId = cardService.updateSpellCard(spellId, updateDto);
+        Long updatedId = cardService.updateSpellCard(spellId, updateDto, "");
 
         // then
-        SpellCard updatedSpell = cardService.findOneSpellCard(updatedId);
+        Card updatedSpell = cardService.findOneSpell(updatedId);
 
         // 바뀐 내용이 잘 반영되어야 함
         assertThat(updatedSpell.getName()).isEqualTo(updateDto.getName());
@@ -260,16 +268,16 @@ class CardServiceTest {
     void updateArtifact() {
         // given
         CardDto artifactDto = generateArtifactDto("30KG 케틀벨", CardGrade.LEGENDARY);
-        Long originId = cardService.createNewArtifactCard(artifactDto);
-        ArtifactCard originArtifact = cardService.findOneArtifactCard(originId);
+        Long originId = cardService.createNewArtifactCard(artifactDto, null);
+        Card originArtifact = cardService.findOneArtifact(originId);
 
         // when
         // varchar 데이터들(name+...)과 등급이 바뀌었음
         CardDto updateDto = generateArtifactDto("수정된 30KG 케틀벨", CardGrade.RARE);
-        Long updatedId = cardService.updateArtifactCard(originId, updateDto);
+        Long updatedId = cardService.updateArtifactCard(originId, updateDto, "");
 
         // then
-        ArtifactCard updatedArtifact = cardService.findOneArtifactCard(updatedId);
+        Card updatedArtifact = cardService.findOneArtifact(updatedId);
 
         // 바뀐 내용이 잘 반영되어야 함
         assertThat(updatedArtifact.getName()).isEqualTo(updateDto.getName());
@@ -287,25 +295,25 @@ class CardServiceTest {
 
         // 애착 사도 생성
         CharacterDto charDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(charDto);
+        Long rim_id = characterService.createNewCharacter(charDto, generateMockChImageDto(), null);
 
         // 애착 아티팩트 스킬 생성
         Skill skill = generateAttachmentSkill("그림 스크래치");
 
         // 아티팩트 카드 생성
         CardDto artifactDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
-        Long originId = cardService.createNewArtifactCard(artifactDto, rim_id, skill); // 새로운 아티팩트 카드 생성
-        ArtifactCard originCard = cardService.findOneArtifactCard(originId);
+        Long originId = cardService.createNewArtifactCard(artifactDto, rim_id, skill, null); // 새로운 아티팩트 카드 생성
+        Card originCard = cardService.findOne(originId);
 
         // when
         Skill updateSkill = generateAttachmentSkill("수정된 그림 스크래치");
 
         // 카드 정보 업데이트
         CardDto updateDto = generateArtifactDto("수정된 림의 낫", CardGrade.RARE);
-        Long updatedId = cardService.updateArtifactCard(originId, updateDto, rim_id, updateSkill); // 아티팩트 카드 업데이트
+        Long updatedId = cardService.updateArtifactCard(originId, updateDto, rim_id, updateSkill, ""); // 아티팩트 카드 업데이트
 
         // then
-        ArtifactCard updatedCard = cardService.findOneArtifactCard(updatedId);
+        Card updatedCard = cardService.findOne(updatedId);
 
         // 수정된 정보가 잘 반영되어야 함
         assertThat(updatedCard.getName()).isEqualTo(updateDto.getName());
@@ -325,15 +333,14 @@ class CardServiceTest {
     void deleteSpell() {
         // given
         CardDto spellDto = generateSpellDto("사기진작", CardGrade.NORMAL);
-        Long savedId = cardService.createNewSpellCard(spellDto);
+        Long savedId = cardService.createNewSpellCard(spellDto, null);
 
         // when
-        cardService.deleteSpellCard(savedId);
+        cardService.deleteCard(savedId);
 
         // then
-        assertThatThrownBy(() -> cardService.findOneSpellCard(savedId))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 스펠 카드가 존재하지 않습니다. id=" + savedId);
+        Card deletedCard = cardService.findOne(savedId);
+        assertThat(deletedCard.getStatus()).isEqualTo(CardStatus.DELETED);
     }
 
     @Test
@@ -341,15 +348,14 @@ class CardServiceTest {
     void deleteArtifact() {
         // given
         CardDto artifactDto = generateArtifactDto("30GK 케틀벨", CardGrade.LEGENDARY);
-        Long savedId = cardService.createNewArtifactCard(artifactDto);
+        Long savedId = cardService.createNewArtifactCard(artifactDto, null);
 
         // when
-        cardService.deleteArtifactCard(savedId);
+        cardService.deleteCard(savedId);
 
         // then
-        assertThatThrownBy(() -> cardService.findOneArtifactCard(savedId))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 아티팩트 카드가 존재하지 않습니다. id=" + savedId);
+        Card deletedCard = cardService.findOne(savedId);
+        assertThat(deletedCard.getStatus()).isEqualTo(CardStatus.DELETED);
     }
 
     @Test
@@ -358,25 +364,28 @@ class CardServiceTest {
     void deleteArtifact2() {
         // given
         CharacterDto charDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(charDto);
+        Long rim_id = characterService.createNewCharacter(charDto, generateMockChImageDto(), null);
 
         Skill skill = generateAttachmentSkill("그림 스크래치");
 
         CardDto cardDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
 
-        Long savedId = cardService.createNewArtifactCard(cardDto, rim_id, skill);
+        Long savedId = cardService.createNewArtifactCard(cardDto, rim_id, skill, null);
 
         // when
-        cardService.deleteArtifactCard(savedId);
+        cardService.deleteCard(savedId);
 
         // then
         // 캐릭터는 남아있어야 함
+        Card deletedCard = cardService.findOne(savedId);
+        assertThat(deletedCard.getStatus()).isEqualTo(CardStatus.DELETED);
+
         Character rim = characterService.findOne(rim_id);
         assertThat(rim).isNotNull();
 
-        assertThatThrownBy(() -> cardService.findOneArtifactCard(savedId))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 아티팩트 카드가 존재하지 않습니다. id=" + savedId);
+//        assertThatThrownBy(() -> cardService.findOneArtifact(savedId))
+//                .isInstanceOf(NoSuchElementException.class)
+//                .hasMessage("해당 아티팩트 카드가 존재하지 않습니다. id=" + savedId);
     }
 
     @Test
@@ -385,22 +394,25 @@ class CardServiceTest {
     void onDeleteCharacter() {
         // given
         CharacterDto charDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(charDto);
+        Long rim_id = characterService.createNewCharacter(charDto, generateMockChImageDto(), null);
 
         Skill skill = generateAttachmentSkill("그림 스크래치");
 
         CardDto artifactDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
-        Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, skill);
+        Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, skill, null);
 
         // when
         characterService.deleteCharacter(rim_id);
 
         // then
-        ArtifactCard card = cardService.findOneArtifactCard(savedId);
+        Card card = cardService.findOneArtifact(savedId);
         assertThat(card.getCharacter()).isNull();
         assertThat(card.getAttachmentSkill()).isNull();
     }
 
+    static CharacterImageDto generateMockChImageDto() {
+        return new CharacterImageDto(null, null, null, null);
+    }
 
     static CardDto generateSpellDto(String name, CardGrade grade) {
         CardDto dto = new CardDto();
@@ -409,7 +421,7 @@ class CardServiceTest {
         dto.setStory(name + "스펠카드 이야기");
         dto.setCost(14);
         dto.setGrade(grade);
-        dto.setImageUrl(name + "스펠카드이미지url");
+//        dto.setImageUrl(name + "스펠카드이미지url");
 
         dto.addAttribute(name + "스펠카드 효과1", name + "스펠카드 효과1 수치");
         dto.addAttribute(name + "스펠카드 효과2", name + "스펠카드 효과2 수치");
@@ -424,7 +436,7 @@ class CardServiceTest {
         dto.setStory(name + "아티팩트카드 이야기");
         dto.setCost(14);
         dto.setGrade(grade);
-        dto.setImageUrl(name + "아티팩트카드이미지url");
+//        dto.setImageUrl(name + "아티팩트카드이미지url");
 
         dto.addAttribute(name + "아티팩트카드 효과1", name + "아티팩트카드 효과1 수치");
         dto.addAttribute(name + "아티팩트카드 효과2", name + "아티팩트카드 효과2 수치");

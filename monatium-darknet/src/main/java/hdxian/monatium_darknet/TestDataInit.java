@@ -27,6 +27,8 @@ public class TestDataInit {
     private final SkinService skinService;
     private final CardService cardService;
 
+    private final ImagePathService imagePathService;
+
     @EventListener(ApplicationReadyEvent.class)
     public void initData() {
 
@@ -42,10 +44,28 @@ public class TestDataInit {
         NoticeDto noticeDto2 = generateNoticeDto("테스트 공지사항2 제목 (업데이트)", NoticeCategory.UPDATE, "테스트 공지사항2 본문");
         NoticeDto noticeDto3 = generateNoticeDto("테스트 공지사항3 제목 (이벤트)", NoticeCategory.EVENT, "테스트 공지사항3 본문");
         NoticeDto noticeDto4 = generateNoticeDto("테스트 공지사항4 제목 (개발자노트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+
+        NoticeDto noticeDto5 = generateNoticeDto("테스트 공지사항5 제목 (공지사항)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+        NoticeDto noticeDto6 = generateNoticeDto("테스트 공지사항6 제목 (업데이트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+        NoticeDto noticeDto7 = generateNoticeDto("테스트 공지사항7 제목 (이벤트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+        NoticeDto noticeDto8 = generateNoticeDto("테스트 공지사항8 제목 (개발자노트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+
+        NoticeDto noticeDto9 = generateNoticeDto("테스트 공지사항9 제목 (공지사항)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+        NoticeDto noticeDto10 = generateNoticeDto("테스트 공지사항10 제목 (업데이트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+        NoticeDto noticeDto11 = generateNoticeDto("테스트 공지사항11 제목 (이벤트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+        NoticeDto noticeDto12 = generateNoticeDto("테스트 공지사항12 제목 (개발자노트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
         Long noticeId1 = noticeService.createNewNotice(memberId, noticeDto1);
         Long noticeId2 = noticeService.createNewNotice(memberId, noticeDto2);
         Long noticeId3 = noticeService.createNewNotice(memberId, noticeDto3);
         Long noticeId4 = noticeService.createNewNotice(memberId, noticeDto4);
+        Long noticeId5 = noticeService.createNewNotice(memberId, noticeDto5);
+        Long noticeId6 = noticeService.createNewNotice(memberId, noticeDto6);
+        Long noticeId7 = noticeService.createNewNotice(memberId, noticeDto7);
+        Long noticeId8 = noticeService.createNewNotice(memberId, noticeDto8);
+        Long noticeId9 = noticeService.createNewNotice(memberId, noticeDto9);
+        Long noticeId10 = noticeService.createNewNotice(memberId, noticeDto10);
+        Long noticeId11 = noticeService.createNewNotice(memberId, noticeDto11);
+        Long noticeId12 = noticeService.createNewNotice(memberId, noticeDto12);
 
         // 캐릭터 추가
         List<CharacterDto> dtos = new ArrayList<>();
@@ -57,10 +77,10 @@ public class TestDataInit {
         dtos.add(generateCharDto("셀리네"));
         dtos.add(generateCharDto("엘레나"));
 
-        List<Long> Ids = new ArrayList<>();
+//        List<Long> Ids = new ArrayList<>();
         for (CharacterDto dto : dtos) {
-            Long chId = characterService.createNewCharacter(dto);
-            Ids.add(chId);
+            Long chId = characterService.createNewCharacter(dto, new CharacterImageDto(null, null, null, null), null);
+//            Ids.add(chId);
         }
 
 //        String baseUrl = "/imgs/wiki/characters/";
@@ -71,7 +91,7 @@ public class TestDataInit {
 //        }
 
         // 스킨 테스트 데이터 추가 (하드코딩, 1개 넣었음)
-        SkinDto skinDto1 = generateSkinDto("하드워킹 홀리데이", SkinGrade.NORMAL);
+        SkinDto skinDto1 = generateSkinDto("하드워킹 홀리데이");
         Long skinId = skinService.createNewSkin(1L, skinDto1);
 
         String skinBaseUrl = "/imgs/wiki/skin/";
@@ -102,23 +122,24 @@ public class TestDataInit {
         CardDto spellDto8 = generateSpellDto("그건 내 잔상", CardGrade.NORMAL);
 
         Skill attachmentSkill = generateAttachmentSkill("블랙홀 오브 위치");
-        Long cardId1 = cardService.createNewArtifactCard(cardDto1, 2L, attachmentSkill);
-        Long cardId2 = cardService.createNewArtifactCard(cardDto2);
-        Long cardId3 = cardService.createNewArtifactCard(cardDto3);
 
-        Long cardId4 = cardService.createNewArtifactCard(cardDto4);
-        Long cardId5 = cardService.createNewArtifactCard(cardDto5);
-        Long cardId6 = cardService.createNewArtifactCard(cardDto6);
-        Long cardId7 = cardService.createNewArtifactCard(cardDto7);
+        Long cardId1 = cardService.createNewArtifactCard(cardDto1, 2L, attachmentSkill, null);
+        Long cardId2 = cardService.createNewArtifactCard(cardDto2, null);
+        Long cardId3 = cardService.createNewArtifactCard(cardDto3, null);
 
-        Long spellId1 = cardService.createNewSpellCard(spellDto1);
-        Long spellId2 = cardService.createNewSpellCard(spellDto2);
-        Long spellId3 = cardService.createNewSpellCard(spellDto3);
-        Long spellId4 = cardService.createNewSpellCard(spellDto4);
-        Long spellId5 = cardService.createNewSpellCard(spellDto5);
-        Long spellId6 = cardService.createNewSpellCard(spellDto6);
-        Long spellId7 = cardService.createNewSpellCard(spellDto7);
-        Long spellId8 = cardService.createNewSpellCard(spellDto8);
+        Long cardId4 = cardService.createNewArtifactCard(cardDto4, null);
+        Long cardId5 = cardService.createNewArtifactCard(cardDto5, null);
+        Long cardId6 = cardService.createNewArtifactCard(cardDto6, null);
+        Long cardId7 = cardService.createNewArtifactCard(cardDto7, null);
+
+        Long spellId1 = cardService.createNewSpellCard(spellDto1, null);
+        Long spellId2 = cardService.createNewSpellCard(spellDto2, null);
+        Long spellId3 = cardService.createNewSpellCard(spellDto3, null);
+        Long spellId4 = cardService.createNewSpellCard(spellDto4, null);
+        Long spellId5 = cardService.createNewSpellCard(spellDto5, null);
+        Long spellId6 = cardService.createNewSpellCard(spellDto6, null);
+        Long spellId7 = cardService.createNewSpellCard(spellDto7, null);
+        Long spellId8 = cardService.createNewSpellCard(spellDto8, null);
 
         String cardBaseUrl = "/imgs/wiki/card/";
 
@@ -177,10 +198,10 @@ public class TestDataInit {
         return dto;
     }
 
-    private static SkinDto generateSkinDto(String name, SkinGrade grade) {
+    private static SkinDto generateSkinDto(String name) {
         SkinDto dto = new SkinDto();
         dto.setName(name);
-        dto.setGrade(grade);
+//        dto.setGrade(grade);
         dto.setDescription(name + " 스킨 설명");
 
         return dto;
