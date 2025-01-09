@@ -452,7 +452,7 @@
                     <!-- 사복 정보 -->
                     <div th:each="skin: ${skinList}" class="card skin-card-container">
                         <div class="skin-card">
-                            <img th:src="@{${skin.imageUrl}}" alt="사복 이미지" class="img-fluid">
+                            <img th:src="@{ |${skinBaseUrl}${skin.id}| }" alt="사복 이미지" class="img-fluid">
                         </div>
                         <div class="card-body">
                             <h5 th:text="${skin.name}" class="card-title">스킨 이름</h5>

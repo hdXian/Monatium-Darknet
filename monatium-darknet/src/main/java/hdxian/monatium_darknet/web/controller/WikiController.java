@@ -103,5 +103,10 @@ public class WikiController {
         return imageUrlService.getAsideBaseUrl();
     }
 
+    @ModelAttribute("skinBaseUrl")
+    public String skinBaseUrl() {
+        return imageUrlService.getSkinBaseUrl();
+    }
+
 
 }

@@ -122,6 +122,10 @@ public class ImagePathService {
         return artifactCardDir + cardId + ext;
     }
 
+    public String getSkinFileName(Long skinId) {
+        return skinDir + skinId + ext;
+    }
+
     @Transactional
     public void saveSpellCardImage(Long cardId, String src) {
         if (cardId == null || src == null) {

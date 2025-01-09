@@ -20,7 +20,7 @@ public class Skin {
 
     private String name;
     private String description;
-    private String imageUrl;
+//    private String imageUrl;
 
 //    @Enumerated(EnumType.STRING)
 //    private SkinGrade grade;

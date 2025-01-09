@@ -78,5 +78,9 @@ public class ImageUrlService {
         return getIconBaseUrl() + "artifact";
     }
 
+    public String getSkinBaseUrl() {
+        return api_baseUrl + "images/" + "skin/";
+    }
+
 
 }

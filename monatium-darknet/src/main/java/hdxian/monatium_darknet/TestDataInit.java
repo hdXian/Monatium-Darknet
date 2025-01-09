@@ -94,8 +94,8 @@ public class TestDataInit {
         SkinDto skinDto1 = generateSkinDto("하드워킹 홀리데이");
         Long skinId = skinService.createNewSkin(1L, skinDto1);
 
-        String skinBaseUrl = "/imgs/wiki/skin/";
-        skinService.updateImageUrl(skinId, skinBaseUrl + 1L + "/" + skinId + ".webp");
+//        String skinBaseUrl = "/imgs/wiki/skin/";
+//        skinService.updateImageUrl(skinId, skinBaseUrl + 1L + "/" + skinId + ".webp");
 
         // 아티팩트 카드 테스트 데이터 추가
         CardDto cardDto1 = generateArtifactDto("벨리타의 지팡이", CardGrade.LEGENDARY); // 벨리타는 2번
