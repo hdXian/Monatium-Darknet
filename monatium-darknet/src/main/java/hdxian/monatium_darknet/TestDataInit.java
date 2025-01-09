@@ -77,7 +77,7 @@ public class TestDataInit {
 
 //        List<Long> Ids = new ArrayList<>();
         for (CharacterDto dto : dtos) {
-            Long chId = characterService.createNewCharacter(dto);
+            Long chId = characterService.createNewCharacter(dto, new CharacterImageDto(null, null, null, null), null);
 //            Ids.add(chId);
         }
 

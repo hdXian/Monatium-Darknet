@@ -21,7 +21,20 @@ logging.level:
   org.springframework.orm.jpa.JpaTransactionManager: debug
   org.hibernate.orm.jdbc.bind: trace # show binding parameter
 
+# file path (local, for test)
 file:
   dir: D:/Dev/trickcal_unofficial/files/
+  imgDir: imgs/
   tempDir: temp/
-  noticeDir: imgs/notice/
+  noticeDir: imgs/notices/
+  wikiDir: imgs/wiki/
+  iconDir: imgs/wiki/icons/
+  chDir: imgs/wiki/characters/
+  asideDir: imgs/wiki/asides/
+  spellCardDir: imgs/wiki/cards/spell/
+  artifactCardDir: imgs/wiki/cards/artifact/
+  skinDir: imgs/wiki/skins/
+  defaultThumbnail: defaultThumbnail.png
+
+url:
+  api_baseUrl: /api/

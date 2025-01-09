@@ -57,14 +57,6 @@ public class CharacterRepository {
         return Optional.ofNullable(find);
     }
 
-    public List<Character> findByName(String name) {
-        String jpql = "select c from Character c where c.name like concat('%', :name, '%')";
-
-        return em.createQuery(jpql, Character.class)
-                .setParameter("name", name)
-                .getResultList();
-    }
-
     // queryDsl
     public List<Character> findAll(CharacterSearchCond searchCond) {
         String name = searchCond.getName();

@@ -9,6 +9,7 @@ import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.repository.dto.CardSearchCond;
 import hdxian.monatium_darknet.service.dto.CardDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
+import hdxian.monatium_darknet.service.dto.CharacterImageDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,12 @@ class CardServiceTest {
 
     @Autowired
     CardService cardService;
+
+    @Autowired
+    ImagePathService imagePathService;
+
+    @Autowired
+    ImageUrlService imageUrlService;
 
     @Test
     @DisplayName("아티팩트 카드 추가(애착사도 X)")
@@ -55,7 +62,7 @@ class CardServiceTest {
 
         // 애착 사도 생성
         CharacterDto charDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(charDto);
+        Long rim_id = characterService.createNewCharacter(charDto, generateMockChImageDto(), null);
         Character rim = characterService.findOne(rim_id);
 
         // 애착 아티팩트 스킬 생성
@@ -135,11 +142,11 @@ class CardServiceTest {
     void dupArtifact2() {
         // 애착 사도 생성
         CharacterDto charDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(charDto);
+        Long rim_id = characterService.createNewCharacter(charDto, generateMockChImageDto(), null);
         Character rim = characterService.findOne(rim_id);
 
         CharacterDto charDto2 = generateCharDto("레비");
-        Long levi_id = characterService.createNewCharacter(charDto2);
+        Long levi_id = characterService.createNewCharacter(charDto2, generateMockChImageDto(), null);
         Character levi = characterService.findOne(levi_id);
 
         // 애착 아티팩트 스킬 생성
@@ -174,7 +181,7 @@ class CardServiceTest {
         // 아티팩트 카드 생성 (애착 사도 O)
         // 애착 사도 생성
         CharacterDto charDto = generateCharDto("레비");
-        Long levi_id = characterService.createNewCharacter(charDto);
+        Long levi_id = characterService.createNewCharacter(charDto, generateMockChImageDto(), null);
 
         // 애착 아티팩트 스킬
         Skill attachmentSkill = generateAttachmentSkill("레비드 더 섀도우");
@@ -288,7 +295,7 @@ class CardServiceTest {
 
         // 애착 사도 생성
         CharacterDto charDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(charDto);
+        Long rim_id = characterService.createNewCharacter(charDto, generateMockChImageDto(), null);
 
         // 애착 아티팩트 스킬 생성
         Skill skill = generateAttachmentSkill("그림 스크래치");
@@ -332,9 +339,8 @@ class CardServiceTest {
         cardService.deleteCard(savedId);
 
         // then
-        assertThatThrownBy(() -> cardService.findOneSpell(savedId))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 스펠 카드가 존재하지 않습니다. id=" + savedId);
+        Card deletedCard = cardService.findOne(savedId);
+        assertThat(deletedCard.getStatus()).isEqualTo(CardStatus.DELETED);
     }
 
     @Test
@@ -348,9 +354,8 @@ class CardServiceTest {
         cardService.deleteCard(savedId);
 
         // then
-        assertThatThrownBy(() -> cardService.findOneArtifact(savedId))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 아티팩트 카드가 존재하지 않습니다. id=" + savedId);
+        Card deletedCard = cardService.findOne(savedId);
+        assertThat(deletedCard.getStatus()).isEqualTo(CardStatus.DELETED);
     }
 
     @Test
@@ -359,7 +364,7 @@ class CardServiceTest {
     void deleteArtifact2() {
         // given
         CharacterDto charDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(charDto);
+        Long rim_id = characterService.createNewCharacter(charDto, generateMockChImageDto(), null);
 
         Skill skill = generateAttachmentSkill("그림 스크래치");
 
@@ -372,12 +377,15 @@ class CardServiceTest {
 
         // then
         // 캐릭터는 남아있어야 함
+        Card deletedCard = cardService.findOne(savedId);
+        assertThat(deletedCard.getStatus()).isEqualTo(CardStatus.DELETED);
+
         Character rim = characterService.findOne(rim_id);
         assertThat(rim).isNotNull();
 
-        assertThatThrownBy(() -> cardService.findOneArtifact(savedId))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 아티팩트 카드가 존재하지 않습니다. id=" + savedId);
+//        assertThatThrownBy(() -> cardService.findOneArtifact(savedId))
+//                .isInstanceOf(NoSuchElementException.class)
+//                .hasMessage("해당 아티팩트 카드가 존재하지 않습니다. id=" + savedId);
     }
 
     @Test
@@ -386,7 +394,7 @@ class CardServiceTest {
     void onDeleteCharacter() {
         // given
         CharacterDto charDto = generateCharDto("림");
-        Long rim_id = characterService.createNewCharacter(charDto);
+        Long rim_id = characterService.createNewCharacter(charDto, generateMockChImageDto(), null);
 
         Skill skill = generateAttachmentSkill("그림 스크래치");
 
@@ -402,6 +410,9 @@ class CardServiceTest {
         assertThat(card.getAttachmentSkill()).isNull();
     }
 
+    static CharacterImageDto generateMockChImageDto() {
+        return new CharacterImageDto(null, null, null, null);
+    }
 
     static CardDto generateSpellDto(String name, CardGrade grade) {
         CardDto dto = new CardDto();
