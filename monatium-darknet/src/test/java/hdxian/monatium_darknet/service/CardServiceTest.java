@@ -47,7 +47,7 @@ class CardServiceTest {
 
         // when
         // 카드 정보, 애착 사도, 애착 아티팩트 스킬
-        Long saved_id = cardService.createNewArtifactCard(artifactDto);
+        Long saved_id = cardService.createNewArtifactCard(artifactDto, null);
 
         // then
         Card artifactCard = cardService.findOneArtifact(saved_id); // artifact 1
@@ -72,7 +72,7 @@ class CardServiceTest {
         CardDto artifactDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
 
         // when
-        Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, attachmentSkill);
+        Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, attachmentSkill, null);
 
         // then
         Card artifactCard = cardService.findOneArtifact(savedId);
@@ -96,7 +96,7 @@ class CardServiceTest {
         CardDto spellDto = generateSpellDto("사기진작", CardGrade.RARE);
 
         // when
-        Long savedId = cardService.createNewSpellCard(spellDto);
+        Long savedId = cardService.createNewSpellCard(spellDto, null);
 
         // then
         Card findSpell = cardService.findOneSpell(savedId);
@@ -112,10 +112,10 @@ class CardServiceTest {
         CardDto dupDto = generateSpellDto("사기진작", CardGrade.NORMAL);
 
         // when
-        Long savedId = cardService.createNewSpellCard(spellDto);
+        Long savedId = cardService.createNewSpellCard(spellDto, null);
 
         // then
-        assertThatThrownBy(() -> cardService.createNewSpellCard(dupDto))
+        assertThatThrownBy(() -> cardService.createNewSpellCard(dupDto, null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 이름의 카드가 이미 있습니다. cardName=" + dupDto.getName());
     }
@@ -129,10 +129,10 @@ class CardServiceTest {
 
         // when
         // 카드 정보, 애착 사도, 애착 아티팩트 스킬
-        Long saved_id = cardService.createNewArtifactCard(artifactDto);
+        Long saved_id = cardService.createNewArtifactCard(artifactDto, null);
 
         // then
-        assertThatThrownBy(() -> cardService.createNewArtifactCard(dupDto))
+        assertThatThrownBy(() -> cardService.createNewArtifactCard(dupDto, null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 이름의 카드가 이미 있습니다. cardName=" + dupDto.getName());
     }
@@ -157,10 +157,10 @@ class CardServiceTest {
         CardDto dupDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
 
         // when
-        Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, attachmentSkill);
+        Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, attachmentSkill, null);
 
         // then
-        assertThatThrownBy(() -> cardService.createNewArtifactCard(dupDto, levi_id, attachmentSkill))
+        assertThatThrownBy(() -> cardService.createNewArtifactCard(dupDto, levi_id, attachmentSkill, null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 이름의 카드가 이미 있습니다. cardName=" + dupDto.getName());
     }
@@ -174,7 +174,7 @@ class CardServiceTest {
         // 스펠 카드 생성
         CardDto spellDto = generateSpellDto("중앙GOOD", CardGrade.RARE);
 
-        Long spellId = cardService.createNewSpellCard(spellDto);
+        Long spellId = cardService.createNewSpellCard(spellDto, null);
         Card spellCard = cardService.findOneSpell(spellId); // spell 1
 
 
@@ -188,14 +188,14 @@ class CardServiceTest {
 
         CardDto artifactDto = generateArtifactDto("레비의 단도", CardGrade.LEGENDARY);
 
-        Long artifactId_1 = cardService.createNewArtifactCard(artifactDto, levi_id, attachmentSkill);
+        Long artifactId_1 = cardService.createNewArtifactCard(artifactDto, levi_id, attachmentSkill, null);
         Card artifact_1 = cardService.findOneArtifact(artifactId_1); // artifact 1
 
 
         // 아티팩트 카드 (애착 사도 X)
         CardDto artifactDto2 = generateArtifactDto("30KG 케틀벨", CardGrade.LEGENDARY);
 
-        Long artifactId_2 = cardService.createNewArtifactCard(artifactDto2);
+        Long artifactId_2 = cardService.createNewArtifactCard(artifactDto2, null);
         Card artifact_2 = cardService.findOneArtifact(artifactId_2); // artifact 2
 
         // when
@@ -219,10 +219,10 @@ class CardServiceTest {
     void findNone() {
         // given
         CardDto spellDto = generateSpellDto("사기진작", CardGrade.RARE);
-        Long saved_spell_id = cardService.createNewSpellCard(spellDto);
+        Long saved_spell_id = cardService.createNewSpellCard(spellDto, null);
 
         CardDto artifactDto2 = generateArtifactDto("30KG 케틀벨", CardGrade.LEGENDARY);
-        Long saved_artifact_id = cardService.createNewArtifactCard(artifactDto2);
+        Long saved_artifact_id = cardService.createNewArtifactCard(artifactDto2, null);
 
         // when
         // then
@@ -243,7 +243,7 @@ class CardServiceTest {
     void updateSpell() {
         // given
         CardDto spellDto = generateSpellDto("중앙GOOD", CardGrade.RARE);
-        Long spellId = cardService.createNewSpellCard(spellDto);
+        Long spellId = cardService.createNewSpellCard(spellDto, null);
         Card originSpell = cardService.findOneSpell(spellId);
 
         // when
@@ -268,7 +268,7 @@ class CardServiceTest {
     void updateArtifact() {
         // given
         CardDto artifactDto = generateArtifactDto("30KG 케틀벨", CardGrade.LEGENDARY);
-        Long originId = cardService.createNewArtifactCard(artifactDto);
+        Long originId = cardService.createNewArtifactCard(artifactDto, null);
         Card originArtifact = cardService.findOneArtifact(originId);
 
         // when
@@ -302,7 +302,7 @@ class CardServiceTest {
 
         // 아티팩트 카드 생성
         CardDto artifactDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
-        Long originId = cardService.createNewArtifactCard(artifactDto, rim_id, skill); // 새로운 아티팩트 카드 생성
+        Long originId = cardService.createNewArtifactCard(artifactDto, rim_id, skill, null); // 새로운 아티팩트 카드 생성
         Card originCard = cardService.findOne(originId);
 
         // when
@@ -333,7 +333,7 @@ class CardServiceTest {
     void deleteSpell() {
         // given
         CardDto spellDto = generateSpellDto("사기진작", CardGrade.NORMAL);
-        Long savedId = cardService.createNewSpellCard(spellDto);
+        Long savedId = cardService.createNewSpellCard(spellDto, null);
 
         // when
         cardService.deleteCard(savedId);
@@ -348,7 +348,7 @@ class CardServiceTest {
     void deleteArtifact() {
         // given
         CardDto artifactDto = generateArtifactDto("30GK 케틀벨", CardGrade.LEGENDARY);
-        Long savedId = cardService.createNewArtifactCard(artifactDto);
+        Long savedId = cardService.createNewArtifactCard(artifactDto, null);
 
         // when
         cardService.deleteCard(savedId);
@@ -370,7 +370,7 @@ class CardServiceTest {
 
         CardDto cardDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
 
-        Long savedId = cardService.createNewArtifactCard(cardDto, rim_id, skill);
+        Long savedId = cardService.createNewArtifactCard(cardDto, rim_id, skill, null);
 
         // when
         cardService.deleteCard(savedId);
@@ -399,7 +399,7 @@ class CardServiceTest {
         Skill skill = generateAttachmentSkill("그림 스크래치");
 
         CardDto artifactDto = generateArtifactDto("림의 낫", CardGrade.LEGENDARY);
-        Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, skill);
+        Long savedId = cardService.createNewArtifactCard(artifactDto, rim_id, skill, null);
 
         // when
         characterService.deleteCharacter(rim_id);

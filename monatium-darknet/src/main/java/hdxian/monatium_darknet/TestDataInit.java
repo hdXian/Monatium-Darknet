@@ -27,6 +27,8 @@ public class TestDataInit {
     private final SkinService skinService;
     private final CardService cardService;
 
+    private final ImagePathService imagePathService;
+
     @EventListener(ApplicationReadyEvent.class)
     public void initData() {
 
@@ -120,23 +122,24 @@ public class TestDataInit {
         CardDto spellDto8 = generateSpellDto("그건 내 잔상", CardGrade.NORMAL);
 
         Skill attachmentSkill = generateAttachmentSkill("블랙홀 오브 위치");
-        Long cardId1 = cardService.createNewArtifactCard(cardDto1, 2L, attachmentSkill);
-        Long cardId2 = cardService.createNewArtifactCard(cardDto2);
-        Long cardId3 = cardService.createNewArtifactCard(cardDto3);
 
-        Long cardId4 = cardService.createNewArtifactCard(cardDto4);
-        Long cardId5 = cardService.createNewArtifactCard(cardDto5);
-        Long cardId6 = cardService.createNewArtifactCard(cardDto6);
-        Long cardId7 = cardService.createNewArtifactCard(cardDto7);
+        Long cardId1 = cardService.createNewArtifactCard(cardDto1, 2L, attachmentSkill, null);
+        Long cardId2 = cardService.createNewArtifactCard(cardDto2, null);
+        Long cardId3 = cardService.createNewArtifactCard(cardDto3, null);
 
-        Long spellId1 = cardService.createNewSpellCard(spellDto1);
-        Long spellId2 = cardService.createNewSpellCard(spellDto2);
-        Long spellId3 = cardService.createNewSpellCard(spellDto3);
-        Long spellId4 = cardService.createNewSpellCard(spellDto4);
-        Long spellId5 = cardService.createNewSpellCard(spellDto5);
-        Long spellId6 = cardService.createNewSpellCard(spellDto6);
-        Long spellId7 = cardService.createNewSpellCard(spellDto7);
-        Long spellId8 = cardService.createNewSpellCard(spellDto8);
+        Long cardId4 = cardService.createNewArtifactCard(cardDto4, null);
+        Long cardId5 = cardService.createNewArtifactCard(cardDto5, null);
+        Long cardId6 = cardService.createNewArtifactCard(cardDto6, null);
+        Long cardId7 = cardService.createNewArtifactCard(cardDto7, null);
+
+        Long spellId1 = cardService.createNewSpellCard(spellDto1, null);
+        Long spellId2 = cardService.createNewSpellCard(spellDto2, null);
+        Long spellId3 = cardService.createNewSpellCard(spellDto3, null);
+        Long spellId4 = cardService.createNewSpellCard(spellDto4, null);
+        Long spellId5 = cardService.createNewSpellCard(spellDto5, null);
+        Long spellId6 = cardService.createNewSpellCard(spellDto6, null);
+        Long spellId7 = cardService.createNewSpellCard(spellDto7, null);
+        Long spellId8 = cardService.createNewSpellCard(spellDto8, null);
 
         String cardBaseUrl = "/imgs/wiki/card/";
 

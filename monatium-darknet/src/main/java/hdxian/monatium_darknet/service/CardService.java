@@ -29,7 +29,7 @@ public class CardService {
 
     // 카드 저장 기능
     @Transactional
-    public Long createNewSpellCard(CardDto cardDto) {
+    public Long createNewSpellCard(CardDto cardDto, String tempImagePath) {
         checkCardName(cardDto.getName());
 
         Card spellCard = Card.createSpellCard(
@@ -41,13 +41,17 @@ public class CardService {
                 cardDto.getAttributes()
         );
 
-//        spellCard.getAttributes().addAll(cardDto.getAttributes());
+        Long savedId = cardRepository.save(spellCard);
+        // TODO - 테스트 데이터 정리 후 null 검증 제거 필요
+        if (tempImagePath != null) {
+            imagePathService.saveSpellCardImage(savedId, tempImagePath);
+        }
 
-        return cardRepository.save(spellCard);
+        return savedId;
     }
 
     @Transactional
-    public Long createNewArtifactCard(CardDto cardDto) {
+    public Long createNewArtifactCard(CardDto cardDto, String tempImagePath) {
         checkCardName(cardDto.getName());
 
         Card artifactCard = Card.createArtifactCard(
@@ -59,13 +63,16 @@ public class CardService {
                 cardDto.getAttributes()
         );
 
-//        artifactCard.getAttributes().addAll(cardDto.getAttributes());
+        Long savedId = cardRepository.save(artifactCard);
+        if (tempImagePath != null) {
+            imagePathService.saveArtifactCardImage(savedId, tempImagePath);
+        }
 
-        return cardRepository.save(artifactCard);
+        return savedId;
     }
 
     @Transactional
-    public Long createNewArtifactCard(CardDto cardDto, Long characterId, Skill attachmentSkill) {
+    public Long createNewArtifactCard(CardDto cardDto, Long characterId, Skill attachmentSkill, String tempImagePath) {
         checkCardName(cardDto.getName());
 
         Optional<Character> findCharacter = characterRepository.findOne(characterId);
@@ -86,9 +93,12 @@ public class CardService {
                 attachmentSkill
         );
 
-//        artifactCard.getAttributes().addAll(cardDto.getAttributes());
+        Long savedId = cardRepository.save(artifactCard);
+        if (tempImagePath != null) {
+            imagePathService.saveArtifactCardImage(savedId, tempImagePath);
+        }
 
-        return cardRepository.save(artifactCard);
+        return savedId;
     }
 
     @Transactional

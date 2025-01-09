@@ -50,6 +50,7 @@ public class CharacterMgController {
 
     // TODO - url 옮겨다니면 세션 데이터 꼬이는 문제 해결 필요
     // ex) 수정 페이지에서 임시저장 한 뒤 (세션에 데이터 저장) 다른 캐릭터 정보 수정 페이지에 진입
+    // -> 이런 행동을 할 이유가 거의 없으니 그냥 세션 클리어 시키는 것도 좋아보임. 아 구분이 안되는구나. 세션 데이터에 id를 추가하는 방식도 괜찮아보임.
 
     @GetMapping
     public String characterList(HttpSession session, Model model) {

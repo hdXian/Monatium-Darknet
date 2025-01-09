@@ -333,24 +333,24 @@ public class CardMgController {
 
         // 스펠 카드인 경우
         if (cardForm.getCardType() == CardType.SPELL) {
-            cardId = cardService.createNewSpellCard(cardDto);
-            // 카드 이미지 저장
-            imagePathService.saveSpellCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
-            System.out.println("tempFilePath = " + tempFilePath);
+            cardId = cardService.createNewSpellCard(cardDto, tempFilePath);
+//            // 카드 이미지 저장
+//            imagePathService.saveSpellCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
+//            System.out.println("tempFilePath = " + tempFilePath);
         }
         // 아티팩트 카드인 경우
         else {
             if (cardForm.isHasAttachment()) { // 애착 사도가 있는 경우
-                cardId = cardService.createNewArtifactCard(cardDto, cardForm.getCharacterId(), cardForm.generateAttachmentSkill());
+                cardId = cardService.createNewArtifactCard(cardDto, cardForm.getCharacterId(), cardForm.generateAttachmentSkill(), tempFilePath);
                 // 카드 이미지 저장
-                imagePathService.saveArtifactCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
-                System.out.println("tempFilePath = " + tempFilePath);
+//                imagePathService.saveArtifactCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
+//                System.out.println("tempFilePath = " + tempFilePath);
             }
             else { // 애착 사도가 없는 경우
-                cardId = cardService.createNewArtifactCard(cardDto);
+                cardId = cardService.createNewArtifactCard(cardDto, tempFilePath);
                 // 카드 이미지 저장
-                imagePathService.saveArtifactCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
-                System.out.println("tempFilePath = " + tempFilePath);
+//                imagePathService.saveArtifactCardImage(cardId, tempFilePath); // 임시 경로에서 정식 경로로 파일을 저장
+//                System.out.println("tempFilePath = " + tempFilePath);
             }
         }
 
