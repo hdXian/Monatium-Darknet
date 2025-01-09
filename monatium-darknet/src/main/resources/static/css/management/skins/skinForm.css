@@ -1,0 +1,71 @@
+
+/* 공통 폼 섹션 스타일 */
+.form-section {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.form-title {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.info-group {
+    border: 2px solid #4CAF50;
+    border-radius: 10px;
+    padding: 20px;
+
+    /* v18 추가 */
+    margin-bottom: 20px;
+    background-color: #ffffff;
+}
+
+.info-subgroup {
+    border: 2px solid #4CAF50;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    /* background-color: #ffffff; */
+    background-color: #f9f9f9; /* 미묘한 배경색 추가 */
+}
+
+.info-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+label {
+    font-weight: bold;
+}
+
+textarea.auto-resize {
+    min-height: 40px;
+    overflow: hidden;
+    resize: none;
+}
+
+.image-upload-wrapper {
+    position: relative;
+    width: 200px; /* 이미지 크기 조정 */
+    /* height: 120px; */
+    height: auto;
+    margin: 0 auto;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .card-form-group {
+        padding: 15px;
+    }
+
+    .card-btn-submit {
+        width: 100%;
+    }
+}

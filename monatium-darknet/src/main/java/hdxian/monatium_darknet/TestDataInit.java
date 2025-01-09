@@ -103,6 +103,19 @@ public class TestDataInit {
         Long skinId4 = skinService.createNewSkin(6L, skinDto4);
         Long skinId5 = skinService.createNewSkin(7L, skinDto5);
 
+        Long skinCategoryId1 = skinService.createNewSkinCategory("상시 판매");
+        Long skinCategoryId2 = skinService.createNewSkinCategory("할인 중");
+        Long skinCategoryId3 = skinService.createNewSkinCategory("할로윈 이벤트"); // 해당하는 스킨이 없는 카테고리
+        skinService.linkSkinAndCategory(skinId1, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId2, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId3, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId4, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId5, skinCategoryId1);
+
+        skinService.linkSkinAndCategory(skinId1, skinCategoryId2);
+        skinService.linkSkinAndCategory(skinId2, skinCategoryId2);
+        skinService.linkSkinAndCategory(skinId3, skinCategoryId2);
+
 //        String skinBaseUrl = "/imgs/wiki/skin/";
 //        skinService.updateImageUrl(skinId, skinBaseUrl + 1L + "/" + skinId + ".webp");
 

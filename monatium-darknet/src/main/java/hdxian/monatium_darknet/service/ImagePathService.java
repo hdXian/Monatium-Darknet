@@ -45,6 +45,9 @@ public class ImagePathService {
     @Value("${file.defaultThumbnail}")
     private String defaultThumbNail;
 
+    @Value("${file.defaultSkinThumbnail}")
+    private String defaultSkinThumbNail;
+
     private static final String ext = ".webp";
 
     private final LocalFileStorageService fileStorageService;
@@ -91,6 +94,8 @@ public class ImagePathService {
     }
 
     // 서버 스토리지 내 이미지 저장 경로를 리턴
+
+    // === 캐릭터 관련 이미지 ===
     public CharacterImageDto generateChImagePaths(Long characterId) {
         String basePath = chDir + (characterId + "/");
 
@@ -114,6 +119,7 @@ public class ImagePathService {
         return new AsideImageDto(asidePath, lv1Path, lv2Path, lv3Path);
     }
 
+    // === 카드 관련 이미지 ===
     public String getSpellCardFileName(Long cardId) {
         return spellCardDir + cardId + ext;
     }
@@ -122,8 +128,29 @@ public class ImagePathService {
         return artifactCardDir + cardId + ext;
     }
 
+    // === 스킨 관련 이미지 ===
+    public String getDefaultSkinThumbnailFilePath() {
+        return skinDir + defaultSkinThumbNail;
+    }
+
     public String getSkinFileName(Long skinId) {
         return skinDir + skinId + ext;
+    }
+
+    @Transactional
+    public void saveSkinImage(Long skinId, String src) {
+        if (skinId == null || src == null) {
+            throw new IllegalArgumentException("skinId 또는 src가 null입니다.");
+        }
+
+        String dst = getSkinFileName(skinId);
+
+        try {
+            fileStorageService.copyFile(new FileDto(src), new FileDto(dst));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Transactional

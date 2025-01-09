@@ -25,6 +25,8 @@ public class SkinService {
 
     private final CharacterService characterService;
 
+    private final ImagePathService imagePathService;
+
     // 스킨 추가
     @Transactional
     public Long createNewSkin(Long characterId, SkinDto skinDto) {
@@ -37,6 +39,30 @@ public class SkinService {
         );
 
         return skinRepository.save(skin);
+    }
+
+    @Transactional
+    public Long createNewSkin(Long characterId, SkinDto skinDto, String tempImagePath) {
+        Character character = characterService.findOne(characterId);
+
+        Skin skin = Skin.createSkin(
+                skinDto.getName(),
+                skinDto.getDescription(),
+                character
+        );
+
+        Long savedId = skinRepository.save(skin);
+
+        for(Long categoryId: skinDto.getCategoryIds()) {
+            linkSkinAndCategory(savedId, categoryId);
+        }
+
+        // 스킨 이미지 저장
+        if (tempImagePath != null) {
+            imagePathService.saveSkinImage(savedId, tempImagePath);
+        }
+
+        return savedId;
     }
 
 //    @Transactional
