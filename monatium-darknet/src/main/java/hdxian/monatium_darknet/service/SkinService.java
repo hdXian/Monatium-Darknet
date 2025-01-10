@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.service;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
+import hdxian.monatium_darknet.domain.skin.SkinCategoryMapping;
 import hdxian.monatium_darknet.repository.SkinCategoryRepository;
 import hdxian.monatium_darknet.repository.SkinRepository;
 import hdxian.monatium_darknet.service.dto.SkinDto;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -81,6 +83,41 @@ public class SkinService {
         skin.setDescription(updateParam.getDescription());
 
         return skin.getId(); // save() 호출 x. merge가 필요한 로직이 아님.
+    }
+
+    @Transactional
+    public Long updateSkin(Long skinId, SkinDto updateParam, Long characterId, String tempImagePath) {
+        Skin skin = findOneSkin(skinId);
+
+        skin.setName(updateParam.getName());
+        skin.setDescription(updateParam.getDescription());
+
+        // 캐릭터 업데이트. 꼭 캐릭터를 바꾸도록 해야 하는지는 모르겠음.
+        Character character = characterService.findOne(characterId);
+        skin.setCharacter(character);
+
+        // 현재 연결돼있는 카테고리들의 id를 가져옴.
+        List<Long> existCategoryIds = new ArrayList<>();
+        for(SkinCategoryMapping mapping: skin.getMappings()) {
+            existCategoryIds.add(mapping.getSkinCategory().getId());
+        }
+
+        // 기존 카테고리 매핑을 제거
+        for (Long existCategoryId : existCategoryIds) {
+            unLinkSkinAndCategory(skinId, existCategoryId);
+        }
+
+        // 업데이트된 카테고리 매핑들을 추가
+        for (Long categoryId : updateParam.getCategoryIds()) {
+            linkSkinAndCategory(skinId, categoryId);
+        }
+
+        // 이미지 경로 업데이트
+        if (tempImagePath != null) {
+            imagePathService.saveSkinImage(skinId, tempImagePath);
+        }
+
+        return skin.getId();
     }
 
     // 카테고리 추가
