@@ -1,0 +1,38 @@
+
+/* 테이블 너비 고정 */
+.table {
+    table-layout: fixed; /* 열 너비 고정 */
+    width: 100%; /* 테이블 전체 너비 */
+}
+
+/* 열 너비 정의 */
+.table th,
+.table td {
+    overflow: hidden; /* 내용이 넘칠 경우 숨김 */
+    text-overflow: ellipsis; /* 텍스트가 넘칠 경우 말줄임표 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+}
+
+/* 열 별 너비 설정 */
+.col1 { width: 5%; }
+.col2 { width: 30%; }
+.col3 { width: 15%; }
+.col4 { width: 50%; }
+
+/* 버튼 색상 정의 */
+.btn-update {
+    background-color: #5bc0de; /* 밝은 하늘색 */
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+/* 호버 효과 */
+.btn-update:hover {
+    background-color: #31a2c4; /* 진한 하늘색으로 변경 */
+}
+
+/* 버튼 크기를 조절하고 더 둥글게 만들기 */
+.btn-update {
+    border-radius: 8px; /* 둥근 모서리 */
+}

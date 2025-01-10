@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.web.controller.management.skin;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
+import hdxian.monatium_darknet.domain.skin.SkinCategoryMapping;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
@@ -48,10 +49,16 @@ public class SkinMgController {
 
     // 스킨 목록
     @GetMapping
-    public String skinList(HttpSession session, Model model) {
+    public String skinList(HttpSession session, Model model, @RequestParam(value = "category", required = false) Long categoryId) {
         clearSessionAttributes(session);
         SkinSearchCond searchCond = new SkinSearchCond();
+        if (categoryId != null) {
+            searchCond.getCategoryIds().add(categoryId);
+            SkinCategory category = skinService.findOneCategory(categoryId);
+            model.addAttribute("categoryName", category.getName());
+        }
         List<Skin> skinList = skinService.findAllSkin(searchCond);
+
 
         model.addAttribute("skinList", skinList);
         return "management/skins/skinList";
@@ -203,22 +210,111 @@ public class SkinMgController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/category/new")
-    public String addCategoryForm(Model model) {
-        SkinCategoryForm categoryForm = new SkinCategoryForm();
+
+    // === 스킨 카테고리 ===
+    @GetMapping("/categories")
+    public String categoryList(Model model) {
+        List<SkinCategory> categoryList = skinService.findAllCategories();
+
+        model.addAttribute("categoryList", categoryList);
+        return "management/skins/categoryList";
+    }
+
+    @GetMapping("/categories/new")
+    public String addCategoryForm(HttpSession session, Model model) {
+        SkinCategoryForm categoryForm = Optional.ofNullable((SkinCategoryForm) session.getAttribute(CATEGORY_FORM)).orElse(new SkinCategoryForm());
         List<Skin> skinOptions = skinService.findAllSkin();
 
-        model.addAttribute("categoryForm", categoryForm);
-        model.addAttribute("skinOptions", skinOptions);
+        model.addAttribute(CATEGORY_FORM, categoryForm);
+        model.addAttribute(SKIN_OPTIONS, skinOptions);
         return "management/skins/categoryAddForm";
     }
 
-    @PostMapping("/category/new")
-    public String addCategory(@ModelAttribute("categoryForm") SkinCategoryForm categoryForm) {
-        ArrayList<Long> skinIds = new ArrayList<>(new HashSet<>(categoryForm.getSkinIds())); // 중복되는 스킨 id 필터링
-        Long savedId = skinService.createNewSkinCategory(categoryForm.getName(), skinIds);
+    @PostMapping("/categories/new")
+    public String addCategory(HttpSession session, @RequestParam("action") String action,
+                              @Validated@ModelAttribute("categoryForm") SkinCategoryForm categoryForm, BindingResult bindingResult,
+                              Model model) {
 
-        return "redirect:/management/skins";
+        // 취소 버튼을 누른 경우
+        if (action.equals("cancel")) {
+            clearSessionAttributes(session);
+            return "redirect:/management/skins/categories";
+        }
+
+        ArrayList<Long> skinIds = new ArrayList<>(new HashSet<>(categoryForm.getSkinIds())); // 중복되는 스킨 id 필터링
+
+        // 완료 버튼을 누른 경우
+        if (action.equals("complete")) {
+
+            if (bindingResult.hasErrors()) {
+                List<Skin> skinOptions = skinService.findAllSkin();
+
+                model.addAttribute(SKIN_OPTIONS, skinOptions);
+                return "management/skins/categoryAddForm";
+            }
+
+            Long savedId = skinService.createNewSkinCategory(categoryForm.getName(), skinIds);
+
+            clearSessionAttributes(session);
+            return "redirect:/management/skins/categories";
+        }
+        // 임시 저장 버튼을 누른 경우
+        else {
+            categoryForm.setSkinIds(skinIds);
+            session.setAttribute(CATEGORY_FORM, categoryForm);
+            return "redirect:/management/skins/categories/new";
+        }
+
+    }
+
+    @GetMapping("/categories/edit/{categoryId}")
+    public String editCategory(HttpSession session, @PathVariable("categoryId") Long categoryId, Model model) {
+        SkinCategoryForm categoryForm = Optional.ofNullable((SkinCategoryForm) session.getAttribute(CATEGORY_FORM)).orElse(generateCategoryForm(categoryId));
+        List<Skin> skinOptions = skinService.findAllSkin();
+
+        model.addAttribute("categoryId", categoryId);
+        model.addAttribute(CATEGORY_FORM, categoryForm);
+        model.addAttribute(SKIN_OPTIONS, skinOptions);
+        return "management/skins/categoryEditForm";
+    }
+
+    @PostMapping("/categories/edit/{categoryId}")
+    public String editCategory(HttpSession session, @PathVariable("categoryId") Long categoryId, @RequestParam("action") String action,
+                               @Validated @ModelAttribute("categoryForm") SkinCategoryForm categoryForm, BindingResult bindingResult,
+                               Model model) {
+
+        // 취소 버튼을 누른 경우
+        if (action.equals("cancel")) {
+            clearSessionAttributes(session);
+            return "redirect:/management/skins/categories";
+        }
+
+        // 중복되는 스킨 id가 없도록 필터링
+        ArrayList<Long> skinIds = new ArrayList<>(new HashSet<>(categoryForm.getSkinIds()));
+
+        // 완료 버튼을 누른 경우
+        if (action.equals("complete")) {
+
+            if (bindingResult.hasErrors()) {
+                List<Skin> skinOptions = skinService.findAllSkin();
+
+                model.addAttribute("categoryId", categoryId);
+                model.addAttribute(SKIN_OPTIONS, skinOptions);
+                return "management/skins/categoryEditForm";
+            }
+
+            Long updatedId = skinService.updateSkinCategory(categoryId, categoryForm.getName(), skinIds);
+
+            clearSessionAttributes(session);
+            return "redirect:/management/skins/categories";
+        }
+        // 임시 저장 버튼을 누른 경우
+        else {
+            categoryForm.setSkinIds(skinIds);
+            session.setAttribute(CATEGORY_FORM, categoryForm);
+            return "redirect:/management/skins/categories/edit/" + categoryId;
+        }
+
     }
 
     @ModelAttribute("skinBaseUrl")
@@ -227,6 +323,21 @@ public class SkinMgController {
     }
 
     // ===== private =====
+    private SkinCategoryForm generateCategoryForm(Long categoryId) {
+        SkinCategory category = skinService.findOneCategory(categoryId);
+
+        SkinCategoryForm categoryForm = new SkinCategoryForm();
+        categoryForm.setName(category.getName());
+
+        ArrayList<Long> skinIds = new ArrayList<>();
+        for (SkinCategoryMapping mapping : category.getMappings()) {
+            skinIds.add(mapping.getSkin().getId());
+        }
+        categoryForm.setSkinIds(skinIds);
+
+        return categoryForm;
+    }
+
     private SkinForm generateSkinEditForm(Long skinId) {
         Skin skin = skinService.findOneSkin(skinId);
 
@@ -288,6 +399,7 @@ public class SkinMgController {
     private void clearSessionAttributes(HttpSession session) {
         session.removeAttribute(SKIN_FORM);
         session.removeAttribute(SKIN_IMAGE_URL);
+        session.removeAttribute(CATEGORY_FORM);
     }
 
 

@@ -135,8 +135,10 @@ public class SkinService {
 
         Long savedCategoryId = categoryRepository.save(skinCategory);
 
-        for (Long skinId : skinIds) {
-            linkSkinAndCategory(skinId, savedCategoryId);
+        if (skinIds != null) {
+            for (Long skinId : skinIds) {
+                linkSkinAndCategory(skinId, savedCategoryId);
+            }
         }
 
         return savedCategoryId;
@@ -148,6 +150,30 @@ public class SkinService {
         SkinCategory category = findOneCategory(categoryId);
 
         category.setName(updateName);
+
+        return category.getId();
+    }
+
+    @Transactional
+    public Long updateSkinCategory(Long categoryId, String updateName, List<Long> skinIds) {
+        SkinCategory category = findOneCategory(categoryId);
+
+        category.setName(updateName);
+
+        List<Long> existSkinIds = new ArrayList<>();
+        for (SkinCategoryMapping mapping : category.getMappings()) {
+            existSkinIds.add(mapping.getSkin().getId());
+        }
+
+        // 기존 매핑을 제거
+        for (Long existSkinId : existSkinIds) {
+            unLinkSkinAndCategory(existSkinId, categoryId);
+        }
+
+        // 매핑 업데이트
+        for (Long skinId : skinIds) {
+            linkSkinAndCategory(skinId, categoryId);
+        }
 
         return category.getId();
     }

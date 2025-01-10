@@ -44,4 +44,9 @@ public interface SessionConst {
     public static final String CATEGORY_OPTIONS = "categoryOptions";
     public static final String CH_LIST = "characterList";
 
+    // 카테고리 추가 관련 상수
+    public static final String CATEGORY_FORM = "categoryForm";
+    public static final String SKIN_OPTIONS = "skinOptions";
+
+
 }
