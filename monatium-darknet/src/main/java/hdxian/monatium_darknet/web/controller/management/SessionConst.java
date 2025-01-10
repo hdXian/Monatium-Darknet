@@ -41,5 +41,7 @@ public interface SessionConst {
     // 스킨 추가 관련 상수
     public static final String SKIN_FORM = "skinForm";
     public static final String SKIN_IMAGE_URL = "skinImageUrl";
+    public static final String CATEGORY_OPTIONS = "categoryOptions";
+    public static final String CH_LIST = "characterList";
 
 }

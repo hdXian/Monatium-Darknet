@@ -11,12 +11,15 @@ import hdxian.monatium_darknet.service.ImagePathService;
 import hdxian.monatium_darknet.service.ImageUrlService;
 import hdxian.monatium_darknet.service.SkinService;
 import hdxian.monatium_darknet.service.dto.SkinDto;
+import hdxian.monatium_darknet.web.validator.SkinFormValidator;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +43,8 @@ public class SkinMgController {
     private final ImagePathService imagePathService;
     private final LocalFileStorageService fileStorageService;
 
+    private final SkinFormValidator skinFormValidator;
+
     // 스킨 목록
     @GetMapping
     public String skinList(HttpSession session, Model model) {
@@ -59,17 +64,17 @@ public class SkinMgController {
         List<SkinCategory> categoryOptions = skinService.findAllCategories();
         List<Character> characterList = characterService.findAll();
 
-        model.addAttribute("skinForm", skinForm);
-        model.addAttribute("skinImageUrl", skinImageUrl);
-        model.addAttribute("categoryOptions", categoryOptions);
-        model.addAttribute("characterList", characterList);
+        model.addAttribute(SKIN_FORM, skinForm);
+        model.addAttribute(SKIN_IMAGE_URL, skinImageUrl);
+        model.addAttribute(CATEGORY_OPTIONS, categoryOptions);
+        model.addAttribute(CH_LIST, characterList);
         return "management/skins/skinAddForm";
     }
 
     // 스킨 추가 요청
     @PostMapping("/new")
     public String addSkin(HttpSession session, @RequestParam("action") String action,
-                          @ModelAttribute("skinForm") SkinForm skinForm) {
+                          @Validated @ModelAttribute("skinForm") SkinForm skinForm, BindingResult bindingResult, Model model) {
 
         // 0. 취소 버튼을 누른 경우
         if (action.equals("cancel")) {
@@ -82,6 +87,20 @@ public class SkinMgController {
 
         // 2. 완료 버튼을 누른 경우 -> 신규 스킨 추가
         if (action.equals("complete")) {
+
+            skinFormValidator.validate(skinForm, bindingResult);
+
+            if (bindingResult.hasErrors()) {
+                List<SkinCategory> categoryOptions = skinService.findAllCategories();
+                List<Character> characterList = characterService.findAll();
+                String skinImageUrl = Optional.ofNullable((String) session.getAttribute(SKIN_IMAGE_URL)).orElse(imageUrlService.getDefaultSkinThumbnailUrl());
+
+                model.addAttribute(SKIN_IMAGE_URL, skinImageUrl);
+                model.addAttribute(CATEGORY_OPTIONS, categoryOptions);
+                model.addAttribute(CH_LIST, characterList);
+                return "management/skins/skinAddForm";
+            }
+
             SkinDto skinDto = generateSkinDto(skinForm);
             Long characterId = skinForm.getCharacterId();
 
@@ -109,16 +128,17 @@ public class SkinMgController {
         List<Character> characterList = characterService.findAll();
 
         model.addAttribute("skinId", skinId);
-        model.addAttribute("skinForm", skinForm);
-        model.addAttribute("skinImageUrl", skinImageUrl);
-        model.addAttribute("categoryOptions", categoryOptions);
-        model.addAttribute("characterList", characterList);
+        model.addAttribute(SKIN_FORM, skinForm);
+        model.addAttribute(SKIN_IMAGE_URL, skinImageUrl);
+        model.addAttribute(CATEGORY_OPTIONS, categoryOptions);
+        model.addAttribute(CH_LIST, characterList);
         return "management/skins/skinEditForm";
     }
 
     @PostMapping("/edit/{skinId}")
     public String editSkin(HttpSession session, @RequestParam("action") String action,
-                           @PathVariable("skinId") Long skinId, @ModelAttribute("skinForm") SkinForm skinForm) {
+                           @PathVariable("skinId") Long skinId,
+                           @Validated@ModelAttribute("skinForm") SkinForm skinForm, BindingResult bindingResult, Model model) {
 
         // 0. 취소 버튼을 누른 경우
         if (action.equals("cancel")) {
@@ -131,6 +151,21 @@ public class SkinMgController {
 
         // 2. 수정 완료 버튼을 누른 경우
         if (action.equals("complete")) {
+
+            skinFormValidator.validate(skinForm, bindingResult);
+
+            if (bindingResult.hasErrors()) {
+                List<SkinCategory> categoryOptions = skinService.findAllCategories();
+                List<Character> characterList = characterService.findAll();
+                String skinImageUrl = Optional.ofNullable((String) session.getAttribute(SKIN_IMAGE_URL)).orElse(imageUrlService.getSkinBaseUrl() + skinId);
+
+                model.addAttribute("skinId", skinId);
+                model.addAttribute(SKIN_IMAGE_URL, skinImageUrl);
+                model.addAttribute(CATEGORY_OPTIONS, categoryOptions);
+                model.addAttribute(CH_LIST, characterList);
+                return "management/skins/skinEditForm";
+            }
+
             // 2. 이미지의 임시 저장 경로를 추출 (세션에 이미지 url이 없으면 null 리턴됨), 없으면 그대로 null 넘겨서 이미지 변경 안되도록 할꺼임
             String imageTempPath = getSkinImageTempPath(session);
 
