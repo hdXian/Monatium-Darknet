@@ -4,6 +4,7 @@ import hdxian.monatium_darknet.domain.card.*;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.character.CharacterStatus;
 import hdxian.monatium_darknet.domain.skin.Skin;
+import hdxian.monatium_darknet.domain.skin.SkinStatus;
 import hdxian.monatium_darknet.repository.dto.CardSearchCond;
 import hdxian.monatium_darknet.repository.dto.CharacterSearchCond;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
@@ -49,8 +50,8 @@ public class WikiController {
         Character character = characterService.findOneWiki(characterId);
         SkinSearchCond searchCond = new SkinSearchCond();
         searchCond.setCharacterId(characterId);
+        searchCond.setStatus(SkinStatus.ACTIVE); // 활성화된 스킨만 노출
         List<Skin> skinList = skinService.findAllSkin(searchCond);
-//        List<Skin> skinList = skinService.findSkinsByCharacter(characterId);
 
         model.addAttribute("character", character);
         model.addAttribute("skinList", skinList);

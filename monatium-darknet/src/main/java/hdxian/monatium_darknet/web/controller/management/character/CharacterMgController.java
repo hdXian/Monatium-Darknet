@@ -2,11 +2,14 @@ package hdxian.monatium_darknet.web.controller.management.character;
 
 import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
+import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.CharacterService;
 import hdxian.monatium_darknet.service.ImagePathService;
 import hdxian.monatium_darknet.service.ImageUrlService;
+import hdxian.monatium_darknet.service.SkinService;
 import hdxian.monatium_darknet.service.dto.AsideImageDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
@@ -39,6 +42,7 @@ import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
 public class CharacterMgController {
 
     private final CharacterService characterService;
+    private final SkinService skinService;
     private final LocalFileStorageService fileStorageService;
 
     private final ImageUrlService imageUrlService;
@@ -65,7 +69,13 @@ public class CharacterMgController {
     public String preView(@PathVariable("characterId") Long characterId, Model model) {
         Character character = characterService.findOne(characterId);
 
+        SkinSearchCond searchCond = new SkinSearchCond();
+        searchCond.setCharacterId(characterId);
+        List<Skin> skinList = skinService.findAllSkin(searchCond);
+
         model.addAttribute("character", character);
+        model.addAttribute("skinList", skinList);
+        model.addAttribute("skinBaseUrl", imageUrlService.getSkinBaseUrl());
         return "/management/characters/characterPreview";
     }
 
