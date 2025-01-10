@@ -129,6 +129,19 @@ public class SkinService {
         return categoryRepository.save(skinCategory);
     }
 
+    @Transactional
+    public Long createNewSkinCategory(String name, List<Long> skinIds) {
+        SkinCategory skinCategory = SkinCategory.createSkinCategory(name);
+
+        Long savedCategoryId = categoryRepository.save(skinCategory);
+
+        for (Long skinId : skinIds) {
+            linkSkinAndCategory(skinId, savedCategoryId);
+        }
+
+        return savedCategoryId;
+    }
+
     // 카테고리 변경 (이름밖에 없긴함)
     @Transactional
     public Long updateSkinCategory(Long categoryId, String updateName) {

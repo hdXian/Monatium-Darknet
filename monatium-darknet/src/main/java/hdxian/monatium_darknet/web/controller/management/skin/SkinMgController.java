@@ -203,6 +203,24 @@ public class SkinMgController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/category/new")
+    public String addCategoryForm(Model model) {
+        SkinCategoryForm categoryForm = new SkinCategoryForm();
+        List<Skin> skinOptions = skinService.findAllSkin();
+
+        model.addAttribute("categoryForm", categoryForm);
+        model.addAttribute("skinOptions", skinOptions);
+        return "management/skins/categoryAddForm";
+    }
+
+    @PostMapping("/category/new")
+    public String addCategory(@ModelAttribute("categoryForm") SkinCategoryForm categoryForm) {
+        ArrayList<Long> skinIds = new ArrayList<>(new HashSet<>(categoryForm.getSkinIds())); // 중복되는 스킨 id 필터링
+        Long savedId = skinService.createNewSkinCategory(categoryForm.getName(), skinIds);
+
+        return "redirect:/management/skins";
+    }
+
     @ModelAttribute("skinBaseUrl")
     public String skinBaseUrl() {
         return imageUrlService.getSkinBaseUrl();

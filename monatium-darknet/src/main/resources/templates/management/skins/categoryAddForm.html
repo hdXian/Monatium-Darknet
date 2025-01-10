@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
+    <title>사복 카테고리 추가</title>
+    <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/management/skins/skinForm.css}">
+</head>
+
+<body>
+<!-- 상단 네비게이션 바 -->
+<nav th:replace="~{fragments/navbar :: management_navbar}">상단 네비게이션 바</nav>
+
+<div class="container mt-5 main-content">
+
+    <div class="form-section">
+
+        <h2 class="form-title">사복 카테고리 추가</h2>
+
+        <form th:action="@{/management/skins/category/new}" method="post">
+
+            <div class="info-group mb-4">
+                <div class="info-title" aria-expanded="true">
+                    <span>사복 카테고리 정보</span>
+                </div>
+
+                <div th:object="${categoryForm}" id="skinSection" class="row mt-3">
+
+                    <!-- 카테고리 이름 -->
+                    <div class="mb-4">
+                        <label for="categoryName" class="form-label">카테고리 이름</label>
+                        <input type="text" th:field="*{name}" th:errorclass="field-error" class="form-control"
+                               id="categoryName" placeholder="카테고리 이름을 입력하세요">
+                        <div class="field-error" th:errors="*{name}"></div>
+                    </div>
+
+                    <!-- 추가할 스킨 -->
+                    <div class="mb-4">
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <label for="skinsContainer" class="form-label mb-0">대상 스킨</label>
+                            <button type="button" class="btn btn-outline-primary" onclick="addSkin()">스킨 추가</button>
+                        </div>
+
+                        <!-- 스킨 컨테이너 -->
+                        <div id="skinsContainer">
+                            <!-- 기본 스킨 입력 -->
+                            <div th:each="skinId, stat : *{skinIds}" class="input-group mb-2 skin-item">
+                                <select class="form-select" th:field="*{skinIds[__${stat.index}__]}" th:errorclass="field-error">
+                                    <option th:each="option : ${skinOptions}"
+                                            th:value="${option.id}"
+                                            th:text="|${option.name} (${option.character.name})|">
+                                    </option>
+                                </select>
+                                <button type="button" class="btn btn-outline-danger remove-skin-btn" onclick="removeSkin(this)">삭제</button>
+                                <div class="field-error" th:errors="*{skinIds[__${stat.index}__]}"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <template id="skinItemTemplate">
+                <div class="input-group mb-2 skin-item">
+                    <select class="form-select">
+                        <option th:each="option : ${skinOptions}" th:value="${option.id}" th:text="|${option.name} (${option.character.name})|"></option>
+                    </select>
+                    <button type="button" class="btn btn-outline-danger remove-category-btn" onclick="removeCategory(this)">
+                        삭제
+                    </button>
+                </div>
+            </template>
+
+            <!-- 폼 제출 버튼 -->
+            <div class="button-group d-flex justify-content-between mt-4">
+
+                <!-- 왼쪽 버튼 그룹 -->
+                <div class="d-flex gap-2">
+                    <!-- 취소 버튼 -->
+                    <button type="button" name="action" value="cancel" class="btn btn-danger" onclick="confirmCancel(this)">취소</button>
+                    <!-- 저장 버튼 -->
+                    <button type="submit" name="action" value="save" class="btn btn-secondary">임시 저장</button>
+                </div>
+
+                <!-- 오른쪽 버튼 그룹 -->
+                <div class="d-flex gap-2">
+                    <!-- 다음 버튼 -->
+                    <button type="submit" name="action" value="complete" class="btn btn-primary">사복 카테고리 추가하기!</button>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer :: management_footer}"></footer>
+
+<script th:src="@{/js/management/skins/categoryForm.js}"></script>
+
+</body>
+</html>
