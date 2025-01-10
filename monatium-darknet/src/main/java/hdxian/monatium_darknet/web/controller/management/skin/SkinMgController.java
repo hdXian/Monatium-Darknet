@@ -5,6 +5,7 @@ import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
+import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.CharacterService;
 import hdxian.monatium_darknet.service.ImagePathService;
 import hdxian.monatium_darknet.service.ImageUrlService;
@@ -43,7 +44,8 @@ public class SkinMgController {
     @GetMapping
     public String skinList(HttpSession session, Model model) {
         clearSessionAttributes(session);
-        List<Skin> skinList = skinService.findAllSkin();
+        SkinSearchCond searchCond = new SkinSearchCond();
+        List<Skin> skinList = skinService.findAllSkin(searchCond);
 
         model.addAttribute("skinList", skinList);
         return "management/skins/skinList";

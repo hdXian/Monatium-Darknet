@@ -6,6 +6,7 @@ import hdxian.monatium_darknet.domain.character.CharacterStatus;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.repository.dto.CardSearchCond;
 import hdxian.monatium_darknet.repository.dto.CharacterSearchCond;
+import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -46,7 +47,10 @@ public class WikiController {
     public String characterInfo(@PathVariable("id") Long characterId, Model model) {
 
         Character character = characterService.findOneWiki(characterId);
-        List<Skin> skinList = skinService.findSkinsByCharacter(characterId);
+        SkinSearchCond searchCond = new SkinSearchCond();
+        searchCond.setCharacterId(characterId);
+        List<Skin> skinList = skinService.findAllSkin(searchCond);
+//        List<Skin> skinList = skinService.findSkinsByCharacter(characterId);
 
         model.addAttribute("character", character);
         model.addAttribute("skinList", skinList);

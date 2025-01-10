@@ -7,6 +7,7 @@ import hdxian.monatium_darknet.domain.skin.SkinCategoryMapping;
 import hdxian.monatium_darknet.domain.skin.SkinStatus;
 import hdxian.monatium_darknet.repository.SkinCategoryRepository;
 import hdxian.monatium_darknet.repository.SkinRepository;
+import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.dto.SkinDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -169,7 +170,7 @@ public class SkinService {
     @Transactional
     public void activateSkin(Long skinId) {
         Skin skin = findOneSkin(skinId);
-        skin.setStatus(SkinStatus.ACTIVATE);
+        skin.setStatus(SkinStatus.ACTIVE);
     }
 
     @Transactional
@@ -199,8 +200,11 @@ public class SkinService {
     public void deleteSkinCategory(Long categoryId) {
         SkinCategory categoryToRemove = findOneCategory(categoryId);
 
+        SkinSearchCond searchCond = new SkinSearchCond();
+        searchCond.getCategoryIds().add(categoryId);
         // 모든 스킨과의 연관관계를 제거 (연관관계, mapping 추가를 skin에서만 하기 때문)
-        List<Skin> skins = findSkinsByCategory(categoryId);
+        List<Skin> skins = findAllSkin(searchCond);
+//        List<Skin> skins = findSkinsByCategory(categoryId);
         for (Skin skin : skins) {
             skin.removeCategory(categoryToRemove);
         }
@@ -227,17 +231,14 @@ public class SkinService {
         return find.get();
     }
 
-    // 스킨 리스트
-    public List<Skin> findSkinsByCategory(Long categoryId) {
-        return skinRepository.findBySkinCategoryId(categoryId);
-    }
-
-    public List<Skin> findSkinsByCharacter(Long characterId) {
-        return skinRepository.findByCharacterId(characterId);
-    }
-
+    // 조건별 스킨 검색
     public List<Skin> findAllSkin() {
-        return skinRepository.findAll();
+        SkinSearchCond searchCond = new SkinSearchCond();
+        return skinRepository.findAll(searchCond);
+    }
+
+    public List<Skin> findAllSkin(SkinSearchCond searchCond) {
+        return skinRepository.findAll(searchCond);
     }
 
     // 카테고리 리스트

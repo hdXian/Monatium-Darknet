@@ -238,7 +238,6 @@ class CharacterServiceTest {
     static SkinDto generateSkinDto(String name, SkinGrade grade) {
         SkinDto dto = new SkinDto();
         dto.setName(name);
-        dto.setGrade(grade);
         dto.setDescription(name + " 스킨 설명");
 
         return dto;

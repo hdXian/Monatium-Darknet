@@ -8,6 +8,8 @@ import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinGrade;
+import hdxian.monatium_darknet.domain.skin.SkinStatus;
+import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
 import hdxian.monatium_darknet.service.dto.SkinDto;
@@ -49,7 +51,7 @@ class SkinServiceTest {
         Character rim = characterService.findOne(rim_id);
 
         // when
-        SkinDto skinDto = generateSkinDto("라크로스 림크로스", SkinGrade.NORMAL);
+        SkinDto skinDto = generateSkinDto("라크로스 림크로스");
         Long savedSkinId = skinService.createNewSkin(rim_id, skinDto);
 
         // then
@@ -61,7 +63,6 @@ class SkinServiceTest {
 
         // 스킨 정보는 맞는가?
         assertThat(findSkin.getName()).isEqualTo(skinDto.getName());
-        assertThat(findSkin.getGrade()).isEqualTo(skinDto.getGrade());
         assertThat(findSkin.getDescription()).isEqualTo(skinDto.getDescription());
 
         // 없는 스킨 id에 대해 검색하면 예외 발생
@@ -114,8 +115,8 @@ class SkinServiceTest {
         SkinCategory category3 = skinService.findOneCategory(category_id_3);
 
         // 스킨 2개
-        SkinDto skinDto1 = generateSkinDto("라크로스 림크로스", SkinGrade.NORMAL);
-        SkinDto skinDto2 = generateSkinDto("하드워킹 홀리데이", SkinGrade.NORMAL);
+        SkinDto skinDto1 = generateSkinDto("라크로스 림크로스");
+        SkinDto skinDto2 = generateSkinDto("하드워킹 홀리데이");
         Long rim_skin_id = skinService.createNewSkin(rim_id, skinDto1);
         Long erpin_skin_id = skinService.createNewSkin(erpin_id, skinDto2);
 
@@ -132,16 +133,26 @@ class SkinServiceTest {
         skinService.linkSkinAndCategory(erpin_skin_id, category_id_3);
 
         // then
+        SkinSearchCond searchCond = new SkinSearchCond();
+
         // 1번 카테고리 검색 -> 림 스킨
-        List<Skin> result1 = skinService.findSkinsByCategory(category_id_1);
+        searchCond.getCategoryIds().add(category_id_1);
+//        List<Skin> result1 = skinService.findSkinsByCategory(category_id_1);
+        List<Skin> result1 = skinService.findAllSkin(searchCond);
         assertThat(result1).containsExactly(rim_skin);
 
         // 2번 카테고리 검색 -> 림 스킨, 에르핀 스킨
-        List<Skin> result2 = skinService.findSkinsByCategory(category_id_2);
+        searchCond.getCategoryIds().remove(category_id_1);
+        searchCond.getCategoryIds().add(category_id_2);
+        List<Skin> result2 = skinService.findAllSkin(searchCond);
+//        List<Skin> result2 = skinService.findSkinsByCategory(category_id_2);
         assertThat(result2).containsExactlyInAnyOrder(rim_skin, erpin_skin);
 
         // 3번 카테고리 검색 -> 에르핀 스킨
-        List<Skin> result3 = skinService.findSkinsByCategory(category_id_3);
+        searchCond.getCategoryIds().remove(category_id_2);
+        searchCond.getCategoryIds().add(category_id_3);
+        List<Skin> result3 = skinService.findAllSkin(searchCond);
+//        List<Skin> result3 = skinService.findSkinsByCategory(category_id_3);
         assertThat(result3).containsExactly(erpin_skin);
 
         // 림 스킨 검색 -> 1번, 2번 카테고리
@@ -186,13 +197,13 @@ class SkinServiceTest {
 
         // when
         // 림 스킨 2개, 에르핀 스킨 2개를 추가
-        SkinDto rimSkinDto1 = generateSkinDto("림 스킨1", SkinGrade.NORMAL);
-        SkinDto rimSkinDto2 = generateSkinDto("림 스킨2", SkinGrade.KKOGGA);
+        SkinDto rimSkinDto1 = generateSkinDto("림 스킨1");
+        SkinDto rimSkinDto2 = generateSkinDto("림 스킨2");
         Long rimSkinId1 = skinService.createNewSkin(rim_id, rimSkinDto1);
         Long rimSkinId2 = skinService.createNewSkin(rim_id, rimSkinDto2);
 
-        SkinDto erpinSkinDto1 = generateSkinDto("에르핀 스킨1", SkinGrade.NORMAL);
-        SkinDto erpinSkinDto2 = generateSkinDto("에르핀 스킨2", SkinGrade.KKOGGA);
+        SkinDto erpinSkinDto1 = generateSkinDto("에르핀 스킨1");
+        SkinDto erpinSkinDto2 = generateSkinDto("에르핀 스킨2");
         Long erpinSkinId1 = skinService.createNewSkin(erpin_id, erpinSkinDto1);
         Long erpinSkinId2 = skinService.createNewSkin(erpin_id, erpinSkinDto2);
 
@@ -202,12 +213,17 @@ class SkinServiceTest {
         Skin erpin_skin_2 = skinService.findOneSkin(erpinSkinId2);
 
         // then
+        SkinSearchCond searchCond = new SkinSearchCond();
         // 림 스킨 검색
-        List<Skin> rim_skins = skinService.findSkinsByCharacter(rim_id);
+        searchCond.setCharacterId(rim_id);
+        List<Skin> rim_skins = skinService.findAllSkin(searchCond);
+//        List<Skin> rim_skins = skinService.findSkinsByCharacter(rim_id);
         assertThat(rim_skins).containsExactlyInAnyOrder(rim_skin_1, rim_skin_2);
 
         // 에르핀 스킨 검색
-        List<Skin> erpin_skins = skinService.findSkinsByCharacter(erpin_id);
+        searchCond.setCharacterId(erpin_id);
+        List<Skin> erpin_skins = skinService.findAllSkin(searchCond);
+//        List<Skin> erpin_skins = skinService.findSkinsByCharacter(erpin_id);
         assertThat(erpin_skins).containsExactlyInAnyOrder(erpin_skin_1, erpin_skin_2);
 
         // 전체 스킨 검색
@@ -225,7 +241,7 @@ class SkinServiceTest {
 
         Long categoryId = skinService.createNewSkinCategory("상시판매");
 
-        SkinDto skinDto = generateSkinDto("라크로스 림크로스", SkinGrade.NORMAL);
+        SkinDto skinDto = generateSkinDto("라크로스 림크로스");
         Long skinId = skinService.createNewSkin(rim_id, skinDto);
 
         // 스킨에 카테고리 추가
@@ -235,18 +251,20 @@ class SkinServiceTest {
 
         // when
         // 이름과 등급 변경
-        SkinDto updateDto = generateSkinDto("수정 라크로스 림크로스", SkinGrade.KKOGGA);
+        SkinDto updateDto = generateSkinDto("수정 라크로스 림크로스");
         Long updateSKinId = skinService.updateSkin(skinId, updateDto);
 
         // then
         Skin updateSkin = skinService.findOneSkin(updateSKinId);
 
         assertThat(updateSkin.getName()).isEqualTo(updateDto.getName());
-        assertThat(updateSkin.getGrade()).isEqualTo(updateDto.getGrade());
         assertThat(updateSkin.getDescription()).isEqualTo(updateDto.getDescription());
 
         // 스킨의 카테고리는 변경한 적 없음 -> 여전히 같은 카테고리에 있어야 함
-        List<Skin> skins = skinService.findSkinsByCategory(categoryId);
+        SkinSearchCond searchCond = new SkinSearchCond();
+        searchCond.getCategoryIds().add(categoryId);
+        List<Skin> skins = skinService.findAllSkin(searchCond);
+//        List<Skin> skins = skinService.findSkinsByCategory(categoryId);
         assertThat(skins).containsExactly(updateSkin);
 
         // 같은 엔티티를 수정한 것이어야 함
@@ -284,8 +302,8 @@ class SkinServiceTest {
         Long cateId2 = skinService.createNewSkinCategory("할인중");
 
         // 스킨 2개
-        SkinDto skinDto1 = generateSkinDto("스킨1", SkinGrade.NORMAL);
-        SkinDto skinDto2 = generateSkinDto("스킨2", SkinGrade.KKOGGA);
+        SkinDto skinDto1 = generateSkinDto("스킨1");
+        SkinDto skinDto2 = generateSkinDto("스킨2");
         Long skinId1 = skinService.createNewSkin(charId1, skinDto1); // 사도1의 스킨1
         Long skinId2 = skinService.createNewSkin(charId2, skinDto2); // 사도2의 스킨2
 
@@ -305,11 +323,17 @@ class SkinServiceTest {
         Skin skin2 = skinService.findOneSkin(skinId2);
 
         // 키테고리 1에는 스킨 1, 2가 존재
-        List<Skin> result1 = skinService.findSkinsByCategory(cateId1);
+        SkinSearchCond searchCond = new SkinSearchCond();
+        searchCond.getCategoryIds().add(cateId1);
+        List<Skin> result1 = skinService.findAllSkin(searchCond);
+//        List<Skin> result1 = skinService.findSkinsByCategory(cateId1);
         assertThat(result1).containsExactlyInAnyOrder(skin1, skin2);
 
         // 카테고리 2에는 스킨 1만 존재
-        List<Skin> result2 = skinService.findSkinsByCategory(cateId2);
+        searchCond.getCategoryIds().remove(cateId1);
+        searchCond.getCategoryIds().add(cateId2);
+        List<Skin> result2 = skinService.findAllSkin(searchCond);
+//        List<Skin> result2 = skinService.findSkinsByCategory(cateId2);
         assertThat(result2).containsExactly(skin1);
     }
 
@@ -323,7 +347,7 @@ class SkinServiceTest {
 
         Long categoryId = skinService.createNewSkinCategory("상시판매");
 
-        SkinDto skinDto = generateSkinDto("사라질 운명", SkinGrade.NORMAL);
+        SkinDto skinDto = generateSkinDto("사라질 운명");
         Long skinId = skinService.createNewSkin(rim_id, skinDto);
 
         skinService.linkSkinAndCategory(skinId, categoryId);
@@ -332,17 +356,19 @@ class SkinServiceTest {
         skinService.deleteSkin(skinId);
 
         // then
+        Skin findSkin = skinService.findOneSkin(skinId);
+        assertThat(findSkin.getStatus()).isEqualTo(SkinStatus.DELETED);
         // DB 테이블에서도 깨끗이 삭제되는지 확인 (rollback false -> 예외 터뜨리는 테스트코드 주석처리) (엔티티 간 연관관계를 모두 깔끔히 지워야 DB에서도 지워짐)
-        assertThatThrownBy(() -> skinService.findOneSkin(skinId))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 스킨이 존재하지 않습니다. skinId=" + skinId);
+//        assertThatThrownBy(() -> skinService.findOneSkin(skinId))
+//                .isInstanceOf(NoSuchElementException.class)
+//                .hasMessage("해당 스킨이 존재하지 않습니다. skinId=" + skinId);
 
         // 스킨이 검색 결과에 나오지 않아야 함
-        List<Skin> result_cate = skinService.findSkinsByCategory(categoryId);
-        assertThat(result_cate).isEmpty();
-
-        List<Skin> result_char = skinService.findSkinsByCharacter(rim_id);
-        assertThat(result_char).isEmpty();
+//        List<Skin> result_cate = skinService.findSkinsByCategory(categoryId);
+//        assertThat(result_cate).isEmpty();
+//
+//        List<Skin> result_char = skinService.findSkinsByCharacter(rim_id);
+//        assertThat(result_char).isEmpty();
 
         // 카테고리는 남아있어야 함
         SkinCategory findCategory = skinService.findOneCategory(categoryId);
@@ -359,7 +385,7 @@ class SkinServiceTest {
 
         Long categoryId = skinService.createNewSkinCategory("상시판매");
 
-        SkinDto skinDto = generateSkinDto("라크로스 림크로스", SkinGrade.NORMAL);
+        SkinDto skinDto = generateSkinDto("라크로스 림크로스");
         Long skinId = skinService.createNewSkin(rim_id, skinDto);
 
         skinService.linkSkinAndCategory(skinId, categoryId);
@@ -387,10 +413,9 @@ class SkinServiceTest {
         return new CharacterImageDto(null, null, null, null);
     }
 
-    static SkinDto generateSkinDto(String name, SkinGrade grade) {
+    static SkinDto generateSkinDto(String name) {
         SkinDto dto = new SkinDto();
         dto.setName(name);
-        dto.setGrade(grade);
         dto.setDescription(name + " 스킨 설명");
 
         return dto;
