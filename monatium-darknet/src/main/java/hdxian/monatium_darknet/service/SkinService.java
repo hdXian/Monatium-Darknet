@@ -112,7 +112,7 @@ public class SkinService {
             linkSkinAndCategory(skinId, categoryId);
         }
 
-        // 이미지 경로 업데이트
+        // 이미지 경로 업데이트 (null 넘어오면 업데이트 안 함)
         if (tempImagePath != null) {
             imagePathService.saveSkinImage(skinId, tempImagePath);
         }

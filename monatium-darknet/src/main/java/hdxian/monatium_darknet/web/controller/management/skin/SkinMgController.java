@@ -40,7 +40,8 @@ public class SkinMgController {
 
     // 스킨 목록
     @GetMapping
-    public String skinList(Model model) {
+    public String skinList(HttpSession session, Model model) {
+        clearSessionAttributes(session);
         List<Skin> skinList = skinService.findAllSkin();
 
         model.addAttribute("skinList", skinList);
@@ -49,70 +50,102 @@ public class SkinMgController {
 
     // 스킨 추가 페이지
     @GetMapping("/new")
-    public String addSkinForm(@ModelAttribute("skinForm") SkinForm skinForm, Model model) {
-
+    public String addSkinForm(HttpSession session, Model model) {
+        SkinForm skinForm = Optional.ofNullable((SkinForm) session.getAttribute(SKIN_FORM)).orElse(new SkinForm());
+        String skinImageUrl = Optional.ofNullable((String) session.getAttribute(SKIN_IMAGE_URL)).orElse(imageUrlService.getDefaultSkinThumbnailUrl());
         List<SkinCategory> categoryOptions = skinService.findAllCategories();
         List<Character> characterList = characterService.findAll();
-        String defaultThumbnailUrl = imageUrlService.getDefaultSkinThumbnailUrl();
 
+        model.addAttribute("skinForm", skinForm);
+        model.addAttribute("skinImageUrl", skinImageUrl);
         model.addAttribute("categoryOptions", categoryOptions);
         model.addAttribute("characterList", characterList);
-        model.addAttribute("skinImageUrl", defaultThumbnailUrl);
         return "management/skins/skinAddForm";
     }
 
     // 스킨 추가 요청
     @PostMapping("/new")
-    public String addSkin(HttpSession session, @ModelAttribute("skinForm") SkinForm skinForm) {
+    public String addSkin(HttpSession session, @RequestParam("action") String action,
+                          @ModelAttribute("skinForm") SkinForm skinForm) {
 
-        // 이미지를 임시 경로에 저장하고 세션에 url 추가
+        // 0. 취소 버튼을 누른 경우
+        if (action.equals("cancel")) {
+            clearSessionAttributes(session);
+            return "redirect:/management/skins";
+        }
+
+        // 1. 이미지를 임시 경로에 저장하고 세션에 url 추가
         saveSkinImageToTemp(session, skinForm.getSkinImage());
 
-        // 이미지의 임시저장 경로를 생성 (세션에 이미지 url이 없으면 null 리턴됨)
-        // 없으면 디폴트 썸네일의 이미지 경로를 가져와서 지정
-        String imageTempPath = Optional.ofNullable(getSkinImageTempPath(session)).orElse(imagePathService.getDefaultSkinThumbnailFilePath());
+        // 2. 완료 버튼을 누른 경우 -> 신규 스킨 추가
+        if (action.equals("complete")) {
+            SkinDto skinDto = generateSkinDto(skinForm);
+            Long characterId = skinForm.getCharacterId();
 
-        // 신규 스킨 추가
-        SkinDto skinDto = generateSkinDto(skinForm);
-        Long characterId = skinForm.getCharacterId();
-        Long savedId = skinService.createNewSkin(characterId, skinDto, imageTempPath);
+            // 2-1. 이미지의 임시저장 경로를 생성 (세션에 이미지 url이 없으면 null 리턴), 없으면 디폴트 썸네일의 이미지 경로를 가져와서 지정
+            String imageTempPath = Optional.ofNullable(getSkinImageTempPath(session)).orElse(imagePathService.getDefaultSkinThumbnailFilePath());
+            Long savedId = skinService.createNewSkin(characterId, skinDto, imageTempPath);
 
-        return "redirect:/management/skins";
+            clearSessionAttributes(session);
+            return "redirect:/management/skins";
+        }
+        // 3. 임시 저장 버튼을 누른 경우 -> 세션에 폼 데이터 저장 및 리다이렉트
+        else {
+            session.setAttribute(SKIN_FORM, skinForm);
+            return "redirect:/management/skins/new";
+        }
+
     }
 
     // TODO - 스킨 수정 로직 추가, 세션 데이터 처리, 캐릭터 미리보기 화면에 스킨 목록 렌더링, 스킨 활성화, 비활성화
 
     // 스킨 수정 페이지
     @GetMapping("/edit/{skinId}")
-    public String editForm(@PathVariable("skinId") Long skinId, Model model) {
-        SkinForm skinForm = generateSkinEditForm(skinId);
+    public String editForm(HttpSession session, @PathVariable("skinId") Long skinId, Model model) {
+        SkinForm skinForm = Optional.ofNullable((SkinForm) session.getAttribute(SKIN_FORM)).orElse(generateSkinEditForm(skinId));
+        String skinImageUrl = Optional.ofNullable((String) session.getAttribute(SKIN_IMAGE_URL)).orElse(imageUrlService.getSkinBaseUrl() + skinId);
         List<SkinCategory> categoryOptions = skinService.findAllCategories();
         List<Character> characterList = characterService.findAll();
-        String skinImageUrl = imageUrlService.getSkinBaseUrl() + skinId;
 
+        model.addAttribute("skinId", skinId);
         model.addAttribute("skinForm", skinForm);
+        model.addAttribute("skinImageUrl", skinImageUrl);
         model.addAttribute("categoryOptions", categoryOptions);
         model.addAttribute("characterList", characterList);
-        model.addAttribute("skinImageUrl", skinImageUrl);
-        model.addAttribute("skinId", skinId);
         return "management/skins/skinEditForm";
     }
 
     @PostMapping("/edit/{skinId}")
-    public String editSkin(HttpSession session, @PathVariable("skinId") Long skinId, @ModelAttribute("skinForm") SkinForm skinForm) {
+    public String editSkin(HttpSession session, @RequestParam("action") String action,
+                           @PathVariable("skinId") Long skinId, @ModelAttribute("skinForm") SkinForm skinForm) {
+
+        // 0. 취소 버튼을 누른 경우
+        if (action.equals("cancel")) {
+            clearSessionAttributes(session);
+            return "redirect:/management/skins";
+        }
 
         // 1. 스킨 이미지 저장 (비어있으면 변한게 아님 -> 동작하지 않음)
         saveSkinImageToTemp(session, skinForm.getSkinImage());
 
-        // 2. 이미지의 임시 저장 경로를 추출 (세션에 이미지 url이 없으면 null 리턴됨)
-        // 없으면 그대로 null 넘겨서 이미지 변경 안되도록 할꺼임
-        String imageTempPath = getSkinImageTempPath(session);
+        // 2. 수정 완료 버튼을 누른 경우
+        if (action.equals("complete")) {
+            // 2. 이미지의 임시 저장 경로를 추출 (세션에 이미지 url이 없으면 null 리턴됨), 없으면 그대로 null 넘겨서 이미지 변경 안되도록 할꺼임
+            String imageTempPath = getSkinImageTempPath(session);
 
-        SkinDto skinDto = generateSkinDto(skinForm);
-        Long characterId = skinForm.getCharacterId();
-        Long updatedId = skinService.updateSkin(skinId, skinDto, characterId, imageTempPath);
+            SkinDto updateParam = generateSkinDto(skinForm);
+            Long characterId = skinForm.getCharacterId();
+            Long updatedId = skinService.updateSkin(skinId, updateParam, characterId, imageTempPath);
 
-        return "redirect:/management/skins";
+            clearSessionAttributes(session);
+            return "redirect:/management/skins";
+        }
+        // 3. 임시 저장 버튼을 누른 경우 -> 폼 데이터를 세션에 저장하고 리다이렉트
+        else {
+            session.setAttribute(SKIN_FORM, skinForm);
+            return "redirect:/management/skins/edit/" + skinId;
+        }
+
     }
 
     @ModelAttribute("skinBaseUrl")
@@ -140,6 +173,7 @@ public class SkinMgController {
         return skinForm;
     }
 
+    // 세션에 이미지 url이 없으면 null 리턴
     private String getSkinImageTempPath(HttpSession session) {
         String imageUrl = (String) session.getAttribute(SKIN_IMAGE_URL);
         if (imageUrl != null) {
@@ -175,6 +209,11 @@ public class SkinMgController {
         dto.setCategoryIds(skinForm.getCategoryIds());
 
         return dto;
+    }
+
+    private void clearSessionAttributes(HttpSession session) {
+        session.removeAttribute(SKIN_FORM);
+        session.removeAttribute(SKIN_IMAGE_URL);
     }
 
 
