@@ -33,19 +33,6 @@ public class SkinService {
 
     // 스킨 추가
     @Transactional
-    public Long createNewSkin(Long characterId, SkinDto skinDto) {
-        Character character = characterService.findOne(characterId);
-
-        Skin skin = Skin.createSkin(
-                skinDto.getName(),
-                skinDto.getDescription(),
-                character
-        );
-
-        return skinRepository.save(skin);
-    }
-
-    @Transactional
     public Long createNewSkin(Long characterId, SkinDto skinDto, String tempImagePath) {
         Character character = characterService.findOne(characterId);
 
@@ -57,8 +44,11 @@ public class SkinService {
 
         Long savedId = skinRepository.save(skin);
 
-        for(Long categoryId: skinDto.getCategoryIds()) {
-            linkSkinAndCategory(savedId, categoryId);
+        List<Long> categoryIds = skinDto.getCategoryIds();
+        if (categoryIds != null) {
+            for(Long categoryId: categoryIds) {
+                linkSkinAndCategory(savedId, categoryId);
+            }
         }
 
         // 스킨 이미지 저장
@@ -76,17 +66,6 @@ public class SkinService {
 //    }
 
     // 스킨 업데이트
-    @Transactional
-    public Long updateSkin(Long skinId, SkinDto updateParam) {
-        Skin skin = findOneSkin(skinId);
-
-        skin.setName(updateParam.getName());
-//        skin.setGrade(updateParam.getGrade());
-        skin.setDescription(updateParam.getDescription());
-
-        return skin.getId(); // save() 호출 x. merge가 필요한 로직이 아님.
-    }
-
     @Transactional
     public Long updateSkin(Long skinId, SkinDto updateParam, Long characterId, String tempImagePath) {
         Skin skin = findOneSkin(skinId);
@@ -110,8 +89,11 @@ public class SkinService {
         }
 
         // 업데이트된 카테고리 매핑들을 추가
-        for (Long categoryId : updateParam.getCategoryIds()) {
-            linkSkinAndCategory(skinId, categoryId);
+        List<Long> categoryIds = updateParam.getCategoryIds();
+        if (categoryIds != null) {
+            for (Long categoryId : categoryIds) {
+                linkSkinAndCategory(skinId, categoryId);
+            }
         }
 
         // 이미지 경로 업데이트 (null 넘어오면 업데이트 안 함)
@@ -146,15 +128,6 @@ public class SkinService {
 
     // 카테고리 변경 (이름밖에 없긴함)
     @Transactional
-    public Long updateSkinCategory(Long categoryId, String updateName) {
-        SkinCategory category = findOneCategory(categoryId);
-
-        category.setName(updateName);
-
-        return category.getId();
-    }
-
-    @Transactional
     public Long updateSkinCategory(Long categoryId, String updateName, List<Long> skinIds) {
         SkinCategory category = findOneCategory(categoryId);
 
@@ -171,8 +144,10 @@ public class SkinService {
         }
 
         // 매핑 업데이트
-        for (Long skinId : skinIds) {
-            linkSkinAndCategory(skinId, categoryId);
+        if (skinIds != null) {
+            for (Long skinId : skinIds) {
+                linkSkinAndCategory(skinId, categoryId);
+            }
         }
 
         return category.getId();

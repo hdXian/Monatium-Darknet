@@ -204,10 +204,10 @@ public class SkinMgController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/delete/{skinId}")
-    public ResponseEntity<Void> delete(@PathVariable("skinId") Long skinId) {
+    @PostMapping("/del/{skinId}")
+    public String delete(@PathVariable("skinId") Long skinId) {
         skinService.deleteSkin(skinId);
-        return ResponseEntity.ok().build();
+        return "redirect:/management/skins";
     }
 
 
@@ -315,6 +315,12 @@ public class SkinMgController {
             return "redirect:/management/skins/categories/edit/" + categoryId;
         }
 
+    }
+
+    @PostMapping("/categories/del/{categoryId}")
+    public String deleteCategory(@PathVariable("categoryId") Long categoryId) {
+        skinService.deleteSkinCategory(categoryId);
+        return "redirect:/management/skins/categories";
     }
 
     @ModelAttribute("skinBaseUrl")

@@ -130,12 +130,20 @@
 
     </div>
 
+    <!-- 주말 농장 스위치 -->
+    <div class="d-flex justify-content-start mb-4">
+        <button id="delSkin-btn" class="btn btn-danger" th:data-id="${skinId}" th:data-name="${skinForm.name}">
+            주말 농장
+        </button>
+    </div>
+
 </div>
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer :: management_footer}"></footer>
 
 <script th:src="@{/js/management/skins/skinForm.js}"></script>
+<script th:src="@{/js/management/skins/skinDelete.js}"></script>
 
 </body>
 </html>

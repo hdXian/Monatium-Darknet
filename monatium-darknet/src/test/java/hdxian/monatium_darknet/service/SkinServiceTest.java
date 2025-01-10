@@ -5,10 +5,7 @@ import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.aside.AsideSpec;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.domain.character.Character;
-import hdxian.monatium_darknet.domain.skin.Skin;
-import hdxian.monatium_darknet.domain.skin.SkinCategory;
-import hdxian.monatium_darknet.domain.skin.SkinGrade;
-import hdxian.monatium_darknet.domain.skin.SkinStatus;
+import hdxian.monatium_darknet.domain.skin.*;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
@@ -19,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -52,7 +50,7 @@ class SkinServiceTest {
 
         // when
         SkinDto skinDto = generateSkinDto("라크로스 림크로스");
-        Long savedSkinId = skinService.createNewSkin(rim_id, skinDto);
+        Long savedSkinId = skinService.createNewSkin(rim_id, skinDto, null);
 
         // then
         Skin findSkin = skinService.findOneSkin(savedSkinId);
@@ -117,8 +115,8 @@ class SkinServiceTest {
         // 스킨 2개
         SkinDto skinDto1 = generateSkinDto("라크로스 림크로스");
         SkinDto skinDto2 = generateSkinDto("하드워킹 홀리데이");
-        Long rim_skin_id = skinService.createNewSkin(rim_id, skinDto1);
-        Long erpin_skin_id = skinService.createNewSkin(erpin_id, skinDto2);
+        Long rim_skin_id = skinService.createNewSkin(rim_id, skinDto1, null);
+        Long erpin_skin_id = skinService.createNewSkin(erpin_id, skinDto2, null);
 
         Skin rim_skin = skinService.findOneSkin(rim_skin_id);
         Skin erpin_skin = skinService.findOneSkin(erpin_skin_id);
@@ -199,13 +197,13 @@ class SkinServiceTest {
         // 림 스킨 2개, 에르핀 스킨 2개를 추가
         SkinDto rimSkinDto1 = generateSkinDto("림 스킨1");
         SkinDto rimSkinDto2 = generateSkinDto("림 스킨2");
-        Long rimSkinId1 = skinService.createNewSkin(rim_id, rimSkinDto1);
-        Long rimSkinId2 = skinService.createNewSkin(rim_id, rimSkinDto2);
+        Long rimSkinId1 = skinService.createNewSkin(rim_id, rimSkinDto1, null);
+        Long rimSkinId2 = skinService.createNewSkin(rim_id, rimSkinDto2, null);
 
         SkinDto erpinSkinDto1 = generateSkinDto("에르핀 스킨1");
         SkinDto erpinSkinDto2 = generateSkinDto("에르핀 스킨2");
-        Long erpinSkinId1 = skinService.createNewSkin(erpin_id, erpinSkinDto1);
-        Long erpinSkinId2 = skinService.createNewSkin(erpin_id, erpinSkinDto2);
+        Long erpinSkinId1 = skinService.createNewSkin(erpin_id, erpinSkinDto1, null);
+        Long erpinSkinId2 = skinService.createNewSkin(erpin_id, erpinSkinDto2, null);
 
         Skin rim_skin_1 = skinService.findOneSkin(rimSkinId1);
         Skin rim_skin_2 = skinService.findOneSkin(rimSkinId2);
@@ -242,7 +240,7 @@ class SkinServiceTest {
         Long categoryId = skinService.createNewSkinCategory("상시판매");
 
         SkinDto skinDto = generateSkinDto("라크로스 림크로스");
-        Long skinId = skinService.createNewSkin(rim_id, skinDto);
+        Long skinId = skinService.createNewSkin(rim_id, skinDto, null);
 
         // 스킨에 카테고리 추가
         skinService.linkSkinAndCategory(skinId, categoryId);
@@ -252,7 +250,14 @@ class SkinServiceTest {
         // when
         // 이름과 등급 변경
         SkinDto updateDto = generateSkinDto("수정 라크로스 림크로스");
-        Long updateSKinId = skinService.updateSkin(skinId, updateDto);
+
+        // originalSkin이 가지고 있던 카테고리 매핑들 추가
+        List<Long> updateCategoryIds = new ArrayList<>();
+        for (SkinCategoryMapping mapping : originalSkin.getMappings()) {
+            updateCategoryIds.add(mapping.getSkinCategory().getId());
+        }
+        updateDto.setCategoryIds(updateCategoryIds);
+        Long updateSKinId = skinService.updateSkin(skinId, updateDto, rim_id, null);
 
         // then
         Skin updateSkin = skinService.findOneSkin(updateSKinId);
@@ -279,7 +284,7 @@ class SkinServiceTest {
         SkinCategory originCategory = skinService.findOneCategory(savedId);
 
         // when
-        Long updateId = skinService.updateSkinCategory(savedId, "할인중");
+        Long updateId = skinService.updateSkinCategory(savedId, "할인중", null);
 
         // then
         SkinCategory category = skinService.findOneCategory(updateId);
@@ -304,8 +309,8 @@ class SkinServiceTest {
         // 스킨 2개
         SkinDto skinDto1 = generateSkinDto("스킨1");
         SkinDto skinDto2 = generateSkinDto("스킨2");
-        Long skinId1 = skinService.createNewSkin(charId1, skinDto1); // 사도1의 스킨1
-        Long skinId2 = skinService.createNewSkin(charId2, skinDto2); // 사도2의 스킨2
+        Long skinId1 = skinService.createNewSkin(charId1, skinDto1, null); // 사도1의 스킨1
+        Long skinId2 = skinService.createNewSkin(charId2, skinDto2, null); // 사도2의 스킨2
 
         skinService.linkSkinAndCategory(skinId1, cateId1); // 스킨1 -> 카테고리1
         skinService.linkSkinAndCategory(skinId2, cateId2);// 스킨2 -> 카테고리2
@@ -348,7 +353,7 @@ class SkinServiceTest {
         Long categoryId = skinService.createNewSkinCategory("상시판매");
 
         SkinDto skinDto = generateSkinDto("사라질 운명");
-        Long skinId = skinService.createNewSkin(rim_id, skinDto);
+        Long skinId = skinService.createNewSkin(rim_id, skinDto, null);
 
         skinService.linkSkinAndCategory(skinId, categoryId);
 
@@ -386,7 +391,7 @@ class SkinServiceTest {
         Long categoryId = skinService.createNewSkinCategory("상시판매");
 
         SkinDto skinDto = generateSkinDto("라크로스 림크로스");
-        Long skinId = skinService.createNewSkin(rim_id, skinDto);
+        Long skinId = skinService.createNewSkin(rim_id, skinDto, null);
 
         skinService.linkSkinAndCategory(skinId, categoryId);
 

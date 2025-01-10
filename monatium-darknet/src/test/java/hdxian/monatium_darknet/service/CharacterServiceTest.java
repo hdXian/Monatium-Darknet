@@ -208,8 +208,8 @@ class CharacterServiceTest {
         CharacterDto charDto = generateCharDto("림");
         Long rim_id = characterService.createNewCharacter(charDto, generateMockChImageDto(), null);
 
-        SkinDto skinDto = generateSkinDto("라크로스 림크로스", SkinGrade.NORMAL);
-        Long skin_id = skinService.createNewSkin(rim_id, skinDto); // 림 스킨 추가
+        SkinDto skinDto = generateSkinDto("라크로스 림크로스");
+        Long skin_id = skinService.createNewSkin(rim_id, skinDto, null); // 림 스킨 추가
 
         Long category_id = skinService.createNewSkinCategory("상시판매");
         skinService.linkSkinAndCategory(skin_id, category_id);
@@ -235,7 +235,7 @@ class CharacterServiceTest {
         return new CharacterImageDto(null, null, null, null);
     }
 
-    static SkinDto generateSkinDto(String name, SkinGrade grade) {
+    static SkinDto generateSkinDto(String name) {
         SkinDto dto = new SkinDto();
         dto.setName(name);
         dto.setDescription(name + " 스킨 설명");

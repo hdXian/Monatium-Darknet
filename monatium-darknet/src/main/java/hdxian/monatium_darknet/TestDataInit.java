@@ -97,11 +97,11 @@ public class TestDataInit {
         SkinDto skinDto4 = generateSkinDto("무미호의 전설");
         SkinDto skinDto5 = generateSkinDto("파티 나잇 모나티엄");
 
-        Long skinId1 = skinService.createNewSkin(1L, skinDto1);
-        Long skinId2 = skinService.createNewSkin(3L, skinDto2);
-        Long skinId3 = skinService.createNewSkin(4L, skinDto3);
-        Long skinId4 = skinService.createNewSkin(6L, skinDto4);
-        Long skinId5 = skinService.createNewSkin(7L, skinDto5);
+        Long skinId1 = skinService.createNewSkin(1L, skinDto1, null);
+        Long skinId2 = skinService.createNewSkin(3L, skinDto2, null);
+        Long skinId3 = skinService.createNewSkin(4L, skinDto3, null);
+        Long skinId4 = skinService.createNewSkin(6L, skinDto4, null);
+        Long skinId5 = skinService.createNewSkin(7L, skinDto5, null);
 
         Long skinCategoryId1 = skinService.createNewSkinCategory("상시 판매");
         Long skinCategoryId2 = skinService.createNewSkinCategory("할인 중");
