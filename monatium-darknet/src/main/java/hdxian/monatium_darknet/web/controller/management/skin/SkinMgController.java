@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -260,7 +261,8 @@ public class SkinMgController {
         SkinDto dto = new SkinDto();
         dto.setName(skinForm.getName());
         dto.setDescription(skinForm.getStory());
-        dto.setCategoryIds(skinForm.getCategoryIds());
+        ArrayList<Long> categoryIds = new ArrayList<>(new HashSet<>(skinForm.getCategoryIds())); // 중복되는 카테고리 값이 없도록 set으로 한번 필터링
+        dto.setCategoryIds(categoryIds);
 
         return dto;
     }
