@@ -174,28 +174,11 @@
         </section>
     </div>
 
-    <!-- 카드 리스트 컨테이너 -->
-<!--    <div class="card-container d-flex flex-wrap gap-3">-->
-
-<!--        <div class="card" th:each="skin : ${skinList}">-->
-
-<!--            <img th:src="@{ |${skinBaseUrl}${skin.id}| }" class="card-img-top" alt="스킨 이미지">-->
-
-<!--            <div class="card-body">-->
-<!--                <h5 class="card-title" th:text="${skin.name}">사복 이름</h5>-->
-<!--                <p class="card-text">스킨 설명</p>-->
-<!--            </div>-->
-
-<!--        </div>-->
-
-<!--    </div>-->
-
-
     <!-- 사복 목록 -->
     <div class="row" id="skinList">
 
         <!-- 사복 카드 (반복될 요소) -->
-        <div th:each="skin : ${skinList}" class="col-6 col-sm-4 col-lg-2 mb-4 g-3 skin-item">
+        <div th:each="skin : ${skinList}" class="col-6 col-sm-4 col-lg-2 mt-4 mb-4 g-3 skin-item">
 
             <div class="card h-100">
                 <!-- 사복 이미지 -->
@@ -215,18 +198,16 @@
                 <a th:href="@{/management/skins/edit/{id} (id=${skin.id})}" class="btn btn-sm btn-primary">정보 수정</a>
 
                 <!-- 활성화 스위치 -->
-                <button class="btn btn-sm btn-success">
+                <button th:classappend="${skin.status.name() == 'ACTIVE' ? 'btn-success' : 'btn-secondary'}"
+                        th:data-id="${skin.id}"
+                        th:data-name="${skin.name}"
+                        th:data-status="${skin.status.name()}"
+                        th:text="${skin.status.name() == 'ACTIVE' ? '활성화 중' : '비활성화 중'}"
+                        class="btn btn-sm toggle-skin-status">
                     활성화 버튼
                 </button>
-<!--                <button th:classappend="${skin.status.name() == 'ACTIVE' ? 'btn-success' : 'btn-secondary'}"-->
-<!--                        th:data-character-id="${skin.id}"-->
-<!--                        th:data-character-name="${skin.name}"-->
-<!--                        th:data-status="${skin.status.name()}"-->
-<!--                        th:text="${skin.status.name() == 'ACTIVE' ? '활성화 중' : '비활성화 중'}"-->
-<!--                        class="btn btn-sm toggle-character-status">-->
-<!--                    활성화 버튼-->
-<!--                </button>-->
             </div>
+
 
         </div>
 
@@ -239,7 +220,7 @@
     하단 푸터 영역
 </footer>
 
-<!--<script th:src="@{/js/management/characters/characterList.js}" defer></script>-->
+<script th:src="@{/js/management/skins/skinList.js}" defer></script>
 
 </body>
 </html>

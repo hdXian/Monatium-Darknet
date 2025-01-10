@@ -13,6 +13,7 @@ import hdxian.monatium_darknet.service.dto.SkinDto;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -97,8 +98,6 @@ public class SkinMgController {
 
     }
 
-    // TODO - 스킨 수정 로직 추가, 세션 데이터 처리, 캐릭터 미리보기 화면에 스킨 목록 렌더링, 스킨 활성화, 비활성화
-
     // 스킨 수정 페이지
     @GetMapping("/edit/{skinId}")
     public String editForm(HttpSession session, @PathVariable("skinId") Long skinId, Model model) {
@@ -146,6 +145,26 @@ public class SkinMgController {
             return "redirect:/management/skins/edit/" + skinId;
         }
 
+    }
+
+    // TODO - 캐릭터 미리보기 화면에 스킨 목록 렌더링, 스킨 활성화, 비활성화
+
+    @PostMapping("/activate/{skinId}")
+    public ResponseEntity<Void> activate(@PathVariable("skinId") Long skinId) {
+        skinService.activateSkin(skinId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/disable/{skinId}")
+    public ResponseEntity<Void> disable(@PathVariable("skinId") Long skinId) {
+        skinService.disableSkin(skinId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/delete/{skinId}")
+    public ResponseEntity<Void> delete(@PathVariable("skinId") Long skinId) {
+        skinService.deleteSkin(skinId);
+        return ResponseEntity.ok().build();
     }
 
     @ModelAttribute("skinBaseUrl")

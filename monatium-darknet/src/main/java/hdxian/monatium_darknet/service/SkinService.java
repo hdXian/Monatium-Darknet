@@ -4,6 +4,7 @@ import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinCategoryMapping;
+import hdxian.monatium_darknet.domain.skin.SkinStatus;
 import hdxian.monatium_darknet.repository.SkinCategoryRepository;
 import hdxian.monatium_darknet.repository.SkinRepository;
 import hdxian.monatium_darknet.service.dto.SkinDto;
@@ -166,20 +167,32 @@ public class SkinService {
     }
 
     @Transactional
+    public void activateSkin(Long skinId) {
+        Skin skin = findOneSkin(skinId);
+        skin.setStatus(SkinStatus.ACTIVATE);
+    }
+
+    @Transactional
+    public void disableSkin(Long skinId) {
+        Skin skin = findOneSkin(skinId);
+        skin.setStatus(SkinStatus.DISABLE);
+    }
+
+    @Transactional
     public void deleteSkin(Long skinId) {
         Skin skin = findOneSkin(skinId);
-
+        skin.setStatus(SkinStatus.DELETED);
         // 모든 mapping들을 고아 객체로 만들어 JPA가 자동으로 삭제하도록 함. (skin의 mappings의 orphanRemoval = true)
-        List<SkinCategory> categories = findCategoriesBySkin(skinId);
-        for (SkinCategory category : categories) {
-            skin.removeCategory(category);
-        }
+//        List<SkinCategory> categories = findCategoriesBySkin(skinId);
+//        for (SkinCategory category : categories) {
+//            skin.removeCategory(category);
+//        }
 
         // character와의 연관관계도 제거해야 함
-        Character skinCharacter = skin.getCharacter();
-        skinCharacter.removeSkin(skin);
+//        Character skinCharacter = skin.getCharacter();
+//        skinCharacter.removeSkin(skin);
 
-        skinRepository.delete(skin);
+//        skinRepository.delete(skin);
     }
 
     @Transactional

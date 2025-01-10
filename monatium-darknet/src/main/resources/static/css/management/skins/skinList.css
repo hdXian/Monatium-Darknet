@@ -1,6 +1,5 @@
 
 .card {
-    /* width: 20%; */
     cursor: pointer;
     text-decoration: none;
     color: inherit;
@@ -14,32 +13,30 @@
 }
 
 .card-body {
-  pointer-events: none;
+    flex-grow: 1;
+    pointer-events: none;
+}
+
+.card-title {
+    font-size: 1rem; /* 글자 크기를 줄여서 높이 감소 */
+    margin-bottom: 0.25rem; /* 제목 아래 여백 축소 */
+}
+
+.card-text {
+    font-size: 0.875rem; /* 글자 크기를 줄임 */
+    margin: 0; /* 불필요한 마진 제거 */
 }
 
 .card-img-top {
-    height: 300px;
+    /* height: 300px; */
+    height: 70%;
     object-fit: contain;
     background-color: #f8f9fa; /* 빈 공간을 보완하기 위해 배경색 추가 */
 }
 
 /* 카드 이미지 우측의 모든 콘텐츠 내용 */
-.card-title {
-    font-size: 1.2rem; /* 아이템 이름의 글씨 크기 */
-    margin: 0;
+button {
+    font-size: 1.5vw; /* 뷰포트 너비의 2%에 해당하는 크기 */
 }
 
-/* 카드 설명 */
-.spell-story {
-    color: #555; /* 효과 설명 텍스트 색상 */
-}
-
-/* 콘텐츠 스타일 */
-.content {
-    padding: 20px;
-}
-
-.green-text {
-    color: #4CAF50;
-}
 

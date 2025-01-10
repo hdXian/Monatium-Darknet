@@ -25,6 +25,9 @@ public class Skin {
 //    @Enumerated(EnumType.STRING)
 //    private SkinGrade grade;
 
+    @Enumerated(EnumType.STRING)
+    private SkinStatus status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id")
     private Character character;
@@ -51,6 +54,7 @@ public class Skin {
         skin.setName(name);
 //        skin.setGrade(grade);
         skin.setDescription(description);
+        skin.setStatus(SkinStatus.DISABLE);
 //        skin.setCharacter(character);
         character.addSkin(skin); // 연관관계 메서드
 
