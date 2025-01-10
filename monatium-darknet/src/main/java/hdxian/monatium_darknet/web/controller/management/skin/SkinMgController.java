@@ -149,8 +149,6 @@ public class SkinMgController {
 
     }
 
-    // TODO - 캐릭터 미리보기 화면에 스킨 목록 렌더링, 스킨 활성화, 비활성화
-
     @PostMapping("/activate/{skinId}")
     public ResponseEntity<Void> activate(@PathVariable("skinId") Long skinId) {
         skinService.activateSkin(skinId);
