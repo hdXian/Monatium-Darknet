@@ -43,7 +43,7 @@
                 <td>
                     <a class="me-2" th:href="@{/management/skins?category={id} (id=${category.id})}"><button class="btn btn-success btn-sm">스킨 목록 보기</button></a>
                     <a class="me-2" th:href="@{/management/skins/categories/edit/{id} (id=${category.id})}"><button class="btn btn-primary btn-sm">수정하기</button></a>
-                    <button id="delCategory-btn" class="btn btn-sm btn-danger" th:data-id="${category.id}" th:data-name="${category.name}">주말 농장</button>
+                    <button class="btn btn-sm btn-danger delCategory-btn" th:data-id="${category.id}" th:data-name="${category.name}">주말 농장</button>
                 </td>
             </tr>
         </tbody>
