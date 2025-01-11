@@ -76,6 +76,7 @@ public class NoticeRepository {
                         likeContent(content),
                         memberIdEq(memberId)
                 )
+                .orderBy(notice.id.desc()) // id 기반 내림차순
                 .offset(pageable.getOffset()) // 시작 위치
                 .limit(pageable.getPageSize()) // 한 페이지에 보여줄 데이터 수
                 .fetch();

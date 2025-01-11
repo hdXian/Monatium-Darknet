@@ -177,7 +177,7 @@ public class NoticeService {
         int pageSize = 10; // 기본 페이지 사이즈는 10
 
         if (pageNumber < 1) pageNumber = 1;
-        PageRequest request = PageRequest.of(pageNumber-1, pageSize, Sort.by("id").descending());
+        PageRequest request = PageRequest.of(pageNumber-1, pageSize);
         return noticeRepository.findAll(searchCond, request);
     }
 

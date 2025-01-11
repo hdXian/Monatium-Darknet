@@ -57,9 +57,19 @@ public class NoticeMgController {
         searchCond.setTitle(title);
         Page<Notice> noticePage = noticeService.findAll_Paging(searchCond, pageNumber);
 
-        // 한번에 페이지가 5개씩만 나오도록 조정
-        int totalPages = noticePage.getTotalPages();
+        setPages(noticePage.getTotalPages(), pageNumber, model);
 
+        List<Notice> noticeList = noticePage.getContent();
+        model.addAttribute("noticeList", noticeList);
+
+        model.addAttribute("curCategory", category);
+        model.addAttribute("page", noticePage);
+        model.addAttribute("query", title);
+        return "management/notice/noticeList";
+    }
+
+    private void setPages(int totalPages, int pageNumber, Model model) {
+        // 한번에 페이지가 5개씩만 나오도록 조정
         int maxPages = 5;
         int idx = pageNumber-1;
 
@@ -71,19 +81,11 @@ public class NoticeMgController {
             startPage = (maxPages * (idx / 5)) + 1; // 5 * (현재 페이지를 maxPage로 나눈 몫)을 시작 페이지 번호로 지정
         }
 
-        int endPage = Math.min((noticePage.getTotalPages()), (startPage + maxPages - 1));
+        int endPage = Math.min(totalPages, (startPage + maxPages - 1));
         if (endPage == 0)
             endPage = 1;
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
-
-        List<Notice> noticeList = noticePage.getContent();
-        model.addAttribute("noticeList", noticeList);
-
-        model.addAttribute("curCategory", category);
-        model.addAttribute("page", noticePage);
-        model.addAttribute("query", title);
-        return "management/notice/noticeList";
     }
 
     // 공지사항 작성 페이지
