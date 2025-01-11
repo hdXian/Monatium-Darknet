@@ -176,6 +176,7 @@ public class NoticeService {
     public Page<Notice> findAll_Paging(NoticeSearchCond searchCond, Integer pageNumber) {
         int pageSize = 10; // 기본 페이지 사이즈는 10
 
+        if (pageNumber < 1) pageNumber = 1;
         PageRequest request = PageRequest.of(pageNumber-1, pageSize, Sort.by("id").descending());
         return noticeRepository.findAll(searchCond, request);
     }
