@@ -213,10 +213,17 @@ public class SkinMgController {
 
     // === 스킨 카테고리 ===
     @GetMapping("/categories")
-    public String categoryList(Model model) {
-        List<SkinCategory> categoryList = skinService.findAllCategories();
+    public String categoryList(@RequestParam(value = "query", required = false) String name, Model model) {
+        List<SkinCategory> categoryList;
+        if (name != null) {
+            categoryList = skinService.findCategoriesByName(name);
+        }
+        else {
+            categoryList = skinService.findAllCategories();
+        }
 
         model.addAttribute("categoryList", categoryList);
+        model.addAttribute("query", name);
         return "management/skins/categoryList";
     }
 

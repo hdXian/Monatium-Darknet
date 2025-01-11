@@ -260,6 +260,10 @@ public class SkinService {
         return categoryRepository.findBySkinId(skinId);
     }
 
+    public List<SkinCategory> findCategoriesByName(String name) {
+        return categoryRepository.findByName(name);
+    }
+
     public List<SkinCategory> findAllCategories() {
         return categoryRepository.findAll();
     }

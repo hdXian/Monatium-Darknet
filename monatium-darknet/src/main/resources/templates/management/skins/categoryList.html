@@ -22,7 +22,10 @@
         <a th:href="@{/management/skins/categories/new}">
             <button class="btn btn-primary">+ 카테고리 추가</button>
         </a>
-        <input type="text" class="form-control w-25" placeholder="검색">
+        <form class="d-flex w-25" method="get" th:action="@{/management/skins/categories}">
+            <input type="text" name="query" class="form-control form-control-sm" placeholder="검색할 제목을 입력하세요" th:value="${query}">
+            <button class="btn btn-sm btn-primary ms-2" type="submit">검색</button>
+        </form>
     </div>
 
     <!-- 스킨 카테고리 목록 테이블 -->
