@@ -77,7 +77,7 @@ public class CardService {
 
         Optional<Character> findCharacter = characterRepository.findOne(characterId);
         if (findCharacter.isEmpty()) {
-            throw new NoSuchElementException("해당 캐릭터가 존재하지 않습니다. characterId=" + characterId);
+            throw new NoSuchElementException("대상 캐릭터가 존재하지 않습니다. characterId=" + characterId);
         }
 
         Character character = findCharacter.get();
@@ -112,7 +112,7 @@ public class CardService {
 
         updateCard(spellCard, updateParam); // 더티 체킹 업데이트
 
-        // 이미지가 바뀌지 않았으면 imagePath는 null로 넘어옴
+        // imagePath가 null이다 -> 변경하지 않는다
         if (imagePath != null) {
             imagePathService.saveSpellCardImage(cardId, imagePath); // 카드 이미지 업데이트
         }
@@ -131,6 +131,7 @@ public class CardService {
 
         updateCard(artifactCard, updateParam);
 
+        // imagePath가 null이다 -> 변경하지 않는다
         if (imagePath != null) {
             imagePathService.saveArtifactCardImage(cardId, imagePath);
         }
@@ -150,7 +151,7 @@ public class CardService {
         if (updateCharacterId != null) {
             Optional<Character> findCharacter = characterRepository.findOne(updateCharacterId);
             if (findCharacter.isEmpty()) {
-                throw new NoSuchElementException("해당 캐릭터가 존재하지 않습니다. updateCharacterId=" + updateCharacterId);
+                throw new NoSuchElementException("대상 캐릭터가 존재하지 않습니다. updateCharacterId=" + updateCharacterId);
             }
             updateCharacter = findCharacter.get();
         }
@@ -166,6 +167,7 @@ public class CardService {
 
         updateCard(artifactCard, updateParam, updateCharacter, updateSkill); // character와 skill은 인자로 null이 전달되면 null로 세팅됨 (애착 사도 효과 제거)
 
+        // imagePath가 null이다 -> 변경하지 않는다
         if (imagePath != null) {
             imagePathService.saveArtifactCardImage(cardId, imagePath);
         }
