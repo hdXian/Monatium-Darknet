@@ -34,9 +34,13 @@
     background-color: #f8f9fa; /* 빈 공간을 보완하기 위해 배경색 추가 */
 }
 
-/* 카드 이미지 우측의 모든 콘텐츠 내용 */
 button {
-    font-size: 1.5vw; /* 뷰포트 너비의 2%에 해당하는 크기 */
+    font-size: 0.875rem; /* 글자 크기를 고정된 단위로 설정 */
+    white-space: nowrap; /* 텍스트가 줄 바뀌지 않도록 설정 */
+    padding: 0.25rem 0.5rem; /* 버튼 내부 여백 조정 */
+    display: inline-flex; /* 플렉스 정렬 사용 */
+    align-items: center; /* 텍스트 수직 중앙 정렬 */
+    justify-content: center; /* 텍스트 수평 중앙 정렬 */
 }
 
 

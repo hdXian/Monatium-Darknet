@@ -46,3 +46,38 @@ document.addEventListener('click', function(event) {
             });
     }
 });
+
+// 스킨 검색 기능
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+    const skinItems = document.querySelectorAll('.skin-item');
+
+    // 검색 로직
+    const filterSkins = () => {
+        const query = searchInput.value.toLowerCase().trim();
+
+        skinItems.forEach(item => {
+            const title = item.querySelector('.card-title span').textContent.toLowerCase();
+
+            // 검색어가 제목에 포함되면 표시, 그렇지 않으면 숨김
+            if (title.includes(query)) {
+                item.style.display = ''; // 기본 표시
+            } else {
+                item.style.display = 'none'; // 숨김
+            }
+        });
+    };
+
+    // 검색 버튼 클릭 시 검색 실행
+    searchButton.addEventListener('click', filterSkins);
+
+    // 검색창에서 Enter 키로 검색 실행
+    searchInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // 기본 Enter 동작(폼 제출) 방지
+            filterSkins();
+        }
+    });
+});
+
