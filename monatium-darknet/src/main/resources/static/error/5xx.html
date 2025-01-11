@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>에러 페이지 - 짭릭컬 리리바이브</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .error-code {
+            font-size: 48px;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+        .container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container .message {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .container img {
+            width: 60%;
+            aspect-ratio: 3 / 2;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        .container .home-link {
+            display: inline-block;
+            font-size: 18px;
+            color: #007bff;
+            text-decoration: none;
+            border: 1px solid #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container .home-link:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="container">
+    <div class="error-code">
+        500 Error
+    </div>
+
+    <div class="message">
+        서버에 뭔가 문제가 있는 것 같아요.. 나중에 다시 찾아주시겠어요?
+    </div>
+
+    <img src="/imgs/error-500.png" alt="Error Image">
+    <a href="/" class="home-link">홈으로 돌아가기</a>
+</div>
+
+</body>
+</html>
