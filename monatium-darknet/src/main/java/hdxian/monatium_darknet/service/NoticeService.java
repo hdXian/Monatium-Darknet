@@ -39,8 +39,6 @@ public class NoticeService {
     @Value("${file.noticeDir}")
     private String noticeBaseDir;
 
-    // TODO - 공지사항 리스트 불러올 시 페이징 추가 필요
-
     // 공지사항 추가 기능
     @Transactional
     public Long createNewNotice(Long memberId, NoticeDto noticeDto) {
@@ -150,6 +148,20 @@ public class NoticeService {
             throw new NoSuchElementException("해당 공지사항이 없습니다. id=" + noticeId);
         }
         return find.get();
+    }
+
+    @Transactional
+    public Notice findOnePublic(Long noticeId) {
+        Optional<Notice> find = noticeRepository.findOne(noticeId);
+        if (find.isEmpty()) {
+            throw new NoSuchElementException("해당 공지사항이 없습니다. id=" + noticeId);
+        }
+
+        Notice notice = find.get();
+        if (notice.getStatus() == NoticeStatus.PUBLIC)
+            return notice;
+        else 
+            return null;
     }
 
     public List<Notice> findAll() {

@@ -143,13 +143,4 @@ public class NoticeMgController {
         return ResponseEntity.ok().build();
     }
 
-    @Data
-    @AllArgsConstructor
-    static class NoticeStatusResponseDto {
-        private boolean success;
-        private NoticeStatus newStatus;
-    }
-
-
-
 }

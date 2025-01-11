@@ -8,6 +8,7 @@ import hdxian.monatium_darknet.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/notices")
@@ -67,12 +70,16 @@ public class NoticeController {
 
     @GetMapping("/{noticeId}")
     public String getDetail(@PathVariable("noticeId") Long noticeId, Model model) {
-        Notice notice = noticeService.findOne(noticeId);
-        // TODO - 공개된 공지사항 아니면 노출 안되도록 검증 필요. 보안 패치 및 에러 페이지 추가할 때 같이 추가할 듯.
-//        if (notice.getStatus() != NoticeStatus.PUBLIC) {
-//            throw new IllegalStateException("공개되지 않은 공지사항입니다..?");
-//        }
-        noticeService.incrementView(noticeId); // 조회수 증가
+        Notice notice = noticeService.findOnePublic(noticeId);
+        // TODO - 에러 페이지 추가 필요
+        if (notice != null) {
+            noticeService.incrementView(noticeId); // 조회수 증가
+        }
+        else {
+            // send error Page...
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid notice ID"); // 404 에러
+        }
+
         model.addAttribute("notice", notice);
 
         return "notice/noticeDetail";
