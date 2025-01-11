@@ -50,9 +50,11 @@ public class NoticeMgController {
 
     @GetMapping
     public String noticeList_Paging(@RequestParam(value = "page", required = false, defaultValue = "1") Integer pageNumber,
-                                    @RequestParam(value = "category", required = false) NoticeCategory category, Model model) {
+                                    @RequestParam(value = "category", required = false) NoticeCategory category,
+                                    @RequestParam(value = "query", required = false) String title, Model model) {
         NoticeSearchCond searchCond = new NoticeSearchCond();
         searchCond.setCategory(category);
+        searchCond.setTitle(title);
 //        List<Notice> noticeList = noticeService.findAll(searchCond);
         Page<Notice> noticePage = noticeService.findAll_Paging(searchCond, pageNumber);
 
@@ -71,6 +73,7 @@ public class NoticeMgController {
 
         model.addAttribute("curCategory", category);
         model.addAttribute("page", noticePage);
+        model.addAttribute("query", title);
         return "management/notice/noticeList";
     }
 
