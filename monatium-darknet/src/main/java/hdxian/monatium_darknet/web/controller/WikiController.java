@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Controller
@@ -47,7 +46,7 @@ public class WikiController {
     @GetMapping("/characters/{id}")
     public String characterInfo(@PathVariable("id") Long characterId, Model model) {
 
-        Character character = characterService.findOneWiki(characterId);
+        Character character = characterService.findOneActive(characterId);
         SkinSearchCond searchCond = new SkinSearchCond();
         searchCond.setCharacterId(characterId);
         searchCond.setStatus(SkinStatus.ACTIVE); // 활성화된 스킨만 노출

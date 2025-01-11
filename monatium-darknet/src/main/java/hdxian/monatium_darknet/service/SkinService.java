@@ -197,11 +197,13 @@ public class SkinService {
     public void deleteSkin(Long skinId) {
         Skin skin = findOneSkin(skinId);
         skin.setStatus(SkinStatus.DELETED);
+
+        // 카테고리와의 연관고리도 끊는다.
         // 모든 mapping들을 고아 객체로 만들어 JPA가 자동으로 삭제하도록 함. (skin의 mappings의 orphanRemoval = true)
-//        List<SkinCategory> categories = findCategoriesBySkin(skinId);
-//        for (SkinCategory category : categories) {
-//            skin.removeCategory(category);
-//        }
+        List<SkinCategory> categories = findCategoriesBySkin(skinId);
+        for (SkinCategory category : categories) {
+            skin.removeCategory(category);
+        }
 
         // character와의 연관관계도 제거해야 함
 //        Character skinCharacter = skin.getCharacter();

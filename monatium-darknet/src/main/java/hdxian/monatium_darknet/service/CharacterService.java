@@ -1,16 +1,17 @@
 package hdxian.monatium_darknet.service;
 
-import hdxian.monatium_darknet.domain.Attribute;
-import hdxian.monatium_darknet.domain.Skill;
-import hdxian.monatium_darknet.domain.SkillCategory;
-import hdxian.monatium_darknet.domain.card.ArtifactCard;
 import hdxian.monatium_darknet.domain.card.Card;
-import hdxian.monatium_darknet.domain.character.Attack;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.character.CharacterStatus;
+import hdxian.monatium_darknet.domain.skin.Skin;
+import hdxian.monatium_darknet.domain.skin.SkinCategory;
+import hdxian.monatium_darknet.domain.skin.SkinStatus;
 import hdxian.monatium_darknet.repository.CardRepository;
 import hdxian.monatium_darknet.repository.CharacterRepository;
+import hdxian.monatium_darknet.repository.SkinCategoryRepository;
+import hdxian.monatium_darknet.repository.SkinRepository;
 import hdxian.monatium_darknet.repository.dto.CharacterSearchCond;
+import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.dto.AsideImageDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
@@ -29,6 +30,8 @@ public class CharacterService {
 
     private final CardRepository cardRepository;
     private final CharacterRepository characterRepository;
+    private final SkinRepository skinRepository;
+    private final SkinCategoryRepository skinCategoryRepository;
 
     private final ImagePathService imagePathService;
 
@@ -124,7 +127,6 @@ public class CharacterService {
         Character ch = findOne(characterId);
         ch.setStatus(CharacterStatus.DELETED);
 
-        // TODO - 스킨, 카드 비활성화 로직 추가 필요 (스킨 관리 기능 마저 다 개발하고 진행할 듯)
         Optional<Card> findCard = cardRepository.findOneArtifactByCharacterId(characterId);
 
         // 그럼 아티팩트 카드 추가할 때도 이미 애착 사도가 있는지 확인해야 하나? 아티팩트 카드에 @OneToOne이 걸려있기는 함.
@@ -134,6 +136,23 @@ public class CharacterService {
             Card artifactCard = findCard.get();
             artifactCard.removeCharacter(); // 애착 사도, 애착 스킬 제거
             cardRepository.save(artifactCard);
+        }
+
+        // 스킨 삭제 로직
+        SkinSearchCond skinSearchCond = new SkinSearchCond();
+        skinSearchCond.setCharacterId(characterId);
+        List<Skin> findSkins = skinRepository.findAll(skinSearchCond);
+        for (Skin skin : findSkins) {
+            // 스킨이 해당하는 카테고리들을 조회
+            List<SkinCategory> skinCategories = skinCategoryRepository.findBySkinId(skin.getId());
+
+            // 해당 카테고리들을 제거
+            for (SkinCategory category : skinCategories) {
+                skin.removeCategory(category);
+            }
+
+            // 스킨의 상태를 DELETED로 변경
+            skin.setStatus(SkinStatus.DELETED);
         }
 
     }
@@ -147,7 +166,7 @@ public class CharacterService {
         return find.get();
     }
 
-    public Character findOneWiki(Long id) {
+    public Character findOneActive(Long id) {
         Character character = findOne(id);
         if (character.getStatus() != CharacterStatus.ACTIVE) {
             throw new NoSuchElementException("해당 캐릭터가 없습니다. id=" + id);
