@@ -5,6 +5,7 @@ import hdxian.monatium_darknet.domain.notice.MemberStatus;
 import hdxian.monatium_darknet.repository.MemberRepository;
 import hdxian.monatium_darknet.service.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,16 +20,19 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     // 회원 추가 기능
     @Transactional
     public Long createNewMember(MemberDto memberDto) {
 
         checkLoginId(memberDto.getLoginId());
         checkNickname(memberDto.getNickName());
+        String encoded = encodePassword(memberDto.getPassword());
 
         Member member = Member.createMember(
                 memberDto.getLoginId(),
-                memberDto.getPassword(),
+                encoded,
                 memberDto.getNickName()
         );
 
@@ -48,7 +52,10 @@ public class MemberService {
         }
 
         member.setLoginId(updateParam.getLoginId());
-        member.setPassword(updateParam.getPassword());
+
+        String encoded = encodePassword(updateParam.getPassword());
+        member.setPassword(encoded);
+
         member.setNickName(updateParam.getNickName());
         return member.getId();
     }
@@ -62,7 +69,7 @@ public class MemberService {
     @Transactional
     public void deactivateMember(Long memberId) {
         Member member = findOne(memberId);
-        member.setStatus(MemberStatus.INACTIVE); // 상태만 INACTIVE로 변경. 실제 DB 삭제 x.
+        member.setStatus(MemberStatus.INACTIVE);
     }
 
     // 회원 검색 기능
@@ -108,6 +115,8 @@ public class MemberService {
         }
     }
 
-
+    private String encodePassword(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
+    }
 
 }

@@ -29,6 +29,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
+	// spring boot security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
 	// add p6spy decorator (for test)
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.2'
 
