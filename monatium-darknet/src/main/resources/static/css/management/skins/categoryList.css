@@ -14,13 +14,10 @@
 }
 
 /* 열 별 너비 설정 */
-.col1 { width: 5%; }         /* ID 열 */
-.col2 { width: 30%; }     /* 제목 열 */
-.col3 { width: 15%; }    /* 작성자 열 */
-.col4 { width: 15%; }      /* 작성일 열 */
-.col5 { width: 15%; }  /* 카테고리 열 */
-.col6 { width: 10%; }    /* 상태 열 */
-.col7 { width: 10%; }   /* 조작 열 */
+.col1 { width: 5%; }
+.col2 { width: 30%; }
+.col3 { width: 15%; }
+.col4 { width: 50%; }
 
 /* 버튼 색상 정의 */
 .btn-update {

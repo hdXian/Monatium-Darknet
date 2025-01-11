@@ -1,122 +1,46 @@
 
 .card {
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* 카드 커스텀 스타일 */
-.card-custom {
-    height: 100%; /* 모든 카드가 동일한 높이 */
-    margin: auto;
-}
-
-.card-custom .card-body {
-    display: flex;
-    align-items: center;
-}
-
+/* 카드 스타일 */
 .card:hover {
   transform: scale(1.02);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .card-body {
-  pointer-events: none;
+    flex-grow: 1;
+    pointer-events: none;
+}
+
+.card-title {
+    font-size: 1rem; /* 글자 크기를 줄여서 높이 감소 */
+    margin-bottom: 0.25rem; /* 제목 아래 여백 축소 */
+}
+
+.card-text {
+    font-size: 0.875rem; /* 글자 크기를 줄임 */
+    margin: 0; /* 불필요한 마진 제거 */
 }
 
 .card-img-top {
-    height: 150px;
+    /* height: 300px; */
+    height: 70%;
     object-fit: contain;
     background-color: #f8f9fa; /* 빈 공간을 보완하기 위해 배경색 추가 */
 }
 
-/* 카드 이미지 우측의 모든 콘텐츠 내용 */
-.spell-content {
-    flex-grow: 1;
-}
-
-.card-title {
-    font-size: 1.5rem; /* 아이템 이름의 글씨 크기 */
-    margin: 0;
-}
-
-/* 카드 등급, 코스트 묶음 */
-.spell-info {
-    font-size: 0.9em; /* 코스트 정보의 글씨 크기 */
-    margin-left: 10px; /* 아이템 이름과 간격 조절 */
-}
-
-.spell-image {
-    width: 120px; /* 고정된 가로 크기 */
-    height: auto; /* 비율 유지 */
-    max-height: 150px; /* 최대 높이 제한 */
-    margin-right: 15px;
-    border: 5px solid #D3D3D3;
-    border-radius: 8px;
-    object-fit: cover; /* 이미지를 잘라서 테두리와 맞춤 */
-    box-sizing: border-box; /* 테두리를 포함하여 크기를 계산 */
-}
-
-
-/* 카드 능력치 */
-.spell-stats {
-    font-size: 1rem; /* 능력치 설명의 글씨 크기 */
-    color: #333; /* 기본 텍스트 색상 */
-    margin-top: 5px; /* 등급과 능력치 사이의 간격 */
-}
-
-/* 카드 효과 */
-.spell-effect {
-    font-size: 1rem; /* 효과 설명의 글씨 크기 */
-    margin-top: 5px; /* 등급과 효과 사이의 간격 */
-}
-
-/* 카드 설명 */
-.spell-story {
-    color: #555; /* 효과 설명 텍스트 색상 */
-}
-
-/* 콘텐츠 스타일 */
-.content {
-    padding: 20px;
-}
-
-.green-text {
-    color: #4CAF50;
-}
-
-.legendary-border {
-    border-color: #800080; /* 전설 등급의 보라색 테두리 */
-}
-
-.legendary-text {
-    color: #800080;
-}
-
-.rare-border {
-    border-color: skyblue;
-}
-
-.rare-text {
-    color: skyblue;
-}
-
-.advanced-border {
-    border-color: #4CAF50;
-}
-
-.advanced-text {
-    color: #4CAF50;
-}
-
-.normal-border {
-    border-color: #D3D3D3;
-}
-
-.normal-text {
-    color: #808080;
+button {
+    font-size: 0.875rem; /* 글자 크기를 고정된 단위로 설정 */
+    white-space: nowrap; /* 텍스트가 줄 바뀌지 않도록 설정 */
+    padding: 0.25rem 0.5rem; /* 버튼 내부 여백 조정 */
+    display: inline-flex; /* 플렉스 정렬 사용 */
+    align-items: center; /* 텍스트 수직 중앙 정렬 */
+    justify-content: center; /* 텍스트 수평 중앙 정렬 */
 }
 
 

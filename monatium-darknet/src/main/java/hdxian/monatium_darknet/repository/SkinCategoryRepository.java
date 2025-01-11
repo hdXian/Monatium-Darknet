@@ -60,6 +60,15 @@ public class SkinCategoryRepository {
                 .getResultList();
     }
 
+    public List<SkinCategory> findByName(String name) {
+        String jpql = "select sc from SkinCategory sc" + " "
+                + "where sc.name like concat('%', :name, '%')";
+
+        return em.createQuery(jpql, SkinCategory.class)
+                .setParameter("name", name)
+                .getResultList();
+    }
+
     public List<SkinCategory> findAll() {
         String jpql = "select sc from SkinCategory sc";
         return em.createQuery(jpql, SkinCategory.class).getResultList();

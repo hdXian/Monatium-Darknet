@@ -92,10 +92,32 @@ public class TestDataInit {
 
         // 스킨 테스트 데이터 추가 (하드코딩, 1개 넣었음)
         SkinDto skinDto1 = generateSkinDto("하드워킹 홀리데이");
-        Long skinId = skinService.createNewSkin(1L, skinDto1);
+        SkinDto skinDto2 = generateSkinDto("세이프티 가드");
+        SkinDto skinDto3 = generateSkinDto("학생회장의 품격");
+        SkinDto skinDto4 = generateSkinDto("무미호의 전설");
+        SkinDto skinDto5 = generateSkinDto("파티 나잇 모나티엄");
 
-        String skinBaseUrl = "/imgs/wiki/skin/";
-        skinService.updateImageUrl(skinId, skinBaseUrl + 1L + "/" + skinId + ".webp");
+        Long skinId1 = skinService.createNewSkin(1L, skinDto1, null);
+        Long skinId2 = skinService.createNewSkin(3L, skinDto2, null);
+        Long skinId3 = skinService.createNewSkin(4L, skinDto3, null);
+        Long skinId4 = skinService.createNewSkin(6L, skinDto4, null);
+        Long skinId5 = skinService.createNewSkin(7L, skinDto5, null);
+
+        Long skinCategoryId1 = skinService.createNewSkinCategory("상시 판매");
+        Long skinCategoryId2 = skinService.createNewSkinCategory("할인 중");
+        Long skinCategoryId3 = skinService.createNewSkinCategory("할로윈 이벤트"); // 해당하는 스킨이 없는 카테고리
+        skinService.linkSkinAndCategory(skinId1, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId2, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId3, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId4, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId5, skinCategoryId1);
+
+        skinService.linkSkinAndCategory(skinId1, skinCategoryId2);
+        skinService.linkSkinAndCategory(skinId2, skinCategoryId2);
+        skinService.linkSkinAndCategory(skinId3, skinCategoryId2);
+
+//        String skinBaseUrl = "/imgs/wiki/skin/";
+//        skinService.updateImageUrl(skinId, skinBaseUrl + 1L + "/" + skinId + ".webp");
 
         // 아티팩트 카드 테스트 데이터 추가
         CardDto cardDto1 = generateArtifactDto("벨리타의 지팡이", CardGrade.LEGENDARY); // 벨리타는 2번

@@ -2,11 +2,14 @@ package hdxian.monatium_darknet.web.controller.management.character;
 
 import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
+import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.CharacterService;
 import hdxian.monatium_darknet.service.ImagePathService;
 import hdxian.monatium_darknet.service.ImageUrlService;
+import hdxian.monatium_darknet.service.SkinService;
 import hdxian.monatium_darknet.service.dto.AsideImageDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
@@ -39,6 +42,7 @@ import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
 public class CharacterMgController {
 
     private final CharacterService characterService;
+    private final SkinService skinService;
     private final LocalFileStorageService fileStorageService;
 
     private final ImageUrlService imageUrlService;
@@ -65,7 +69,13 @@ public class CharacterMgController {
     public String preView(@PathVariable("characterId") Long characterId, Model model) {
         Character character = characterService.findOne(characterId);
 
+        SkinSearchCond searchCond = new SkinSearchCond();
+        searchCond.setCharacterId(characterId);
+        List<Skin> skinList = skinService.findAllSkin(searchCond);
+
         model.addAttribute("character", character);
+        model.addAttribute("skinList", skinList);
+        model.addAttribute("skinBaseUrl", imageUrlService.getSkinBaseUrl());
         return "/management/characters/characterPreview";
     }
 
@@ -99,28 +109,25 @@ public class CharacterMgController {
 
         addImageUrlsOnModelStep1(session, model); // 이미지 url 처리 (검증 전에 url은 처리해야 함)
 
-        chForm1Validator.validate(chForm, bindingResult); // step1에 좋아하는 것 리스트 커스텀 검증 추가
-
-        if (bindingResult.hasErrors()) {
-            return "management/characters/addChStep1";
-        }
-
-//        log.info("chForm1 = {}", chForm);
-//        for (String favorite : chForm.getFavorites()) {
-//            log.info("favorite = {}", favorite);
-//        }
-
         uploadImagesToTemp(session, chForm); // 이미지 임시경로 업로드 처리
 
         session.setAttribute(CHFORM_STEP1, chForm); // 폼 데이터를 세션에 저장
 
-        String redirectUrl;
-        switch (action) {
-            case "next" -> redirectUrl = "redirect:/management/characters/new/step2";
-            default -> redirectUrl = "redirect:/management/characters/new/step1";
+        // 다음 단계로 넘어갈 경우 필드 검증 수행
+        if (action.equals("next")) {
+            chForm1Validator.validate(chForm, bindingResult); // step1에 좋아하는 것 리스트 커스텀 검증 추가
+
+            if (bindingResult.hasErrors()) {
+                return "management/characters/addChStep1";
+            }
+
+            return "redirect:/management/characters/new/step2";
+        }
+        // 임시저장인 경우 그냥 넘어감
+        else {
+            return "redirect:/management/characters/new/step1";
         }
 
-        return redirectUrl;
     }
 
     // 2단계 폼 페이지
@@ -137,25 +144,27 @@ public class CharacterMgController {
                              @Validated @ModelAttribute("chForm")ChFormStep2 chForm, BindingResult bindingResult) {
 
         // 취소 버튼은 검증 건너뛰고 목록으로 돌아감
-        if(action.equals("cancel")) {
+        if (action.equals("cancel")) {
             return "redirect:/management/characters";
         }
 
-        if (bindingResult.hasErrors()) {
-            return "management/characters/addChStep2";
-        }
-
-//        log.info("chForm2 = {}", chForm);
         session.setAttribute(CHFORM_STEP2, chForm);
 
-        String redirectUrl;
-        switch(action) {
-            case "prev" -> redirectUrl = "redirect:/management/characters/new/step1";
-            case "next" -> redirectUrl = "redirect:/management/characters/new/step3";
-            default -> redirectUrl = "redirect:/management/characters/new/step2";
+        // 다음 단계로 넘어갈 경우 -> 검증 수행
+        if (action.equals("next")) {
+            if (bindingResult.hasErrors()) {
+                return "management/characters/addChStep2";
+            }
+            return "redirect:/management/characters/new/step3";
+        }
+        // 이전으로 넘어가거나 임시저장인 경우 -> 검증하지 않음
+        else if (action.equals("prev")) {
+            return "redirect:/management/characters/new/step1";
+        }
+        else {
+            return "redirect:/management/characters/new/step2";
         }
 
-        return redirectUrl;
     }
 
     // 3단계 폼 페이지
@@ -181,25 +190,25 @@ public class CharacterMgController {
         // 모델에 이미지 url 추가 (검증 실패 대비)
         addImageUrlsOnModelStep3(session, model);
 
-        chForm3Validator.validate(chForm, bindingResult); // Attribute 배열과 강화 공격 필드에 대한 검증
-
-        if (bindingResult.hasErrors()) {
-            return "management/characters/addChStep3";
-        }
-
         uploadImagesToTemp(session, chForm); // 이미지 임시경로 업로드 처리
 
-//        log.info("chForm3 = {}", chForm);
         session.setAttribute(CHFORM_STEP3, chForm); // 세션에 폼 데이터 저장
 
-        String redirectUrl;
-        switch(action) {
-            case "prev" -> redirectUrl = "redirect:/management/characters/new/step2";
-            case "next" -> redirectUrl = "redirect:/management/characters/new/step4";
-            default -> redirectUrl = "redirect:/management/characters/new/step3";
+        if (action.equals("next")) {
+            chForm3Validator.validate(chForm, bindingResult); // Attribute 배열과 강화 공격 필드에 대한 검증
+
+            if (bindingResult.hasErrors()) {
+                return "management/characters/addChStep3";
+            }
+            return "redirect:/management/characters/new/step4";
+        }
+        else if (action.equals("prev")) {
+            return "redirect:/management/characters/new/step2";
+        }
+        else {
+            return "redirect:/management/characters/new/step3";
         }
 
-        return redirectUrl;
     }
 
     // 4단계 폼 페이지
@@ -226,26 +235,26 @@ public class CharacterMgController {
 
         addImageUrlsOnModelStep4(session, model);
 
-        // chForm4에 대한 검증 수행 -> 별도의 Validator에서 Bean Validation을 함께 쓰는 경우 @Validated 쓸 필요 없음
-        chForm4Validator.validate(chForm, bindingResult);
-
-        if (bindingResult.hasErrors()) {
-            return "management/characters/addChStep4";
-        }
-
         uploadImagesToTemp(session, chForm);
 
-//        log.info("chForm4 = {}", chForm);
         session.setAttribute(CHFORM_STEP4, chForm);
 
-        String redirectUrl;
-        switch(action) {
-            case "prev" -> redirectUrl = "redirect:/management/characters/new/step3";
-            case "next" -> redirectUrl = "redirect:/management/characters/new/summary";
-            default -> redirectUrl = "redirect:/management/characters/new/step4";
+        if (action.equals("next")) {
+            // chForm4에 대한 검증 수행
+            chForm4Validator.validate(chForm, bindingResult);
+
+            if (bindingResult.hasErrors()) {
+                return "management/characters/addChStep4";
+            }
+            return "redirect:/management/characters/new/summary";
+        }
+        else if (action.equals("prev")) {
+            return "redirect:/management/characters/new/step3";
+        }
+        else {
+            return "redirect:/management/characters/new/step4";
         }
 
-        return redirectUrl; // 4단계 끝나면 캐릭터 리스트 또는 미리보기 페이지로 이동
     }
 
     @GetMapping("/new/summary")
@@ -273,15 +282,6 @@ public class CharacterMgController {
         // 이미지 url들 모델에 추가
         addImageUrlsOnModelAllStep(session, model);
 
-        // 폼 객체들에 대한 검증 수행
-        chForm1Validator.validate(chForm1, br1);
-        chForm3Validator.validate(chForm3, br3);
-        chForm4Validator.validate(chForm4, br4);
-
-        if (br1.hasErrors() || br2.hasErrors() || br3.hasErrors() || br4.hasErrors()) {
-            return "management/characters/addChSummary";
-        }
-
         // 마지막으로 제출된 이미지를 임시 경로에 저장
         uploadImagesToTemp(session, chForm1);
         uploadImagesToTemp(session, chForm3);
@@ -291,6 +291,15 @@ public class CharacterMgController {
         updateFormDataOnSession(session, chForm1, chForm2, chForm3, chForm4);
 
         if (action.equals("complete")) {
+            // 폼 객체들에 대한 검증 수행
+            chForm1Validator.validate(chForm1, br1);
+            chForm3Validator.validate(chForm3, br3);
+            chForm4Validator.validate(chForm4, br4);
+
+            if (br1.hasErrors() || br2.hasErrors() || br3.hasErrors() || br4.hasErrors()) {
+                return "management/characters/addChSummary";
+            }
+
             CharacterDto charDto = generateCharDto(chForm1, chForm2, chForm3, chForm4); // 캐릭터 정보
 
             CharacterImageDto chImages = generateChImagePathsFromTemp(session); // 캐릭터 이미지 파일 경로
@@ -303,9 +312,7 @@ public class CharacterMgController {
             clearSessionAttributes(session); // 세션 데이터 모두 지우기
             return "redirect:/management/characters";
         }
-
-
-        if (action.equals("prev")) {
+        else if (action.equals("prev")) {
             return "redirect:/management/characters/new/step4";
         }
         // save 등
@@ -373,16 +380,6 @@ public class CharacterMgController {
         addChUrlsOnModel_Edit(session, model, characterId);
         addAsideUrlsOnModel_Edit(session, model, characterId);
 
-        // 폼 객체들에 대한 검증 수행
-        chForm1Validator.validate(chForm1, br1);
-        chForm3Validator.validate(chForm3, br3);
-        chForm4Validator.validate(chForm4, br4);
-
-        if (br1.hasErrors() || br2.hasErrors() || br3.hasErrors() || br4.hasErrors()) {
-            model.addAttribute("characterId", characterId);
-            return "management/characters/characterEditForm";
-        }
-
         // 2. temp 경로에 이미지 파일, 세션에 이미지 url 저장하기
         // 2-1. 파일이 없는 경우 (따로 첨부한 파일이 없는 경우) -> 해당 이미지 url은 세션에 저장되지 않음
         uploadChImageToTemp_Edit(session, chForm1, chForm3);
@@ -398,6 +395,16 @@ public class CharacterMgController {
 
         // 5. complete 버튼을 누른 경우 -> 캐릭터 정보 수정하여 저장하기
         if (action.equals("complete")) {
+            // 폼 객체들에 대한 검증 수행
+            chForm1Validator.validate(chForm1, br1);
+            chForm3Validator.validate(chForm3, br3);
+            chForm4Validator.validate(chForm4, br4);
+
+            if (br1.hasErrors() || br2.hasErrors() || br3.hasErrors() || br4.hasErrors()) {
+                model.addAttribute("characterId", characterId);
+                return "management/characters/characterEditForm";
+            }
+
             CharacterDto updateDto = generateCharDto(chForm1, chForm2, chForm3, chForm4);
 
             // 변경하지 않는 이미지 경로는 null로 전달됨

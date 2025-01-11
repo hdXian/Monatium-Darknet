@@ -20,10 +20,13 @@ public class Skin {
 
     private String name;
     private String description;
-    private String imageUrl;
+//    private String imageUrl;
 
 //    @Enumerated(EnumType.STRING)
 //    private SkinGrade grade;
+
+    @Enumerated(EnumType.STRING)
+    private SkinStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id")
@@ -51,6 +54,7 @@ public class Skin {
         skin.setName(name);
 //        skin.setGrade(grade);
         skin.setDescription(description);
+        skin.setStatus(SkinStatus.DISABLE);
 //        skin.setCharacter(character);
         character.addSkin(skin); // 연관관계 메서드
 

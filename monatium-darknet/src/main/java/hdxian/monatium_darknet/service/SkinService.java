@@ -3,13 +3,17 @@ package hdxian.monatium_darknet.service;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
+import hdxian.monatium_darknet.domain.skin.SkinCategoryMapping;
+import hdxian.monatium_darknet.domain.skin.SkinStatus;
 import hdxian.monatium_darknet.repository.SkinCategoryRepository;
 import hdxian.monatium_darknet.repository.SkinRepository;
+import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.dto.SkinDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -25,9 +29,11 @@ public class SkinService {
 
     private final CharacterService characterService;
 
+    private final ImagePathService imagePathService;
+
     // 스킨 추가
     @Transactional
-    public Long createNewSkin(Long characterId, SkinDto skinDto) {
+    public Long createNewSkin(Long characterId, SkinDto skinDto, String tempImagePath) {
         Character character = characterService.findOne(characterId);
 
         Skin skin = Skin.createSkin(
@@ -36,25 +42,66 @@ public class SkinService {
                 character
         );
 
-        return skinRepository.save(skin);
+        Long savedId = skinRepository.save(skin);
+
+        List<Long> categoryIds = skinDto.getCategoryIds();
+        if (categoryIds != null) {
+            for(Long categoryId: categoryIds) {
+                linkSkinAndCategory(savedId, categoryId);
+            }
+        }
+
+        // 스킨 이미지 저장
+        if (tempImagePath != null) {
+            imagePathService.saveSkinImage(savedId, tempImagePath);
+        }
+
+        return savedId;
     }
 
-    @Transactional
-    public void updateImageUrl(Long skinId, String imageUrl) {
-        Skin skin = findOneSkin(skinId);
-        skin.setImageUrl(imageUrl);
-    }
+//    @Transactional
+//    public void updateImageUrl(Long skinId, String imageUrl) {
+//        Skin skin = findOneSkin(skinId);
+//        skin.setImageUrl(imageUrl);
+//    }
 
     // 스킨 업데이트
     @Transactional
-    public Long updateSkin(Long skinId, SkinDto updateParam) {
+    public Long updateSkin(Long skinId, SkinDto updateParam, Long characterId, String tempImagePath) {
         Skin skin = findOneSkin(skinId);
 
         skin.setName(updateParam.getName());
-//        skin.setGrade(updateParam.getGrade());
         skin.setDescription(updateParam.getDescription());
 
-        return skin.getId(); // save() 호출 x. merge가 필요한 로직이 아님.
+        // 캐릭터 업데이트. 꼭 캐릭터를 바꾸도록 해야 하는지는 모르겠음.
+        Character character = characterService.findOne(characterId);
+        skin.setCharacter(character);
+
+        // 현재 연결돼있는 카테고리들의 id를 가져옴.
+        List<Long> existCategoryIds = new ArrayList<>();
+        for(SkinCategoryMapping mapping: skin.getMappings()) {
+            existCategoryIds.add(mapping.getSkinCategory().getId());
+        }
+
+        // 기존 카테고리 매핑을 제거
+        for (Long existCategoryId : existCategoryIds) {
+            unLinkSkinAndCategory(skinId, existCategoryId);
+        }
+
+        // 업데이트된 카테고리 매핑들을 추가
+        List<Long> categoryIds = updateParam.getCategoryIds();
+        if (categoryIds != null) {
+            for (Long categoryId : categoryIds) {
+                linkSkinAndCategory(skinId, categoryId);
+            }
+        }
+
+        // 이미지 경로 업데이트 (null 넘어오면 업데이트 안 함)
+        if (tempImagePath != null) {
+            imagePathService.saveSkinImage(skinId, tempImagePath);
+        }
+
+        return skin.getId();
     }
 
     // 카테고리 추가
@@ -64,12 +111,44 @@ public class SkinService {
         return categoryRepository.save(skinCategory);
     }
 
+    @Transactional
+    public Long createNewSkinCategory(String name, List<Long> skinIds) {
+        SkinCategory skinCategory = SkinCategory.createSkinCategory(name);
+
+        Long savedCategoryId = categoryRepository.save(skinCategory);
+
+        if (skinIds != null) {
+            for (Long skinId : skinIds) {
+                linkSkinAndCategory(skinId, savedCategoryId);
+            }
+        }
+
+        return savedCategoryId;
+    }
+
     // 카테고리 변경 (이름밖에 없긴함)
     @Transactional
-    public Long updateSkinCategory(Long categoryId, String updateName) {
+    public Long updateSkinCategory(Long categoryId, String updateName, List<Long> skinIds) {
         SkinCategory category = findOneCategory(categoryId);
 
         category.setName(updateName);
+
+        List<Long> existSkinIds = new ArrayList<>();
+        for (SkinCategoryMapping mapping : category.getMappings()) {
+            existSkinIds.add(mapping.getSkin().getId());
+        }
+
+        // 기존 매핑을 제거
+        for (Long existSkinId : existSkinIds) {
+            unLinkSkinAndCategory(existSkinId, categoryId);
+        }
+
+        // 매핑 업데이트
+        if (skinIds != null) {
+            for (Long skinId : skinIds) {
+                linkSkinAndCategory(skinId, categoryId);
+            }
+        }
 
         return category.getId();
     }
@@ -103,28 +182,43 @@ public class SkinService {
     }
 
     @Transactional
+    public void activateSkin(Long skinId) {
+        Skin skin = findOneSkin(skinId);
+        skin.setStatus(SkinStatus.ACTIVE);
+    }
+
+    @Transactional
+    public void disableSkin(Long skinId) {
+        Skin skin = findOneSkin(skinId);
+        skin.setStatus(SkinStatus.DISABLE);
+    }
+
+    @Transactional
     public void deleteSkin(Long skinId) {
         Skin skin = findOneSkin(skinId);
-
+        skin.setStatus(SkinStatus.DELETED);
         // 모든 mapping들을 고아 객체로 만들어 JPA가 자동으로 삭제하도록 함. (skin의 mappings의 orphanRemoval = true)
-        List<SkinCategory> categories = findCategoriesBySkin(skinId);
-        for (SkinCategory category : categories) {
-            skin.removeCategory(category);
-        }
+//        List<SkinCategory> categories = findCategoriesBySkin(skinId);
+//        for (SkinCategory category : categories) {
+//            skin.removeCategory(category);
+//        }
 
         // character와의 연관관계도 제거해야 함
-        Character skinCharacter = skin.getCharacter();
-        skinCharacter.removeSkin(skin);
+//        Character skinCharacter = skin.getCharacter();
+//        skinCharacter.removeSkin(skin);
 
-        skinRepository.delete(skin);
+//        skinRepository.delete(skin);
     }
 
     @Transactional
     public void deleteSkinCategory(Long categoryId) {
         SkinCategory categoryToRemove = findOneCategory(categoryId);
 
+        SkinSearchCond searchCond = new SkinSearchCond();
+        searchCond.getCategoryIds().add(categoryId);
         // 모든 스킨과의 연관관계를 제거 (연관관계, mapping 추가를 skin에서만 하기 때문)
-        List<Skin> skins = findSkinsByCategory(categoryId);
+        List<Skin> skins = findAllSkin(searchCond);
+//        List<Skin> skins = findSkinsByCategory(categoryId);
         for (Skin skin : skins) {
             skin.removeCategory(categoryToRemove);
         }
@@ -151,22 +245,23 @@ public class SkinService {
         return find.get();
     }
 
-    // 스킨 리스트
-    public List<Skin> findSkinsByCategory(Long categoryId) {
-        return skinRepository.findBySkinCategoryId(categoryId);
-    }
-
-    public List<Skin> findSkinsByCharacter(Long characterId) {
-        return skinRepository.findByCharacterId(characterId);
-    }
-
+    // 조건별 스킨 검색
     public List<Skin> findAllSkin() {
-        return skinRepository.findAll();
+        SkinSearchCond searchCond = new SkinSearchCond();
+        return skinRepository.findAll(searchCond);
+    }
+
+    public List<Skin> findAllSkin(SkinSearchCond searchCond) {
+        return skinRepository.findAll(searchCond);
     }
 
     // 카테고리 리스트
     public List<SkinCategory> findCategoriesBySkin(Long skinId) {
         return categoryRepository.findBySkinId(skinId);
+    }
+
+    public List<SkinCategory> findCategoriesByName(String name) {
+        return categoryRepository.findByName(name);
     }
 
     public List<SkinCategory> findAllCategories() {

@@ -48,9 +48,6 @@ document.addEventListener('click', function(event) {
 
         const requestUrl = isActive ? `/management/cards/disable/${cardId}` : `/management/cards/activate/${cardId}`
 
-        // 요청한 상태를 미리 계산
-
-
         // AJAX 요청
         fetch(requestUrl, { method: 'POST' })
             .then(response => {

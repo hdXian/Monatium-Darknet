@@ -61,6 +61,10 @@ public class ImageUrlService {
         return api_baseUrl + "images/" + "defaultThumbnail";
     }
 
+    public String getDefaultSkinThumbnailUrl() {
+        return api_baseUrl + "images/" + "skin/" +"defaultSkinThumbnail";
+    }
+
     // 카드 이미지 -> /api/images/card/{id}
     public String getSpellCardBaseUrl() {
         return api_baseUrl + "images/" + "card/" + "spell/";
@@ -76,6 +80,10 @@ public class ImageUrlService {
 
     public String getArtifactIconUrl() {
         return getIconBaseUrl() + "artifact";
+    }
+
+    public String getSkinBaseUrl() {
+        return api_baseUrl + "images/" + "skin/";
     }
 
 
