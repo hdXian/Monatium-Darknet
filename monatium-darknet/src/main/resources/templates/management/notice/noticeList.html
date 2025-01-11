@@ -83,7 +83,7 @@
                             th:data-status="${notice.status}"
                             th:data-title="${notice.title}"
                             th:classappend="${notice.status.name() == 'PUBLIC'} ? 'btn-success' : 'btn-secondary'"
-                            th:text="${notice.status.name() == 'PUBLIC'} ? '공개 중' : '비공개'">
+                            th:text="${notice.status.name() == 'PUBLIC'} ? '공개 중' : '비공개 중'">
                     </button>
                 </td>
                 <td class="col7">

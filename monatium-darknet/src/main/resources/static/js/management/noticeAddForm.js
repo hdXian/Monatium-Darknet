@@ -51,21 +51,47 @@ const quill = new Quill('#editor', {
     }
 });
 
-// 등록 버튼에 확인창 추가
-document.querySelector('#notice-form').addEventListener('submit', function (event) {
-    const userConfirmed = confirm('공지사항을 등록하시겠습니까?');
-    if (!userConfirmed) {
-        event.preventDefault(); // 폼 제출을 중단
-        return;
-    }
+// Quill 에디터에 서버에서 받은 HTML 본문을 안전하게 삽입
+window.onload = function() {
+    const content = document.querySelector('#content').value;
+    quill.clipboard.dangerouslyPasteHTML(content);
+};
+
+// "임시 저장" 버튼 이벤트 추가
+document.querySelector('#btnSave').addEventListener('click', function () {
+    console.log('임시 저장 버튼 클릭됨');
+
+    // 추가적인 저장 처리 로직
     console.log(quill.root.innerHTML);
     document.querySelector('#content').value = quill.root.innerHTML;
 });
 
-// 취소 버튼에 확인창 추가
-document.querySelector('#cancel-button').addEventListener('click', function (event) {
-    const userConfirmed = confirm('작성 중인 내용이 사라집니다. 취소하시겠습니까?');
-    if (!userConfirmed) {
-        event.preventDefault(); // 기본 동작(페이지 이동) 중단
+
+// "작성하기" 버튼 이벤트 추가
+document.querySelector('#btnComplete').addEventListener('click', function () {
+    if (confirm('공지사항을 등록하시겠습니까?')) {
+        console.log('작성하기 버튼 클릭됨');
+        // 추가적인 작성 처리 로직
+        document.querySelector('#content').value = quill.root.innerHTML;
+    } else {
+        event.preventDefault(); // 기본 동작 중단
     }
 });
+
+function confirmCancel(button) {
+    // 버튼이 속한 폼을 가져옴
+    const form = button.closest('form');
+
+    // 사용자 확인 후 폼 제출
+    if (confirm("취소하시겠습니까? 현재 작성된 데이터는 저장되지 않습니다.")) {
+        // action 파라미터를 명시적으로 설정
+        const hiddenField = document.createElement('input');
+        hiddenField.type = 'hidden';
+        hiddenField.name = 'action';
+        hiddenField.value = 'cancel';
+        form.appendChild(hiddenField);
+
+        form.submit(); // 폼을 명시적으로 제출
+    }
+}
+

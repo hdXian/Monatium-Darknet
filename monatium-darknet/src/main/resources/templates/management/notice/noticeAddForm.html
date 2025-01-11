@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!-- v3 -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
+    <title>공지사항 작성</title>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/management/noticeForm.css}">
+    <!-- 커스텀 css -->
+</head>
+
+<body>
+
+<!-- 상단 네비게이션 바 -->
+<nav th:replace="~{fragments/navbar :: management_navbar}">
+    상단 네비게이션 바 영역
+</nav>
+
+<div class="container mt-4 main-content">
+    <h1>공지사항 작성</h1>
+    <form th:action="@{/management/notices/new}" th:object="${noticeForm}" id="notice-form" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="title" class="form-label">제목</label>
+            <input th:field="*{title}" th:errorclass="field-error" type="text" id="title" name="title" class="form-control" required>
+            <div class="field-error" th:errors="*{title}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="category" class="form-label">카테고리</label>
+            <select th:field="*{category}" th:errorclass="field-error" id="category" name="category" class="form-select" required>
+                <option value="NOTICE">공지사항</option>
+                <option value="EVENT">이벤트</option>
+                <option value="UPDATE">업데이트</option>
+                <option value="DEV">개발자 노트</option>
+            </select>
+            <div class="field-error" th:errors="*{category}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="editor" class="form-label">내용</label>
+            <div id="editor"></div>
+            <textarea th:field="*{content}" th:errorclass="field-error" id="content" name="content" class="d-none"></textarea>
+            <div class="field-error" th:errors="*{content}"></div>
+        </div>
+
+        <!-- 폼 제출 버튼 -->
+        <div class="button-group d-flex justify-content-between mt-4">
+
+            <!-- 왼쪽 버튼 그룹 -->
+            <div class="d-flex gap-2">
+                <!-- 취소 버튼 -->
+                <button id="btnCancel" type="button" name="action" value="cancel" class="btn btn-danger" onclick="confirmCancel(this)">취소</button>
+                <!-- 저장 버튼 -->
+                <button id="btnSave" type="submit" name="action" value="save" class="btn btn-secondary">임시 저장</button>
+            </div>
+
+            <!-- 오른쪽 버튼 그룹 -->
+            <div class="d-flex gap-2">
+                <!-- 다음 버튼 -->
+                <button id="btnComplete" type="submit" name="action" value="complete" class="btn btn-primary">공지사항 작성하기!</button>
+            </div>
+
+        </div>
+
+    </form>
+
+
+</div>
+
+<!-- 하단 푸터 -->
+<footer th:replace="~{fragments/footer :: management_footer}">
+    하단 푸터 영역
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
+<script th:src="@{/js/management/noticeAddForm.js}"></script>
+
+</body>
+
+</html>

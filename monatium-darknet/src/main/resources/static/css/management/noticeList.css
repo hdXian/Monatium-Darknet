@@ -8,9 +8,9 @@
 /* 열 너비 정의 */
 .table th,
 .table td {
-    overflow: hidden; /* 내용이 넘칠 경우 숨김 */
-    text-overflow: ellipsis; /* 텍스트가 넘칠 경우 말줄임표 */
-    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    overflow: visible; /* 숨김 제거 */
+    text-overflow: clip; /* 말줄임표 제거 */
+    white-space: normal; /* 텍스트 줄바꿈 허용 */
 }
 
 /* 열 별 너비 설정 */

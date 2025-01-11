@@ -9,6 +9,7 @@ import hdxian.monatium_darknet.service.MemberService;
 import hdxian.monatium_darknet.service.NoticeService;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
 import hdxian.monatium_darknet.web.controller.management.SessionConst;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +18,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+
+import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
 
 // 공지사항 관리 기능 관련 요청 처리
 
@@ -37,17 +45,6 @@ public class NoticeMgController {
     private final NoticeService noticeService;
 
     // 공지사항 목록 (대시보드 -> 공지사항 관리)
-//    @GetMapping
-    public String noticeList(@RequestParam(value = "category", required = false) NoticeCategory category, Model model) {
-        NoticeSearchCond searchCond = new NoticeSearchCond();
-        searchCond.setCategory(category);
-        List<Notice> noticeList = noticeService.findAll(searchCond);
-
-        model.addAttribute("noticeList", noticeList);
-        model.addAttribute("curCategory", category);
-        return "management/notice/noticeList";
-    }
-
     @GetMapping
     public String noticeList_Paging(@RequestParam(value = "page", required = false, defaultValue = "1") Integer pageNumber,
                                     @RequestParam(value = "category", required = false) NoticeCategory category,
@@ -66,6 +63,141 @@ public class NoticeMgController {
         model.addAttribute("page", noticePage);
         model.addAttribute("query", title);
         return "management/notice/noticeList";
+    }
+
+    // 공지사항 작성 페이지
+    @GetMapping("/new")
+    public String noticeForm(HttpSession session, Model model) {
+        NoticeForm noticeForm = Optional.ofNullable((NoticeForm) session.getAttribute(NOTICE_FORM)).orElse(new NoticeForm());
+        System.out.println("noticeForm in getForm() = " + noticeForm);
+
+        model.addAttribute(NOTICE_FORM, noticeForm);
+        return "management/notice/noticeAddForm";
+    }
+
+    // 공지사항 작성 기능
+    @PostMapping("/new")
+    public String createNotice(HttpSession session, @RequestParam("action") String action,
+                               @SessionAttribute(LOGIN_MEMBER) Member member,
+                               @Validated @ModelAttribute(NOTICE_FORM) NoticeForm noticeForm, BindingResult bindingResult) {
+
+        // 취소 버튼을 누른 경우
+        if (action.equals("cancel")) {
+            return "redirect:/management/notices";
+        }
+
+        // 완료 버튼을 누른 경우
+        if (action.equals("complete")) {
+
+            if (bindingResult.hasErrors()) {
+                return "management/notice/noticeAddForm";
+            }
+
+            NoticeDto noticeDto = generateNoticeDto(noticeForm);
+            Long savedId = noticeService.createNewNotice(member.getId(), noticeDto);
+
+            clearSessionAttributes(session);
+            return "redirect:/management/notices";
+        }
+        // 임시 저장 버튼을 누른 경우
+        else {
+            session.setAttribute(NOTICE_FORM, noticeForm);
+            return "redirect:/management/notices/new";
+        }
+
+    }
+
+    // 공지사항 수정 페이지
+    @GetMapping("/{noticeId}/edit")
+    public String editForm(HttpSession session, Model model, @PathVariable("noticeId") Long noticeId) {
+
+        Notice notice = noticeService.findOne(noticeId);
+        if (notice == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 공지사항이 없습니다. noticeId=" + noticeId);
+        }
+
+        NoticeForm noticeForm = Optional.ofNullable((NoticeForm) session.getAttribute(NOTICE_FORM)).orElse(generateNoticeForm(notice));
+
+        model.addAttribute("noticeId", noticeId);
+        model.addAttribute(NOTICE_FORM, noticeForm);
+
+        return "management/notice/noticeEditForm";
+    }
+
+    // 공지사항 수정
+    @PostMapping("/{noticeId}/edit")
+    public String edit(HttpSession session, @RequestParam("action") String action,
+                       @PathVariable("noticeId") Long noticeId,
+                       @SessionAttribute(LOGIN_MEMBER) Member member,
+                       @Validated @ModelAttribute(NOTICE_FORM) NoticeForm noticeForm, BindingResult bindingResult,
+                       Model model) {
+
+        // 취소 버튼을 누른 경우
+        if (action.equals("cancel")) {
+            clearSessionAttributes(session);
+            return "redirect:/management/notices";
+        }
+
+        // 완료 버튼을 누른 경우
+        if (action.equals("complete")) {
+
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("noticeId", noticeId);
+                return "management/notice/noticeEditForm";
+            }
+
+            NoticeDto updateParam = generateNoticeDto(noticeForm);
+            Long updatedId = noticeService.updateNotice(noticeId, updateParam);
+            clearSessionAttributes(session);
+            return "redirect:/management/notices";
+        }
+        // 취소 버튼을 누른 경우
+        else {
+            session.setAttribute(NOTICE_FORM, noticeForm);
+            return "redirect:/management/notices/" + noticeId + "/edit";
+        }
+
+    }
+
+    // 공지사항 공개 설정
+    @PostMapping("/publish/{noticeId}")
+    public ResponseEntity<Void> publish(@PathVariable("noticeId") Long noticeId) {
+        noticeService.publishNotice(noticeId);
+        return ResponseEntity.ok().build();
+    }
+
+    // 공지사항 공개 설정
+    @PostMapping("/unpublish/{noticeId}")
+    public ResponseEntity<Void> unPublish(@PathVariable("noticeId") Long noticeId) {
+        noticeService.unPublishNotice(noticeId);
+        return ResponseEntity.ok().build();
+    }
+
+    // 공지사항 삭제 요청 -> 페이지 쪽에서 delete 메서드로 요청 보내도록 구현할 것
+    @DeleteMapping("/{noticeId}")
+    public ResponseEntity<Void> deleteNotice(@PathVariable("noticeId")Long noticeId) {
+        noticeService.deleteNotice(noticeId);
+        return ResponseEntity.ok().build();
+    }
+
+
+    // === private ===
+
+    private NoticeForm generateNoticeForm(Notice notice) {
+        NoticeForm noticeForm = new NoticeForm();
+        noticeForm.setCategory(notice.getCategory());
+        noticeForm.setTitle(notice.getTitle());
+        noticeForm.setContent(notice.getContent());
+
+        return noticeForm;
+    }
+
+    private NoticeDto generateNoticeDto(NoticeForm noticeForm) {
+        NoticeCategory category = noticeForm.getCategory();
+        String title = noticeForm.getTitle();
+        String htmlContent = noticeForm.getContent();
+
+        return new NoticeDto(category, title, htmlContent);
     }
 
     private void setPages(int totalPages, int pageNumber, Model model) {
@@ -88,70 +220,8 @@ public class NoticeMgController {
         model.addAttribute("endPage", endPage);
     }
 
-    // 공지사항 작성 페이지
-    @GetMapping("/new")
-    public String noticeForm(@ModelAttribute("noticeForm") NoticeForm form) {
-        return "management/notice/noticeForm";
-    }
-
-    // 공지사항 작성 기능
-    @PostMapping("/new")
-    public String createNotice(@ModelAttribute("noticeForm") NoticeForm form,
-                               @SessionAttribute(SessionConst.LOGIN_MEMBER) Member member) throws IOException
-    {
-
-        NoticeCategory category = form.getCategory();
-        String title = form.getTitle();
-        String htmlContent = form.getContent();
-
-        // 전달받은 내용으로 공지사항 생성 (공지사항 Id 리턴)
-        NoticeDto noticeDto = new NoticeDto(category, title, htmlContent);
-        noticeService.createNewNotice(member.getId(), noticeDto);
-
-        return "redirect:/management/notices";
-    }
-
-    // 공지사항 수정 페이지
-    @GetMapping("/{noticeId}/edit")
-    public String editForm(@PathVariable("noticeId")Long noticeId, Model model) {
-
-        Notice notice = noticeService.findOne(noticeId);
-        NoticeForm noticeForm = new NoticeForm(notice.getTitle(), notice.getCategory(), notice.getContent());
-
-        model.addAttribute("noticeId", noticeId);
-        model.addAttribute("noticeForm", noticeForm);
-
-        return "management/notice/editForm";
-    }
-
-    // 공지사항 수정
-    @PostMapping("/{noticeId}/edit")
-    public String edit(@PathVariable("noticeId")Long noticeId, @ModelAttribute("noticeForm") NoticeForm form) {
-        NoticeDto updateParam = new NoticeDto(form.getCategory(), form.getTitle(), form.getContent());
-        noticeService.updateNotice(noticeId, updateParam);
-
-        return "redirect:/management/notices";
-    }
-
-    // 공지사항 공개 설정
-    @PostMapping("/publish/{noticeId}")
-    public ResponseEntity<Void> publish(@PathVariable("noticeId") Long noticeId) {
-        noticeService.publishNotice(noticeId);
-        return ResponseEntity.ok().build();
-    }
-
-    // 공지사항 공개 설정
-    @PostMapping("/unpublish/{noticeId}")
-    public ResponseEntity<Void> unPublish(@PathVariable("noticeId") Long noticeId) {
-        noticeService.unPublishNotice(noticeId);
-        return ResponseEntity.ok().build();
-    }
-
-    // 공지사항 삭제 요청 -> 페이지 쪽에서 delete 메서드로 요청 보내도록 구현할 것
-    @DeleteMapping("/{noticeId}")
-    public ResponseEntity<Void> deleteNotice(@PathVariable("noticeId")Long noticeId) {
-        noticeService.deleteNotice(noticeId);
-        return ResponseEntity.ok().build();
+    private void clearSessionAttributes(HttpSession session) {
+        session.removeAttribute(NOTICE_FORM);
     }
 
 }

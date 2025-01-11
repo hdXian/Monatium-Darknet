@@ -3,6 +3,10 @@ package hdxian.monatium_darknet.web.controller.management;
 public interface SessionConst {
     public static final String LOGIN_MEMBER = "loginMember";
 
+    // 공지사항 기능 관련 상수
+    public static final String NOTICE_FORM = "noticeForm";
+
+
     // 캐릭터 추가 기능 관련 상수
     // 단계별 폼 객체를 세션에 저장할 때 지정하는 attr 이름
     public static final String CHFORM_STEP1 = "chFormStep1";
