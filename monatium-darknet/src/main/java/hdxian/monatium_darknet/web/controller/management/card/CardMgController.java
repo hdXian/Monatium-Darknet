@@ -6,6 +6,8 @@ import hdxian.monatium_darknet.domain.card.Card;
 import hdxian.monatium_darknet.domain.card.CardType;
 import hdxian.monatium_darknet.domain.card.SpellCard;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.exception.card.CardImageProcessException;
+import hdxian.monatium_darknet.exception.card.CardTypeMisMatchException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.repository.dto.CardSearchCond;
@@ -291,7 +293,7 @@ public class CardMgController {
 
         // DB 업데이트 전 마지막 타입 체크
         if (card.getType() != cardForm.getCardType()) {
-            throw new IllegalArgumentException("카드의 타입이 맞지 않습니다. cardId = " + cardId);
+            throw new CardTypeMisMatchException("카드의 타입이 맞지 않습니다. cardId = " + cardId);
         }
 
         // CardDto (공통 부분) 생성
@@ -443,7 +445,7 @@ public class CardMgController {
             String tempUrl = imageUrlService.getTempImageBaseUrl() + fileDto.getFileName();
             session.setAttribute(CARD_IMAGE_URL, tempUrl);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CardImageProcessException(e);
         }
 
     }

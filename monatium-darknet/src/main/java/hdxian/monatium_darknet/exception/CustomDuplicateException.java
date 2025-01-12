@@ -1,6 +1,6 @@
 package hdxian.monatium_darknet.exception;
 
-public class CustomDuplicateException extends RuntimeException {
+public class CustomDuplicateException extends CustomBusinessLogicException {
 
     public CustomDuplicateException() {
         super();

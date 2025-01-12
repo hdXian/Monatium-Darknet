@@ -1,6 +1,6 @@
 package hdxian.monatium_darknet.exception;
 
-public class CustomFileProcessException extends RuntimeException {
+public class CustomFileProcessException extends CustomBusinessLogicException {
 
     public CustomFileProcessException() {
         super();

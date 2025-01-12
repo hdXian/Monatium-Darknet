@@ -6,6 +6,7 @@ import hdxian.monatium_darknet.domain.card.*;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.exception.card.CardNotFoundException;
 import hdxian.monatium_darknet.exception.card.DuplicateCardNameException;
+import hdxian.monatium_darknet.exception.character.CharacterNotFoundException;
 import hdxian.monatium_darknet.repository.CardRepository;
 import hdxian.monatium_darknet.repository.CharacterRepository;
 import hdxian.monatium_darknet.repository.dto.CardSearchCond;
@@ -79,7 +80,7 @@ public class CardService {
 
         Optional<Character> findCharacter = characterRepository.findOne(characterId);
         if (findCharacter.isEmpty()) {
-            throw new NoSuchElementException("대상 캐릭터가 존재하지 않습니다. characterId=" + characterId);
+            throw new CharacterNotFoundException("대상 캐릭터가 존재하지 않습니다. characterId=" + characterId);
         }
 
         Character character = findCharacter.get();
@@ -153,7 +154,7 @@ public class CardService {
         if (updateCharacterId != null) {
             Optional<Character> findCharacter = characterRepository.findOne(updateCharacterId);
             if (findCharacter.isEmpty()) {
-                throw new NoSuchElementException("대상 캐릭터가 존재하지 않습니다. updateCharacterId=" + updateCharacterId);
+                throw new CharacterNotFoundException("대상 캐릭터가 존재하지 않습니다. characterId=" + updateCharacterId);
             }
             updateCharacter = findCharacter.get();
         }

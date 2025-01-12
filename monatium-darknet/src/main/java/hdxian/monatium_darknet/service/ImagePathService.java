@@ -1,6 +1,7 @@
 package hdxian.monatium_darknet.service;
 
 import hdxian.monatium_darknet.domain.character.*;
+import hdxian.monatium_darknet.exception.card.CardImageProcessException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.service.dto.AsideImageDto;
@@ -156,7 +157,7 @@ public class ImagePathService {
     @Transactional
     public void saveSpellCardImage(Long cardId, String src) {
         if (cardId == null || src == null) {
-            throw new IllegalArgumentException("cardId 또는 src가 null입니다.");
+            throw new CardImageProcessException("cardId 또는 src가 null입니다.");
         }
 
         String dst = getSpellCardFileName(cardId);
@@ -164,7 +165,7 @@ public class ImagePathService {
         try {
             fileStorageService.copyFile(new FileDto(src), new FileDto(dst));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CardImageProcessException(e);
         }
 
     }
@@ -172,7 +173,7 @@ public class ImagePathService {
     @Transactional
     public void saveArtifactCardImage(Long cardId, String src) {
         if (cardId == null || src == null) {
-            throw new IllegalArgumentException("cardId 또는 src가 null입니다.");
+            throw new CardImageProcessException("cardId 또는 src가 null입니다.");
         }
 
         String dst = getArtifactCardFileName(cardId);
@@ -180,7 +181,7 @@ public class ImagePathService {
         try {
             fileStorageService.copyFile(new FileDto(src), new FileDto(dst));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CardImageProcessException(e);
         }
 
     }

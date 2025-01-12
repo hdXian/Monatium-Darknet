@@ -1,7 +1,6 @@
 package hdxian.monatium_darknet.exception;
 
-// 최상위 검색 실패 커스텀 예외
-public class CustomNotFoundException extends RuntimeException {
+public class CustomNotFoundException extends CustomBusinessLogicException {
 
     public CustomNotFoundException() {
         super();
