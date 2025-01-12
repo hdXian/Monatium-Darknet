@@ -39,8 +39,9 @@ public class Skin {
 
     // 연관관계 메서드 - SkinCategory의 addSkin() 쪽에서도 이걸 호출해야 돼서 public으로 따로 열어놔야 함.
     public void addMapping(SkinCategoryMapping mapping) {
-        // TODO - mapping이 null일 때에 대한 예외 로직 추가 검토
-        System.out.println("skin.addMapping = " + mapping);
+        if (mapping == null) {
+            throw new IllegalArgumentException("SkinCategoryMapping cannot be null.");
+        }
         mappings.add(mapping);
     }
 
@@ -52,7 +53,6 @@ public class Skin {
     public static Skin createSkin(String name, String description, Character character) {
         Skin skin = new Skin();
         skin.setName(name);
-//        skin.setGrade(grade);
         skin.setDescription(description);
         skin.setStatus(SkinStatus.DISABLE);
 //        skin.setCharacter(character);

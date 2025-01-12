@@ -72,7 +72,6 @@ public class NoticeService {
         return notice.getId();
     }
 
-    // TODO - 공지사항 업데이트 로직 개선 필요 - dto에서 null인 필드는 건너뛰기, content 업데이트하는 작업은 분리하기..
     @Transactional
     public Long updateNotice(Long noticeId, NoticeDto updateParam) {
         Notice notice = findOne(noticeId);

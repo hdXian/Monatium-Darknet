@@ -21,7 +21,6 @@ import java.io.IOException;
 @RequestMapping("/api/images")
 public class ImageController {
 
-    // TODO - IOException 나는것들 묶어서 처리하기
     private final LocalFileStorageService fileStorageService;
 
     private final ImageUrlService imageUrlService;
