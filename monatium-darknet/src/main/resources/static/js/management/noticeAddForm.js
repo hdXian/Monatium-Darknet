@@ -28,16 +28,15 @@ const quill = new Quill('#editor', {
                                 method: 'POST',
                                 body: formData
                             });
-                            const result = await response.json();
 
-                            if (result.success) {
-                                console.log('이미지 업로드 성공:', result.imageUrl);
-
+                            if (response.ok) {
+                                const imageUrl = await response.text(); // 서버에서 반환한 imageUrl 읽기
                                 const range = quill.getSelection();
-                                quill.insertEmbed(range.index, 'image', result.imageUrl);
+                                quill.insertEmbed(range.index, 'image', imageUrl);
                             } else {
                                 alert('이미지 업로드 실패');
                             }
+
                         } catch (error) {
                             alert('이미지 업로드 중 오류가 발생했습니다.');
                             console.error(error);
