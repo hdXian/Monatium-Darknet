@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.web.controller.management.character;
 import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
+import hdxian.monatium_darknet.exception.CharacterNotFoundException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
@@ -90,7 +91,6 @@ public class CharacterMgController {
     public String chFormStep1(HttpSession session, Model model) {
         ChFormStep1 chForm = Optional.ofNullable( (ChFormStep1) session.getAttribute(CHFORM_STEP1) ).orElse(new ChFormStep1()); // 세션에 저장된 게 없으면 새로운 빈 폼 객체를 생성
 
-        // TODO - url들 ModelAttribute 처리 해야할 듯.
         addImageUrlsOnModelStep1(session, model); // 이미지 url 처리
 
         model.addAttribute("chForm", chForm); // 모델에 폼 객체 전달

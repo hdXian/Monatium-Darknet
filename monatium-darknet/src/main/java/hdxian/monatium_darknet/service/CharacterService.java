@@ -77,9 +77,6 @@ public class CharacterService {
     @Transactional
     public Long updateCharacter(Long characterId, CharacterDto updateParam, CharacterImageDto chImagePaths, AsideImageDto asideImagePaths) {
         Character ch = findOne(characterId);
-        if (ch == null) {
-            throw new NoSuchElementException("해당 캐릭터가 없습니다. id=" + characterId);
-        }
 
         Optional.ofNullable(updateParam.getName()).ifPresent(ch::setName);
         Optional.ofNullable(updateParam.getSubtitle()).ifPresent(ch::setSubtitle);
@@ -117,27 +114,18 @@ public class CharacterService {
     @Transactional
     public void activateCharacter(Long characterId) {
         Character ch = findOne(characterId);
-        if (ch == null) {
-            throw new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId=" + characterId);
-        }
         ch.setStatus(CharacterStatus.ACTIVE);
     }
 
     @Transactional
     public void disableCharacter(Long characterId) {
         Character ch = findOne(characterId);
-        if (ch == null) {
-            throw new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId=" + characterId);
-        }
         ch.setStatus(CharacterStatus.DISABLED);
     }
 
     @Transactional
     public void deleteCharacter(Long characterId) {
         Character ch = findOne(characterId);
-        if (ch == null) {
-            throw new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId=" + characterId);
-        }
         ch.setStatus(CharacterStatus.DELETED);
 
         Optional<Card> findCard = cardRepository.findOneArtifactByCharacterId(characterId);
@@ -173,16 +161,13 @@ public class CharacterService {
     // 캐릭터 검색 기능
     public Character findOne(Long id) {
         Optional<Character> find = characterRepository.findOne(id);
-        return find.orElse(null);
+        return find.orElseThrow(() -> new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId = " + id));
     }
 
     public Character findOneActive(Long id) {
         Optional<Character> find = characterRepository.findOne(id);
-        if (find.isEmpty()) {
-            return null;
-        }
-        else if (find.get().getStatus() != CharacterStatus.ACTIVE) {
-            return null;
+        if (find.isEmpty() || find.get().getStatus() != CharacterStatus.ACTIVE) {
+            throw new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId = " + id);
         }
         return find.get();
     }
