@@ -6,6 +6,7 @@ import hdxian.monatium_darknet.domain.character.CharacterStatus;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinStatus;
+import hdxian.monatium_darknet.exception.CharacterNotFoundException;
 import hdxian.monatium_darknet.repository.CardRepository;
 import hdxian.monatium_darknet.repository.CharacterRepository;
 import hdxian.monatium_darknet.repository.SkinCategoryRepository;
@@ -76,6 +77,9 @@ public class CharacterService {
     @Transactional
     public Long updateCharacter(Long characterId, CharacterDto updateParam, CharacterImageDto chImagePaths, AsideImageDto asideImagePaths) {
         Character ch = findOne(characterId);
+        if (ch == null) {
+            throw new NoSuchElementException("해당 캐릭터가 없습니다. id=" + characterId);
+        }
 
         Optional.ofNullable(updateParam.getName()).ifPresent(ch::setName);
         Optional.ofNullable(updateParam.getSubtitle()).ifPresent(ch::setSubtitle);
@@ -113,18 +117,27 @@ public class CharacterService {
     @Transactional
     public void activateCharacter(Long characterId) {
         Character ch = findOne(characterId);
+        if (ch == null) {
+            throw new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId=" + characterId);
+        }
         ch.setStatus(CharacterStatus.ACTIVE);
     }
 
     @Transactional
     public void disableCharacter(Long characterId) {
         Character ch = findOne(characterId);
+        if (ch == null) {
+            throw new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId=" + characterId);
+        }
         ch.setStatus(CharacterStatus.DISABLED);
     }
 
     @Transactional
     public void deleteCharacter(Long characterId) {
         Character ch = findOne(characterId);
+        if (ch == null) {
+            throw new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId=" + characterId);
+        }
         ch.setStatus(CharacterStatus.DELETED);
 
         Optional<Card> findCard = cardRepository.findOneArtifactByCharacterId(characterId);
@@ -160,18 +173,18 @@ public class CharacterService {
     // 캐릭터 검색 기능
     public Character findOne(Long id) {
         Optional<Character> find = characterRepository.findOne(id);
-        if(find.isEmpty()) {
-            throw new NoSuchElementException("해당 캐릭터가 없습니다. id=" + id);
-        }
-        return find.get();
+        return find.orElse(null);
     }
 
     public Character findOneActive(Long id) {
-        Character character = findOne(id);
-        if (character.getStatus() != CharacterStatus.ACTIVE) {
-            throw new NoSuchElementException("해당 캐릭터가 없습니다. id=" + id);
+        Optional<Character> find = characterRepository.findOne(id);
+        if (find.isEmpty()) {
+            return null;
         }
-        return character;
+        else if (find.get().getStatus() != CharacterStatus.ACTIVE) {
+            return null;
+        }
+        return find.get();
     }
 
     public List<Character> findAll() {
