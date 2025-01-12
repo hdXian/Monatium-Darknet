@@ -4,6 +4,7 @@ import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import hdxian.monatium_darknet.domain.notice.NoticeStatus;
+import hdxian.monatium_darknet.exception.NoticeNotFoundException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.repository.NoticeRepository;
@@ -145,7 +146,7 @@ public class NoticeService {
     public Notice findOne(Long noticeId) {
         Optional<Notice> find = noticeRepository.findOne(noticeId);
         if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 공지사항이 없습니다. id=" + noticeId);
+            throw new NoticeNotFoundException("해당 공지사항을 찾을 수 없습니다. noticeId = " + noticeId);
         }
         return find.get();
     }
@@ -153,15 +154,10 @@ public class NoticeService {
     @Transactional
     public Notice findOnePublic(Long noticeId) {
         Optional<Notice> find = noticeRepository.findOne(noticeId);
-        if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 공지사항이 없습니다. id=" + noticeId);
+        if (find.isEmpty() || find.get().getStatus() != NoticeStatus.PUBLIC) {
+            throw new NoticeNotFoundException("해당 공지사항을 찾을 수 없습니다. noticeId = " + noticeId);
         }
-
-        Notice notice = find.get();
-        if (notice.getStatus() == NoticeStatus.PUBLIC)
-            return notice;
-        else 
-            return null;
+        return find.get();
     }
 
     public List<Notice> findAll() {
