@@ -129,8 +129,6 @@ public class CharacterService {
 
         Optional<Card> findCard = cardRepository.findOneArtifactByCharacterId(characterId);
 
-        // 그럼 아티팩트 카드 추가할 때도 이미 애착 사도가 있는지 확인해야 하나? 아티팩트 카드에 @OneToOne이 걸려있기는 함.
-
         // 애착 아티팩트 카드가 있을 경우에만 제거
         if (findCard.isPresent()) {
             Card artifactCard = findCard.get();

@@ -4,6 +4,7 @@ import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import hdxian.monatium_darknet.domain.notice.NoticeStatus;
+import hdxian.monatium_darknet.exception.notice.NoticeImageProcessException;
 import hdxian.monatium_darknet.exception.notice.NoticeNotFoundException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
@@ -59,11 +60,8 @@ public class NoticeService {
             // 3. 추출한 src를 바탕으로 이미지 파일명 수정 및 경로 변경 (서버 내 경로)
             // {basePath}/temp/abcdef.png -> {basePath}}/notice/{noticeId}/img_01.png
             List<String> changedImgSrcs;
-            try {
-                changedImgSrcs = moveNoticeImageFiles(noticeId, imgSrcs);
-            } catch (IOException e) { // 파일 작업 중에 예외 터지면 롤백
-                throw new IllegalArgumentException(e);
-            }
+
+            changedImgSrcs = moveNoticeImageFiles(noticeId, imgSrcs);
 
             String baseSrc = "/notices/" + noticeId + "/images/";
             String updatedContent = htmlContentUtil.updateImgSrc(htmlContent, baseSrc, changedImgSrcs);
@@ -92,11 +90,7 @@ public class NoticeService {
         if (!imgSrcs.isEmpty()) {
             List<String> changedFileNames;
 
-            try {
-                changedFileNames = moveNoticeImageFiles(noticeId, imgSrcs);
-            } catch (IOException e) { // 파일 작업 중에 예외 터지면 롤백
-                throw new IllegalArgumentException(e);
-            }
+            changedFileNames = moveNoticeImageFiles(noticeId, imgSrcs);
 
             // img 태그의 src에 사용할 url. 서버 스토리지에 저장되는 경로와 다름.
             String baseSrc = "/notices/" + noticeId + "/images/";
@@ -180,7 +174,7 @@ public class NoticeService {
     }
 
     // 임시 저장 경로에 있던 공지사항 이미지들을 정식 경로에 저장
-    public List<String> moveNoticeImageFiles(Long noticeId, List<String> imgSrcs) throws IOException {
+    public List<String> moveNoticeImageFiles(Long noticeId, List<String> imgSrcs) {
 
         String tempDir = fileStorageService.getTempDir();
 
@@ -210,7 +204,13 @@ public class NoticeService {
             }
 
             changedFileNames.add(to.getFileName()); // add("img_#.ext")
-            fileStorageService.copyFile(from, to);
+
+            try {
+                fileStorageService.copyFile(from, to);
+            } catch (IOException e) {
+                throw new NoticeImageProcessException(e);
+            }
+
             seq++;
         }
 

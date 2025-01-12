@@ -242,11 +242,9 @@ public class CardService {
         // 카드 정보 업데이트
         updateCard(artifactCard, updateParam);
 
-        // 애착 스킬 정보 업데이트
-        artifactCard.setAttachmentSkill(updateSkill);
-
-        // 애착 사도 정보 업데이트
         artifactCard.setCharacter(updateCharacter);
+
+        artifactCard.setAttachmentSkill(updateSkill);
     }
 
     private void checkCardName(String cardName) {
