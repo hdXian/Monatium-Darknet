@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.service;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.exception.card.CardImageProcessException;
 import hdxian.monatium_darknet.exception.character.CharacterImageProcessException;
+import hdxian.monatium_darknet.exception.skin.SkinImageProcessException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.service.dto.AsideImageDto;
@@ -142,7 +143,7 @@ public class ImagePathService {
     @Transactional
     public void saveSkinImage(Long skinId, String src) {
         if (skinId == null || src == null) {
-            throw new IllegalArgumentException("skinId 또는 src가 null입니다.");
+            throw new SkinImageProcessException("skinId 또는 src가 null입니다.");
         }
 
         String dst = getSkinFileName(skinId);
@@ -150,7 +151,7 @@ public class ImagePathService {
         try {
             fileStorageService.copyFile(new FileDto(src), new FileDto(dst));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SkinImageProcessException(e);
         }
 
     }

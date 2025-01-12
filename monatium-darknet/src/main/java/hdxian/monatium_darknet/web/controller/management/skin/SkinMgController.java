@@ -4,6 +4,7 @@ import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinCategoryMapping;
+import hdxian.monatium_darknet.exception.skin.SkinImageProcessException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
@@ -394,7 +395,7 @@ public class SkinMgController {
             String tempUrl = imageUrlService.getTempImageBaseUrl() + fileDto.getFileName();
             session.setAttribute(SKIN_IMAGE_URL, tempUrl);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SkinImageProcessException(e);
         }
 
     }
