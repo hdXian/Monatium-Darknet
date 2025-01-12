@@ -2,6 +2,7 @@ package hdxian.monatium_darknet.service;
 
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.exception.card.CardImageProcessException;
+import hdxian.monatium_darknet.exception.character.CharacterImageProcessException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.service.dto.AsideImageDto;
@@ -190,7 +191,7 @@ public class ImagePathService {
     @Transactional // 예외 터지면 관련 트랜잭션 롤백
     public void saveCharacterImages(Long characterId, CharacterImageDto src) {
         if (characterId == null || src == null) {
-            throw new IllegalArgumentException("characterId 또는 src가 null입니다.");
+            throw new CharacterImageProcessException("characterId 또는 characterImage src가 null입니다.");
         }
 
         CharacterImageDto dst = generateChImagePaths(characterId);
@@ -209,7 +210,7 @@ public class ImagePathService {
                 fileStorageService.copyFile(new FileDto(src.getLowSkillImage()), new FileDto(dst.getLowSkillImage()));
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CharacterImageProcessException(e);
         }
 
     }
@@ -218,7 +219,7 @@ public class ImagePathService {
     @Transactional // 예외 터지면 관련 트랜잭션 롤백
     public void saveAsideImages(Long characterId, AsideImageDto src) {
         if (characterId == null || src == null) {
-            throw new IllegalArgumentException("characterId 또는 src가 null입니다.");
+            throw new CharacterImageProcessException("characterId 또는 asideImage src가 null입니다.");
         }
 
         AsideImageDto dst = generateAsideImagePaths(characterId);
@@ -237,7 +238,7 @@ public class ImagePathService {
                 fileStorageService.copyFile(new FileDto(src.getLv3Image()), new FileDto(dst.getLv3Image()));
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CharacterImageProcessException(e);
         }
 
     }

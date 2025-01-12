@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.web.controller.management.character;
 import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
+import hdxian.monatium_darknet.exception.character.CharacterImageProcessException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
@@ -906,7 +907,7 @@ public class CharacterMgController {
             session.setAttribute(attrName, tempImageUrl);
 //            log.info("setAttribute attrName = {}, tempImageUrl = {}", attrName, tempImageUrl);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CharacterImageProcessException(e);
         }
 
     }
