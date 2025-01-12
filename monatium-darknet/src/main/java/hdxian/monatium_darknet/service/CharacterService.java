@@ -6,7 +6,7 @@ import hdxian.monatium_darknet.domain.character.CharacterStatus;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinStatus;
-import hdxian.monatium_darknet.exception.CharacterNotFoundException;
+import hdxian.monatium_darknet.exception.character.CharacterNotFoundException;
 import hdxian.monatium_darknet.repository.CardRepository;
 import hdxian.monatium_darknet.repository.CharacterRepository;
 import hdxian.monatium_darknet.repository.SkinCategoryRepository;
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service

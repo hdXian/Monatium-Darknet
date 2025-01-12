@@ -4,7 +4,7 @@ import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import hdxian.monatium_darknet.domain.notice.NoticeStatus;
-import hdxian.monatium_darknet.exception.NoticeNotFoundException;
+import hdxian.monatium_darknet.exception.notice.NoticeNotFoundException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.repository.NoticeRepository;
@@ -14,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +21,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service

@@ -1,7 +1,8 @@
 package hdxian.monatium_darknet.web.controller;
 
-import hdxian.monatium_darknet.exception.CharacterNotFoundException;
-import hdxian.monatium_darknet.exception.NoticeNotFoundException;
+import hdxian.monatium_darknet.exception.card.CardNotFoundException;
+import hdxian.monatium_darknet.exception.character.CharacterNotFoundException;
+import hdxian.monatium_darknet.exception.notice.NoticeNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,11 @@ public class ExControllerAdvice {
     @ExceptionHandler(NoticeNotFoundException.class)
     public void handleNoticeNFE(NoticeNotFoundException ex, HttpServletResponse response) throws IOException {
         response.sendError(HttpStatus.NOT_FOUND.value(), "invalid Notice Id");
+    }
+
+    @ExceptionHandler(CardNotFoundException.class)
+    public void handelCardNFE(CardNotFoundException ex, HttpServletResponse response) throws IOException {
+        response.sendError(HttpStatus.NOT_FOUND.value(), "invalid Card Id");
     }
 
 }

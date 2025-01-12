@@ -1,4 +1,6 @@
-package hdxian.monatium_darknet.exception;
+package hdxian.monatium_darknet.exception.character;
+
+import hdxian.monatium_darknet.exception.CustomNotFoundException;
 
 public class CharacterNotFoundException extends CustomNotFoundException {
 
