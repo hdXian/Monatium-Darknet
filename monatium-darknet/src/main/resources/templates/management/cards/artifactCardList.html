@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<!-- deprecated -->
+<!--/*[[ deprecated ]]*/-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
     <title>아티팩트 카드 관리</title>
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
     <link rel="stylesheet" th:href="@{/css/management/cards/cardList.css}">
-    <!-- 커스텀 css -->
+    <!--/*[[ 커스텀 css ]]*/-->
 </head>
 
 <body>
 
-<!-- 상단 네비게이션 바 -->
+<!--/*[[ 상단 네비게이션 바 ]]*/-->
 <nav th:replace="~{fragments/navbar :: management_navbar}">
     상단 네비게이션 바 영역
 </nav>
@@ -24,9 +24,9 @@
         </a>
     </div>
 
-    <!-- 필터링 섹션 -->
+    <!--/*[[ 필터링 섹션 ]]*/-->
     <section id="filtering-options" class="d-flex justify-content-end align-items-center mb-3">
-        <!-- 등급 필터링 (체크박스) -->
+        <!--/*[[ 등급 필터링 (체크박스) ]]*/-->
         <div class="me-3">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="legendaryFilter" value="legendary">
@@ -46,17 +46,17 @@
             </div>
         </div>
 
-        <!-- 이름 검색창 -->
+        <!--/*[[ 이름 검색창 ]]*/-->
         <div class="me-3">
             <label for="searchName" class="form-label visually-hidden">이름 검색</label>
             <input type="text" class="form-control form-control-sm" id="searchName" placeholder="이름 검색" onkeyup="handleEnter(event)">
         </div>
 
-        <!-- 검색 버튼 -->
+        <!--/*[[ 검색 버튼 ]]*/-->
         <button type="button" class="btn btn-primary btn-sm" onclick="filterItems()">검색</button>
     </section>
 
-    <!-- 카드 목록 -->
+    <!--/*[[ 카드 목록 ]]*/-->
     <div class="container mt-4">
         <div class="row row-cols-1 row-cols-md-3 g-4">
 
@@ -85,7 +85,7 @@
 
 </div>
 
-<!-- 하단 푸터 -->
+<!--/*[[ 하단 푸터 ]]*/-->
 <footer th:replace="~{fragments/footer :: management_footer}">
     하단 푸터 영역
 </footer>
