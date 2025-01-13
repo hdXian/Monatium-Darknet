@@ -7,19 +7,19 @@
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/font.css}">
     <link rel="stylesheet" th:href="@{/css/main.css}">
-    <!-- 커스텀 css -->
+    <!--/*[[ 커스텀 css ]]*/-->
 
 </head>
 
 <body>
-<!-- 상단 네비게이션 바 -->
+<!--/*[[ 상단 네비게이션 바 ]]*/-->
 <nav th:replace="~{fragments/navbar :: common_navbar}">
     상단 네비게이션 바 영역
 </nav>
 
-<!-- Hero Section -->
+<!--/*[[ Hero Section ]]*/-->
 <section id="hero" class="hero-section">
-    <!-- YouTube 비디오 배경 -->
+    <!--/*[[ YouTube 비디오 배경 ]]*/-->
     <div class="video-background">
         <iframe
             src="https://www.youtube.com/embed/videoseries?list=PLzBZviDMO3LF4-GAL3KN__2bep0S0CUUX&autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&rel=0"
@@ -27,35 +27,35 @@
         ></iframe>
     </div>
 
-    <!-- 검은색 오버레이 -->
+    <!--/*[[ 검은색 오버레이 ]]*/-->
     <div class="video-overlay"></div>
 
-    <!-- 히어로 콘텐츠 (비디오 위에 표시) -->
+    <!--/*[[ 히어로 콘텐츠 (비디오 위에 표시) ]]*/-->
     <div class="hero-content">
         <h1>트릭컬 리바이브</h1>
         <p>귀염뽀짝 볼따구들과 우당탕탕 대모험!</p>
-        <!-- Google Play 다운로드 링크 -->
+        <!--/*[[ Google Play 다운로드 링크 ]]*/-->
         <a href="https://play.google.com/store/apps/details?id=com.epidgames.trickcalrevive" target="_blank">
             <img th:src="@{/imgs/main/google_play.png}" alt="Google Play에서 다운로드" style="width: 180px; margin-right: 10px;">
         </a>
 
-        <!-- App Store 다운로드 링크 -->
+        <!--/*[[ App Store 다운로드 링크 ]]*/-->
         <a href="https://apps.apple.com/kr/app/%ED%8A%B8%EB%A6%AD%EC%BB%AC-revive/id6443824730" target="_blank">
             <img th:src="@{/imgs/main/app_store.png}" alt="App Store에서 다운로드" style="width: 180px;">
         </a>
     </div>
 </section>
 
-<!-- 공지사항 섹션 -->
+<!--/*[[ 공지사항 섹션 ]]*/-->
 <section id="notice" class="notice-section">
 
     <div class="container">
-        <!-- 섹션 타이틀 -->
+        <!--/*[[ 섹션 타이틀 ]]*/-->
 
-        <!-- 공지사항 콘텐츠 영역 -->
+        <!--/*[[ 공지사항 콘텐츠 영역 ]]*/-->
         <div class="row notice-content p-4 rounded flex-nowrap justify-content-between">
 
-            <!-- 왼쪽: 슬라이드 (Carousel) -->
+            <!--/*[[ 왼쪽: 슬라이드 (Carousel) ]]*/-->
             <div class="notice-content-col d-flex flex-column align-items-center justify-content-center" data-aos="fade-right">
 
                 <div id="noticeCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
@@ -79,10 +79,10 @@
                     </div>
                 </div>
 
-                <!-- 하단 이미지와 텍스트 -->
-                <div class="notice-media row text-center">  <!-- 중앙 정렬을 위해 text-center 추가 -->
+                <!--/*[[ 하단 이미지와 텍스트 ]]*/-->
+                <div class="notice-media row text-center">  <!--/*[[ 중앙 정렬을 위해 text-center 추가 ]]*/-->
 
-                    <!-- 미디어 타이틀 -->
+                    <!--/*[[ 미디어 타이틀 ]]*/-->
                     <div class="notice-media-title w-100 mb-2">미디어</div>
 
                     <div class="col-4">
@@ -107,37 +107,37 @@
 
             </div>
 
-            <!-- 오른쪽: 공지사항 바로가기 -->
+            <!--/*[[ 오른쪽: 공지사항 바로가기 ]]*/-->
             <div class="notice-content-col d-flex flex-column gap-3" data-aos="fade-left">
-                <!-- 첫 번째 이미지 -->
+                <!--/*[[ 첫 번째 이미지 ]]*/-->
                 <div class="notice-img-container position-relative">
                     <a th:href="@{/notices?category=notice}">
                         <img th:src="@{/imgs/main/notice_sc1.png}" class="img-fluid rounded shadow" alt="공지사항">
                     </a>
                 </div>
-            
-                <!-- 두 번째 이미지 -->
+
+                <!--/*[[ 두 번째 이미지 ]]*/-->
                 <div class="notice-img-container position-relative">
                     <a th:href="@{/notices?category=update}">
                         <img th:src="@{/imgs/main/notice_sc2.png}" class="img-fluid rounded shadow" alt="업데이트">
                     </a>
                 </div>
-            
-                <!-- 세 번째 이미지 -->
+
+                <!--/*[[ 세 번째 이미지 ]]*/-->
                 <div class="notice-img-container position-relative">
                     <a th:href="@{/notices?category=event}">
                         <img th:src="@{/imgs/main/notice_sc3.png}" class="img-fluid rounded shadow" alt="이벤트">
                     </a>
                 </div>
-            
-                <!-- 네 번째 이미지 -->
+
+                <!--/*[[ 네 번째 이미지 ]]*/-->
                 <div class="notice-img-container position-relative">
                     <a th:href="@{/notices?category=dev}">
                         <img th:src="@{/imgs/main/notice_sc4.png}" class="img-fluid rounded shadow" alt="개발자 노트">
                     </a>
                 </div>
 
-                <!-- 더보기 버튼: 하단 우측 정렬 -->
+                <!--/*[[ 더보기 버튼: 하단 우측 정렬 ]]*/-->
                 <div class="w-100 d-flex justify-content-end">
                     <a th:href="@{/notices}" class="notice-button btn btn-custom btn-lg"> 공지사항 더보기 </a>
                 </div>
@@ -146,45 +146,45 @@
         </div>
 
     </div>
-    
+
 </section>
 
-<!-- 세계관 섹션 -->
+<!--/*[[ 세계관 섹션 ]]*/-->
 <section id="worldview" class="worldview-section container-fluid">
 
     <div class="worldview-content container d-flex flex-column align-items-center justify-content-center" >
-        <!-- 유튜브 비디오 -->
+        <!--/*[[ 유튜브 비디오 ]]*/-->
         <div class="video-container ratio ratio-16x9">
-            <iframe 
-                src="https://www.youtube.com/embed/k1PwjZG7a4g" 
-                title="YouTube video player" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            <iframe
+                src="https://www.youtube.com/embed/k1PwjZG7a4g"
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen>
             </iframe>
         </div>
     </div>
-    
+
 </section>
 
-<!-- 캐릭터 소개 섹션 -->
+<!--/*[[ 캐릭터 소개 섹션 ]]*/-->
 <section id="characters" class="container-fluid characters-section">
 
     <div class="container characters-content d-flex justify-content-center align-items-center">
-        
+
         <div class="row w-100 align-items-center justify-content-center">
 
-            <!-- 왼쪽: 캐릭터 이미지 영역 -->
+            <!--/*[[ 왼쪽: 캐릭터 이미지 영역 ]]*/-->
             <div class="characters-content-col d-flex justify-content-center align-items-center">
                 <div class="image-container d-flex justify-content-center align-items-center">
                     <img id="main-character-img" th:src="@{ |${chBaseUrl}body/1| }" alt="캐릭터 이미지" class="character-img rounded">
                 </div>
             </div>
 
-            <!-- 오른쪽: 캐릭터 정보 텍스트 -->
+            <!--/*[[ 오른쪽: 캐릭터 정보 텍스트 ]]*/-->
             <div class="characters-content-col flex-column d-flex align-items-center">
 
-                <!-- 초상화 목록 -->
-                <div class="character-portraits d-flex flex-wrap justify-content-center g-3"> <!-- 자동 줄바꿈 -->
+                <!--/*[[ 초상화 목록 ]]*/-->
+                <div class="character-portraits d-flex flex-wrap justify-content-center g-3"> <!--/*[[ 자동 줄바꿈 ]]*/-->
                     <div th:each="character: ${characterList}" class="portrait-container">
                         <img th:src="@{ |${chBaseUrl}portrait/${character.id}| }" alt="캐릭터 1" class="character-portrait"
                         th:data-target="|character-info-${character.id}|"
@@ -193,12 +193,12 @@
                     </div>
                 </div>
 
-                <!-- 캐릭터 정보 -->
+                <!--/*[[ 캐릭터 정보 ]]*/-->
                 <div th:each="character: ${characterList}" th:id="|character-info-${character.id}|"
                      class="character-info mx-auto d-flex flex-column align-items-center justify-content-center"
                      th:classappend=" ${character.id == 1} ? '' : 'd-none' ">
 
-                    <!-- 초상화 이미지와 이름, 수식어 -->
+                    <!--/*[[ 초상화 이미지와 이름, 수식어 ]]*/-->
                     <div class="character-title d-flex align-items-center justify-content-center">
                         <div class="portrait-container">
                             <img th:src="@{ |${chBaseUrl}portrait/${character.id}| }" alt="캐릭터 1" class="info-portrait">
@@ -209,10 +209,10 @@
                         </div>
                     </div>
 
-                    <!-- 한마디와 TMI를 묶고, 가운데 정렬 -->
+                    <!--/*[[ 한마디와 TMI를 묶고, 가운데 정렬 ]]*/-->
                     <div class="character-info-text text-center">
 
-                        <!-- 종족명 및 심볼 -->
+                        <!--/*[[ 종족명 및 심볼 ]]*/-->
                         <div th:switch="${{character.race}}" class="d-flex align-items-center justify-content-center gap-2">
                             종족:
                             <th:block th:case="'fairy'">
@@ -252,12 +252,12 @@
 
                         </div>
 
-                        <!-- 캐릭터 한마디 -->
-                        <div class="info-subtitle">한마디</div> <!-- 소제목 -->
+                        <!--/*[[ 캐릭터 한마디 ]]*/-->
+                        <div class="info-subtitle">한마디</div> <!--/*[[ 소제목 ]]*/-->
                         <div th:text="${character.quote}">캐릭터 한 마디</div>
 
-                        <!-- 캐릭터 TMI -->
-                        <div class="info-subtitle">좋아하는 것</div> <!-- 소제목 -->
+                        <!--/*[[ 캐릭터 TMI ]]*/-->
+                        <div class="info-subtitle">좋아하는 것</div> <!--/*[[ 소제목 ]]*/-->
                         <div th:text="${character.favorite}">캐릭터 좋아하는 것</div>
 
                     </div>
@@ -271,27 +271,27 @@
 
 </section>
 
-<!-- 포토존 섹션 -->
+<!--/*[[ 포토존 섹션 ]]*/-->
 <section id="photozone" class="container-fluid photozone-section">
     <div class="photozone-content container row align-items-center justify-content-center">
-        
-        <!-- 좌측: 세로 탭 -->
+
+        <!--/*[[ 좌측: 세로 탭 ]]*/-->
         <div class="photozone-tab">
             <ul class="nav nav-pills flex-column" id="photozoneTabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="battle-tab" data-bs-toggle="pill" data-bs-target="#battle" 
+                    <button class="nav-link active" id="battle-tab" data-bs-toggle="pill" data-bs-target="#battle"
                             type="button" role="tab" aria-controls="battle" aria-selected="true">
                         <div class="photozone-text">전투</div>
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="theater-tab" data-bs-toggle="pill" data-bs-target="#theater" 
+                    <button class="nav-link" id="theater-tab" data-bs-toggle="pill" data-bs-target="#theater"
                             type="button" role="tab" aria-controls="theater" aria-selected="false">
                         <div class="photozone-text">테마극장</div>
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="adventure-tab" data-bs-toggle="pill" data-bs-target="#adventure" 
+                    <button class="nav-link" id="adventure-tab" data-bs-toggle="pill" data-bs-target="#adventure"
                             type="button" role="tab" aria-controls="adventure" aria-selected="false">
                         <div class="photozone-text">볼따구 라이프</div>
                     </button>
@@ -299,10 +299,10 @@
             </ul>
         </div>
 
-        <!-- 우측: 탭 콘텐츠 (슬라이드 캐러셀) -->
+        <!--/*[[ 우측: 탭 콘텐츠 (슬라이드 캐러셀) ]]*/-->
         <div class="photozone-tab-content">
             <div class="tab-content" id="photozoneTabsContent">
-                <!-- 전투 탭 -->
+                <!--/*[[ 전투 탭 ]]*/-->
                 <div class="tab-pane fade show active" id="battle" role="tabpanel" aria-labelledby="battle-tab">
                     <div id="battleCarousel" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
@@ -351,7 +351,7 @@
                     </div>
                 </div>
 
-                <!-- 테마극장 탭 -->
+                <!--/*[[ 테마극장 탭 ]]*/-->
                 <div class="tab-pane fade" id="theater" role="tabpanel" aria-labelledby="theater-tab">
                     <div id="theaterCarousel" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
@@ -400,7 +400,7 @@
                     </div>
                 </div>
 
-                <!-- 모험회 탭 -->
+                <!--/*[[ 모험회 탭 ]]*/-->
                 <div class="tab-pane fade" id="adventure" role="tabpanel" aria-labelledby="adventure-tab">
                     <div id="adventureCarousel" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
@@ -440,9 +440,9 @@
     </div>
 </section>
 
-<!-- 리모컨 섹션 -->
+<!--/*[[ 리모컨 섹션 ]]*/-->
 <div class="remote-control">
-    <!-- 닫기 버튼 -->
+    <!--/*[[ 닫기 버튼 ]]*/-->
     <button class="btn-close btn-close-white" onclick="closeRemoteControl()"></button>
     <h4>Quick Menu</h4>
     <a href="https://coupon.a.prod.service.trickcal.io" class="btn btn-custom">쿠폰 등록</a>
@@ -450,7 +450,7 @@
     <a href="#" class="btn btn-custom">이벤트 참여</a>
 </div>
 
-<!-- 푸터 -->
+<!--/*[[ 푸터 ]]*/-->
 <footer th:replace="~{fragments/footer :: common_footer}"></footer>
 
 <script>
