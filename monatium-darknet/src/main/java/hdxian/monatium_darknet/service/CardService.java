@@ -4,6 +4,9 @@ import hdxian.monatium_darknet.domain.Attribute;
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.card.*;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.exception.card.CardNotFoundException;
+import hdxian.monatium_darknet.exception.card.DuplicateCardNameException;
+import hdxian.monatium_darknet.exception.character.CharacterNotFoundException;
 import hdxian.monatium_darknet.repository.CardRepository;
 import hdxian.monatium_darknet.repository.CharacterRepository;
 import hdxian.monatium_darknet.repository.dto.CardSearchCond;
@@ -77,7 +80,7 @@ public class CardService {
 
         Optional<Character> findCharacter = characterRepository.findOne(characterId);
         if (findCharacter.isEmpty()) {
-            throw new NoSuchElementException("대상 캐릭터가 존재하지 않습니다. characterId=" + characterId);
+            throw new CharacterNotFoundException("대상 캐릭터가 존재하지 않습니다. characterId=" + characterId);
         }
 
         Character character = findCharacter.get();
@@ -151,7 +154,7 @@ public class CardService {
         if (updateCharacterId != null) {
             Optional<Character> findCharacter = characterRepository.findOne(updateCharacterId);
             if (findCharacter.isEmpty()) {
-                throw new NoSuchElementException("대상 캐릭터가 존재하지 않습니다. updateCharacterId=" + updateCharacterId);
+                throw new CharacterNotFoundException("대상 캐릭터가 존재하지 않습니다. characterId=" + updateCharacterId);
             }
             updateCharacter = findCharacter.get();
         }
@@ -198,7 +201,7 @@ public class CardService {
     public Card findOneSpell(Long id) {
         Optional<Card> find = cardRepository.findOne(id, CardType.SPELL);
         if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 스펠 카드가 존재하지 않습니다. id=" + id);
+            throw new CardNotFoundException("해당 스펠 카드가 존재하지 않습니다. cardId = " + id);
         }
         return find.get();
     }
@@ -206,7 +209,7 @@ public class CardService {
     public Card findOneArtifact(Long id) {
         Optional<Card> find = cardRepository.findOne(id, CardType.ARTIFACT);
         if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 아티팩트 카드가 존재하지 않습니다. id=" + id);
+            throw new CardNotFoundException("해당 아티팩트 카드가 존재하지 않습니다. cardId = " + id);
         }
         return find.get();
     }
@@ -214,7 +217,7 @@ public class CardService {
     public Card findOne(Long id) {
         Optional<Card> find = cardRepository.findOne(id);
         if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 카드가 존재하지 않습니다. id=" + id);
+            throw new CardNotFoundException("해당 카드가 존재하지 않습니다. cardId = " + id);
         }
         return find.get();
     }
@@ -239,17 +242,15 @@ public class CardService {
         // 카드 정보 업데이트
         updateCard(artifactCard, updateParam);
 
-        // 애착 스킬 정보 업데이트
-        artifactCard.setAttachmentSkill(updateSkill);
-
-        // 애착 사도 정보 업데이트
         artifactCard.setCharacter(updateCharacter);
+
+        artifactCard.setAttachmentSkill(updateSkill);
     }
 
     private void checkCardName(String cardName) {
         Optional<Card> find = cardRepository.findByName(cardName);
         if (find.isPresent()) {
-            throw new IllegalArgumentException("해당 이름의 카드가 이미 있습니다. cardName=" + cardName);
+            throw new DuplicateCardNameException("해당 이름의 카드가 이미 있습니다. cardName=" + cardName);
         }
     }
 

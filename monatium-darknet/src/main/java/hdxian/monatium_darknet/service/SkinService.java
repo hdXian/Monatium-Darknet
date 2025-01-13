@@ -5,6 +5,8 @@ import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinCategoryMapping;
 import hdxian.monatium_darknet.domain.skin.SkinStatus;
+import hdxian.monatium_darknet.exception.skin.SkinCategoryNotFoundException;
+import hdxian.monatium_darknet.exception.skin.SkinNotFoundException;
 import hdxian.monatium_darknet.repository.SkinCategoryRepository;
 import hdxian.monatium_darknet.repository.SkinRepository;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
@@ -232,7 +234,7 @@ public class SkinService {
     public Skin findOneSkin(Long skinId) {
         Optional<Skin> find = skinRepository.findOne(skinId);
         if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 스킨이 존재하지 않습니다. skinId=" + skinId);
+            throw new SkinNotFoundException("해당 스킨이 존재하지 않습니다. skinId=" + skinId);
         }
 
         return find.get();
@@ -242,7 +244,7 @@ public class SkinService {
     public SkinCategory findOneCategory(Long categoryId) {
         Optional<SkinCategory> find = categoryRepository.findOne(categoryId);
         if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 스킨 카테고리가 존재하지 않습니다. categoryId=" + categoryId);
+            throw new SkinCategoryNotFoundException("해당 스킨 카테고리가 존재하지 않습니다. categoryId=" + categoryId);
         }
         return find.get();
     }

@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.web.controller.api;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.service.ImagePathService;
+import hdxian.monatium_darknet.service.ImageUrlService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -20,9 +21,9 @@ import java.io.IOException;
 @RequestMapping("/api/images")
 public class ImageController {
 
-    // TODO - IOException 나는것들 묶어서 처리하기
     private final LocalFileStorageService fileStorageService;
 
+    private final ImageUrlService imageUrlService;
     private final ImagePathService imagePathService;
 
     // 임시 경로 이미지 요청
@@ -40,12 +41,13 @@ public class ImageController {
 
     // 서버 임시 경로에 이미지를 업로드
     @PostMapping("/upload/tmp")
-    public UploadImageResponseDto uploadImage(@RequestParam("file") MultipartFile multipartFile) {
+    public ResponseEntity<String> uploadImage2(@RequestParam("file") MultipartFile multipartFile) {
         try {
             FileDto fileDto = fileStorageService.saveFileToTemp(multipartFile);
             String fileName = fileDto.getFileName();
-            String imageUrl = "/api/images/tmp/" + fileName;
-            return new UploadImageResponseDto(true, imageUrl);
+            String imageUrl = imageUrlService.getTempImageBaseUrl() + fileName;
+
+            return ResponseEntity.ok(imageUrl);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

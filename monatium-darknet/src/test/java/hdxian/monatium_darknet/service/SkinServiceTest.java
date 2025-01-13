@@ -6,6 +6,8 @@ import hdxian.monatium_darknet.domain.aside.AsideSpec;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.*;
+import hdxian.monatium_darknet.exception.skin.SkinCategoryNotFoundException;
+import hdxian.monatium_darknet.exception.skin.SkinNotFoundException;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -66,7 +69,7 @@ class SkinServiceTest {
         // 없는 스킨 id에 대해 검색하면 예외 발생
         Long noneSkinId = -1L;
         assertThatThrownBy(() -> skinService.findOneSkin(noneSkinId))
-                .isInstanceOf(NoSuchElementException.class)
+                .isInstanceOf(SkinNotFoundException.class)
                 .hasMessage("해당 스킨이 존재하지 않습니다. skinId=" + noneSkinId);
     }
 
@@ -86,7 +89,7 @@ class SkinServiceTest {
         // 없는 카테고리 id를 검색하면 예외 발생
         Long noneCategoryId = -1L;
         assertThatThrownBy(() -> skinService.findOneCategory(noneCategoryId))
-                .isInstanceOf(NoSuchElementException.class)
+                .isInstanceOf(SkinCategoryNotFoundException.class)
                 .hasMessage("해당 스킨 카테고리가 존재하지 않습니다. categoryId=" + noneCategoryId);
     }
 
@@ -168,12 +171,12 @@ class SkinServiceTest {
 
         // 없는 카테고리에 대해 스킨 추가
         assertThatThrownBy(() -> skinService.linkSkinAndCategory(rim_skin_id, nonCategoryId))
-                .isInstanceOf(NoSuchElementException.class)
+                .isInstanceOf(SkinCategoryNotFoundException.class)
                 .hasMessage("해당 스킨 카테고리가 존재하지 않습니다. categoryId=" + nonCategoryId);
 
         // 없는 스킨에 대해 카테고리 추가
         assertThatThrownBy(() -> skinService.linkSkinAndCategory(nonSkinId, category_id_1))
-                .isInstanceOf(NoSuchElementException.class)
+                .isInstanceOf(SkinNotFoundException.class)
                 .hasMessage("해당 스킨이 존재하지 않습니다. skinId=" + nonSkinId);
     }
 
@@ -294,7 +297,7 @@ class SkinServiceTest {
 
     @Test
     @DisplayName("스킨 카테고리 변경")
-//    @Rollback(value = false)
+    @Rollback(value = false)
     void update3() {
         // given
         CharacterDto charDto1 = generateCharDto("사도1");
@@ -401,7 +404,7 @@ class SkinServiceTest {
         // then
         // 삭제된 카테고리는 찾을 수 없어야 함
         assertThatThrownBy(() -> skinService.findOneCategory(categoryId))
-                .isInstanceOf(NoSuchElementException.class)
+                .isInstanceOf(SkinCategoryNotFoundException.class)
                 .hasMessage("해당 스킨 카테고리가 존재하지 않습니다. categoryId=" + categoryId);
 
         // 검색결과 없어야 함

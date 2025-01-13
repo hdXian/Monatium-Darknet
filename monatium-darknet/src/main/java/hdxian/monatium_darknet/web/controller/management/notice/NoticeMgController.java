@@ -112,9 +112,6 @@ public class NoticeMgController {
     public String editForm(HttpSession session, Model model, @PathVariable("noticeId") Long noticeId) {
 
         Notice notice = noticeService.findOne(noticeId);
-        if (notice == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 공지사항이 없습니다. noticeId=" + noticeId);
-        }
 
         NoticeForm noticeForm = Optional.ofNullable((NoticeForm) session.getAttribute(NOTICE_FORM)).orElse(generateNoticeForm(notice));
 

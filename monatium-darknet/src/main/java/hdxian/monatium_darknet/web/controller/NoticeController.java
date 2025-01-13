@@ -82,14 +82,7 @@ public class NoticeController {
     @GetMapping("/{noticeId}")
     public String getDetail(@PathVariable("noticeId") Long noticeId, Model model) {
         Notice notice = noticeService.findOnePublic(noticeId);
-        // TODO - 에러 페이지 추가 필요
-        if (notice != null) {
-            noticeService.incrementView(noticeId); // 조회수 증가
-        }
-        else {
-            // send error Page...
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid notice ID"); // 404 에러
-        }
+        noticeService.incrementView(noticeId); // 조회수 증가
 
         model.addAttribute("notice", notice);
 

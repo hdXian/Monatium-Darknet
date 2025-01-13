@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,7 +27,7 @@ public class SkinCategory {
     // 연관관계 메서드
     // Skin의 addSkinCategory() 쪽에서도 이걸 호출해야 돼서 public으로 따로 열어놔야 함.
     public void addMapping(SkinCategoryMapping mapping) {
-        System.out.println("category.addMapping = " + mapping);
+//        System.out.println("category.addMapping = " + mapping);
         mappings.add(mapping);
     }
 
@@ -42,19 +43,6 @@ public class SkinCategory {
         return skinCategory;
     }
 
-    // 비즈니스 로직 (보통 skin의 addCategory를 통해 함께 설정됨. 이 메서드를 호출할 일은 사실상 없음.)
-    public void addSkin(Skin skin) {
-        // mappings 변경에 따른 DB 반영은 Skin에서만 일어남. -> mapping을 어디서 추가하는지는 크게 중요하지 않음
-        SkinCategoryMapping mapping = SkinCategoryMapping.createSkinCategoryMapping(skin, this);
-        this.addMapping(mapping);
-        skin.addMapping(mapping);
-    }
-
-//    public void removeSkin(Skin skin) {
-//        mappings.removeIf(mapping -> mapping.getSkin().equals(skin));
-//        skin.getMappings().removeIf(mapping -> mapping.getSkinCategory().equals(this));
-//    }
-
-    // TODO - equals, hashCode 추가 고려
+    // 비즈니스 로직은 Skin 객체에서 수행 (연관관계의 주인)
 
 }

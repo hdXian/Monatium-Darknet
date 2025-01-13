@@ -50,7 +50,6 @@ public class SkinCategoryRepository {
 
     // Skin이 속하는 카테고리 검색
     public List<SkinCategory> findBySkinId(Long skinId) {
-        // TODO - 성능 최적화를 위해 fetch join 도입 고려
         String jpql = "select sc from SkinCategory sc" + " "
                 + "join sc.mappings scm" + " "
                 + "where scm.skin.id = :skinId";

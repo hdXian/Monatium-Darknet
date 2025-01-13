@@ -6,6 +6,7 @@ import hdxian.monatium_darknet.domain.character.CharacterStatus;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinStatus;
+import hdxian.monatium_darknet.exception.character.CharacterNotFoundException;
 import hdxian.monatium_darknet.repository.CardRepository;
 import hdxian.monatium_darknet.repository.CharacterRepository;
 import hdxian.monatium_darknet.repository.SkinCategoryRepository;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -129,8 +129,6 @@ public class CharacterService {
 
         Optional<Card> findCard = cardRepository.findOneArtifactByCharacterId(characterId);
 
-        // 그럼 아티팩트 카드 추가할 때도 이미 애착 사도가 있는지 확인해야 하나? 아티팩트 카드에 @OneToOne이 걸려있기는 함.
-
         // 애착 아티팩트 카드가 있을 경우에만 제거
         if (findCard.isPresent()) {
             Card artifactCard = findCard.get();
@@ -160,18 +158,15 @@ public class CharacterService {
     // 캐릭터 검색 기능
     public Character findOne(Long id) {
         Optional<Character> find = characterRepository.findOne(id);
-        if(find.isEmpty()) {
-            throw new NoSuchElementException("해당 캐릭터가 없습니다. id=" + id);
-        }
-        return find.get();
+        return find.orElseThrow(() -> new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId = " + id));
     }
 
     public Character findOneActive(Long id) {
-        Character character = findOne(id);
-        if (character.getStatus() != CharacterStatus.ACTIVE) {
-            throw new NoSuchElementException("해당 캐릭터가 없습니다. id=" + id);
+        Optional<Character> find = characterRepository.findOne(id);
+        if (find.isEmpty() || find.get().getStatus() != CharacterStatus.ACTIVE) {
+            throw new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId = " + id);
         }
-        return character;
+        return find.get();
     }
 
     public List<Character> findAll() {
