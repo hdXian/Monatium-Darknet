@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<!-- v18 -->
+<!--/*[[ v18 ]]*/-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
     <title>캐릭터 추가</title>
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
     <link rel="stylesheet" th:href="@{/css/management/characters/characterForm.css}">
-    <!-- 커스텀 css -->
+    <!--/*[[ 커스텀 css ]]*/-->
 </head>
 
 <body>
 
-<!-- 상단 네비게이션 바 -->
+<!--/*[[ 상단 네비게이션 바 ]]*/-->
 <nav th:replace="~{fragments/navbar :: management_navbar}">
     상단 네비게이션 바 영역
 </nav>
@@ -24,7 +24,7 @@
 
         <form th:object="${chForm}" th:action="@{/management/characters/new/step2}" method="post" enctype="multipart/form-data">
 
-            <!-- 특성 정보 그룹 -->
+            <!--/*[[ 특성 정보 그룹 ]]*/-->
             <div class="info-group mb-4">
                 <div class="info-title" data-bs-toggle="collapse" data-bs-target="#traitSection" aria-expanded="true">
                     <span>특성 정보</span>
@@ -35,7 +35,7 @@
                     <hr>
                     <div class="row mt-3">
                         <div class="col-md-6">
-                            <!-- 성격 -->
+                            <!--/*[[ 성격 ]]*/-->
                             <div class="mb-3">
                                 <label for="personality" class="form-label">성격</label>
                                 <select th:field="*{personality}" th:errorclass="error-field" id="personality" name="personality" class="form-select">
@@ -48,7 +48,7 @@
                                 <div class="error-field" th:errors="*{personality}"></div>
                             </div>
     
-                            <!-- 역할 -->
+                            <!--/*[[ 역할 ]]*/-->
                             <div class="mb-3">
                                 <label for="role" class="form-label">역할</label>
                                 <select th:field="*{role}" th:errorclass="error-field" id="role" name="role" class="form-select">
@@ -59,7 +59,7 @@
                                 <div class="error-field" th:errors="*{role}"></div>
                             </div>
     
-                            <!-- 공격 방식 -->
+                            <!--/*[[ 공격 방식 ]]*/-->
                             <div class="mb-3">
                                 <label for="attackStyle" class="form-label">공격 방식</label>
                                 <select th:field="*{attackType}" th:errorclass="error-field" id="attackStyle" name="attackStyle" class="form-select">
@@ -69,7 +69,7 @@
                                 <div class="error-field" th:errors="*{attackType}"></div>
                             </div>
     
-                            <!-- 배치 -->
+                            <!--/*[[ 배치 ]]*/-->
                             <div class="mb-3">
                                 <label for="placement" class="form-label">배치</label>
                                 <select th:field="*{position}" th:errorclass="error-field" id="placement" name="placement" class="form-select">
@@ -83,7 +83,7 @@
                         </div>
     
                         <div class="col-md-6">
-                            <!-- 깡 -->
+                            <!--/*[[ 깡 ]]*/-->
                             <div class="mb-3">
                                 <label for="aggressive-status" class="form-label">깡</label>
                                 <div id="aggressive-status" class="d-flex align-items-center">
@@ -93,7 +93,7 @@
                                 <div class="error-field" th:errors="*{aggressive}"></div>
                             </div>
     
-                            <!-- 맷집 -->
+                            <!--/*[[ 맷집 ]]*/-->
                             <div class="mb-3">
                                 <label for="endurance-status" class="form-label">맷집</label>
                                 <div id="endurance-status" class="d-flex align-items-center">
@@ -103,7 +103,7 @@
                                 <div class="error-field" th:errors="*{endurance}"></div>
                             </div>
     
-                            <!-- 재주 -->
+                            <!--/*[[ 재주 ]]*/-->
                             <div class="mb-3">
                                 <label for="trick-status" class="form-label">재주</label>
                                 <div id="trick-status" class="d-flex align-items-center">
@@ -117,21 +117,21 @@
                 </div>
             </div>
 
-            <!-- 폼 제출 버튼 -->
+            <!--/*[[ 폼 제출 버튼 ]]*/-->
             <div class="button-group d-flex justify-content-between mt-4">
-                <!-- 왼쪽 버튼 그룹 -->
+                <!--/*[[ 왼쪽 버튼 그룹 ]]*/-->
                 <div class="d-flex gap-2">
-                    <!-- 취소 버튼 -->
+                    <!--/*[[ 취소 버튼 ]]*/-->
                     <button type="button" name="action" value="cancel" class="btn btn-danger" onclick="confirmCancel(this)">취소</button>
-                    <!-- 저장 버튼 -->
+                    <!--/*[[ 저장 버튼 ]]*/-->
                     <button type="submit" name="action" value="save" class="btn btn-secondary">임시 저장</button>
                 </div>
 
-                <!-- 오른쪽 버튼 그룹 -->
+                <!--/*[[ 오른쪽 버튼 그룹 ]]*/-->
                 <div class="d-flex gap-2">
-                    <!-- 이전 버튼 -->
+                    <!--/*[[ 이전 버튼 ]]*/-->
                     <button type="submit" name="action" value="prev" class="btn btn-secondary">이전으로</button>
-                    <!-- 다음 버튼 -->
+                    <!--/*[[ 다음 버튼 ]]*/-->
                     <button type="submit" name="action" value="next" class="btn btn-primary">다음 단계로</button>
                 </div>
             </div>
@@ -142,7 +142,7 @@
 
 </div>
 
-<!-- 하단 푸터 -->
+<!--/*[[ 하단 푸터 ]]*/-->
 <footer th:replace="~{fragments/footer :: management_footer}">
     하단 푸터 영역
 </footer>

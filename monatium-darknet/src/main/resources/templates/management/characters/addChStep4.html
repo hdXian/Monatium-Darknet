@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<!-- v18 -->
+<!--/*[[ v18 ]]*/-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
     <title>캐릭터 추가</title>
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
     <link rel="stylesheet" th:href="@{/css/management/characters/characterForm.css}">
-    <!-- 커스텀 css -->
+    <!--/*[[ 커스텀 css ]]*/-->
 </head>
 
 <body>
 
-<!-- 상단 네비게이션 바 -->
+<!--/*[[ 상단 네비게이션 바 ]]*/-->
 <nav th:replace="~{fragments/navbar :: management_navbar}">
     상단 네비게이션 바 영역
 </nav>
@@ -24,7 +24,7 @@
 
         <form th:object="${chForm}" th:action="@{/management/characters/new/step4}" method="post" enctype="multipart/form-data">
 
-            <!-- 어사이드 여부 -->
+            <!--/*[[ 어사이드 여부 ]]*/-->
             <div class="enable-radio mb-3 p-3 rounded border d-flex align-items-center">
                 <label class="form-label me-3 mb-0">어사이드</label>
                 <div>
@@ -41,7 +41,7 @@
                 </div>
             </div>
 
-            <!-- 어사이드 그룹 -->
+            <!--/*[[ 어사이드 그룹 ]]*/-->
             <div class="info-group optional-info mb-4">
 
                 <div class="info-title" data-bs-toggle="collapse" data-bs-target="#asideSection" aria-expanded="true">
@@ -51,11 +51,11 @@
 
                 <div id="asideSection" class="collapse show">
                     <hr>
-                    <!-- 1. 어사이드 정보 -->
+                    <!--/*[[ 1. 어사이드 정보 ]]*/-->
                     <div class="info-subgroup mb-3 mt-3">
                         <h4 class="form-subtitle">어사이드 정보</h4>
                         
-                        <!-- 어사이드 이미지 -->
+                        <!--/*[[ 어사이드 이미지 ]]*/-->
                         <div class="row align-items-center">
                             <div class="col-md-3 text-center">
                                 <label for="asideImage" class="form-label">이미지</label>
@@ -84,10 +84,10 @@
 
                     </div>
                 
-                    <!-- 2. 어사이드 1단계 -->
+                    <!--/*[[ 2. 어사이드 1단계 ]]*/-->
                     <div class="info-subgroup mb-3">
                         <h4 class="form-subtitle">어사이드 1단계</h4>
-                        <!-- 이미지 -->
+                        <!--/*[[ 이미지 ]]*/-->
                         <div class="row align-items-center">
                             <div class="col-md-3 text-center">
                                 <label for="asideLv1Image" class="form-label">이미지</label>
@@ -131,10 +131,10 @@
                         </div>
                     </div>
                 
-                    <!-- 3. 어사이드 2단계 -->
+                    <!--/*[[ 3. 어사이드 2단계 ]]*/-->
                     <div class="info-subgroup mb-3">
                         <h4 class="form-subtitle">어사이드 2단계</h4>
-                        <!-- 이미지 -->
+                        <!--/*[[ 이미지 ]]*/-->
                         <div class="row align-items-center">
                             <div class="col-md-3 text-center">
                                 <label for="asideLv2Image" class="form-label">이미지</label>
@@ -178,10 +178,10 @@
                         </div>
                     </div>
                 
-                    <!-- 4. 어사이드 3단계 -->
+                    <!--/*[[ 4. 어사이드 3단계 ]]*/-->
                     <div class="info-subgroup mb-3">
                         <h4 class="form-subtitle">어사이드 3단계</h4>
-                        <!-- 이미지 -->
+                        <!--/*[[ 이미지 ]]*/-->
                         <div class="row align-items-center">
                             <div class="col-md-3 text-center">
                                 <label for="asideLv3Image" class="form-label">이미지</label>
@@ -228,21 +228,21 @@
 
             </div>
 
-            <!-- 폼 제출 버튼 -->
+            <!--/*[[ 폼 제출 버튼 ]]*/-->
             <div class="button-group d-flex justify-content-between mt-4">
-                <!-- 왼쪽 버튼 그룹 -->
+                <!--/*[[ 왼쪽 버튼 그룹 ]]*/-->
                 <div class="d-flex gap-2">
-                    <!-- 취소 버튼 -->
+                    <!--/*[[ 취소 버튼 ]]*/-->
                     <button type="button" name="action" value="cancel" class="btn btn-danger" onclick="confirmCancel(this)">취소</button>
-                    <!-- 저장 버튼 -->
+                    <!--/*[[ 저장 버튼 ]]*/-->
                     <button type="submit" name="action" value="save" class="btn btn-secondary">임시 저장</button>
                 </div>
 
-                <!-- 오른쪽 버튼 그룹 -->
+                <!--/*[[ 오른쪽 버튼 그룹 ]]*/-->
                 <div class="d-flex gap-2">
-                    <!-- 이전 버튼 -->
+                    <!--/*[[ 이전 버튼 ]]*/-->
                     <button type="submit" name="action" value="prev" class="btn btn-secondary">이전으로</button>
-                    <!-- 다음 버튼 -->
+                    <!--/*[[ 다음 버튼 ]]*/-->
                     <button type="submit" name="action" value="next" class="btn btn-primary">마지막 확인하러 가기!</button>
                 </div>
             </div>
@@ -253,7 +253,7 @@
 
 </div>
 
-<!-- 하단 푸터 -->
+<!--/*[[ 하단 푸터 ]]*/-->
 <footer th:replace="~{fragments/footer :: management_footer}">
     하단 푸터 영역
 </footer>
