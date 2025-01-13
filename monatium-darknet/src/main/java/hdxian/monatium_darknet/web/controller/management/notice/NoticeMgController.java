@@ -3,31 +3,22 @@ package hdxian.monatium_darknet.web.controller.management.notice;
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
-import hdxian.monatium_darknet.domain.notice.NoticeStatus;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
+import hdxian.monatium_darknet.service.ImageUrlService;
 import hdxian.monatium_darknet.service.MemberService;
 import hdxian.monatium_darknet.service.NoticeService;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
-import hdxian.monatium_darknet.web.controller.management.SessionConst;
 import jakarta.servlet.http.HttpSession;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +34,7 @@ public class NoticeMgController {
 
     private final MemberService memberService;
     private final NoticeService noticeService;
+    private final ImageUrlService imageUrlService;
 
     // 공지사항 목록 (대시보드 -> 공지사항 관리)
     @GetMapping
@@ -175,6 +167,11 @@ public class NoticeMgController {
     public ResponseEntity<Void> deleteNotice(@PathVariable("noticeId")Long noticeId) {
         noticeService.deleteNotice(noticeId);
         return ResponseEntity.ok().build();
+    }
+
+    @ModelAttribute("faviconUrl")
+    public String faviconUrl() {
+        return imageUrlService.getElleafFaviconUrl();
     }
 
 

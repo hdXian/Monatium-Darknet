@@ -1,10 +1,8 @@
 package hdxian.monatium_darknet.web.controller.management.card;
 
 import hdxian.monatium_darknet.domain.Skill;
-import hdxian.monatium_darknet.domain.card.ArtifactCard;
 import hdxian.monatium_darknet.domain.card.Card;
 import hdxian.monatium_darknet.domain.card.CardType;
-import hdxian.monatium_darknet.domain.card.SpellCard;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.exception.card.CardImageProcessException;
 import hdxian.monatium_darknet.exception.card.CardTypeMisMatchException;
@@ -282,6 +280,11 @@ public class CardMgController {
         else {
             return "redirect:/management/cards/artifact";
         }
+    }
+
+    @ModelAttribute("faviconUrl")
+    public String faviconUrl() {
+        return imageUrlService.getElleafFaviconUrl();
     }
 
     // ===== private =====

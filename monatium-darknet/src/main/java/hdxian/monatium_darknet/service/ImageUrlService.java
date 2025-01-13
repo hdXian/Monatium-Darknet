@@ -48,8 +48,8 @@ public class ImageUrlService {
         return staticImg_baseUrl + "favicon.ico";
     }
 
-    public String getButterFaviconUrl() {
-        return staticImg_baseUrl + "favicon_butter.ico";
+    public String getElleafFaviconUrl() {
+        return staticImg_baseUrl + "favicon_elleaf.ico";
     }
 
     public String getTempImageBaseUrl() {

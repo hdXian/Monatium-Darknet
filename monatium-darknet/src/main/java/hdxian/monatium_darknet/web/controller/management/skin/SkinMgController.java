@@ -331,6 +331,11 @@ public class SkinMgController {
         return "redirect:/management/skins/categories";
     }
 
+    @ModelAttribute("faviconUrl")
+    public String faviconUrl() {
+        return imageUrlService.getElleafFaviconUrl();
+    }
+
     @ModelAttribute("skinBaseUrl")
     public String skinBaseUrl() {
         return imageUrlService.getSkinBaseUrl();
