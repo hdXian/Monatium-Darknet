@@ -13,6 +13,9 @@ public class ImageUrlService {
     @Value("${url.api_baseUrl}")
     private String api_baseUrl;
 
+    @Value("${url.staticImg_baseUrl}")
+    private String staticImg_baseUrl;
+
     // 클라이언트가 요청할 캐릭터 이미지 url을 리턴
     public CharacterImageDto generateCharacterImageUrls(Long characterId) {
         String baseUrl = api_baseUrl + "images/" + "character/";
@@ -39,6 +42,14 @@ public class ImageUrlService {
 
     public String getImageBaseUrl() {
         return api_baseUrl + "images/";
+    }
+
+    public String getErpinFaviconUrl() {
+        return staticImg_baseUrl + "favicon.ico";
+    }
+
+    public String getButterFaviconUrl() {
+        return staticImg_baseUrl + "favicon_butter.ico";
     }
 
     public String getTempImageBaseUrl() {

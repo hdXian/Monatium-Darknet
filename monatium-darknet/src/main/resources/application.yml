@@ -57,4 +57,5 @@ file:
 
 url:
   api_baseUrl: /api/
+  staticImg_baseUrl: /imgs/
 
