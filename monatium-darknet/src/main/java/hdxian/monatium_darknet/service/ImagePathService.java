@@ -1,6 +1,5 @@
 package hdxian.monatium_darknet.service;
 
-import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.exception.card.CardImageProcessException;
 import hdxian.monatium_darknet.exception.character.CharacterImageProcessException;
 import hdxian.monatium_darknet.exception.skin.SkinImageProcessException;
@@ -27,9 +26,6 @@ public class ImagePathService {
     @Value("${file.wikiDir}")
     private String wikiDir;
 
-    @Value("${file.iconDir}")
-    private String iconDir;
-
     @Value("${file.chDir}")
     private String chDir;
 
@@ -51,46 +47,9 @@ public class ImagePathService {
     @Value("${file.defaultSkinThumbnail}")
     private String defaultSkinThumbNail;
 
-    private static final String ext = ".webp";
+    private static final String ext_webp = ".webp";
 
     private final LocalFileStorageService fileStorageService;
-
-    // TODO - 근 시일 내에 이걸로 통합하는게 낫지 않을까?
-    public String getIconFileName(String fileName) {
-        return iconDir + fileName + ext;
-    }
-
-    public String getIconFileName(Race race) {
-        return iconDir + "symbol_" + race.name().toLowerCase() + ext;
-    }
-
-    public String getIconFileName(Personality personality) {
-        return iconDir + "personality_" + personality.name().toLowerCase() + ext;
-    }
-
-    public String getIconFileName(Role role) {
-        return iconDir + "class_" + role.name().toLowerCase() + ext;
-    }
-
-    public String getIconFileName(AttackType attackType) {
-        return iconDir + "attackType_" + attackType.name().toLowerCase() + ext;
-    }
-
-    public String getIconFileName(Position position) {
-        return iconDir + "position_" + position.name().toLowerCase() + ext;
-    }
-
-    public String getNormalAttackIconFileName(AttackType attackType) {
-        return iconDir + "normalAttack_" + attackType.name().toLowerCase() + ext;
-    }
-
-    public String getGradeStarIconFileName(Integer grade) {
-        return iconDir + "star_" + grade + ext;
-    }
-
-    public String getOneStarIconFileName(String isFilled) {
-        return iconDir + "star_" + isFilled + ext;
-    }
 
     public String getDefaultThumbNailFilePath() {
         return imgDir + defaultThumbNail;
@@ -102,11 +61,11 @@ public class ImagePathService {
     public CharacterImageDto generateChImagePaths(Long characterId) {
         String basePath = chDir + (characterId + "/");
 
-        String portraitPath = basePath + ("portrait" + ext); // {characterId}/portrait{.ext}
-        String profilePath = basePath+ ("profile" + ext);
-        String bodyPath = basePath + ("bodyShot" + ext);
+        String portraitPath = basePath + ("portrait" + ext_webp); // {characterId}/portrait{.ext}
+        String profilePath = basePath+ ("profile" + ext_webp);
+        String bodyPath = basePath + ("bodyShot" + ext_webp);
 
-        String lowSkillPath = basePath + ("lowSkill" + ext);
+        String lowSkillPath = basePath + ("lowSkill" + ext_webp);
 
         return new CharacterImageDto(profilePath, portraitPath, bodyPath, lowSkillPath);
     }
@@ -114,21 +73,21 @@ public class ImagePathService {
     public AsideImageDto generateAsideImagePaths(Long characterId) {
         String basePath = chDir + (characterId + "/");
 
-        String asidePath = basePath + "aside" + ext;
-        String lv1Path = basePath + "asideLv1" + ext;
-        String lv2Path = basePath + "asideLv2" + ext;
-        String lv3Path = basePath + "asideLv3" + ext;
+        String asidePath = basePath + "aside" + ext_webp;
+        String lv1Path = basePath + "asideLv1" + ext_webp;
+        String lv2Path = basePath + "asideLv2" + ext_webp;
+        String lv3Path = basePath + "asideLv3" + ext_webp;
 
         return new AsideImageDto(asidePath, lv1Path, lv2Path, lv3Path);
     }
 
     // === 카드 관련 이미지 ===
     public String getSpellCardFileName(Long cardId) {
-        return spellCardDir + cardId + ext;
+        return spellCardDir + cardId + ext_webp;
     }
 
     public String getArtifactCardFileName(Long cardId) {
-        return artifactCardDir + cardId + ext;
+        return artifactCardDir + cardId + ext_webp;
     }
 
     // === 스킨 관련 이미지 ===
@@ -137,7 +96,7 @@ public class ImagePathService {
     }
 
     public String getSkinFileName(Long skinId) {
-        return skinDir + skinId + ext;
+        return skinDir + skinId + ext_webp;
     }
 
     @Transactional
