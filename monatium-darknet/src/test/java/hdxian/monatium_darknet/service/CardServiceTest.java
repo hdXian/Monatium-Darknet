@@ -6,6 +6,8 @@ import hdxian.monatium_darknet.domain.aside.AsideSpec;
 import hdxian.monatium_darknet.domain.card.*;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.exception.card.CardNotFoundException;
+import hdxian.monatium_darknet.exception.card.DuplicateCardNameException;
 import hdxian.monatium_darknet.repository.dto.CardSearchCond;
 import hdxian.monatium_darknet.service.dto.CardDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
@@ -18,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -116,7 +117,7 @@ class CardServiceTest {
 
         // then
         assertThatThrownBy(() -> cardService.createNewSpellCard(dupDto, null))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(DuplicateCardNameException.class)
                 .hasMessage("해당 이름의 카드가 이미 있습니다. cardName=" + dupDto.getName());
     }
 
@@ -133,7 +134,7 @@ class CardServiceTest {
 
         // then
         assertThatThrownBy(() -> cardService.createNewArtifactCard(dupDto, null))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(DuplicateCardNameException.class)
                 .hasMessage("해당 이름의 카드가 이미 있습니다. cardName=" + dupDto.getName());
     }
 
@@ -161,7 +162,7 @@ class CardServiceTest {
 
         // then
         assertThatThrownBy(() -> cardService.createNewArtifactCard(dupDto, levi_id, attachmentSkill, null))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(DuplicateCardNameException.class)
                 .hasMessage("해당 이름의 카드가 이미 있습니다. cardName=" + dupDto.getName());
     }
 
@@ -228,11 +229,11 @@ class CardServiceTest {
         // then
         // 아티팩트 카드 id로 스펠 카드를 검색
         assertThatThrownBy(() -> cardService.findOneSpell(saved_artifact_id))
-                .isInstanceOf(NoSuchElementException.class);
+                .isInstanceOf(CardNotFoundException.class);
 
         // 스펠 카드 id로 아티팩트 카드를 검색
         assertThatThrownBy(() -> cardService.findOneArtifact(saved_spell_id))
-                .isInstanceOf(NoSuchElementException.class);
+                .isInstanceOf(CardNotFoundException.class);
 
     }
 
@@ -384,7 +385,7 @@ class CardServiceTest {
         assertThat(rim).isNotNull();
 
 //        assertThatThrownBy(() -> cardService.findOneArtifact(savedId))
-//                .isInstanceOf(NoSuchElementException.class)
+//                .isInstanceOf(CardNotFoundException.class)
 //                .hasMessage("해당 아티팩트 카드가 존재하지 않습니다. id=" + savedId);
     }
 

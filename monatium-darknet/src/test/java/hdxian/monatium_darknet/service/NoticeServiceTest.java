@@ -4,6 +4,7 @@ import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import hdxian.monatium_darknet.domain.notice.NoticeStatus;
+import hdxian.monatium_darknet.exception.notice.NoticeNotFoundException;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.dto.MemberDto;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
@@ -14,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -70,8 +70,8 @@ class NoticeServiceTest {
 
         Long noneExistNoticeId = -1L;
         assertThatThrownBy(() -> noticeService.findOne(noneExistNoticeId))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 공지사항이 없습니다. id=" + noneExistNoticeId);
+                .isInstanceOf(NoticeNotFoundException.class)
+                .hasMessage("해당 공지사항을 찾을 수 없습니다. noticeId = " + noneExistNoticeId);
     }
 
     // 회원별 공지사항 조회

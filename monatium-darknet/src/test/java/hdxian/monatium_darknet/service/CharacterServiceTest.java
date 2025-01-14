@@ -6,7 +6,7 @@ import hdxian.monatium_darknet.domain.aside.AsideSpec;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
-import hdxian.monatium_darknet.domain.skin.SkinGrade;
+import hdxian.monatium_darknet.exception.character.CharacterNotFoundException;
 import hdxian.monatium_darknet.repository.dto.CharacterSearchCond;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
@@ -19,7 +19,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -105,9 +104,9 @@ class CharacterServiceTest {
         List<Character> result = characterService.findAll(searchCond);
         assertThat(result).isEmpty();
 
-        // 없는 아이디로 검색하면 NoSuchElementException 예외가 터져나와야 함.
+        // 없는 아이디로 검색하면 CharacterNotFoundException 예외가 터져나와야 함.
         assertThatThrownBy(() -> characterService.findOne(madeleine_id))
-                .isInstanceOf(NoSuchElementException.class);
+                .isInstanceOf(CharacterNotFoundException.class);
     }
 
     // 전체 캐릭터 검색

@@ -38,7 +38,7 @@ class MemberServiceTest {
 
         assertThat(lily.getId()).isEqualTo(savedId);
         assertThat(lily.getLoginId()).isEqualTo(memberDto.getLoginId());
-        assertThat(lily.getPassword()).isEqualTo(memberDto.getPassword());
+//        assertThat(lily.getPassword()).isEqualTo(memberDto.getPassword()); // 비밀번호 해싱해서 이제 다르게 저장됨
         assertThat(lily.getNickName()).isEqualTo(memberDto.getNickName());
     }
 
@@ -50,10 +50,12 @@ class MemberServiceTest {
         MemberDto dto1 = new MemberDto();
         dto1.setLoginId("lily");
         dto1.setNickName("GM릴1리");
+        dto1.setPassword("1234");
 
         MemberDto dup_loginId = new MemberDto();
         dup_loginId.setLoginId("lily");
         dup_loginId.setNickName("다른닉네임");
+        dup_loginId.setPassword("1234");
 
         MemberDto dup_nickName = new MemberDto();
         dup_nickName.setLoginId("다른로그인아이디");
@@ -174,7 +176,7 @@ class MemberServiceTest {
         // then
         Member updatedMember = memberService.findOne(updateId);
         assertThat(updatedMember.getLoginId()).isEqualTo(updateDto.getLoginId());
-        assertThat(updatedMember.getPassword()).isEqualTo(updateDto.getPassword());
+//        assertThat(updatedMember.getPassword()).isEqualTo(updateDto.getPassword()); // 비밀번호 해싱해서 이제 다르게 저장됨
         assertThat(updatedMember.getNickName()).isEqualTo(updateDto.getNickName());
     }
 
