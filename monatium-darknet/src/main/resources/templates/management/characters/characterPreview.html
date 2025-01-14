@@ -51,7 +51,7 @@
                                         <h3 th:text="*{name}" class="mb-1">캐릭터 이름</h3>
                                         <p th:text="*{subtitle}" class="character-subtitle mb-0">캐릭터 수식언</p>
                                     </div>
-                                    <img th:src="@{ |${iconBaseUrl}gradeStar/*{grade}| }" alt="등급 이미지" class="img-fluid grade-image ms-3">
+                                    <img th:src="@{ |${iconBaseUrl}star_*{grade}.webp| }" alt="등급 이미지" class="img-fluid grade-image ms-3">
                                 </div>
                                 <hr class="my-2">
                                 <!--/*[[ 한마디와 TMI ]]*/-->
@@ -67,7 +67,7 @@
                                             <p th:case="'ghost'" th:text="유령" class="character-race mb-0 me-2">종족명</p>
                                             <p th:case="'spirit'" th:text="정령" class="character-race mb-0 me-2">종족명</p>
                                             <p th:case="'elf'" th:text="엘프" class="character-race mb-0 me-2">종족명</p>
-                                            <img th:src=" @{ |${iconBaseUrl}race/*{{race}}| }" alt="종족 심볼" class="race-symbol">
+                                            <img th:src=" @{ |${iconBaseUrl}race_*{{race}}.webp| }" alt="종족 심볼" class="race-symbol">
                                         </div>
                                     </div>
                                     <div class="mb-3">
@@ -92,27 +92,27 @@
                                 <!--/*[[ 성격 ]]*/-->
                                 <div th:switch="*{{personality}}" class="trait">
                                     <th:block th:case="'gloomy'">
-                                        <img th:src="@{ |${iconBaseUrl}personality/*{{personality}}| }" alt="성격 아이콘" class="img-fluid">
+                                        <img th:src="@{ |${iconBaseUrl}personality_*{{personality}}.webp| }" alt="성격 아이콘" class="img-fluid">
                                         <p class="trait-label"><span class="trait-category">성격:</span> <span class="trait-value">우울</span></p>
                                     </th:block>
 
                                     <th:block th:case="'activity'">
-                                        <img th:src="@{ |${iconBaseUrl}personality/*{{personality}}| }" alt="성격 아이콘" class="img-fluid">
+                                        <img th:src="@{ |${iconBaseUrl}personality_*{{personality}}.webp| }" alt="성격 아이콘" class="img-fluid">
                                         <p class="trait-label"><span class="trait-category">성격:</span> <span class="trait-value">활발</span></p>
                                     </th:block>
 
                                     <th:block th:case="'pure'">
-                                        <img th:src="@{ |${iconBaseUrl}personality/*{{personality}}| }" alt="성격 아이콘" class="img-fluid">
+                                        <img th:src="@{ |${iconBaseUrl}personality_*{{personality}}.webp| }" alt="성격 아이콘" class="img-fluid">
                                         <p class="trait-label"><span class="trait-category">성격:</span> <span class="trait-value">순수</span></p>
                                     </th:block>
 
                                     <th:block th:case="'madness'">
-                                        <img th:src="@{ |${iconBaseUrl}personality/*{{personality}}| }" alt="성격 아이콘" class="img-fluid">
+                                        <img th:src="@{ |${iconBaseUrl}personality_*{{personality}}.webp| }" alt="성격 아이콘" class="img-fluid">
                                         <p class="trait-label"><span class="trait-category">성격:</span> <span class="trait-value">광기</span></p>
                                     </th:block>
 
                                     <th:block th:case="'cool'">
-                                        <img th:src="@{ |${iconBaseUrl}personality/*{{personality}}| }" alt="성격 아이콘" class="img-fluid">
+                                        <img th:src="@{ |${iconBaseUrl}personality_*{{personality}}.webp| }" alt="성격 아이콘" class="img-fluid">
                                         <p class="trait-label"><span class="trait-category">성격:</span> <span class="trait-value">냉정</span></p>
                                     </th:block>
                                 </div>
@@ -120,17 +120,17 @@
                                 <!--/*[[ 역할 ]]*/-->
                                 <div th:switch="*{{role}}" class="trait">
                                     <th:block th:case="'dealer'">
-                                        <img th:src="@{ |${iconBaseUrl}role/*{{role}}| }" alt="역할 아이콘" class="img-fluid">
+                                        <img th:src="@{ |${iconBaseUrl}class_*{{role}}.webp| }" alt="역할 아이콘" class="img-fluid">
                                         <p class="trait-label"><span class="trait-category">역할:</span> <span class="trait-value">딜러</span></p>
                                     </th:block>
 
                                     <th:block th:case="'tanker'">
-                                        <img th:src="@{ |${iconBaseUrl}role/*{{role}}| }" alt="역할 아이콘" class="img-fluid">
+                                        <img th:src="@{ |${iconBaseUrl}class_*{{role}}.webp| }" alt="역할 아이콘" class="img-fluid">
                                         <p class="trait-label"><span class="trait-category">역할:</span> <span class="trait-value">탱커</span></p>
                                     </th:block>
 
                                     <th:block th:case="'supporter'">
-                                        <img th:src="@{ |${iconBaseUrl}role/*{{role}}| }" alt="역할 아이콘" class="img-fluid">
+                                        <img th:src="@{ |${iconBaseUrl}class_*{{role}}.webp| }" alt="역할 아이콘" class="img-fluid">
                                         <p class="trait-label"><span class="trait-category">역할:</span> <span class="trait-value">서포터</span></p>
                                     </th:block>
                                 </div>
@@ -138,12 +138,12 @@
                                 <!--/*[[ 공격 방식 ]]*/-->
                                 <div th:switch="*{{attackType}}" class="trait">
                                     <th:block th:case="'physical'">
-                                        <img th:src="@{ |${iconBaseUrl}attackType/*{{attackType}}| }" alt="공격 방식 아이콘" class="img-fluid">
+                                        <img th:src="@{ |${iconBaseUrl}attackType_*{{attackType}}.webp| }" alt="공격 방식 아이콘" class="img-fluid">
                                         <p class="trait-label"><span class="trait-category">공격 방식:</span> <span class="trait-value">물리</span></p>
                                     </th:block>
 
                                     <th:block th:case="'magical'">
-                                        <img th:src="@{ |${iconBaseUrl}attackType/*{{attackType}}| }" alt="공격 방식 아이콘" class="img-fluid">
+                                        <img th:src="@{ |${iconBaseUrl}attackType_*{{attackType}}.webp| }" alt="공격 방식 아이콘" class="img-fluid">
                                         <p class="trait-label"><span class="trait-category">공격 방식:</span> <span class="trait-value">마법</span></p>
                                     </th:block>
                                 </div>
@@ -151,22 +151,22 @@
                                 <!--/*[[ 배치 ]]*/-->
                                 <div th:switch="*{{position}}" class="trait">
                                     <th:block th:case="'front'">
-                                        <img th:src="@{ |${iconBaseUrl}position/*{{position}}| }" alt="배치 아이콘" class="img-fluid">
+                                        <img th:src="@{ |${iconBaseUrl}position_*{{position}}.webp| }" alt="배치 아이콘" class="img-fluid">
                                         <p class="trait-label"><span class="trait-category">배치:</span> <span class="trait-value">전열</span></p>
                                     </th:block>
 
                                     <th:block th:case="'middle'">
-                                        <img th:src="@{ |${iconBaseUrl}position/*{{position}}| }" alt="배치 아이콘" class="img-fluid">
+                                        <img th:src="@{ |${iconBaseUrl}position_*{{position}}.webp| }" alt="배치 아이콘" class="img-fluid">
                                         <p class="trait-label"><span class="trait-category">배치:</span> <span class="trait-value">중열</span></p>
                                     </th:block>
 
                                     <th:block th:case="'back'">
-                                        <img th:src="@{ |${iconBaseUrl}position/*{{position}}| }" alt="배치 아이콘" class="img-fluid">
+                                        <img th:src="@{ |${iconBaseUrl}position_*{{position}}.webp| }" alt="배치 아이콘" class="img-fluid">
                                         <p class="trait-label"><span class="trait-category">배치:</span> <span class="trait-value">후열</span></p>
                                     </th:block>
 
                                     <th:block th:case="'all'">
-                                        <img th:src="@{ |${iconBaseUrl}position/*{{position}}| }" alt="배치 아이콘" class="img-fluid">
+                                        <img th:src="@{ |${iconBaseUrl}position_*{{position}}.webp| }" alt="배치 아이콘" class="img-fluid">
                                         <p class="trait-label"><span class="trait-category">배치:</span> <span class="trait-value">전체</span></p>
                                     </th:block>
                                 </div>
@@ -220,8 +220,8 @@
                             <div class="card-body">
                                 <!--/*[[ 이미지가 카드 내부의 상단에 위치 ]]*/-->
                                 <div th:switch="*{{attackType}}" class="d-flex justify-content-center mb-4">
-                                    <img th:case="'physical'" th:src="@{ |${iconBaseUrl}normalAttack/*{{attackType}}| }" alt="일반 공격 이미지" class="img-fluid rounded skill-image">
-                                    <img th:case="'magical'" th:src="@{ |${iconBaseUrl}normalAttack/*{{attackType}}| }" alt="일반 공격 이미지" class="img-fluid rounded skill-image">
+                                    <img th:case="'physical'" th:src="@{ |${iconBaseUrl}normalAttack_*{{attackType}}.webp| }" alt="일반 공격 이미지" class="img-fluid rounded skill-image">
+                                    <img th:case="'magical'" th:src="@{ |${iconBaseUrl}normalAttack_*{{attackType}}.webp| }" alt="일반 공격 이미지" class="img-fluid rounded skill-image">
                                 </div>
                                 
                                 <h4 class="card-title text-center">
@@ -348,9 +348,9 @@
                                         <h4 th:text="*{aside.level1.name}" class="card-title mb-0">어사이드 1단계 이름</h4>
                                         <!--/*[[ 작은 이미지 3개를 가로로 배치 ]]*/-->
                                         <div class="d-flex ms-2 bg-light ms-auto">
-                                            <img th:src="@{ |${iconBaseUrl}oneStar/filled| }" alt="아이콘 1" class="img-fluid ms-1 aside-star-img">
-                                            <img th:src="@{ |${iconBaseUrl}oneStar/empty| }" alt="아이콘 2" class="img-fluid ms-1 aside-star-img">
-                                            <img th:src="@{ |${iconBaseUrl}oneStar/empty| }" alt="아이콘 3" class="img-fluid ms-1 aside-star-img">
+                                            <img th:src="@{ |${iconBaseUrl}star_filled.webp| }" alt="아이콘 1" class="img-fluid ms-1 aside-star-img">
+                                            <img th:src="@{ |${iconBaseUrl}star_empty.webp| }" alt="아이콘 2" class="img-fluid ms-1 aside-star-img">
+                                            <img th:src="@{ |${iconBaseUrl}star_empty.webp| }" alt="아이콘 3" class="img-fluid ms-1 aside-star-img">
                                         </div>
                                     </div>
                                     <p th:text="*{aside.level1.description}" class="card-text">어사이드 1단계 설명</p>
@@ -384,9 +384,9 @@
                                         <h4 th:text="*{aside.level2.name}" class="card-title mb-0">어사이드 2단계 이름</h4>
                                         <!--/*[[ 작은 이미지 3개를 가로로 배치 ]]*/-->
                                         <div class="d-flex ms-2 bg-light ms-auto">
-                                            <img th:src="@{ |${iconBaseUrl}oneStar/filled| }" alt="아이콘 1" class="img-fluid ms-1 aside-star-img">
-                                            <img th:src="@{ |${iconBaseUrl}oneStar/filled| }" alt="아이콘 2" class="img-fluid ms-1 aside-star-img">
-                                            <img th:src="@{ |${iconBaseUrl}oneStar/empty| }" alt="아이콘 3" class="img-fluid ms-1 aside-star-img">
+                                            <img th:src="@{ |${iconBaseUrl}star_filled.webp| }" alt="아이콘 1" class="img-fluid ms-1 aside-star-img">
+                                            <img th:src="@{ |${iconBaseUrl}star_filled.webp| }" alt="아이콘 2" class="img-fluid ms-1 aside-star-img">
+                                            <img th:src="@{ |${iconBaseUrl}star_empty.webp| }" alt="아이콘 3" class="img-fluid ms-1 aside-star-img">
                                         </div>
                                     </div>
                                     <p th:text="*{aside.level2.description}" class="card-text">어사이드 2단계 설명</p>
@@ -420,9 +420,9 @@
                                         <h4 th:text="*{aside.level3.name}" class="card-title mb-0">어사이드 3단계 이름</h4>
                                         <!--/*[[ 작은 이미지 3개를 가로로 배치 ]]*/-->
                                         <div class="d-flex ms-2 bg-light ms-auto">
-                                            <img th:src="@{ |${iconBaseUrl}oneStar/filled| }" alt="아이콘 1" class="img-fluid ms-1 aside-star-img">
-                                            <img th:src="@{ |${iconBaseUrl}oneStar/filled| }" alt="아이콘 2" class="img-fluid ms-1 aside-star-img">
-                                            <img th:src="@{ |${iconBaseUrl}oneStar/filled| }" alt="아이콘 3" class="img-fluid ms-1 aside-star-img">
+                                            <img th:src="@{ |${iconBaseUrl}star_filled.webp| }" alt="아이콘 1" class="img-fluid ms-1 aside-star-img">
+                                            <img th:src="@{ |${iconBaseUrl}star_filled.webp| }" alt="아이콘 2" class="img-fluid ms-1 aside-star-img">
+                                            <img th:src="@{ |${iconBaseUrl}star_filled.webp| }" alt="아이콘 3" class="img-fluid ms-1 aside-star-img">
                                         </div>
                                     </div>
                                     <p th:text="*{aside.level3.description}" class="card-text">어사이드 3단계 설명</p>

@@ -41,6 +41,7 @@ public class HomeController {
 
     @ModelAttribute("iconBaseUrl")
     public String iconBasesUrl() {
+//        return imageUrlService.getIconBaseUrl();
         return imageUrlService.getIconBaseUrl();
     }
 

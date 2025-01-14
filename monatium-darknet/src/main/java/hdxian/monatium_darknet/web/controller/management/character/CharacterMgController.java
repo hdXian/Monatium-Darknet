@@ -449,6 +449,7 @@ public class CharacterMgController {
 
     @ModelAttribute("iconBaseUrl")
     public String iconBaseUrl() {
+//        return imageUrlService.getIconBaseUrl();
         return imageUrlService.getIconBaseUrl();
     }
 

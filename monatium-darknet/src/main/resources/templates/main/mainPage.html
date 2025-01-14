@@ -213,43 +213,18 @@
                     <div class="character-info-text text-center">
 
                         <!--/*[[ 종족명 및 심볼 ]]*/-->
-                        <div th:switch="${{character.race}}" class="d-flex align-items-center justify-content-center gap-2">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
                             종족:
-                            <th:block th:case="'fairy'">
-                                <span th:text="요정" class="character-race">종족명</span>
-                                <img th:src="@{ |${iconBaseUrl}race/fairy| }" class="symbol-icon" alt="종족 심볼">
+                            <th:block th:switch="${{character.race}}" th:case="'fairy'">
+                                <span th:case="'fairy'" th:text="요정" class="character-race">종족명</span>
+                                <span th:case="'witch'" th:text="마녀" class="character-race">종족명</span>
+                                <span th:case="'furry'" th:text="수인" class="character-race">종족명</span>
+                                <span th:case="'dragon'" th:text="용족" class="character-race">종족명</span>
+                                <span th:case="'ghost'" th:text="유령" class="character-race">종족명</span>
+                                <span th:case="'spirit'" th:text="정령" class="character-race">종족명</span>
+                                <span th:case="'elf'" th:text="엘프" class="character-race">종족명</span>
                             </th:block>
-
-                            <th:block th:case="'witch'">
-                                <span th:text="마녀" class="character-race">종족명</span>
-                                <img th:src="@{ |${iconBaseUrl}race/witch| }" class="symbol-icon" alt="종족 심볼">
-                            </th:block>
-
-                            <th:block th:case="'furry'">
-                                <span th:text="수인" class="character-race">종족명</span>
-                                <img th:src="@{ |${iconBaseUrl}race/furry| }}" class="symbol-icon" alt="종족 심볼">
-                            </th:block>
-
-                            <th:block th:case="'dragon'">
-                                <span th:text="용족" class="character-race">종족명</span>
-                                <img th:src="@{ |${iconBaseUrl}race/dragon| }" class="symbol-icon" alt="종족 심볼">
-                            </th:block>
-
-                            <th:block th:case="'ghost'">
-                                <span th:text="유령" class="character-race">종족명</span>
-                                <img th:src="@{ |${iconBaseUrl}race/ghost| }" class="symbol-icon" alt="종족 심볼">
-                            </th:block>
-
-                            <th:block th:case="'spirit'">
-                                <span th:text="정령" class="character-race">종족명</span>
-                                <img th:src="@{ |${iconBaseUrl}race/spirit| }" class="symbol-icon" alt="종족 심볼">
-                            </th:block>
-
-                            <th:block th:case="'elf'">
-                                <span th:text="엘프" class="character-race">종족명</span>
-                                <img th:src="@{ |${iconBaseUrl}race/elf| }" class="symbol-icon" alt="종족 심볼">
-                            </th:block>
-
+                            <img th:src="@{ |${iconBaseUrl}race_${{character.race}}.webp| }" class="symbol-icon" alt="종족 심볼">
                         </div>
 
                         <!--/*[[ 캐릭터 한마디 ]]*/-->
