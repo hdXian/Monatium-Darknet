@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v2 -->
+<!--/*[[ v2 ]]*/-->
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: common_header(~{::title}, ~{::link})}">
@@ -8,35 +8,35 @@
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/font.css}">
     <link rel="stylesheet" th:href="@{/css/spellCardList.css}">
-    <!-- 커스텀 css -->
+    <!--/*[[ 커스텀 css ]]*/-->
 </head>
 
 <body>
 
-<!-- 상단 네비게이션 바 -->
+<!--/*[[ 상단 네비게이션 바 ]]*/-->
 <nav th:replace="~{fragments/navbar :: common_navbar}">
     상단 네비게이션 바 영역
 </nav>
 
-<!-- 배너 이미지 -->
+<!--/*[[ 배너 이미지 ]]*/-->
 <div class="banner"></div>
 
-<!-- 전체 레이아웃 -->
+<!--/*[[ 전체 레이아웃 ]]*/-->
 <div class="container-fluid">
     <div class="row">
-        <!-- 좌측 탭 네비게이션 -->
+        <!--/*[[ 좌측 탭 네비게이션 ]]*/-->
         <nav class="col-md-3 col-lg-2 side-nav">
             <a th:href="@{/wiki/characters}">사도</a>
             <a th:href="@{/wiki/cards/artifact}">아티팩트 카드</a>
             <a th:href="@{/wiki/cards/spell}" class="active">스펠 카드</a>
         </nav>
 
-        <!-- 우측 콘텐츠 -->
+        <!--/*[[ 우측 콘텐츠 ]]*/-->
         <main class="col-md-9 col-lg-10 content">
 
-            <!-- 필터링 섹션 -->
+            <!--/*[[ 필터링 섹션 ]]*/-->
             <section id="filtering-options" class="d-flex justify-content-end align-items-center mb-3">
-                <!-- 등급 필터링 (체크박스) -->
+                <!--/*[[ 등급 필터링 (체크박스) ]]*/-->
                 <div class="me-3">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="legendaryFilter" value="legendary">
@@ -56,24 +56,24 @@
                     </div>
                 </div>
         
-                <!-- 이름 검색창 -->
+                <!--/*[[ 이름 검색창 ]]*/-->
                 <div class="me-3">
                     <label for="searchName" class="form-label visually-hidden">이름 검색</label>
                     <input type="text" class="form-control form-control-sm" id="searchName" placeholder="이름 검색" onkeyup="handleEnter(event)">
                 </div>
         
-                <!-- 검색 버튼 -->
+                <!--/*[[ 검색 버튼 ]]*/-->
                 <button type="button" class="btn btn-primary btn-sm" onclick="filterItems()">검색</button>
             </section>
 
-            <!-- 스펠 카드 목록 -->
+            <!--/*[[ 스펠 카드 목록 ]]*/-->
             <section id="items" class="container mt-5">
 
                 <h2 class="section-title">스펠 카드</h2>
                 
                 <div class="row" id="artifactList">
 
-                    <!-- 스펠 카드 -->
+                    <!--/*[[ 스펠 카드 ]]*/-->
                     <div th:each="card: ${cardList}" class="col-md-6 my-3 spell-item" th:data-grade="${{card.grade}}" th:data-name="${card.name}">
                         <div class="card card-custom">
                             <div class="card-body d-flex align-items-start">
@@ -117,7 +117,7 @@
     </div>
 </div>
 
-<!-- 푸터 -->
+<!--/*[[ 푸터 ]]*/-->
 <footer th:replace="~{fragments/footer :: common_footer}"></footer>
 
 <script th:src="@{/js/spellCardList_wiki.js}" defer></script>

@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<!--v3-->
+<!--/*[[v3]]*/-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
     <title>사복 관리</title>
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
     <link rel="stylesheet" th:href="@{/css/management/skins/skinList.css}">
-    <!-- 커스텀 css -->
+    <!--/*[[ 커스텀 css ]]*/-->
 </head>
 
 <body>
 
-<!-- 상단 네비게이션 바 -->
+<!--/*[[ 상단 네비게이션 바 ]]*/-->
 <nav th:replace="~{fragments/navbar :: management_navbar}">
     상단 네비게이션 바 영역
 </nav>
 
-<!-- 메인 콘텐츠 영역 -->
+<!--/*[[ 메인 콘텐츠 영역 ]]*/-->
 <div class="container mt-4 main-content">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 th:text="${categoryName != null} ? '사복 관리 (' + ${categoryName} + ')' : '사복 관리 (전체)'">사복 관리 제목</h2>
         <div class="d-flex align-items-center">
-            <!-- 검색 창 -->
+            <!--/*[[ 검색 창 ]]*/-->
             <div class="d-flex me-3 align-items-center">
                 <input id="searchInput" type="text" name="query" class="form-control form-control-sm me-2" placeholder="사복 이름 검색" aria-label="검색">
                 <button id="searchButton" class="btn btn-primary btn-sm" type="submit">검색</button>
@@ -31,19 +31,19 @@
         </div>
     </div>
 
-    <!-- 필터링, 검색 기능 있으면 좋을듯 -->
+    <!--/*[[ 필터링, 검색 기능 있으면 좋을듯 ]]*/-->
 
-    <!-- 사복 목록 -->
+    <!--/*[[ 사복 목록 ]]*/-->
     <div class="row" id="skinList">
 
-        <!-- 사복 카드 (반복될 요소) -->
+        <!--/*[[ 사복 카드 (반복될 요소) ]]*/-->
         <div th:each="skin : ${skinList}" class="col-6 col-sm-4 col-lg-2 mt-4 mb-4 g-3 skin-item">
 
             <div class="card h-100">
-                <!-- 사복 이미지 -->
+                <!--/*[[ 사복 이미지 ]]*/-->
                 <img th:src="@{ |${skinBaseUrl}${skin.id}| }" class="card-img-top" alt="스킨 이미지">
 
-                <!-- 사복 이름 -->
+                <!--/*[[ 사복 이름 ]]*/-->
                 <div class="card-body">
                     <div class="card-title mb-2 d-inline-flex align-items-center">
                         <span th:text="${skin.name}">사복 이름</span>
@@ -51,12 +51,12 @@
                 </div>
             </div>
 
-            <!-- 변경 및 삭제 버튼 -->
+            <!--/*[[ 변경 및 삭제 버튼 ]]*/-->
             <div class="d-flex justify-content-between mt-2 mb-2">
-                <!-- 정보 수정 버튼 -->
+                <!--/*[[ 정보 수정 버튼 ]]*/-->
                 <a th:href="@{/management/skins/edit/{id} (id=${skin.id})}" class="btn btn-sm btn-primary">정보 수정</a>
 
-                <!-- 활성화 스위치 -->
+                <!--/*[[ 활성화 스위치 ]]*/-->
                 <button th:classappend="${skin.status.name() == 'ACTIVE' ? 'btn-success' : 'btn-secondary'}"
                         th:data-id="${skin.id}"
                         th:data-name="${skin.name}"
@@ -74,7 +74,7 @@
 
 </div>
 
-<!-- 하단 푸터 -->
+<!--/*[[ 하단 푸터 ]]*/-->
 <footer th:replace="~{fragments/footer :: management_footer}">
     하단 푸터 영역
 </footer>

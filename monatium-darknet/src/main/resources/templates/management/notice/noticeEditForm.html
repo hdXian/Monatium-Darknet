@@ -6,12 +6,12 @@
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
     <link rel="stylesheet" th:href="@{/css/management/noticeForm.css}">
-    <!-- 커스텀 css -->
+    <!--/*[[ 커스텀 css ]]*/-->
 </head>
 
 <body>
 
-<!-- 상단 네비게이션 바 -->
+<!--/*[[ 상단 네비게이션 바 ]]*/-->
 <nav th:replace="~{fragments/navbar :: management_navbar}">
     상단 네비게이션 바 영역
 </nav>
@@ -19,16 +19,16 @@
 <div class="container mt-4 main-content">
     <h1>공지사항 수정</h1>
 
-    <!-- 공지사항 수정 폼 -->
+    <!--/*[[ 공지사항 수정 폼 ]]*/-->
     <form id="notice-form" th:action="@{/management/notices/{id}/edit (id=${noticeId})}" th:object="${noticeForm}" method="post" enctype="multipart/form-data">
-        <!-- 제목 입력 -->
+        <!--/*[[ 제목 입력 ]]*/-->
         <div class="mb-3">
             <label for="title" class="form-label">제목</label>
             <input th:field="*{title}" th:errorclass="field-error" type="text" id="title" name="title" class="form-control" required>
             <div class="field-error" th:errors="*{title}"></div>
         </div>
 
-        <!-- 카테고리 선택 -->
+        <!--/*[[ 카테고리 선택 ]]*/-->
         <div class="mb-3">
             <label for="category" class="form-label">카테고리</label>
             <select th:field="*{category}" th:errorclass="field-error"  id="category" name="category" class="form-select" required>
@@ -40,7 +40,7 @@
             <div class="field-error" th:errors="*{category}"></div>
         </div>
 
-        <!-- Quill 에디터 -->
+        <!--/*[[ Quill 에디터 ]]*/-->
         <div class="mb-3">
             <label for="editor" class="form-label">내용</label>
             <div id="editor"></div>
@@ -48,20 +48,20 @@
             <div class="field-error" th:errors="*{content}"></div>
         </div>
 
-        <!-- 폼 제출 버튼 -->
+        <!--/*[[ 폼 제출 버튼 ]]*/-->
         <div class="button-group d-flex justify-content-between mt-4">
 
-            <!-- 왼쪽 버튼 그룹 -->
+            <!--/*[[ 왼쪽 버튼 그룹 ]]*/-->
             <div class="d-flex gap-2">
-                <!-- 취소 버튼 -->
+                <!--/*[[ 취소 버튼 ]]*/-->
                 <button id="btnCancel" type="button" name="action" value="cancel" class="btn btn-danger" onclick="confirmCancel(this)">취소</button>
-                <!-- 저장 버튼 -->
+                <!--/*[[ 저장 버튼 ]]*/-->
                 <button id="btnSave" type="submit" name="action" value="save" class="btn btn-secondary">임시 저장</button>
             </div>
 
-            <!-- 오른쪽 버튼 그룹 -->
+            <!--/*[[ 오른쪽 버튼 그룹 ]]*/-->
             <div class="d-flex gap-2">
-                <!-- 다음 버튼 -->
+                <!--/*[[ 다음 버튼 ]]*/-->
                 <button id="btnComplete" type="submit" name="action" value="complete" class="btn btn-primary">공지사항 수정하기!</button>
             </div>
 
@@ -72,12 +72,12 @@
 
 </div>
 
-<!-- 하단 푸터 -->
+<!--/*[[ 하단 푸터 ]]*/-->
 <footer th:replace="~{fragments/footer :: management_footer}">
     하단 푸터 영역
 </footer>
 
-<!-- Quill 에디터 스크립트 -->
+<!--/*[[ Quill 에디터 스크립트 ]]*/-->
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 
 <script th:src="@{/js/management/noticeEditForm.js}"></script>
