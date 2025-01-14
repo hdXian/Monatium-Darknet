@@ -22,18 +22,6 @@ public class SkinImageController {
     private final LocalFileStorageService fileStorageService;
     private final ImagePathService imagePathService;
 
-    @GetMapping("/defaultSkinThumbnail")
-    public ResponseEntity<Resource> getDefaultThumbnail() throws IOException {
-        String fullPath = fileStorageService.getFullPath(imagePathService.getDefaultSkinThumbnailFilePath());
-
-        UrlResource resource = new UrlResource("file:" + fullPath);
-        String contentType = fileStorageService.getContentType(fullPath);
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .body(resource);
-    }
-
     @GetMapping("/{skinId}")
     public ResponseEntity<Resource> getSkinImage(@PathVariable("skinId") Long skinId) throws IOException {
         String fullPath = fileStorageService.getFullPath(imagePathService.getSkinFileName(skinId));

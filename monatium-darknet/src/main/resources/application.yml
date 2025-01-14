@@ -52,8 +52,8 @@ file:
   spellCardDir: imgs/wiki/cards/spell/
   artifactCardDir: imgs/wiki/cards/artifact/
   skinDir: imgs/wiki/skins/
-  defaultThumbnail: defaultThumbnail.png
-  defaultSkinThumbnail: defaultSkinThumbnail.png
+  thumbnailDir: imgs/thumbnail/
+
 
 url:
   api_baseUrl: /api/

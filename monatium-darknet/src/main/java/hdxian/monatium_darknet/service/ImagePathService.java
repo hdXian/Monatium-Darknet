@@ -41,18 +41,16 @@ public class ImagePathService {
     @Value("${file.skinDir}")
     private String skinDir;
 
-    @Value("${file.defaultThumbnail}")
-    private String defaultThumbNail;
-
-    @Value("${file.defaultSkinThumbnail}")
-    private String defaultSkinThumbNail;
+    @Value("${file.thumbnailDir}")
+    private String thumbnailDir;
 
     private static final String ext_webp = ".webp";
+    private static final String ext_png = ".png";
 
     private final LocalFileStorageService fileStorageService;
 
     public String getDefaultThumbNailFilePath() {
-        return imgDir + defaultThumbNail;
+        return thumbnailDir + "default_thumbnail" + ext_png;
     }
 
     // 서버 스토리지 내 이미지 저장 경로를 리턴
@@ -92,7 +90,7 @@ public class ImagePathService {
 
     // === 스킨 관련 이미지 ===
     public String getDefaultSkinThumbnailFilePath() {
-        return skinDir + defaultSkinThumbNail;
+        return thumbnailDir + "default_skin_thumbnail" + ext_png;
     }
 
     public String getSkinFileName(Long skinId) {

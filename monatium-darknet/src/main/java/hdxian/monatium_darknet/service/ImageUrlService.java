@@ -18,6 +18,7 @@ public class ImageUrlService {
 
     private final String ext_webp = ".webp";
     private final String ext_ico = ".ico";
+    private final String ext_png = ".png";
 
     // === static image urls ===
     public String getErpinFaviconUrl() {
@@ -40,6 +41,14 @@ public class ImageUrlService {
         return getIconBaseUrl() + "artifact" + ext_webp;
     }
 
+    public String getDefaultThumbnailUrl() {
+        return staticImg_baseUrl + "thumbnail/" + "default_thumbnail" + ext_png;
+    }
+
+    public String getDefaultSkinThumbnailUrl() {
+        return staticImg_baseUrl + "thumbnail/" + "default_skin_thumbnail" + ext_png;
+    }
+
 
     // === api image urls ===
     public String getTempImageBaseUrl() {
@@ -56,14 +65,6 @@ public class ImageUrlService {
 
     public String getAsideBaseUrl() {
         return api_baseUrl + "images/" + "aside/";
-    }
-
-    public String getDefaultThumbnailUrl() {
-        return api_baseUrl + "images/" + "defaultThumbnail";
-    }
-
-    public String getDefaultSkinThumbnailUrl() {
-        return api_baseUrl + "images/" + "skin/" +"defaultSkinThumbnail";
     }
 
     // 카드 이미지 -> /api/images/card/{id}
