@@ -1,6 +1,5 @@
 package hdxian.monatium_darknet.web.controller.management.notice;
 
-import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -12,7 +11,7 @@ public class NoticeForm {
     private String title;
 
     @NotNull
-    private NoticeCategory category;
+    private Long categoryId;
 
     @NotBlank
     private String content;
@@ -20,10 +19,9 @@ public class NoticeForm {
     public NoticeForm() {
     }
 
-    public NoticeForm(String title, NoticeCategory category, String content) {
+    public NoticeForm(String title, Long categoryId, String content) {
         this.title = title;
-        this.category = category;
+        this.categoryId = categoryId;
         this.content = content;
     }
-
 }

@@ -3,7 +3,7 @@ package hdxian.monatium_darknet.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hdxian.monatium_darknet.domain.notice.Notice;
-import hdxian.monatium_darknet.domain.notice.NoticeCategory;
+import hdxian.monatium_darknet.domain.notice.NoticeCategoryStatus;
 import hdxian.monatium_darknet.domain.notice.NoticeStatus;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import jakarta.persistence.EntityManager;
@@ -60,35 +60,34 @@ public class NoticeRepository {
     }
 
     public Page<Notice> findAll(NoticeSearchCond searchCond, Pageable pageable) {
-        NoticeCategory category = searchCond.getCategory();
+        Long categoryId = searchCond.getCategoryId();
         NoticeStatus status = searchCond.getStatus();
+        NoticeCategoryStatus categoryStatus = searchCond.getCategoryStatus();
         String title = searchCond.getTitle();
         String content = searchCond.getContent();
         Long memberId = searchCond.getMemberId();
 
-        // 1. 공지사항 목록 조회
-        List<Notice> noticeList = queryFactory.select(notice)
-                .from(notice)
+        List<Notice> noticeList = queryFactory.selectFrom(notice)
                 .where(
-                        equalsCategory(category),
+                        equalsCategoryId(categoryId),
                         equalsStatus(status),
+                        equalsCategoryStatus(categoryStatus),
                         likeTitle(title),
                         likeContent(content),
                         memberIdEq(memberId)
                 )
-                .orderBy(notice.id.desc()) // id 기반 내림차순
-                .offset(pageable.getOffset()) // 시작 위치
-                .limit(pageable.getPageSize()) // 한 페이지에 보여줄 데이터 수
+                .orderBy(notice.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
-        // 2. 전체 데이터 수 가져오기
-        // fetchOne()은 결과가 없을 경우 null을 반환함.
         Long total = Optional.ofNullable(
                 queryFactory.select(notice.count())
                         .from(notice)
                         .where(
-                                equalsCategory(category),
+                                equalsCategoryId(categoryId),
                                 equalsStatus(status),
+                                equalsCategoryStatus(categoryStatus),
                                 likeTitle(title),
                                 likeContent(content),
                                 memberIdEq(memberId)
@@ -101,8 +100,9 @@ public class NoticeRepository {
 
     // queryDsl
     public List<Notice> findAll(NoticeSearchCond searchCond) {
-        NoticeCategory category = searchCond.getCategory();
+        Long categoryId = searchCond.getCategoryId();
         NoticeStatus status = searchCond.getStatus();
+        NoticeCategoryStatus categoryStatus = searchCond.getCategoryStatus();
         String title = searchCond.getTitle();
         String content = searchCond.getContent();
         Long memberId = searchCond.getMemberId();
@@ -110,8 +110,9 @@ public class NoticeRepository {
         return queryFactory.select(notice)
                 .from(notice)
                 .where(
-                        equalsCategory(category),
+                        equalsCategoryId(categoryId),
                         equalsStatus(status),
+                        equalsCategoryStatus(categoryStatus),
                         likeTitle(title),
                         likeContent(content),
                         memberIdEq(memberId)
@@ -119,9 +120,9 @@ public class NoticeRepository {
                 .fetch();
     }
 
-    private BooleanExpression equalsCategory(NoticeCategory category) {
-        if (category != null) {
-            return notice.category.eq(category);
+    private BooleanExpression equalsCategoryId(Long categoryId) {
+        if (categoryId != null) {
+            return notice.category.id.eq(categoryId);
         }
         return null;
     }
@@ -138,6 +139,13 @@ public class NoticeRepository {
         }
 
         return notice.status.ne(NoticeStatus.DELETED); // 조건이 따로 없을 경우, 기본적으로 DELETED가 아닌 공지사항을 제외하고 조회
+    }
+
+    private BooleanExpression equalsCategoryStatus(NoticeCategoryStatus status) {
+        if (status != null) {
+            return notice.category.status.eq(status);
+        }
+        return null;
     }
 
     private BooleanExpression likeTitle(String title) {

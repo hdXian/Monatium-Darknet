@@ -28,11 +28,11 @@ const quill = new Quill('#editor', {
                                 method: 'POST',
                                 body: formData
                             });
-                            const result = await response.json();
 
-                            if (result.success) {
+                            if (response.ok) {
+                                const imageUrl = await response.text(); // 서버에서 반환한 imageUrl 읽기
                                 const range = quill.getSelection();
-                                quill.insertEmbed(range.index, 'image', result.imageUrl);
+                                quill.insertEmbed(range.index, 'image', imageUrl);
                             } else {
                                 alert('이미지 업로드 실패');
                             }

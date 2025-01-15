@@ -1,13 +1,11 @@
 package hdxian.monatium_darknet.service;
 
-import hdxian.monatium_darknet.domain.notice.Member;
-import hdxian.monatium_darknet.domain.notice.Notice;
-import hdxian.monatium_darknet.domain.notice.NoticeCategory;
-import hdxian.monatium_darknet.domain.notice.NoticeStatus;
+import hdxian.monatium_darknet.domain.notice.*;
 import hdxian.monatium_darknet.exception.notice.NoticeImageProcessException;
 import hdxian.monatium_darknet.exception.notice.NoticeNotFoundException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
+import hdxian.monatium_darknet.repository.NoticeCategoryRepository;
 import hdxian.monatium_darknet.repository.NoticeRepository;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.dto.NoticeDto;
@@ -30,6 +28,7 @@ import java.util.Optional;
 public class NoticeService {
 
     private final NoticeRepository noticeRepository;
+    private final NoticeCategoryRepository noticeCategoryRepository;
     private final MemberService memberService;
     private final LocalFileStorageService fileStorageService;
 
@@ -44,9 +43,15 @@ public class NoticeService {
 
         Member member = memberService.findOne(memberId);
         String title = noticeDto.getTitle();
-        NoticeCategory category = noticeDto.getCategory();
+
+        Long categoryId = noticeDto.getCategoryId();
+        Optional<NoticeCategory> findCategory = noticeCategoryRepository.findOne(categoryId);
+        if (findCategory.isEmpty()) {
+            throw new RuntimeException("해당 공지사항 카테고리가 없습니다.");
+        }
+        NoticeCategory category = findCategory.get();
+
         String htmlContent = htmlContentUtil.cleanHtmlContent(noticeDto.getContent());
-//        String htmlContent = noticeDto.getContent();
 
         // 1. 우선 공지사항을 저장해 ID 획득
         Notice notice = Notice.createNotice(member, category, title, htmlContent);
@@ -76,12 +81,18 @@ public class NoticeService {
     public Long updateNotice(Long noticeId, NoticeDto updateParam) {
         Notice notice = findOne(noticeId);
 
-        notice.setCategory(updateParam.getCategory());
+        Long categoryId = updateParam.getCategoryId();
+        Optional<NoticeCategory> findCategory = noticeCategoryRepository.findOne(categoryId);
+        if (findCategory.isEmpty()) {
+            throw new RuntimeException("해당 공지사항 카테고리가 없습니다.");
+        }
+        NoticeCategory category = findCategory.get();
+        notice.setCategory(category);
+
         notice.setTitle(updateParam.getTitle());
 
         // 업데이트할 html 콘텐츠. notice에 저장된 경로, temp에 저장된 경로 모두 있음
         String htmlContent = htmlContentUtil.cleanHtmlContent(updateParam.getContent());
-//        String htmlContent = updateParam.getContent();
 
         // 공지사항 본문에서 src 속성들 추출
         List<String> imgSrcs = htmlContentUtil.getImgSrc(htmlContent);
@@ -144,7 +155,8 @@ public class NoticeService {
     @Transactional
     public Notice findOnePublic(Long noticeId) {
         Optional<Notice> find = noticeRepository.findOne(noticeId);
-        if (find.isEmpty() || find.get().getStatus() != NoticeStatus.PUBLIC) {
+        // 찾는게 없거나, 공지사항이 공개가 아니거나, 해당 카테고리가 공개가 아니면 결과를 리턴하지 않음.
+        if (find.isEmpty() || find.get().getStatus() != NoticeStatus.PUBLIC || find.get().getCategory().getStatus() != NoticeCategoryStatus.PUBLIC) {
             throw new NoticeNotFoundException("해당 공지사항을 찾을 수 없습니다. noticeId = " + noticeId);
         }
         return find.get();
@@ -218,6 +230,35 @@ public class NoticeService {
 
     private String getNoticeDir(Long noticeId) {
         return noticeBaseDir + (noticeId + "/");
+    }
+
+
+    // === NoticeCategory ===
+    @Transactional
+    public Long createNewNoticeCategory(String name) {
+        NoticeCategory category = NoticeCategory.createNoticeCategory(name);
+        return noticeCategoryRepository.save(category);
+    }
+
+    @Transactional
+    public Long updateNoticeCategory(Long categoryId, String name, NoticeCategoryStatus status) {
+        NoticeCategory category = findOneCategory(categoryId);
+        category.setName(name);
+        category.setStatus(status);
+
+        return category.getId();
+    }
+
+    public NoticeCategory findOneCategory(Long categoryId) {
+        Optional<NoticeCategory> find = noticeCategoryRepository.findOne(categoryId);
+        if (find.isEmpty()) {
+            throw new RuntimeException("해당 공지사항 카테고리가 없습니다. id=" + categoryId);
+        }
+        return find.get();
+    }
+
+    public List<NoticeCategory> findAllNoticeCategories() {
+        return noticeCategoryRepository.findAll();
     }
 
 }

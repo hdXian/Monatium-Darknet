@@ -37,27 +37,13 @@
                 <span class="me-3">|</span>
                 <span class="me-3">조회수: <span th:text="${notice.views}">1234</span></span>
                 <span class="me-3">|</span>
-                <span th:switch="${{notice.category}}">카테고리:
-                    <span th:case="'NOTICE'" th:text="공지">카테고리명</span>
-                    <span th:case="'UPDATE'" th:text="업데이트">카테고리명</span>
-                    <span th:case="'EVENT'" th:text="이벤트">카테고리명</span>
-                    <span th:case="'DEV'" th:text="개발자노트">카테고리명</span>
-                    <span th:case="*" th:text="기타">카테고리명</span>
+                <span>카테고리:
+                    <span th:text="${notice.category.name}">카테고리명</span>
                 </span>
             </div>
         </div>
         
-        <!--/*[[ 가로선 추가 ]]*/-->
         <hr>
-
-        <!--/*[[ 본문 상단에 배너 이미지를 가운데 정렬로 추가 ]]*/-->
-        <div class="text-center mb-4" th:switch="${{notice.category}}">
-            <img th:case="'NOTICE'" th:src="@{/imgs/notice/DetailBanner1.png}" alt="공지사항 배너" class="notice-banner img-fluid">
-            <img th:case="'UPDATE'" th:src="@{/imgs/notice/DetailBanner2.png}" alt="공지사항 배너" class="notice-banner img-fluid">
-            <img th:case="'EVENT'" th:src="@{/imgs/notice/DetailBanner3.png}" alt="공지사항 배너" class="notice-banner img-fluid">
-            <img th:case="'DEV'" th:src="@{/imgs/notice/DetailBanner4.png}" alt="공지사항 배너" class="notice-banner img-fluid">
-            <img th:case="*" th:src="@{/imgs/notice/DetailBanner1.png}" alt="공지사항 배너" class="notice-banner img-fluid">
-        </div>
 
         <!--/*[[ 공지사항 본문 ]]*/-->
         <div th:utext="${notice.content}" class="notice-content">

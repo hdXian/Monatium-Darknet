@@ -23,19 +23,17 @@
     <form th:action="@{/management/notices/new}" th:object="${noticeForm}" id="notice-form" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="title" class="form-label">제목</label>
-            <input th:field="*{title}" th:errorclass="field-error" type="text" id="title" name="title" class="form-control" required>
+            <input th:field="*{title}" th:errorclass="field-error" type="text" id="title" name="title" class="form-control" placeholder="공지사항 제목을 입력하세요">
             <div class="field-error" th:errors="*{title}"></div>
         </div>
 
         <div class="mb-3">
-            <label for="category" class="form-label">카테고리</label>
-            <select th:field="*{category}" th:errorclass="field-error" id="category" name="category" class="form-select" required>
-                <option value="NOTICE">공지사항</option>
-                <option value="EVENT">이벤트</option>
-                <option value="UPDATE">업데이트</option>
-                <option value="DEV">개발자 노트</option>
+            <label for="categoryId" class="form-label">카테고리</label>
+            <select th:field="*{categoryId}" th:errorclass="field-error" id="categoryId" name="categoryId" class="form-select">
+                <option value="" disabled selected>카테고리를 선택하세요</option>
+                <option th:each="category : ${categoryList}" th:value="${category.id}" th:text="${category.name}"></option>
             </select>
-            <div class="field-error" th:errors="*{category}"></div>
+            <div class="field-error" th:errors="*{categoryId}"></div>
         </div>
 
         <div class="mb-3">
