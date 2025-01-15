@@ -45,15 +45,6 @@
         
         <hr>
 
-        <!--/*[[ 본문 상단에 배너 이미지를 가운데 정렬로 추가 ]]*/-->
-<!--        <div class="text-center mb-4" th:switch="${{notice.category}}">-->
-<!--            <img th:case="'NOTICE'" th:src="@{/imgs/notice/DetailBanner1.png}" alt="공지사항 배너" class="notice-banner img-fluid">-->
-<!--            <img th:case="'UPDATE'" th:src="@{/imgs/notice/DetailBanner2.png}" alt="공지사항 배너" class="notice-banner img-fluid">-->
-<!--            <img th:case="'EVENT'" th:src="@{/imgs/notice/DetailBanner3.png}" alt="공지사항 배너" class="notice-banner img-fluid">-->
-<!--            <img th:case="'DEV'" th:src="@{/imgs/notice/DetailBanner4.png}" alt="공지사항 배너" class="notice-banner img-fluid">-->
-<!--            <img th:case="*" th:src="@{/imgs/notice/DetailBanner1.png}" alt="공지사항 배너" class="notice-banner img-fluid">-->
-<!--        </div>-->
-
         <!--/*[[ 공지사항 본문 ]]*/-->
         <div th:utext="${notice.content}" class="notice-content">
             공지사항 본문

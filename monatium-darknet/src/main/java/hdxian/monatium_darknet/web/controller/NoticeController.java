@@ -28,9 +28,11 @@ public class NoticeController {
 
     @GetMapping
     public String noticeList(@RequestParam(value = "page", required = false, defaultValue = "1") Integer pageNumber,
-                             @RequestParam(value = "category", required = false) Long categoryId, Model model) {
+                             @RequestParam(value = "category", required = false) Long categoryId,
+                             @RequestParam(value = "query", required = false) String title, Model model) {
         NoticeSearchCond searchCond = new NoticeSearchCond();
         searchCond.setCategoryId(categoryId);
+        searchCond.setTitle(title);
         searchCond.setStatus(NoticeStatus.PUBLIC); // 공개 상태인 공지사항만 노출
         Page<Notice> noticePage = noticeService.findAll_Paging(searchCond, pageNumber);
 

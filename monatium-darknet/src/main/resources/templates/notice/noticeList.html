@@ -22,7 +22,7 @@
     <section class="cover-section"></section>
 
     <!--/*[[ 메인 콘텐츠 영역 ]]*/-->
-    <div class="container container-main">
+    <div class="container container-main main-content mt-4">
 
         <!--/*[[ 카테고리 필터링 메뉴 ]]*/-->
         <div class="category-menu">
@@ -46,14 +46,18 @@
             <!--/*[[ 공지사항 제목 ]]*/-->
             <h2 class="text-center mb-5">새소식 및 공지사항</h2>
 
+            <div class="notice-search d-flex justify-content-end mb-3">
+                <form class="d-flex w-30" method="get" th:action="@{/notices}">
+                    <input type="text" name="query" class="form-control form-control-sm" placeholder="검색할 제목을 입력하세요" th:value="${query}">
+                    <input type="hidden" name="category" class="form-control" th:value="${curCategoryId}">
+                    <button class="btn btn-sm btn-primary ms-2" type="submit">검색</button>
+                </form>
+            </div>
+
             <!--/*[[ 공지사항 목록 ]]*/-->
             <ul class="list-unstyled">
 
                 <li class="notice-item" th:each="notice : ${noticeList}">
-                    <!--/*[[ 썸네일 이미지 ]]*/-->
-<!--                    <div class="thumbnail-container me-3">-->
-<!--                        <img th:src="@{/imgs/notice/CategoryThumbnail1.png}" alt="공지사항 썸네일" class="notice-thumbnail">-->
-<!--                    </div>-->
 
                     <div class="notice-category me-3" th:text="|[${notice.category.name}]|">공지사항 카테고리 이름</div>
 
