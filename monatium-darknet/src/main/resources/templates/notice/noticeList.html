@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- v13 -->
-<!--공지사항별 이미지 경로 추가, 캐릭터 이미지 (초상화, 프로필, 스킨 등) 경로 설계-->
+<!--/*[[ v13 ]]*/-->
+<!--/*[[공지사항별 이미지 경로 추가, 캐릭터 이미지 (초상화, 프로필, 스킨 등) 경로 설계]]*/-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: common_header(~{::title}, ~{::link})}">
@@ -8,23 +8,23 @@
     <link rel="stylesheet" th:href="@{/css/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/font.css}">
-    <link rel="stylesheet" th:href="@{/css/noticeList.css}">
-    <!-- 커스텀 css -->
+    <link rel="stylesheet" th:href="@{/css/notice/noticeList.css}">
+    <!--/*[[ 커스텀 css ]]*/-->
 </head>
 
 <body>
-    <!-- 상단 네비게이션 바 -->
+    <!--/*[[ 상단 네비게이션 바 ]]*/-->
     <nav th:replace="~{fragments/navbar :: common_navbar}">
         상단 네비게이션 바 영역
     </nav>
 
-    <!-- 표지 이미지 섹션 -->
+    <!--/*[[ 표지 이미지 섹션 ]]*/-->
     <section class="cover-section"></section>
 
-    <!-- 메인 콘텐츠 영역 -->
+    <!--/*[[ 메인 콘텐츠 영역 ]]*/-->
     <div class="container container-main">
 
-        <!-- 카테고리 필터링 메뉴 -->
+        <!--/*[[ 카테고리 필터링 메뉴 ]]*/-->
         <div class="category-menu">
             <h5>카테고리</h5>
             <ul>
@@ -36,18 +36,18 @@
             </ul>
         </div>
 
-        <!-- 공지사항 리스트 섹션 -->
+        <!--/*[[ 공지사항 리스트 섹션 ]]*/-->
         <div class="notice-list-section">
 
-            <!-- 공지사항 제목 -->
+            <!--/*[[ 공지사항 제목 ]]*/-->
             <h2 class="text-center mb-5">새소식 및 공지사항</h2>
 
-            <!-- 공지사항 목록 -->
+            <!--/*[[ 공지사항 목록 ]]*/-->
             <ul class="list-unstyled">
 
                 <li class="notice-item" th:each="notice : ${noticeList}">
-                    <!-- 썸네일 이미지 -->
-                    <!-- !! ${{}} 를 사용해야 컨버전 서비스가 적용됨 -->
+                    <!--/*[[ 썸네일 이미지 ]]*/-->
+                    <!--/*[[ !! ${{}} 를 사용해야 컨버전 서비스가 적용됨 ]]*/-->
                     <div class="thumbnail-container me-3" th:switch="${{notice.category}}">
                         <img th:case="'NOTICE'" th:src="@{/imgs/notice/CategoryThumbnail1.png}" alt="공지사항 썸네일" class="notice-thumbnail">
                         <img th:case="'UPDATE'" th:src="@{/imgs/notice/CategoryThumbnail2.png}" alt="공지사항 썸네일" class="notice-thumbnail">
@@ -56,7 +56,7 @@
                         <img th:case="*" th:src="@{/imgs/notice/CategoryThumbnail1.png}" alt="공지사항 썸네일" class="notice-thumbnail">
                     </div>
 
-                    <!-- 제목 및 날짜 -->
+                    <!--/*[[ 제목 및 날짜 ]]*/-->
                     <div class="notice-content">
                         <a th:href="@{ /notices/{id} (id=${notice.id}) }"
                            class="notice-title"
@@ -69,27 +69,27 @@
 
             </ul>
 
-            <!-- 페이징 UI -->
+            <!--/*[[ 페이징 UI ]]*/-->
             <div>
-                <!--        <p>현재 페이지: <span th:text="${page.number + 1}"></span> / <span th:text="${page.totalPages}"></span></p>-->
+                <!--/*[[        <p>현재 페이지: <span th:text="${page.number + 1}"></span> / <span th:text="${page.totalPages}"></span></p>]]*/-->
 
-                <!-- Bootstrap Pagination -->
+                <!--/*[[ Bootstrap Pagination ]]*/-->
                 <nav aria-label="Page navigation">
                     <ul class="pagination justify-content-center">
-                        <!-- 이전 버튼 -->
+                        <!--/*[[ 이전 버튼 ]]*/-->
                         <li class="page-item" th:classappend="${!page.hasPrevious()} ? 'disabled'">
                             <a class="page-link" th:href="@{/notices(page=${(page.number+1) - 1})}" aria-label="Previous">
                                 <span aria-hidden="true"> << </span>
                             </a>
                         </li>
 
-                        <!-- 페이지 번호 버튼 -->
+                        <!--/*[[ 페이지 번호 버튼 ]]*/-->
                         <li class="page-item" th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"
                             th:classappend="${(pageNum-1) == page.number} ? 'active' : ''">
                             <a class="page-link" th:href="@{/notices(page=${pageNum})}" th:text="${pageNum}"></a>
                         </li>
 
-                        <!-- 다음 버튼 -->
+                        <!--/*[[ 다음 버튼 ]]*/-->
                         <li class="page-item" th:classappend="${!page.hasNext()} ? 'disabled'">
                             <a class="page-link" th:href="@{/notices(page=${(page.number+1) + 1})}" aria-label="Next">
                                 <span aria-hidden="true"> >> </span>
@@ -99,7 +99,7 @@
                 </nav>
             </div>
 
-            <!-- 뒤로가기 버튼 -->
+            <!--/*[[ 뒤로가기 버튼 ]]*/-->
             <div class="text-center">
               <a href="/" class="btn btn-back">메인으로 돌아가기</a>
             </div>

@@ -92,8 +92,14 @@ public class WikiController {
 
 
     // === ModelAttribute ===
+    @ModelAttribute("faviconUrl")
+    public String faviconUrl() {
+        return imageUrlService.getErpinFaviconUrl();
+    }
+
     @ModelAttribute("iconBaseUrl")
     public String iconBaseUrl() {
+//        return imageUrlService.getIconBaseUrl();
         return imageUrlService.getIconBaseUrl();
     }
 

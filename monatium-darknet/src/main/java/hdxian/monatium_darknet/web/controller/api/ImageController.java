@@ -53,17 +53,4 @@ public class ImageController {
         }
     }
 
-    @GetMapping("/defaultThumbnail")
-    public ResponseEntity<Resource> getDefaultThumbNail() throws IOException {
-        String fullPath = fileStorageService.getFullPath(imagePathService.getDefaultThumbNailFilePath());
-
-        String contentType = fileStorageService.getContentType(fullPath);
-        UrlResource resource = new UrlResource("file:" + fullPath);
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .body(resource);
-    }
-
-
 }

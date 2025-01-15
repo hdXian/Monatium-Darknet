@@ -2,6 +2,9 @@ package hdxian.monatium_darknet.service;
 
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.MemberStatus;
+import hdxian.monatium_darknet.exception.member.DuplicateNicknameException;
+import hdxian.monatium_darknet.exception.member.LoginIdAlreadyExistException;
+import hdxian.monatium_darknet.exception.member.MemberNotFoundException;
 import hdxian.monatium_darknet.repository.MemberRepository;
 import hdxian.monatium_darknet.service.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +45,9 @@ public class MemberService {
     @Transactional
     public Long updateMember(Long id, MemberDto updateParam) {
         Member member = findOne(id);
+        if (member == null) {
+            throw new MemberNotFoundException("해당 회원이 존재하지 않습니다. id=" + id);
+        }
 
         // 로그인 아이디, 닉네임을 변경하는 경우
         if (!(member.getLoginId().equals(updateParam.getLoginId()))) {
@@ -63,12 +69,18 @@ public class MemberService {
     @Transactional
     public void activeMember(Long memberId) {
         Member member = findOne(memberId);
+        if (member == null) {
+            throw new MemberNotFoundException("해당 회원이 존재하지 않습니다. id=" + memberId);
+        }
         member.setStatus(MemberStatus.ACTIVE);
     }
 
     @Transactional
     public void deactivateMember(Long memberId) {
         Member member = findOne(memberId);
+        if (member == null) {
+            throw new MemberNotFoundException("해당 회원이 존재하지 않습니다. id=" + memberId);
+        }
         member.setStatus(MemberStatus.INACTIVE);
     }
 
@@ -76,7 +88,8 @@ public class MemberService {
     public Member findOne(Long id) {
         Optional<Member> find = memberRepository.findOne(id);
         if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 회원이 존재하지 않습니다. id=" + id);
+//            throw new NoSuchElementException("해당 회원이 존재하지 않습니다. id=" + id);
+            return null;
         }
         return find.get();
     }
@@ -84,7 +97,8 @@ public class MemberService {
     public Member findByLoginId(String loginId) {
         Optional<Member> find = memberRepository.findByLoginId(loginId);
         if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 아이디로 회원을 찾을 수 없습니다.");
+//            throw new NoSuchElementException("해당 아이디로 회원을 찾을 수 없습니다.");
+            return null;
         }
         return find.get();
     }
@@ -92,7 +106,8 @@ public class MemberService {
     public Member findByNickname(String nickName) {
         Optional<Member> find = memberRepository.findByNickname(nickName);
         if (find.isEmpty()) {
-            throw new NoSuchElementException("해당 닉네임으로 회원을 찾을 수 없습니다.");
+//            throw new NoSuchElementException("해당 닉네임으로 회원을 찾을 수 없습니다.");
+            return null;
         }
         return find.get();
     }
@@ -104,14 +119,14 @@ public class MemberService {
     private void checkNickname(String nickName) {
         Optional<Member> find = memberRepository.findByNickname(nickName);
         if (find.isPresent()) {
-            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다. nickname=" + nickName);
+            throw new DuplicateNicknameException("이미 사용 중인 닉네임입니다. nickname=" + nickName);
         }
     }
 
     private void checkLoginId(String loginId) {
         Optional<Member> find = memberRepository.findByLoginId(loginId);
         if (find.isPresent()) {
-            throw new IllegalArgumentException("이미 존재하는 ID입니다. loginId=" + loginId);
+            throw new LoginIdAlreadyExistException("이미 존재하는 ID입니다. loginId=" + loginId);
         }
     }
 

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.List;
 
@@ -30,12 +31,33 @@ public class HomeController {
 
         model.addAttribute("noticeList", noticeList);
         model.addAttribute("characterList", characterList);
-
-        model.addAttribute("iconBaseUrl", imageUrlService.getIconBaseUrl());
-        model.addAttribute("chBaseUrl", imageUrlService.getChBaseUrl());
-        model.addAttribute("asideBaseUrl", imageUrlService.getAsideBaseUrl());
-
         return "main/mainPage";
+    }
+
+    @ModelAttribute("faviconUrl")
+    public String faviconUrl() {
+        return imageUrlService.getErpinFaviconUrl();
+    }
+
+    @ModelAttribute("iconBaseUrl")
+    public String iconBasesUrl() {
+//        return imageUrlService.getIconBaseUrl();
+        return imageUrlService.getIconBaseUrl();
+    }
+
+    @ModelAttribute("chBaseUrl")
+    public String chBasesUrl() {
+        return imageUrlService.getChBaseUrl();
+    }
+
+    @ModelAttribute("asideBaseUrl")
+    public String asideBasesUrl() {
+        return imageUrlService.getAsideBaseUrl();
+    }
+
+    @ModelAttribute("staticMainUrl")
+    public String mainBaseUrl() {
+        return imageUrlService.getStaticImageBaseUrl() + "main/";
     }
 
 }

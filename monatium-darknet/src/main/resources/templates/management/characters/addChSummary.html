@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<!-- v18 -->
+<!--/*[[ v18 ]]*/-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
     <title>캐릭터 추가</title>
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
     <link rel="stylesheet" th:href="@{/css/management/characters/characterForm.css}">
-    <!-- 커스텀 css -->
+    <!--/*[[ 커스텀 css ]]*/-->
 </head>
 
 <body>
 
-<!-- 상단 네비게이션 바 -->
+<!--/*[[ 상단 네비게이션 바 ]]*/-->
 <nav th:replace="~{fragments/navbar :: management_navbar}">
     상단 네비게이션 바 영역
 </nav>
@@ -24,7 +24,7 @@
 
         <form th:action="@{/management/characters/new/complete}" method="post" enctype="multipart/form-data">
 
-            <!-- 프로필 그룹 -->
+            <!--/*[[ 프로필 그룹 ]]*/-->
             <div th:object="${chFormStep1}" class="info-group mb-4">
                 <div class="info-title" data-bs-toggle="collapse" data-bs-target="#profileSection" aria-expanded="true">
                     <span>프로필</span>
@@ -34,23 +34,23 @@
                 <div id="profileSection" class="collapse show">
                     <hr>
                     <div class="row mt-3">
-                        <!-- 좌측 폼 -->
+                        <!--/*[[ 좌측 폼 ]]*/-->
                         <div class="col-md-6">
-                            <!-- 이름 -->
+                            <!--/*[[ 이름 ]]*/-->
                             <div class="mb-3">
                                 <label for="name" class="form-label">이름</label>
                                 <input th:field="*{name}" th:errorclass="field-error" type="text" id="name" name="name" class="form-control" placeholder="캐릭터의 이름을 입력하세요">
                                 <div class="field-error" th:errors="*{name}"></div>
                             </div>
 
-                            <!-- 수식언 -->
+                            <!--/*[[ 수식언 ]]*/-->
                             <div class="mb-3">
                                 <label for="subtitle" class="form-label">수식언</label>
                                 <input th:field="*{subtitle}" th:errorclass="field-error" type="text" id="subtitle" name="subtitle" class="form-control" placeholder="캐릭터의 수식언을 입력하세요">
                                 <div class="field-error" th:errors="*{subtitle}"></div>
                             </div>
 
-                            <!-- 성급 -->
+                            <!--/*[[ 성급 ]]*/-->
                             <div class="mb-3">
                                 <label for="star" class="form-label">성급</label>
                                 <select th:field="*{grade}" th:errorclass="field-error" id="star" name="star" class="form-select">
@@ -61,7 +61,7 @@
                                 <div class="field-error" th:errors="*{grade}"></div>
                             </div>
 
-                            <!-- 종족 -->
+                            <!--/*[[ 종족 ]]*/-->
                             <div class="mb-3">
                                 <label for="race" class="form-label">종족</label>
                                 <select th:field="*{race}" th:errorclass="field-error" id="race" name="race" class="form-select">
@@ -76,7 +76,7 @@
                                 <div class="field-error" th:errors="*{race}"></div>
                             </div>
 
-                            <!-- 성우 -->
+                            <!--/*[[ 성우 ]]*/-->
                             <div class="mb-3">
                                 <label for="voiceActor" class="form-label">성우</label>
                                 <input th:field="*{cv}" th:errorclass="field-error" type="text" id="voiceActor" name="voiceActor" class="form-control" placeholder="성우의 이름을 입력하세요">
@@ -84,23 +84,23 @@
                             </div>
                         </div>
 
-                        <!-- 우측 폼 -->
+                        <!--/*[[ 우측 폼 ]]*/-->
                         <div class="col-md-6">
-                            <!-- 한마디 -->
+                            <!--/*[[ 한마디 ]]*/-->
                             <div class="mb-3">
                                 <label for="quote" class="form-label">한마디</label>
                                 <textarea th:field="*{quote}" th:errorclass="field-error" id="quote" name="quote" class="form-control" placeholder="캐릭터의 한마디를 입력하세요"></textarea>
                                 <div class="field-error" th:errors="*{quote}"></div>
                             </div>
 
-                            <!-- TMI -->
+                            <!--/*[[ TMI ]]*/-->
                             <div class="mb-3">
                                 <label for="tmi" class="form-label">TMI</label>
                                 <textarea th:field="*{tmi}" th:errorclass="field-error" id="tmi" name="tmi" class="form-control" placeholder="캐릭터의 TMI를 입력하세요"></textarea>
                                 <div class="field-error" th:errors="*{tmi}"></div>
                             </div>
 
-                            <!-- 좋아하는 것 -->
+                            <!--/*[[ 좋아하는 것 ]]*/-->
                             <div class="mb-3">
                                 <label class="form-label">좋아하는 것</label>
                                 <div id="likes-container">
@@ -117,12 +117,12 @@
                         </div>
                     </div>
 
-                    <!-- 이미지 업로드 섹션 -->
+                    <!--/*[[ 이미지 업로드 섹션 ]]*/-->
                     <div class="info-subgroup">
                         <h4 class="form-subtitle">캐릭터 이미지</h4>
 
                         <div class="row align-items-center mb-3">
-                            <!-- 프로필 이미지 -->
+                            <!--/*[[ 프로필 이미지 ]]*/-->
                             <div class="col-md-4 text-center">
                                 <label for="profileImage" class="form-label">프로필 이미지</label>
                                 <div class="image-upload-wrapper">
@@ -134,7 +134,7 @@
                                 </div>
                             </div>
 
-                            <!-- 초상화 이미지 -->
+                            <!--/*[[ 초상화 이미지 ]]*/-->
                             <div class="col-md-4 text-center">
                                 <label for="portraitImage" class="form-label">초상화 이미지</label>
                                 <div class="image-upload-wrapper">
@@ -146,7 +146,7 @@
                                 </div>
                             </div>
 
-                            <!-- 전신 이미지 -->
+                            <!--/*[[ 전신 이미지 ]]*/-->
                             <div class="col-md-4 text-center">
                                 <label for="bodyImage" class="form-label">전신 이미지</label>
                                 <div class="image-upload-wrapper">
@@ -163,7 +163,7 @@
                 </div>
             </div>
 
-            <!-- 특성 정보 그룹 -->
+            <!--/*[[ 특성 정보 그룹 ]]*/-->
             <div th:object="${chFormStep2}" class="info-group mb-4">
                 <div class="info-title" data-bs-toggle="collapse" data-bs-target="#traitSection" aria-expanded="true">
                     <span>특성 정보</span>
@@ -174,7 +174,7 @@
                     <hr>
                     <div class="row mt-3">
                         <div class="col-md-6">
-                            <!-- 성격 -->
+                            <!--/*[[ 성격 ]]*/-->
                             <div class="mb-3">
                                 <label for="personality" class="form-label">성격</label>
                                 <select th:field="*{personality}" th:errorclass="field-error" id="personality" name="personality" class="form-select">
@@ -187,7 +187,7 @@
                                 <div class="field-error" th:errors="*{personality}"></div>
                             </div>
 
-                            <!-- 역할 -->
+                            <!--/*[[ 역할 ]]*/-->
                             <div class="mb-3">
                                 <label for="role" class="form-label">역할</label>
                                 <select th:field="*{role}" th:errorclass="field-error" id="role" name="role" class="form-select">
@@ -198,7 +198,7 @@
                                 <div class="field-error" th:errors="*{role}"></div>
                             </div>
 
-                            <!-- 공격 방식 -->
+                            <!--/*[[ 공격 방식 ]]*/-->
                             <div class="mb-3">
                                 <label for="attackStyle" class="form-label">공격 방식</label>
                                 <select th:field="*{attackType}" th:errorclass="field-error" id="attackStyle" name="attackStyle" class="form-select">
@@ -208,7 +208,7 @@
                                 <div class="field-error" th:errors="*{attackType}"></div>
                             </div>
 
-                            <!-- 배치 -->
+                            <!--/*[[ 배치 ]]*/-->
                             <div class="mb-3">
                                 <label for="placement" class="form-label">배치</label>
                                 <select th:field="*{position}" th:errorclass="field-error" id="placement" name="placement" class="form-select">
@@ -222,7 +222,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <!-- 깡 -->
+                            <!--/*[[ 깡 ]]*/-->
                             <div class="mb-3">
                                 <label for="aggressive-status" class="form-label">깡</label>
                                 <div id="aggressive-status" class="d-flex align-items-center">
@@ -232,7 +232,7 @@
                                 <div class="field-error" th:errors="*{aggressive}"></div>
                             </div>
 
-                            <!-- 맷집 -->
+                            <!--/*[[ 맷집 ]]*/-->
                             <div class="mb-3">
                                 <label for="endurance-status" class="form-label">맷집</label>
                                 <div id="endurance-status" class="d-flex align-items-center">
@@ -242,7 +242,7 @@
                                 <div class="field-error" th:errors="*{endurance}"></div>
                             </div>
 
-                            <!-- 재주 -->
+                            <!--/*[[ 재주 ]]*/-->
                             <div class="mb-3">
                                 <label for="trick-status" class="form-label">재주</label>
                                 <div id="trick-status" class="d-flex align-items-center">
@@ -256,7 +256,7 @@
                 </div>
             </div>
 
-            <!-- 스킬 정보 그룹 -->
+            <!--/*[[ 스킬 정보 그룹 ]]*/-->
             <div th:object="${chFormStep3}" class="info-group mb-4">
 
                 <div class="info-title" data-bs-toggle="collapse" data-bs-target="#skillSection" aria-expanded="true">
@@ -266,7 +266,7 @@
 
                 <div id="skillSection" class="collapse show">
                     <hr>
-                    <!-- 기본 공격 -->
+                    <!--/*[[ 기본 공격 ]]*/-->
                     <div class="info-subgroup mb-3 mt-3">
                         <h4 class="form-subtitle">기본 공격</h4>
 
@@ -296,7 +296,7 @@
 
                     </div>
 
-                    <!-- 강화 공격 입력 여부 -->
+                    <!--/*[[ 강화 공격 입력 여부 ]]*/-->
                     <div class="enable-radio mb-3 p-3 rounded d-flex align-items-center">
                         <label class="form-label me-3 mb-0">강화 공격</label>
                         <div class="d-flex justify-content-end">
@@ -313,7 +313,7 @@
                         </div>
                     </div>
 
-                    <!-- 강화 공격 -->
+                    <!--/*[[ 강화 공격 ]]*/-->
                     <div id="enhancedAttackSection" class="info-subgroup optional-info mb-3">
                         <h4 class="form-subtitle">강화 공격</h4>
 
@@ -342,13 +342,13 @@
                         </div>
                     </div>
 
-                    <!-- 저학년 스킬 -->
+                    <!--/*[[ 저학년 스킬 ]]*/-->
                     <div class="info-subgroup mb-3">
                         <h4 class="form-subtitle">저학년 스킬</h4>
 
-                        <!-- 스킬 이미지 업로드 추가 -->
+                        <!--/*[[ 스킬 이미지 업로드 추가 ]]*/-->
                         <div class="row align-items-center">
-                            <!-- 이미지 업로드 박스 -->
+                            <!--/*[[ 이미지 업로드 박스 ]]*/-->
                             <div class="col-md-3 text-center">
                                 <label for="lowSkillImage" class="form-label">스킬 이미지</label>
                                 <div class="image-upload-wrapper">
@@ -359,16 +359,16 @@
                                 </div>
                             </div>
 
-                            <!-- 스킬 이름 및 효과 입력 -->
+                            <!--/*[[ 스킬 이름 및 효과 입력 ]]*/-->
                             <div class="col-md-9">
-                                <!-- 스킬 이름 입력 -->
+                                <!--/*[[ 스킬 이름 입력 ]]*/-->
                                 <div class="mb-3">
                                     <label for="lowSkillName" class="form-label">스킬 이름</label>
                                     <input th:field="*{lowSkillName}" th:errorclass="field-error" type="text" id="lowSkillName" name="lowSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
                                     <div class="field-error" th:errors="*{lowSkillName}"></div>
                                 </div>
 
-                                <!-- 스킬 효과 입력 -->
+                                <!--/*[[ 스킬 효과 입력 ]]*/-->
                                 <div class="mb-3">
                                     <label for="lowSkillDescription" class="form-label">스킬 효과</label>
                                     <textarea th:field="*{lowSkillDescription}" th:errorclass="field-error" id="lowSkillDescription" name="lowSkillDescription" class="form-control auto-resize" placeholder="스킬 효과를 입력하세요"></textarea>
@@ -377,7 +377,7 @@
                             </div>
                         </div>
 
-                        <!-- 특성 입력 -->
+                        <!--/*[[ 특성 입력 ]]*/-->
                         <label class="form-label">특성</label>
                         <div id="lowSkill-attributes-container">
                             <div th:each="attribute, stat : *{lowSkillAttributes}" class="d-flex align-items-center mb-2 attribute-input-container">
@@ -395,20 +395,20 @@
                         </div>
                     </div>
 
-                    <!-- 고학년 스킬 -->
+                    <!--/*[[ 고학년 스킬 ]]*/-->
                     <div class="info-subgroup">
                         <h4 class="form-subtitle">고학년 스킬</h4>
 
-                        <!-- 스킬명, 쿨타임 입력 칸이 위치하는 행 -->
+                        <!--/*[[ 스킬명, 쿨타임 입력 칸이 위치하는 행 ]]*/-->
                         <div class="row mb-3">
-                            <!-- 스킬 이름 입력 필드 -->
+                            <!--/*[[ 스킬 이름 입력 필드 ]]*/-->
                             <div class="col-7">
                                 <label for="highSkillName" class="form-label">스킬 이름</label>
                                 <input th:field="*{highSkillName}" th:errorclass="field-error" type="text" id="highSkillName" name="highSkillName" class="form-control" placeholder="스킬 이름을 입력하세요">
                                 <div class="field-error" th:errors="*{highSkillName}"></div>
                             </div>
 
-                            <!-- 재사용 대기시간 입력 필드 -->
+                            <!--/*[[ 재사용 대기시간 입력 필드 ]]*/-->
                             <div class="col-5">
                                 <label for="highSkillCooldown" class="form-label">재사용 대기시간</label>
                                 <div class="input-group">
@@ -446,10 +446,10 @@
 
             </div>
 
-            <!-- 어사이드 그룹 -->
+            <!--/*[[ 어사이드 그룹 ]]*/-->
             <div th:object="${chFormStep4}" class="info-group optional-info mb-4">
 
-                <!-- 어사이드 여부 -->
+                <!--/*[[ 어사이드 여부 ]]*/-->
                 <div class="enable-radio mb-3 p-3 rounded border d-flex align-items-center">
                     <label class="form-label me-3 mb-0">어사이드</label>
                     <div>
@@ -473,11 +473,11 @@
 
                 <div id="asideSection" class="collapse show">
                     <hr>
-                    <!-- 1. 어사이드 정보 -->
+                    <!--/*[[ 1. 어사이드 정보 ]]*/-->
                     <div class="info-subgroup mb-3 mt-3">
                         <h4 class="form-subtitle">어사이드 정보</h4>
 
-                        <!-- 어사이드 이미지 -->
+                        <!--/*[[ 어사이드 이미지 ]]*/-->
                         <div class="row align-items-center">
                             <div class="col-md-3 text-center">
                                 <label for="asideImage" class="form-label">이미지</label>
@@ -506,10 +506,10 @@
 
                     </div>
 
-                    <!-- 2. 어사이드 1단계 -->
+                    <!--/*[[ 2. 어사이드 1단계 ]]*/-->
                     <div class="info-subgroup mb-3">
                         <h4 class="form-subtitle">어사이드 1단계</h4>
-                        <!-- 이미지 -->
+                        <!--/*[[ 이미지 ]]*/-->
                         <div class="row align-items-center">
                             <div class="col-md-3 text-center">
                                 <label for="asideLv1Image" class="form-label">이미지</label>
@@ -553,10 +553,10 @@
                         </div>
                     </div>
 
-                    <!-- 3. 어사이드 2단계 -->
+                    <!--/*[[ 3. 어사이드 2단계 ]]*/-->
                     <div class="info-subgroup mb-3">
                         <h4 class="form-subtitle">어사이드 2단계</h4>
-                        <!-- 이미지 -->
+                        <!--/*[[ 이미지 ]]*/-->
                         <div class="row align-items-center">
                             <div class="col-md-3 text-center">
                                 <label for="asideLv2Image" class="form-label">이미지</label>
@@ -600,10 +600,10 @@
                         </div>
                     </div>
 
-                    <!-- 4. 어사이드 3단계 -->
+                    <!--/*[[ 4. 어사이드 3단계 ]]*/-->
                     <div class="info-subgroup mb-3">
                         <h4 class="form-subtitle">어사이드 3단계</h4>
-                        <!-- 이미지 -->
+                        <!--/*[[ 이미지 ]]*/-->
                         <div class="row align-items-center">
                             <div class="col-md-3 text-center">
                                 <label for="asideLv3Image" class="form-label">이미지</label>
@@ -650,21 +650,21 @@
 
             </div>
 
-            <!-- 폼 제출 버튼 -->
+            <!--/*[[ 폼 제출 버튼 ]]*/-->
             <div class="button-group d-flex justify-content-between mt-4">
-                <!-- 왼쪽 버튼 그룹 -->
+                <!--/*[[ 왼쪽 버튼 그룹 ]]*/-->
                 <div class="d-flex gap-2">
-                    <!-- 취소 버튼 -->
+                    <!--/*[[ 취소 버튼 ]]*/-->
                     <button type="button" name="action" value="cancel" class="btn btn-danger" onclick="confirmCancel(this)">취소</button>
-                    <!-- 저장 버튼 -->
+                    <!--/*[[ 저장 버튼 ]]*/-->
                     <button type="submit" name="action" value="save" class="btn btn-secondary">임시 저장</button>
                 </div>
 
-                <!-- 오른쪽 버튼 그룹 -->
+                <!--/*[[ 오른쪽 버튼 그룹 ]]*/-->
                 <div class="d-flex gap-2">
-                    <!-- 이전 버튼 -->
+                    <!--/*[[ 이전 버튼 ]]*/-->
                     <button type="submit" name="action" value="prev" class="btn btn-secondary">이전으로</button>
-                    <!-- "다음 단계" 버튼 -->
+                    <!--/*[[ "다음 단계" 버튼 ]]*/-->
                     <button type="submit" name="action" value="complete" class="btn btn-primary">캐릭터 추가하기!</button>
                 </div>
             </div>
@@ -675,7 +675,7 @@
 
 </div>
 
-<!-- 하단 푸터 -->
+<!--/*[[ 하단 푸터 ]]*/-->
 <footer th:replace="~{fragments/footer :: management_footer}">
     하단 푸터 영역
 </footer>

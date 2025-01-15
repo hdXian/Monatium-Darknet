@@ -442,8 +442,14 @@ public class CharacterMgController {
         return "redirect:/management/characters";
     }
 
+    @ModelAttribute("faviconUrl")
+    public String faviconUrl() {
+        return imageUrlService.getElleafFaviconUrl();
+    }
+
     @ModelAttribute("iconBaseUrl")
     public String iconBaseUrl() {
+//        return imageUrlService.getIconBaseUrl();
         return imageUrlService.getIconBaseUrl();
     }
 

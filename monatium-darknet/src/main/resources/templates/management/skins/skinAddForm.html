@@ -8,7 +8,7 @@
 </head>
 
 <body>
-<!-- 상단 네비게이션 바 -->
+<!--/*[[ 상단 네비게이션 바 ]]*/-->
 <nav th:replace="~{fragments/navbar :: management_navbar}">상단 네비게이션 바</nav>
 
 <div class="container mt-5 main-content">
@@ -25,7 +25,7 @@
                 </div>
 
                 <div th:object="${skinForm}" id="skinSection" class="row">
-                    <!-- 왼쪽: 스킨 이미지 -->
+                    <!--/*[[ 왼쪽: 스킨 이미지 ]]*/-->
                     <div class="col-md-4 text-center">
                         <label for="skinImage" class="form-label mt-3">사복 이미지</label>
                         <div class="image-upload-wrapper">
@@ -36,9 +36,9 @@
                         </div>
                     </div>
 
-                    <!-- 오른쪽: 사복 주인, 사복 이름, 사복 스토리 -->
+                    <!--/*[[ 오른쪽: 사복 주인, 사복 이름, 사복 스토리 ]]*/-->
                     <div class="col-md-8 d-flex flex-column">
-                        <!-- 위쪽: 사복 주인, 사복 이름 -->
+                        <!--/*[[ 위쪽: 사복 주인, 사복 이름 ]]*/-->
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="character" class="form-label">사복 주인</label>
@@ -57,14 +57,14 @@
                             </div>
                         </div>
 
-                        <!-- 아래쪽: 사복 스토리 -->
+                        <!--/*[[ 아래쪽: 사복 스토리 ]]*/-->
                         <div class="mb-3">
                             <label for="skinStory" class="form-label">사복 스토리</label>
                             <textarea th:field="*{story}" th:errorclass="field-error" class="form-control auto-resize" id="skinStory" rows="6" placeholder="사복 스토리를 입력하세요"></textarea>
                             <div class="field-error" th:errors="*{story}"></div>
                         </div>
 
-                        <!-- 스킨 카테고리 -->
+                        <!--/*[[ 스킨 카테고리 ]]*/-->
                         <div class="mb-3">
 
                             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -73,7 +73,7 @@
                             </div>
 
                             <div id="categoryContainer">
-                                <!-- 기본 카테고리 선택 -->
+                                <!--/*[[ 기본 카테고리 선택 ]]*/-->
                                 <div th:each="categoryId, stat : *{categoryIds}" class="input-group mb-2 category-item">
                                     <select class="form-select" th:field="*{categoryIds[__${stat.index}__]}" th:errorclass="field-error">
                                         <option th:each="option : ${categoryOptions}"
@@ -107,20 +107,20 @@
                 </div>
             </template>
 
-            <!-- 폼 제출 버튼 -->
+            <!--/*[[ 폼 제출 버튼 ]]*/-->
             <div class="button-group d-flex justify-content-between mt-4">
 
-                <!-- 왼쪽 버튼 그룹 -->
+                <!--/*[[ 왼쪽 버튼 그룹 ]]*/-->
                 <div class="d-flex gap-2">
-                    <!-- 취소 버튼 -->
+                    <!--/*[[ 취소 버튼 ]]*/-->
                     <button type="button" name="action" value="cancel" class="btn btn-danger" onclick="confirmCancel(this)">취소</button>
-                    <!-- 저장 버튼 -->
+                    <!--/*[[ 저장 버튼 ]]*/-->
                     <button type="submit" name="action" value="save" class="btn btn-secondary">임시 저장</button>
                 </div>
 
-                <!-- 오른쪽 버튼 그룹 -->
+                <!--/*[[ 오른쪽 버튼 그룹 ]]*/-->
                 <div class="d-flex gap-2">
-                    <!-- 다음 버튼 -->
+                    <!--/*[[ 다음 버튼 ]]*/-->
                     <button type="submit" name="action" value="complete" class="btn btn-primary">신규 사복 추가하기!</button>
                 </div>
 
@@ -132,7 +132,7 @@
 
 </div>
 
-<!-- Footer -->
+<!--/*[[ Footer ]]*/-->
 <footer th:replace="~{fragments/footer :: management_footer}"></footer>
 
 <script th:src="@{/js/management/skins/skinForm.js}"></script>

@@ -13,6 +13,77 @@ public class ImageUrlService {
     @Value("${url.api_baseUrl}")
     private String api_baseUrl;
 
+    @Value("${url.staticImg_baseUrl}")
+    private String staticImg_baseUrl;
+
+    private final String ext_webp = ".webp";
+    private final String ext_ico = ".ico";
+    private final String ext_png = ".png";
+
+    // === static image urls ===
+    public String getErpinFaviconUrl() {
+        return staticImg_baseUrl + "favicon" + ext_ico;
+    }
+
+    public String getElleafFaviconUrl() {
+        return staticImg_baseUrl + "favicon_elleaf" + ext_ico;
+    }
+
+    public String getIconBaseUrl() {
+        return staticImg_baseUrl + "icons/";
+    }
+
+    public String getSpellIconUrl() {
+        return getIconBaseUrl() + "spell" + ext_webp;
+    }
+
+    public String getArtifactIconUrl() {
+        return getIconBaseUrl() + "artifact" + ext_webp;
+    }
+
+    public String getDefaultThumbnailUrl() {
+        return staticImg_baseUrl + "thumbnail/" + "default_thumbnail" + ext_png;
+    }
+
+    public String getDefaultSkinThumbnailUrl() {
+        return staticImg_baseUrl + "thumbnail/" + "default_skin_thumbnail" + ext_png;
+    }
+
+    public String getStaticImageBaseUrl() {
+        return staticImg_baseUrl;
+    }
+
+
+    // === api image urls ===
+    public String getTempImageBaseUrl() {
+        return api_baseUrl + "images/" + "tmp/";
+    }
+
+    public String getApiImageBaseUrl() {
+        return api_baseUrl + "images/";
+    }
+
+    public String getChBaseUrl() {
+        return api_baseUrl + "images/" + "character/";
+    }
+
+    public String getAsideBaseUrl() {
+        return api_baseUrl + "images/" + "aside/";
+    }
+
+    // 카드 이미지 -> /api/images/card/{id}
+    public String getSpellCardBaseUrl() {
+        return api_baseUrl + "images/" + "card/" + "spell/";
+    }
+
+    public String getArtifactCardBaseUrl() {
+        return api_baseUrl + "images/" + "card/" + "artifact/";
+    }
+
+    public String getSkinBaseUrl() {
+        return api_baseUrl + "images/" + "skin/";
+    }
+
     // 클라이언트가 요청할 캐릭터 이미지 url을 리턴
     public CharacterImageDto generateCharacterImageUrls(Long characterId) {
         String baseUrl = api_baseUrl + "images/" + "character/";
@@ -35,55 +106,6 @@ public class ImageUrlService {
         String lv3Url = baseUrl + "3/" + characterId;
 
         return new AsideImageDto(asideUrl, lv1Url, lv2Url, lv3Url);
-    }
-
-    public String getImageBaseUrl() {
-        return api_baseUrl + "images/";
-    }
-
-    public String getTempImageBaseUrl() {
-        return api_baseUrl + "images/" + "tmp/";
-    }
-
-    public String getIconBaseUrl() {
-        return api_baseUrl + "images/" + "icon/";
-    }
-
-    public String getChBaseUrl() {
-        return api_baseUrl + "images/" + "character/";
-    }
-
-    public String getAsideBaseUrl() {
-        return api_baseUrl + "images/" + "aside/";
-    }
-
-    public String getDefaultThumbnailUrl() {
-        return api_baseUrl + "images/" + "defaultThumbnail";
-    }
-
-    public String getDefaultSkinThumbnailUrl() {
-        return api_baseUrl + "images/" + "skin/" +"defaultSkinThumbnail";
-    }
-
-    // 카드 이미지 -> /api/images/card/{id}
-    public String getSpellCardBaseUrl() {
-        return api_baseUrl + "images/" + "card/" + "spell/";
-    }
-
-    public String getArtifactCardBaseUrl() {
-        return api_baseUrl + "images/" + "card/" + "artifact/";
-    }
-
-    public String getSpellIconUrl() {
-        return getIconBaseUrl() + "spell";
-    }
-
-    public String getArtifactIconUrl() {
-        return getIconBaseUrl() + "artifact";
-    }
-
-    public String getSkinBaseUrl() {
-        return api_baseUrl + "images/" + "skin/";
     }
 
 

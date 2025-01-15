@@ -2,6 +2,8 @@ package hdxian.monatium_darknet.service;
 
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.MemberStatus;
+import hdxian.monatium_darknet.exception.member.DuplicateNicknameException;
+import hdxian.monatium_darknet.exception.member.LoginIdAlreadyExistException;
 import hdxian.monatium_darknet.service.dto.MemberDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +40,7 @@ class MemberServiceTest {
 
         assertThat(lily.getId()).isEqualTo(savedId);
         assertThat(lily.getLoginId()).isEqualTo(memberDto.getLoginId());
-        assertThat(lily.getPassword()).isEqualTo(memberDto.getPassword());
+//        assertThat(lily.getPassword()).isEqualTo(memberDto.getPassword()); // 비밀번호 해싱해서 이제 다르게 저장됨
         assertThat(lily.getNickName()).isEqualTo(memberDto.getNickName());
     }
 
@@ -50,10 +52,12 @@ class MemberServiceTest {
         MemberDto dto1 = new MemberDto();
         dto1.setLoginId("lily");
         dto1.setNickName("GM릴1리");
+        dto1.setPassword("1234");
 
         MemberDto dup_loginId = new MemberDto();
         dup_loginId.setLoginId("lily");
         dup_loginId.setNickName("다른닉네임");
+        dup_loginId.setPassword("1234");
 
         MemberDto dup_nickName = new MemberDto();
         dup_nickName.setLoginId("다른로그인아이디");
@@ -65,11 +69,11 @@ class MemberServiceTest {
         // then
         // 중복된 아이디나 닉네임으로 가입을 시도하면 예외가 발생해야 함
         assertThatThrownBy(() -> memberService.createNewMember(dup_loginId))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(LoginIdAlreadyExistException.class)
                 .hasMessage("이미 존재하는 ID입니다. loginId=" + dup_loginId.getLoginId());
 
         assertThatThrownBy(() -> memberService.createNewMember(dup_nickName))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(DuplicateNicknameException.class)
                 .hasMessage("이미 사용 중인 닉네임입니다. nickname=" + dup_nickName.getNickName());
     }
 
@@ -137,18 +141,23 @@ class MemberServiceTest {
         assertThat(findLily1).isEqualTo(findLily2);
         assertThat(findLily1.getId()).isEqualTo(savedId);
 
-        assertThatThrownBy(() -> memberService.findOne(noneMemberId))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 회원이 존재하지 않습니다. id=" + noneMemberId);
+        // 없는 회원 검색은 null 리턴
+        assertThat(memberService.findOne(noneMemberId)).isNull();
+        assertThat(memberService.findByLoginId(nonLoginId)).isNull();
+        assertThat(memberService.findByNickname(nonNickname)).isNull();
 
-        // 없는 조건으로 검색하면 예외가 발생해야 함
-        assertThatThrownBy(() -> memberService.findByLoginId(nonLoginId))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 아이디로 회원을 찾을 수 없습니다.");
-
-        assertThatThrownBy(() -> memberService.findByNickname(nonNickname))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 닉네임으로 회원을 찾을 수 없습니다.");
+//        assertThatThrownBy(() -> memberService.findOne(noneMemberId))
+//                .isInstanceOf(NoSuchElementException.class)
+//                .hasMessage("해당 회원이 존재하지 않습니다. id=" + noneMemberId);
+//
+//        // 없는 조건으로 검색하면 예외가 발생해야 함
+//        assertThatThrownBy(() -> memberService.findByLoginId(nonLoginId))
+//                .isInstanceOf(NoSuchElementException.class)
+//                .hasMessage("해당 아이디로 회원을 찾을 수 없습니다.");
+//
+//        assertThatThrownBy(() -> memberService.findByNickname(nonNickname))
+//                .isInstanceOf(NoSuchElementException.class)
+//                .hasMessage("해당 닉네임으로 회원을 찾을 수 없습니다.");
     }
 
     @Test
@@ -174,7 +183,7 @@ class MemberServiceTest {
         // then
         Member updatedMember = memberService.findOne(updateId);
         assertThat(updatedMember.getLoginId()).isEqualTo(updateDto.getLoginId());
-        assertThat(updatedMember.getPassword()).isEqualTo(updateDto.getPassword());
+//        assertThat(updatedMember.getPassword()).isEqualTo(updateDto.getPassword()); // 비밀번호 해싱해서 이제 다르게 저장됨
         assertThat(updatedMember.getNickName()).isEqualTo(updateDto.getNickName());
     }
 
@@ -214,11 +223,11 @@ class MemberServiceTest {
 
         // then
         assertThatThrownBy(() -> memberService.updateMember(lilyId, duplicateDto))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(LoginIdAlreadyExistException.class)
                 .hasMessage("이미 존재하는 ID입니다. loginId=" + duplicateDto.getLoginId());
 
         assertThatThrownBy(() -> memberService.updateMember(lilyId, duplicateDto2))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(DuplicateNicknameException.class)
                 .hasMessage("이미 사용 중인 닉네임입니다. nickname=" + duplicateDto2.getNickName());
     }
 

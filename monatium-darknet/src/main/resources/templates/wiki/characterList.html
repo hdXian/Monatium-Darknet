@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7  -->
+<!--/*[[ v7  ]]*/-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: common_header(~{::title}, ~{::link})}">
@@ -7,47 +7,47 @@
     <link rel="stylesheet" th:href="@{/css/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/font.css}">
-    <link rel="stylesheet" th:href="@{/css/characterList.css}">
-    <!-- 커스텀 css -->
+    <link rel="stylesheet" th:href="@{/css/wiki/characterList.css}">
+    <!--/*[[ 커스텀 css ]]*/-->
 </head>
 
 <body>
 
-<!-- 상단 네비게이션 바 -->
+<!--/*[[ 상단 네비게이션 바 ]]*/-->
 <nav th:replace="~{fragments/navbar :: common_navbar}">
     상단 네비게이션 바 영역
 </nav>
 
-<!-- 배너 이미지 -->
+<!--/*[[ 배너 이미지 ]]*/-->
 <div class="banner"></div>
 
-<!-- 전체 레이아웃 -->
+<!--/*[[ 전체 레이아웃 ]]*/-->
 <div class="container-fluid">
     <div class="row">
-        <!-- 좌측 탭 네비게이션 -->
+        <!--/*[[ 좌측 탭 네비게이션 ]]*/-->
         <nav class="col-md-3 col-lg-2 side-nav">
             <a th:href="@{/wiki/characters}" class="active">사도</a>
             <a th:href="@{/wiki/cards/artifact}">아티팩트 카드</a>
             <a th:href="@{/wiki/cards/spell}">스펠 카드</a>
         </nav>
 
-        <!-- 우측 콘텐츠 -->
+        <!--/*[[ 우측 콘텐츠 ]]*/-->
         <main class="col-md-9 col-lg-10 content">
 
-            <!-- 캐릭터 목록 제목과 필터링 토글 버튼을 같은 줄에 배치 -->
+            <!--/*[[ 캐릭터 목록 제목과 필터링 토글 버튼을 같은 줄에 배치 ]]*/-->
             <div class="container d-flex justify-content-between align-items-center mb-3">
-                <!-- 캐릭터 목록 제목 -->
+                <!--/*[[ 캐릭터 목록 제목 ]]*/-->
                 <h2 class="section-title mb-0">사도 목록</h2>
-                <!-- 필터링 토글 버튼 -->
+                <!--/*[[ 필터링 토글 버튼 ]]*/-->
                 <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#filtering-options" aria-expanded="false" aria-controls="filtering-options">
                     필터링 옵션 보기
                 </button>
             </div>
 
-            <!-- 필터링 섹션 -->
+            <!--/*[[ 필터링 섹션 ]]*/-->
             <div class="container collapse" id="filtering-options">
                 <section class="p-3 bg-light rounded shadow-sm d-flex flex-wrap ms-auto">
-                        <!-- 성격 필터링 -->
+                        <!--/*[[ 성격 필터링 ]]*/-->
                         <div class="mb-3">
                             <span class="form-label me-2 mb-0">성격:</span>
                             <div class="form-check-group">
@@ -74,10 +74,10 @@
                             </div>
                         </div>
 
-                        <!-- 줄바꿈 -->
-                        <div class="w-100"></div> <!-- 여기서 줄바꿈을 추가 -->
+                        <!--/*[[ 줄바꿈 ]]*/-->
+                        <div class="w-100"></div> <!--/*[[ 여기서 줄바꿈을 추가 ]]*/-->
                 
-                        <!-- 역할군 필터링 -->
+                        <!--/*[[ 역할군 필터링 ]]*/-->
                         <div class="mb-3">
                             <span class="form-label me-2 mb-0">역할군:</span>
                             <div class="form-check-group">
@@ -96,10 +96,10 @@
                             </div>
                         </div>
 
-                        <!-- 줄바꿈 -->
-                        <div class="w-100"></div> <!-- 여기서 줄바꿈을 추가 -->
+                        <!--/*[[ 줄바꿈 ]]*/-->
+                        <div class="w-100"></div> <!--/*[[ 여기서 줄바꿈을 추가 ]]*/-->
                 
-                        <!-- 배치 열 필터링 -->
+                        <!--/*[[ 배치 열 필터링 ]]*/-->
                         <div class="mb-3">
                             <span class="form-label me-2 mb-0">배치 열:</span>
                             <div class="form-check-group">
@@ -118,10 +118,10 @@
                             </div>
                         </div>
 
-                        <!-- 줄바꿈 -->
-                        <div class="w-100"></div> <!-- 여기서 줄바꿈을 추가 -->
+                        <!--/*[[ 줄바꿈 ]]*/-->
+                        <div class="w-100"></div> <!--/*[[ 여기서 줄바꿈을 추가 ]]*/-->
                 
-                        <!-- 종족 필터링 -->
+                        <!--/*[[ 종족 필터링 ]]*/-->
                         <div class="mb-3">
                             <span class="form-label me-2 mb-0">종족:</span>
                             <div class="form-check-group">
@@ -156,10 +156,10 @@
                             </div>
                         </div>
 
-                        <!-- 줄바꿈 -->
-                        <div class="w-100"></div> <!-- 여기서 줄바꿈을 추가 -->
+                        <!--/*[[ 줄바꿈 ]]*/-->
+                        <div class="w-100"></div> <!--/*[[ 여기서 줄바꿈을 추가 ]]*/-->
                 
-                        <!-- 공격 타입 필터링 -->
+                        <!--/*[[ 공격 타입 필터링 ]]*/-->
                         <div class="mb-3">
                             <span class="form-label me-2 mb-0">공격 타입:</span>
                             <div class="form-check-group">
@@ -174,10 +174,10 @@
                             </div>
                         </div>
 
-                    <!-- 줄바꿈 -->
-                    <div class="w-100"></div> <!-- 여기서 줄바꿈을 추가 -->
+                    <!--/*[[ 줄바꿈 ]]*/-->
+                    <div class="w-100"></div> <!--/*[[ 여기서 줄바꿈을 추가 ]]*/-->
             
-                    <!-- 검색 및 초기화 버튼 -->
+                    <!--/*[[ 검색 및 초기화 버튼 ]]*/-->
                     <div class="d-flex align-items-center mt-3">
                         <button type="button" class="btn btn-primary me-2" onclick="filterCharacters()">검색</button>
                         <button type="button" class="btn btn-secondary" onclick="resetFilters()">초기화</button>
@@ -185,37 +185,37 @@
                 </section>
             </div>
 
-            <!-- 사도 목록 섹션 -->
+            <!--/*[[ 사도 목록 섹션 ]]*/-->
             <section id="characters" class="container mt-5">
                 <div class="row" id="characterList">
 
-                    <!-- 캐릭터 카드 -->
+                    <!--/*[[ 캐릭터 카드 ]]*/-->
                     <div th:each="character : ${characterList}"
                          class="col-6 col-sm-4 col-lg-2 mb-4 character-item"
-                         th:classappend="| ${{character.race}} ${{character.personality}} ${{character.role}} ${{character.attackType}} ${{character.position}}| "> <!-- 모바일에서 2개, 데스크탑에서 6개 -->
+                         th:classappend="| ${{character.race}} ${{character.personality}} ${{character.role}} ${{character.attackType}} ${{character.position}}| "> <!--/*[[ 모바일에서 2개, 데스크탑에서 6개 ]]*/-->
 
-                        <a th:href="@{ /wiki/characters/{id} (id=${character.id}) }" class="card-link"> <!-- 누르면 넘어가는 이미지 -->
+                        <a th:href="@{ /wiki/characters/{id} (id=${character.id}) }" class="card-link"> <!--/*[[ 누르면 넘어가는 이미지 ]]*/-->
                             <div class="card">
-                                <!-- 캐릭터 이미지 -->
+                                <!--/*[[ 캐릭터 이미지 ]]*/-->
                                 <img th:src="@{ |${chBaseUrl}profile/${character.id}| }" class="card-img-top" alt="캐릭터 프로필 이미지">
 
-                                <!-- 캐릭터 이름, 종족 심볼, 성급 이미지 및 특성 -->
+                                <!--/*[[ 캐릭터 이름, 종족 심볼, 성급 이미지 및 특성 ]]*/-->
                                 <div class="card-body">
-                                    <!-- 캐릭터 이름과 종족 심볼 -->
+                                    <!--/*[[ 캐릭터 이름과 종족 심볼 ]]*/-->
                                     <h5 class="card-title mb-2 d-inline-flex align-items-center">
                                         <span th:text="${character.name}">캐릭터 이름</span>
-                                        <img th:src="@{ |${iconBaseUrl}race/${{character.race}}| }" class="symbol-image ms-2" alt="종족 심볼 이미지"> <!-- 종족 심볼 추가 -->
+                                        <img th:src="@{ |${iconBaseUrl}race_${{character.race}}.webp| }" class="symbol-image ms-2" alt="종족 심볼 이미지"> <!--/*[[ 종족 심볼 추가 ]]*/-->
                                     </h5>
 
-                                    <!-- 성급 이미지 -->
-                                    <img th:src="@{ |${iconBaseUrl}gradeStar/${character.grade}| }" class="star-image mb-2" alt="성급 이미지">
+                                    <!--/*[[ 성급 이미지 ]]*/-->
+                                    <img th:src="@{ |${iconBaseUrl}star_${character.grade}.webp| }" class="star-image mb-2" alt="성급 이미지">
 
-                                    <!-- 작은 이미지 4개 (특성) (|..| 구문으로 url 렌더링) -->
+                                    <!--/*[[ 작은 이미지 4개 (특성) (|..| 구문으로 url 렌더링) ]]*/-->
                                     <div class="small-images-container">
-                                        <img th:src="@{ |${iconBaseUrl}personality/${{character.personality}}| }" class="small-image" alt="성격 이미지">
-                                        <img th:src="@{ |${iconBaseUrl}role/${{character.role}}| }" class="small-image" alt="역할 이미지">
-                                        <img th:src="@{ |${iconBaseUrl}attackType/${{character.attackType}}| }" class="small-image" alt="공격 방식 이미지">
-                                        <img th:src="@{ |${iconBaseUrl}position/${{character.position}}| }" class="small-image" alt="위치 이미지">
+                                        <img th:src="@{ |${iconBaseUrl}personality_${{character.personality}}.webp| }" class="small-image" alt="성격 이미지">
+                                        <img th:src="@{ |${iconBaseUrl}class_${{character.role}}.webp| }" class="small-image" alt="역할 이미지">
+                                        <img th:src="@{ |${iconBaseUrl}attackType_${{character.attackType}}.webp| }" class="small-image" alt="공격 방식 이미지">
+                                        <img th:src="@{ |${iconBaseUrl}position_${{character.position}}.webp| }" class="small-image" alt="위치 이미지">
                                     </div>
                                 </div>
                             </div>
@@ -228,10 +228,10 @@
     </div>
 </div>
 
-<!-- 푸터 -->
+<!--/*[[ 푸터 ]]*/-->
 <footer th:replace="~{fragments/footer :: common_footer}"></footer>
 
-<script th:src="@{/js/characters_wiki.js}" defer></script>
+<script th:src="@{/js/wiki/characterList.js}" defer></script>
 
 </body>
 </html>

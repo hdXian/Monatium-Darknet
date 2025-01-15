@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<!-- v18 -->
+<!--/*[[ v18 ]]*/-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
     <title>캐릭터 추가</title>
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
     <link rel="stylesheet" th:href="@{/css/management/characters/characterForm.css}">
-    <!-- 커스텀 css -->
+    <!--/*[[ 커스텀 css ]]*/-->
 </head>
 
 <body>
 
-<!-- 상단 네비게이션 바 -->
+<!--/*[[ 상단 네비게이션 바 ]]*/-->
 <nav th:replace="~{fragments/navbar :: management_navbar}">
     상단 네비게이션 바 영역
 </nav>
@@ -28,7 +28,7 @@
                 글로벌 오류 템플릿 조각
             </div>
 
-            <!-- 프로필 그룹 -->
+            <!--/*[[ 프로필 그룹 ]]*/-->
             <div class="info-group mb-4">
                 <div class="info-title" data-bs-toggle="collapse" data-bs-target="#profileSection" aria-expanded="true">
                     <span>프로필</span>
@@ -38,23 +38,23 @@
                 <div id="profileSection" class="collapse show">
                     <hr>
                     <div class="row mt-3">
-                        <!-- 좌측 폼 -->
+                        <!--/*[[ 좌측 폼 ]]*/-->
                         <div class="col-md-6">
-                            <!-- 이름 -->
+                            <!--/*[[ 이름 ]]*/-->
                             <div class="mb-3">
                                 <label for="name" class="form-label">이름</label>
                                 <input th:field="*{name}" th:errorclass="field-error" type="text" id="name" name="name" class="form-control" placeholder="캐릭터의 이름을 입력하세요">
                                 <div class="field-error" th:errors="*{name}"></div>
                             </div>
     
-                            <!-- 수식언 -->
+                            <!--/*[[ 수식언 ]]*/-->
                             <div class="mb-3">
                                 <label for="subtitle" class="form-label">수식언</label>
                                 <input th:field="*{subtitle}" th:errorclass="field-error" type="text" id="subtitle" name="subtitle" class="form-control" placeholder="캐릭터의 수식언을 입력하세요">
                                 <div class="field-error" th:errors="*{subtitle}"></div>
                             </div>
     
-                            <!-- 성급 -->
+                            <!--/*[[ 성급 ]]*/-->
                             <div class="mb-3">
                                 <label for="star" class="form-label">성급</label>
                                 <select th:field="*{grade}" th:errorclass="field-error" id="star" name="star" class="form-select">
@@ -65,7 +65,7 @@
                                 <div class="field-error" th:errors="*{grade}"></div>
                             </div>
     
-                            <!-- 종족 -->
+                            <!--/*[[ 종족 ]]*/-->
                             <div class="mb-3">
                                 <label for="race" class="form-label">종족</label>
                                 <select th:field="*{race}" th:errorclass="field-error" id="race" name="race" class="form-select">
@@ -80,7 +80,7 @@
                                 <div class="field-error" th:errors="*{race}"></div>
                             </div>
     
-                            <!-- 성우 -->
+                            <!--/*[[ 성우 ]]*/-->
                             <div class="mb-3">
                                 <label for="voiceActor" class="form-label">성우</label>
                                 <input th:field="*{cv}" th:errorclass="field-error" type="text" id="voiceActor" name="voiceActor" class="form-control" placeholder="성우의 이름을 입력하세요">
@@ -88,23 +88,23 @@
                             </div>
                         </div>
                         
-                        <!-- 우측 폼 -->
+                        <!--/*[[ 우측 폼 ]]*/-->
                         <div class="col-md-6">
-                            <!-- 한마디 -->
+                            <!--/*[[ 한마디 ]]*/-->
                             <div class="mb-3">
                                 <label for="quote" class="form-label">한마디</label>
                                 <textarea th:field="*{quote}" th:errorclass="field-error" id="quote" name="quote" class="form-control" placeholder="캐릭터의 한마디를 입력하세요"></textarea>
                                 <div class="field-error" th:errors="*{quote}"></div>
                             </div>
     
-                            <!-- TMI -->
+                            <!--/*[[ TMI ]]*/-->
                             <div class="mb-3">
                                 <label for="tmi" class="form-label">TMI</label>
                                 <textarea th:field="*{tmi}" th:errorclass="field-error" id="tmi" name="tmi" class="form-control" placeholder="캐릭터의 TMI를 입력하세요"></textarea>
                                 <div class="field-error" th:errors="*{tmi}"></div>
                             </div>
     
-                            <!-- 좋아하는 것 -->
+                            <!--/*[[ 좋아하는 것 ]]*/-->
                             <div class="mb-3">
                                 <label class="form-label">좋아하는 것</label>
                                 <div id="likes-container">
@@ -121,12 +121,12 @@
                         </div>
                     </div>
     
-                    <!-- 이미지 업로드 섹션 -->
+                    <!--/*[[ 이미지 업로드 섹션 ]]*/-->
                     <div class="info-subgroup">
                         <h4 class="form-subtitle">캐릭터 이미지</h4>
     
                         <div class="row align-items-center mb-3">
-                            <!-- 프로필 이미지 -->
+                            <!--/*[[ 프로필 이미지 ]]*/-->
                             <div class="col-md-4 text-center">
                                 <label for="profileImage" class="form-label">프로필 이미지</label>
                                 <div class="image-upload-wrapper">
@@ -138,7 +138,7 @@
                                 </div>
                             </div>
     
-                            <!-- 초상화 이미지 -->
+                            <!--/*[[ 초상화 이미지 ]]*/-->
                             <div class="col-md-4 text-center">
                                 <label for="portraitImage" class="form-label">초상화 이미지</label>
                                 <div class="image-upload-wrapper">
@@ -150,7 +150,7 @@
                                 </div>
                             </div>
     
-                            <!-- 전신 이미지 -->
+                            <!--/*[[ 전신 이미지 ]]*/-->
                             <div class="col-md-4 text-center">
                                 <label for="bodyImage" class="form-label">전신 이미지</label>
                                 <div class="image-upload-wrapper">
@@ -167,19 +167,19 @@
                 </div>
             </div>
 
-            <!-- 폼 제출 버튼 -->
+            <!--/*[[ 폼 제출 버튼 ]]*/-->
             <div class="button-group d-flex justify-content-between mt-4">
-                <!-- 왼쪽 버튼 그룹 -->
+                <!--/*[[ 왼쪽 버튼 그룹 ]]*/-->
                 <div class="d-flex gap-2">
-                    <!-- 취소 버튼 -->
+                    <!--/*[[ 취소 버튼 ]]*/-->
                     <button type="button" name="action" value="cancel" class="btn btn-danger" onclick="confirmCancel(this)">취소</button>
-                    <!-- 저장 버튼 -->
+                    <!--/*[[ 저장 버튼 ]]*/-->
                     <button type="submit" name="action" value="save" class="btn btn-secondary">임시 저장</button>
                 </div>
 
-                <!-- 오른쪽 버튼 그룹 -->
+                <!--/*[[ 오른쪽 버튼 그룹 ]]*/-->
                 <div class="d-flex gap-2">
-                    <!-- 다음 버튼 -->
+                    <!--/*[[ 다음 버튼 ]]*/-->
                     <button type="submit" name="action" value="next" class="btn btn-primary">다음 단계로</button>
                 </div>
             </div>
@@ -190,7 +190,7 @@
 
 </div>
 
-<!-- 하단 푸터 -->
+<!--/*[[ 하단 푸터 ]]*/-->
 <footer th:replace="~{fragments/footer :: management_footer}">
     하단 푸터 영역
 </footer>

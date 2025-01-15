@@ -4,23 +4,18 @@ import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import hdxian.monatium_darknet.domain.notice.NoticeStatus;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
+import hdxian.monatium_darknet.service.ImageUrlService;
 import hdxian.monatium_darknet.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/notices")
@@ -28,6 +23,7 @@ import java.util.NoSuchElementException;
 public class NoticeController {
 
     private final NoticeService noticeService;
+    private final ImageUrlService imageUrlService;
 
 //    @GetMapping
     public String noticeList(@RequestParam(value = "category", required = false) NoticeCategory category, Model model) {
@@ -94,6 +90,11 @@ public class NoticeController {
         String url = noticeService.getNoticeImageUrl(noticeId, imageName);
         UrlResource resource = new UrlResource("file:" + url);
         return ResponseEntity.ok(resource);
+    }
+
+    @ModelAttribute("faviconUrl")
+    public String faviconUrl() {
+        return imageUrlService.getErpinFaviconUrl();
     }
 
 }

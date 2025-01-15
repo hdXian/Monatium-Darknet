@@ -5,12 +5,12 @@
   <title>카드 관리</title>
   <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
   <link rel="stylesheet" th:href="@{/css/management/cards/cards.css}">
-  <!-- 커스텀 css -->
+  <!--/*[[ 커스텀 css ]]*/-->
 </head>
 
 <body>
 
-<!-- 상단 네비게이션 바 -->
+<!--/*[[ 상단 네비게이션 바 ]]*/-->
 <nav th:replace="~{fragments/navbar :: management_navbar}">
     상단 네비게이션 바 영역
 </nav>
@@ -18,7 +18,7 @@
 <div class="container-fluid d-flex justify-content-center align-items-center main-content">
     <div class="row g-4 d-flex justify-content-center text-center">
 
-        <!-- 스펠 카드 -->
+        <!--/*[[ 스펠 카드 ]]*/-->
         <div class="col-6">
             <a th:href="@{/management/cards/spell}" class="card h-100 shadow">
                 <img th:src="@{|${spellIconUrl}|}" class="card-img-top" alt="스펠 카드">
@@ -29,7 +29,7 @@
             </a>
         </div>
 
-        <!-- 아티팩트 카드 -->
+        <!--/*[[ 아티팩트 카드 ]]*/-->
         <div class="col-6">
             <a th:href="@{/management/cards/artifact}" class="card h-100 shadow">
                 <img th:src="@{|${artifactIconUrl}|}" class="card-img-top" alt="아티팩트 카드">
@@ -43,7 +43,7 @@
   </div>
 </div>
 
-<!-- 하단 푸터 -->
+<!--/*[[ 하단 푸터 ]]*/-->
 <footer th:replace="~{fragments/footer :: management_footer}">
   하단 푸터 영역
 </footer>

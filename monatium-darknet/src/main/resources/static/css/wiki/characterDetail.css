@@ -1,0 +1,263 @@
+body {
+    background-color: #F0F8FF;
+    font-family: 'MobileGothicPOP', sans-serif;
+}
+
+/* 배너 이미지 스타일 */
+.banner {
+    min-height: 300px;
+    width: 100%;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    background-image: url('/imgs/banner/wiki.webp');
+    margin-bottom: 20px;
+}
+
+/* 좌측 네비게이션 스타일 */
+.side-nav {
+    height: 100vh;
+    background-color: #F8F9FA;
+    padding-top: 20px;
+}
+
+.side-nav a {
+    color: #333;
+    font-size: 1.2rem;
+    padding: 15px 20px;
+    display: block;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.side-nav a:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.side-nav .active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.content {
+    padding: 20px;
+}
+
+/* 공통 스타일 */
+.title-underline {
+    height: 4px;
+    width: 50px;
+    background-color: #4682B4; /* 타이틀 아래에 파란색 선 추가 */
+    margin-top: -10px; /* 선과 타이틀의 간격 조정 */
+}
+
+
+/* 캐릭터 프로필 섹션 */
+.character-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 전체는 좌측 정렬 */
+}
+
+.character-image img {
+    min-width: 50%; /* 이미지의 최소 너비 설정 */
+    min-height: 50%; /* 이미지의 최소 높이 설정 */
+    object-fit: cover; /* 비율 유지하며 이미지 잘림 방지 */
+
+    max-width: 100%; /* 프로필 이미지 최대 크기 */
+    height: auto;
+    border-radius: 10px;
+}
+
+#profile h3 {
+    font-size: 1.5rem;
+    margin-right: 10px;
+}
+
+.grade-image {
+    max-width: 200px; /* 등급 이미지 최대 크기 */
+    height: auto;
+    margin-left: 15px; /* 이름과의 간격 */
+    margin-top: 0; /* 상단 여백 제거 */
+    align-self: flex-start; /* Flexbox에서 상단 정렬 */
+}
+
+/* 사도 수식언 */
+.character-subtitle {
+    font-size: 1.1rem; /* 수식어 글씨 크기 */
+    margin-bottom: 10px; /* 아래 여백 */
+    color: #6c757d; /* 텍스트 색상 (부드러운 회색) */
+}
+
+/* 종족 심볼 이미지 스타일 */
+.race-symbol {
+    width: 24px; /* 종족 심볼 이미지의 너비 */
+    height: 24px; /* 종족 심볼 이미지의 높이 */
+    object-fit: contain; /* 이미지 비율을 유지하면서 영역에 맞추기 */
+}
+
+/* 한마디, tmi */
+.character-extras {
+    /* margin-top: 30px; -> mt-4로 대체 (상단 여백)  */
+    width: 100%; /* 한마디, TMI를 전체 너비로 설정 */
+    text-align: center; /* 중앙 정렬 */
+}
+
+/* 한마디, tmi 부분 크기 설정 */
+.character-extras h4 {
+    font-size: 1rem; /* 제목 크기를 본문 크기로 설정 */
+}
+
+.character-extras p {
+    font-size: 1.25rem; /* 본문 크기를 제목 크기로 설정 */
+}
+
+.character-quote, .character-tmi, .character-race {
+    font-size: 1rem; /* 글귀의 기본 폰트 크기 */
+    color: #333; /* 일반적인 텍스트 색상 */
+}
+
+/* 캐릭터 특성 섹션 (프로필 섹션 우측) */
+.traits-icons {
+    display: flex;
+    justify-content: space-between;  /* 아이콘을 수평으로 균등하게 배치 */
+}
+
+.trait {
+    text-align: center;  /* 아이콘과 라벨을 중앙 정렬 */
+    width: 20%;          /* 각 아이콘이 차지하는 영역 크기 */
+}
+
+.trait img {
+    max-width: 50px;     /* 아이콘 이미지 크기 */
+    height: auto;
+}
+
+.trait-label {
+    font-size: 0.9rem;   /* 라벨의 크기 */
+    margin-top: 5px;
+}
+
+.trait-category {
+    color: #333;  /* 라벨 색상 (어두운 회색) */
+    font-weight: bold;  /* 굵은 글씨 */
+}
+
+.trait-value {
+    color: #FF6347;  /* 설명 텍스트 색상 (토마토 색상) */
+    font-weight: normal;  /* 기본 글씨 굵기 */
+}
+
+.status-bars {
+    margin-top: 20px;
+}
+
+.status-bar label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.progress {
+    height: 20px;  /* 게이지 높이 */
+    border-radius: 10px;  /* 둥근 모서리 */
+}
+
+.progress-bar {
+    transition: width 0.6s ease;  /* 게이지 애니메이션 */
+}
+
+/* 게이지 색상 */
+.strength-bar {
+    background-color: #C71585;  /* 깡: 어두운 분홍색 (Dark Magenta) */
+}
+
+.endurance-bar {
+    background-color: #00008B;  /* 맷집: 어두운 파란색 (Dark Blue) */
+}
+
+.skill-bar {
+    background-color: #FF8C00;  /* 재주: 어두운 주황색 (Dark Orange) */
+}
+
+.progress {
+    height: 20px;  /* 게이지 높이 */
+    border-radius: 10px;  /* 둥근 모서리 */
+}
+
+/* 스킬 섹션 스타일 */
+.skill-image {
+    max-height: 120px;
+    object-fit: contain; /* 이미지 비율 유지 및 영역에 맞추기 */
+}
+
+.skill-title-prefix {
+    font-size: 0.875rem; /* 기본 제목 크기보다 작은 폰트 크기 */
+    font-weight: normal; /* 굵기 조정 */
+    color: #6c757d; /* 부드러운 회색 */
+}
+
+.card-title {
+     /* 카드 타이틀 기본 크기와 유사 */
+    font-size: 1.4rem;
+}
+
+/* 어사이드 섹션 스타일 */
+.aside-image {
+    max-height: 150px; /* 이미지 최대 높이 제한 */
+    object-fit: contain; /* 이미지 비율 유지 및 영역에 맞추기 */
+    border-radius: 5px; /* 모서리 둥글게 처리 */
+}
+
+.aside-content {
+    max-width: 800px;
+}
+
+.aside-star-img {
+    width: 30px;
+    height: 30px;
+}
+
+/* 사복 섹션 스타일 */
+.skin-row {
+    display: flex;
+    flex-wrap: nowrap; /* 카드들이 줄바꿈 없이 한 줄에 나열되도록 설정 */
+    overflow-x: auto; /* 가로 스크롤을 허용 */
+    justify-content: flex-start; /* 카드들이 중앙 정렬되도록 설정 */
+    gap: 10px; /* 카드 사이의 간격 */
+    padding-bottom: 10px; /* 스크롤바와 카드 사이의 여백 */
+    width: 100%; /* 사복 행의 너비를 전체로 설정 */
+}
+
+.skin-card-container {
+    flex: 0 0 300px;
+    max-width: 300px; /* 각 사복 카드의 최대 너비 */
+    margin: 10px; /* 카드 간의 간격 조절 */
+    box-sizing: border-box; /* 카드 간의 여백 계산 포함 */
+}
+
+/* 사복 섹션의 img 태그를 감싸는 div에 적용되는 클래스 */
+.skin-card {
+    max-height: 400px; /* 이미지 컨테이너 높이 설정 */
+    overflow: hidden; /* 이미지가 컨테이너를 넘지 않도록 자름 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.skin-card img {
+    max-height: 100%;
+    object-fit: cover;
+}
+
+
+.btn-custom {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+}
+
+.btn-custom:hover {
+    background-color: #45A049;
+}

@@ -8,7 +8,7 @@
 </head>
 
 <body>
-<!-- 상단 네비게이션 바 -->
+<!--/*[[ 상단 네비게이션 바 ]]*/-->
 <nav th:replace="~{fragments/navbar :: management_navbar}">상단 네비게이션 바</nav>
 
 <div class="container mt-5 main-content">
@@ -26,7 +26,7 @@
 
                 <div th:object="${categoryForm}" id="skinSection" class="row mt-3">
 
-                    <!-- 카테고리 이름 -->
+                    <!--/*[[ 카테고리 이름 ]]*/-->
                     <div class="mb-4">
                         <label for="categoryName" class="form-label">카테고리 이름</label>
                         <input type="text" th:field="*{name}" th:errorclass="field-error" class="form-control"
@@ -34,7 +34,7 @@
                         <div class="field-error" th:errors="*{name}"></div>
                     </div>
 
-                    <!-- 추가할 스킨 -->
+                    <!--/*[[ 추가할 스킨 ]]*/-->
                     <div class="mb-4">
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -42,9 +42,9 @@
                             <button type="button" class="btn btn-outline-primary" onclick="addSkin()">스킨 추가</button>
                         </div>
 
-                        <!-- 스킨 컨테이너 -->
+                        <!--/*[[ 스킨 컨테이너 ]]*/-->
                         <div id="skinsContainer">
-                            <!-- 기본 스킨 입력 -->
+                            <!--/*[[ 기본 스킨 입력 ]]*/-->
                             <div th:each="skinId, stat : *{skinIds}" class="input-group mb-2 skin-item">
                                 <select class="form-select" th:field="*{skinIds[__${stat.index}__]}" th:errorclass="field-error">
                                     <option th:each="option : ${skinOptions}"
@@ -74,20 +74,20 @@
                 </div>
             </template>
 
-            <!-- 폼 제출 버튼 -->
+            <!--/*[[ 폼 제출 버튼 ]]*/-->
             <div class="button-group d-flex justify-content-between mt-4">
 
-                <!-- 왼쪽 버튼 그룹 -->
+                <!--/*[[ 왼쪽 버튼 그룹 ]]*/-->
                 <div class="d-flex gap-2">
-                    <!-- 취소 버튼 -->
+                    <!--/*[[ 취소 버튼 ]]*/-->
                     <button type="button" name="action" value="cancel" class="btn btn-danger" onclick="confirmCancel(this)">취소</button>
-                    <!-- 저장 버튼 -->
+                    <!--/*[[ 저장 버튼 ]]*/-->
                     <button type="submit" name="action" value="save" class="btn btn-secondary">임시 저장</button>
                 </div>
 
-                <!-- 오른쪽 버튼 그룹 -->
+                <!--/*[[ 오른쪽 버튼 그룹 ]]*/-->
                 <div class="d-flex gap-2">
-                    <!-- 다음 버튼 -->
+                    <!--/*[[ 다음 버튼 ]]*/-->
                     <button type="submit" name="action" value="complete" class="btn btn-primary">사복 카테고리 추가하기!</button>
                 </div>
 
@@ -99,7 +99,7 @@
 
 </div>
 
-<!-- Footer -->
+<!--/*[[ Footer ]]*/-->
 <footer th:replace="~{fragments/footer :: management_footer}"></footer>
 
 <script th:src="@{/js/management/skins/categoryForm.js}"></script>
