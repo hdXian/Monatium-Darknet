@@ -13,8 +13,6 @@ public class WebConfig implements WebMvcConfigurer {
     // String <-> NoticeCategory 컨버터 등록
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(new StringToNoticeCategoryConverter());
-
         registry.addConverter(new StringToRaceConverter());
         registry.addConverter(new StringToPersonalityConverter());
         registry.addConverter(new StringToRoleConverter());

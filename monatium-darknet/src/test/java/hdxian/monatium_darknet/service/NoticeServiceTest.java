@@ -1,9 +1,6 @@
 package hdxian.monatium_darknet.service;
 
-import hdxian.monatium_darknet.domain.notice.Member;
-import hdxian.monatium_darknet.domain.notice.Notice;
-import hdxian.monatium_darknet.domain.notice.NoticeCategoryDeprecated;
-import hdxian.monatium_darknet.domain.notice.NoticeStatus;
+import hdxian.monatium_darknet.domain.notice.*;
 import hdxian.monatium_darknet.exception.notice.NoticeNotFoundException;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.dto.MemberDto;
@@ -37,8 +34,11 @@ class NoticeServiceTest {
         Long lilyId = memberService.createNewMember(dto);
         Member lily = memberService.findOne(lilyId);
 
+        Long categoryId = noticeService.createNewNoticeCategory("공지사항");
+        NoticeCategory savedCategory = noticeService.findOneCategory(categoryId);
+
         // when
-        NoticeDto noticeDto = generateNoticeDto("공지사항제목", NoticeCategoryDeprecated.NOTICE, "공지사항 본문");
+        NoticeDto noticeDto = generateNoticeDto("공지사항제목", categoryId, "공지사항 본문");
         Long savedId = noticeService.createNewNotice(lilyId, noticeDto);
 
         // then
@@ -47,7 +47,7 @@ class NoticeServiceTest {
         assertThat(findNotice.getMember()).isEqualTo(lily);
 
         assertThat(findNotice.getTitle()).isEqualTo(noticeDto.getTitle());
-        assertThat(findNotice.getCategory()).isEqualTo(noticeDto.getCategory());
+        assertThat(findNotice.getCategory()).isEqualTo(savedCategory);
         assertThat(findNotice.getContent()).isEqualTo(noticeDto.getContent());
     }
 
@@ -59,8 +59,11 @@ class NoticeServiceTest {
         Long lily_id = memberService.createNewMember(lilyDto);
         Member lily = memberService.findOne(lily_id);
 
+        Long categoryId = noticeService.createNewNoticeCategory("공지사항");
+        NoticeCategory savedCategory = noticeService.findOneCategory(categoryId);
+
         // when
-        NoticeDto noticeDto = generateNoticeDto("공지사항제목1", NoticeCategoryDeprecated.NOTICE, "공지사항본문1");
+        NoticeDto noticeDto = generateNoticeDto("공지사항제목1", categoryId, "공지사항본문1");
         Long noticeId = noticeService.createNewNotice(lily_id, noticeDto);
 
         // then
@@ -87,11 +90,14 @@ class NoticeServiceTest {
         Long ameliaId = memberService.createNewMember(amelia_dto);
         Member amelia = memberService.findOne(ameliaId);
 
-        // when
-        NoticeDto noticeDto1 = generateNoticeDto("공지사항제목1", NoticeCategoryDeprecated.NOTICE, "공지사항본문1");
-        NoticeDto noticeDto2 = generateNoticeDto("공지사항제목2", NoticeCategoryDeprecated.NOTICE, "공지사항본문2");
+        Long categoryId = noticeService.createNewNoticeCategory("공지사항");
+        NoticeCategory savedCategory = noticeService.findOneCategory(categoryId);
 
-        NoticeDto updateDto1 = generateNoticeDto("업데이트제목1", NoticeCategoryDeprecated.UPDATE, "업데이트본문1");
+        // when
+        NoticeDto noticeDto1 = generateNoticeDto("공지사항제목1", categoryId, "공지사항본문1");
+        NoticeDto noticeDto2 = generateNoticeDto("공지사항제목2", categoryId, "공지사항본문2");
+
+        NoticeDto updateDto1 = generateNoticeDto("업데이트제목1", categoryId, "업데이트본문1");
 
         Long noticeId1 = noticeService.createNewNotice(lilyId, noticeDto1); // by 릴1리
         Long noticeId2 = noticeService.createNewNotice(ameliaId, noticeDto2); // by 아멜리아
@@ -128,21 +134,33 @@ class NoticeServiceTest {
         Long ameliaId = memberService.createNewMember(amelia_dto);
         Member amelia = memberService.findOne(ameliaId);
 
+        Long categoryId1 = noticeService.createNewNoticeCategory("공지사항");
+        NoticeCategory savedCategory1 = noticeService.findOneCategory(categoryId1);
+
+        Long categoryId2 = noticeService.createNewNoticeCategory("이벤트");
+        NoticeCategory savedCategory2 = noticeService.findOneCategory(categoryId2);
+
+        Long categoryId3 = noticeService.createNewNoticeCategory("업데이트");
+        NoticeCategory savedCategory3 = noticeService.findOneCategory(categoryId3);
+
+        Long categoryId4 = noticeService.createNewNoticeCategory("개발자노트");
+        NoticeCategory savedCategory4 = noticeService.findOneCategory(categoryId4);
+
         // 공지 2개
-        NoticeDto noticeDto1 = generateNoticeDto("공지사항제목1", NoticeCategoryDeprecated.NOTICE, "공지사항본문1");
-        NoticeDto noticeDto2 = generateNoticeDto("공지사항제목2", NoticeCategoryDeprecated.NOTICE, "공지사항본문2");
+        NoticeDto noticeDto1 = generateNoticeDto("공지사항제목1", categoryId1, "공지사항본문1");
+        NoticeDto noticeDto2 = generateNoticeDto("공지사항제목2", categoryId1, "공지사항본문2");
 
         // 이벤트 2개
-        NoticeDto eventDto1 = generateNoticeDto("이벤트제목1", NoticeCategoryDeprecated.EVENT, "이벤트본문1");
-        NoticeDto eventDto2 = generateNoticeDto("이벤트제목2", NoticeCategoryDeprecated.EVENT, "이벤트본문2");
+        NoticeDto eventDto1 = generateNoticeDto("이벤트제목1", categoryId2, "이벤트본문1");
+        NoticeDto eventDto2 = generateNoticeDto("이벤트제목2", categoryId2, "이벤트본문2");
 
         // 업데이트 3개
-        NoticeDto updateDto1 = generateNoticeDto("업데이트제목1", NoticeCategoryDeprecated.UPDATE, "업데이트본문1");
-        NoticeDto updateDto2 = generateNoticeDto("업데이트제목2", NoticeCategoryDeprecated.UPDATE, "업데이트본문2");
-        NoticeDto updateDto3 = generateNoticeDto("업데이트제목3", NoticeCategoryDeprecated.UPDATE, "업데이트본문3");
+        NoticeDto updateDto1 = generateNoticeDto("업데이트제목1", categoryId3, "업데이트본문1");
+        NoticeDto updateDto2 = generateNoticeDto("업데이트제목2", categoryId3, "업데이트본문2");
+        NoticeDto updateDto3 = generateNoticeDto("업데이트제목3", categoryId3, "업데이트본문3");
 
         // 개발자노트 1개
-        NoticeDto devDto1 = generateNoticeDto("개발자노트제목1", NoticeCategoryDeprecated.DEV, "개발자노트제목2");
+        NoticeDto devDto1 = generateNoticeDto("개발자노트제목1", categoryId4, "개발자노트제목2");
 
         // when
         Long noticeId1 = noticeService.createNewNotice(lilyId, noticeDto1);
@@ -172,19 +190,19 @@ class NoticeServiceTest {
         // then
         NoticeSearchCond searchCond = new NoticeSearchCond();
 
-        searchCond.setCategory(NoticeCategoryDeprecated.NOTICE);
+        searchCond.setCategoryId(categoryId1);
         List<Notice> notices = noticeService.findAll(searchCond);
         assertThat(notices).containsExactlyInAnyOrder(notice1, notice2);
 
-        searchCond.setCategory(NoticeCategoryDeprecated.EVENT);
+        searchCond.setCategoryId(categoryId2);
         List<Notice> events = noticeService.findAll(searchCond);
         assertThat(events).containsExactlyInAnyOrder(event1, event2);
 
-        searchCond.setCategory(NoticeCategoryDeprecated.UPDATE);
+        searchCond.setCategoryId(categoryId3);
         List<Notice> updates = noticeService.findAll(searchCond);
         assertThat(updates).containsExactlyInAnyOrder(update1, update2, update3);
 
-        searchCond.setCategory(NoticeCategoryDeprecated.DEV);
+        searchCond.setCategoryId(categoryId4);
         List<Notice> devs = noticeService.findAll(searchCond);
         assertThat(devs).containsExactlyInAnyOrder(dev1);
     }
@@ -199,18 +217,20 @@ class NoticeServiceTest {
         Long lilyId = memberService.createNewMember(lilyDto);
         Member lily = memberService.findOne(lilyId);
 
-        NoticeDto noticeDto = generateNoticeDto("공지사항제목", NoticeCategoryDeprecated.NOTICE, "공지사항본문");
+        Long categoryId = noticeService.createNewNoticeCategory("공지사항");
+
+        NoticeDto noticeDto = generateNoticeDto("공지사항제목", categoryId, "공지사항본문");
         Long savedNoticeId = noticeService.createNewNotice(lilyId, noticeDto);
 
         // when
         // 제목, 본문, 카테고리 모두 수정
-        NoticeDto updateDto = generateNoticeDto("수정공지사항제목", NoticeCategoryDeprecated.EVENT, "수정공지사항본문");
+        NoticeDto updateDto = generateNoticeDto("수정공지사항제목", categoryId, "수정공지사항본문");
         Long updatedId = noticeService.updateNotice(savedNoticeId, updateDto); // 참고 - 업데이트 기능에 시간도 수정하는 로직 포함돼있음
 
         // then
         Notice updatedNotice = noticeService.findOne(updatedId);
         assertThat(updatedNotice.getTitle()).isEqualTo(updateDto.getTitle());
-        assertThat(updatedNotice.getCategory()).isEqualTo(updateDto.getCategory());
+        assertThat(updatedNotice.getCategory().getId()).isEqualTo(updateDto.getCategoryId());
         assertThat(updatedNotice.getContent()).isEqualTo(updateDto.getContent());
     }
 
@@ -222,10 +242,13 @@ class NoticeServiceTest {
         MemberDto lilyDto = generateMemberDto("lily", "1234", "GM릴1리");
         Long lilyId = memberService.createNewMember(lilyDto);
 
-        NoticeDto noticeDto = generateNoticeDto("공지사항제목", NoticeCategoryDeprecated.NOTICE, "공지사항본문");
+        Long categoryId1 = noticeService.createNewNoticeCategory("공지사항");
+        Long categoryId2 = noticeService.createNewNoticeCategory("이벤트");
+
+        NoticeDto noticeDto = generateNoticeDto("공지사항제목", categoryId1, "공지사항본문");
         Long savedNoticeId1 = noticeService.createNewNotice(lilyId, noticeDto);
 
-        NoticeDto noticeDto2 = generateNoticeDto("이벤트제목", NoticeCategoryDeprecated.EVENT, "이벤트본문");
+        NoticeDto noticeDto2 = generateNoticeDto("이벤트제목", categoryId2, "이벤트본문");
         Long savedNoticeId2 = noticeService.createNewNotice(lilyId, noticeDto2);
 
         // when
@@ -249,7 +272,7 @@ class NoticeServiceTest {
 
         // findAll()로 찾으면 조회는 안 됨
         NoticeSearchCond searchCond = new NoticeSearchCond();
-        searchCond.setCategory(NoticeCategoryDeprecated.NOTICE);
+        searchCond.setCategoryId(categoryId1);
         List<Notice> noticeList = noticeService.findAll(searchCond);
         assertThat(noticeList).isEmpty();
     }
@@ -268,19 +291,24 @@ class NoticeServiceTest {
         Long ameliaId = memberService.createNewMember(amelia_dto);
         Member amelia = memberService.findOne(ameliaId);
 
+        Long categoryId1 = noticeService.createNewNoticeCategory("공지사항");
+        Long categoryId2 = noticeService.createNewNoticeCategory("이벤트");
+        Long categoryId3 = noticeService.createNewNoticeCategory("업데이트");
+        Long categoryId4 = noticeService.createNewNoticeCategory("개발자노트");
+
         // 공지 2개
-        NoticeDto noticeDto1 = generateNoticeDto("공지사항제목1", NoticeCategoryDeprecated.NOTICE, "공지사항본문1");
-        NoticeDto noticeDto2 = generateNoticeDto("공지사항제목2", NoticeCategoryDeprecated.NOTICE, "공지사항본문2");
+        NoticeDto noticeDto1 = generateNoticeDto("공지사항제목1", categoryId1, "공지사항본문1");
+        NoticeDto noticeDto2 = generateNoticeDto("공지사항제목2", categoryId1, "공지사항본문2");
 
         // 이벤트 2개
-        NoticeDto eventDto1 = generateNoticeDto("이벤트제목1", NoticeCategoryDeprecated.EVENT, "이벤트본문1");
+        NoticeDto eventDto1 = generateNoticeDto("이벤트제목1", categoryId2, "이벤트본문1");
 
         // 업데이트 3개
-        NoticeDto updateDto1 = generateNoticeDto("업데이트제목1", NoticeCategoryDeprecated.UPDATE, "업데이트본문1");
-        NoticeDto updateDto2 = generateNoticeDto("업데이트제목2", NoticeCategoryDeprecated.UPDATE, "업데이트본문2");
+        NoticeDto updateDto1 = generateNoticeDto("업데이트제목1", categoryId3, "업데이트본문1");
+        NoticeDto updateDto2 = generateNoticeDto("업데이트제목2", categoryId3, "업데이트본문2");
 
         // 개발자노트 1개
-        NoticeDto devDto1 = generateNoticeDto("개발자노트제목1", NoticeCategoryDeprecated.DEV, "개발자노트제목2");
+        NoticeDto devDto1 = generateNoticeDto("개발자노트제목1", categoryId4, "개발자노트제목2");
 
         // 릴리 - 공지1, 업데이트2, 개발자노트1
         // 아멜리아 - 공지2, 이벤트1, 업데이트1
@@ -321,10 +349,10 @@ class NoticeServiceTest {
         assertThat(byAmelia).containsExactlyInAnyOrder(notice2, event1, update1);
     }
 
-    static NoticeDto generateNoticeDto(String title, NoticeCategoryDeprecated category, String content) {
+    static NoticeDto generateNoticeDto(String title, Long categoryId, String content) {
         NoticeDto dto = new NoticeDto();
         dto.setTitle(title);
-        dto.setCategory(category);
+        dto.setCategoryId(categoryId);
         dto.setContent(content);
 
         return dto;
