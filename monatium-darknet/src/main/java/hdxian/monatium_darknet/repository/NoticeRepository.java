@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hdxian.monatium_darknet.domain.notice.Notice;
+import hdxian.monatium_darknet.domain.notice.NoticeCategoryStatus;
 import hdxian.monatium_darknet.domain.notice.NoticeStatus;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import jakarta.persistence.EntityManager;
@@ -61,6 +62,7 @@ public class NoticeRepository {
     public Page<Notice> findAll(NoticeSearchCond searchCond, Pageable pageable) {
         Long categoryId = searchCond.getCategoryId();
         NoticeStatus status = searchCond.getStatus();
+        NoticeCategoryStatus categoryStatus = searchCond.getCategoryStatus();
         String title = searchCond.getTitle();
         String content = searchCond.getContent();
         Long memberId = searchCond.getMemberId();
@@ -69,6 +71,7 @@ public class NoticeRepository {
                 .where(
                         equalsCategoryId(categoryId),
                         equalsStatus(status),
+                        equalsCategoryStatus(categoryStatus),
                         likeTitle(title),
                         likeContent(content),
                         memberIdEq(memberId)
@@ -84,6 +87,7 @@ public class NoticeRepository {
                         .where(
                                 equalsCategoryId(categoryId),
                                 equalsStatus(status),
+                                equalsCategoryStatus(categoryStatus),
                                 likeTitle(title),
                                 likeContent(content),
                                 memberIdEq(memberId)
@@ -98,6 +102,7 @@ public class NoticeRepository {
     public List<Notice> findAll(NoticeSearchCond searchCond) {
         Long categoryId = searchCond.getCategoryId();
         NoticeStatus status = searchCond.getStatus();
+        NoticeCategoryStatus categoryStatus = searchCond.getCategoryStatus();
         String title = searchCond.getTitle();
         String content = searchCond.getContent();
         Long memberId = searchCond.getMemberId();
@@ -107,6 +112,7 @@ public class NoticeRepository {
                 .where(
                         equalsCategoryId(categoryId),
                         equalsStatus(status),
+                        equalsCategoryStatus(categoryStatus),
                         likeTitle(title),
                         likeContent(content),
                         memberIdEq(memberId)
@@ -133,6 +139,13 @@ public class NoticeRepository {
         }
 
         return notice.status.ne(NoticeStatus.DELETED); // 조건이 따로 없을 경우, 기본적으로 DELETED가 아닌 공지사항을 제외하고 조회
+    }
+
+    private BooleanExpression equalsCategoryStatus(NoticeCategoryStatus status) {
+        if (status != null) {
+            return notice.category.status.eq(status);
+        }
+        return null;
     }
 
     private BooleanExpression likeTitle(String title) {

@@ -1,9 +1,6 @@
 package hdxian.monatium_darknet.web.controller;
 
-import hdxian.monatium_darknet.domain.notice.Notice;
-import hdxian.monatium_darknet.domain.notice.NoticeCategory;
-import hdxian.monatium_darknet.domain.notice.NoticeCategoryDeprecated;
-import hdxian.monatium_darknet.domain.notice.NoticeStatus;
+import hdxian.monatium_darknet.domain.notice.*;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.ImageUrlService;
 import hdxian.monatium_darknet.service.NoticeService;
@@ -34,6 +31,7 @@ public class NoticeController {
         searchCond.setCategoryId(categoryId);
         searchCond.setTitle(title);
         searchCond.setStatus(NoticeStatus.PUBLIC); // 공개 상태인 공지사항만 노출
+        searchCond.setCategoryStatus(NoticeCategoryStatus.PUBLIC); // 카테고리고 공개된 것만 노출
         Page<Notice> noticePage = noticeService.findAll_Paging(searchCond, pageNumber);
 
         setPages(noticePage.getTotalPages(), pageNumber, model);

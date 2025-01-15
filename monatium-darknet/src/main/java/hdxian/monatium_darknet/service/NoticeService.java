@@ -155,7 +155,8 @@ public class NoticeService {
     @Transactional
     public Notice findOnePublic(Long noticeId) {
         Optional<Notice> find = noticeRepository.findOne(noticeId);
-        if (find.isEmpty() || find.get().getStatus() != NoticeStatus.PUBLIC) {
+        // 찾는게 없거나, 공지사항이 공개가 아니거나, 해당 카테고리가 공개가 아니면 결과를 리턴하지 않음.
+        if (find.isEmpty() || find.get().getStatus() != NoticeStatus.PUBLIC || find.get().getCategory().getStatus() != NoticeCategoryStatus.PUBLIC) {
             throw new NoticeNotFoundException("해당 공지사항을 찾을 수 없습니다. noticeId = " + noticeId);
         }
         return find.get();
