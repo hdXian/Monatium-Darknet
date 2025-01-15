@@ -5,8 +5,6 @@ import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.aside.AsideSpec;
 import hdxian.monatium_darknet.domain.card.CardGrade;
 import hdxian.monatium_darknet.domain.character.*;
-import hdxian.monatium_darknet.domain.notice.NoticeCategory;
-import hdxian.monatium_darknet.domain.skin.SkinGrade;
 import hdxian.monatium_darknet.service.*;
 import hdxian.monatium_darknet.service.dto.*;
 import lombok.RequiredArgsConstructor;
@@ -39,21 +37,27 @@ public class TestDataInit {
         memberDto.setNickName("GM릴2리");
         Long memberId = memberService.createNewMember(memberDto);
 
+        // 공지사항 카테고리 추가
+        Long noticeCategoryId1 = noticeService.createNewNoticeCategory("공지사항");
+        Long noticeCategoryId2 = noticeService.createNewNoticeCategory("업데이트");
+        Long noticeCategoryId3 = noticeService.createNewNoticeCategory("이벤트");
+        Long noticeCategoryId4 = noticeService.createNewNoticeCategory("개발자노트");
+
         // 공지사항 추가
-        NoticeDto noticeDto1 = generateNoticeDto("테스트 공지사항1 제목 (공지사항)", NoticeCategory.NOTICE, "테스트 공지사항1 본문");
-        NoticeDto noticeDto2 = generateNoticeDto("테스트 공지사항2 제목 (업데이트)", NoticeCategory.UPDATE, "테스트 공지사항2 본문");
-        NoticeDto noticeDto3 = generateNoticeDto("테스트 공지사항3 제목 (이벤트)", NoticeCategory.EVENT, "테스트 공지사항3 본문");
-        NoticeDto noticeDto4 = generateNoticeDto("테스트 공지사항4 제목 (개발자노트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+        NoticeDto noticeDto1 = generateNoticeDto("테스트 공지사항1 제목 (공지사항)", noticeCategoryId1, "테스트 공지사항1 본문");
+        NoticeDto noticeDto2 = generateNoticeDto("테스트 공지사항2 제목 (업데이트)", noticeCategoryId2, "테스트 공지사항2 본문");
+        NoticeDto noticeDto3 = generateNoticeDto("테스트 공지사항3 제목 (이벤트)", noticeCategoryId3, "테스트 공지사항3 본문");
+        NoticeDto noticeDto4 = generateNoticeDto("테스트 공지사항4 제목 (개발자노트)", noticeCategoryId4, "테스트 공지사항4 본문");
 
-        NoticeDto noticeDto5 = generateNoticeDto("테스트 공지사항5 제목 (공지사항)", NoticeCategory.DEV, "테스트 공지사항4 본문");
-        NoticeDto noticeDto6 = generateNoticeDto("테스트 공지사항6 제목 (업데이트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
-        NoticeDto noticeDto7 = generateNoticeDto("테스트 공지사항7 제목 (이벤트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
-        NoticeDto noticeDto8 = generateNoticeDto("테스트 공지사항8 제목 (개발자노트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+        NoticeDto noticeDto5 = generateNoticeDto("테스트 공지사항5 제목 (공지사항)", noticeCategoryId1, "테스트 공지사항4 본문");
+        NoticeDto noticeDto6 = generateNoticeDto("테스트 공지사항6 제목 (업데이트)", noticeCategoryId2, "테스트 공지사항4 본문");
+        NoticeDto noticeDto7 = generateNoticeDto("테스트 공지사항7 제목 (이벤트)", noticeCategoryId3, "테스트 공지사항4 본문");
+        NoticeDto noticeDto8 = generateNoticeDto("테스트 공지사항8 제목 (개발자노트)", noticeCategoryId4, "테스트 공지사항4 본문");
 
-        NoticeDto noticeDto9 = generateNoticeDto("테스트 공지사항9 제목 (공지사항)", NoticeCategory.DEV, "테스트 공지사항4 본문");
-        NoticeDto noticeDto10 = generateNoticeDto("테스트 공지사항10 제목 (업데이트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
-        NoticeDto noticeDto11 = generateNoticeDto("테스트 공지사항11 제목 (이벤트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
-        NoticeDto noticeDto12 = generateNoticeDto("테스트 공지사항12 제목 (개발자노트)", NoticeCategory.DEV, "테스트 공지사항4 본문");
+        NoticeDto noticeDto9 = generateNoticeDto("테스트 공지사항9 제목 (공지사항)", noticeCategoryId1, "테스트 공지사항4 본문");
+        NoticeDto noticeDto10 = generateNoticeDto("테스트 공지사항10 제목 (업데이트)", noticeCategoryId2, "테스트 공지사항4 본문");
+        NoticeDto noticeDto11 = generateNoticeDto("테스트 공지사항11 제목 (이벤트)", noticeCategoryId3, "테스트 공지사항4 본문");
+        NoticeDto noticeDto12 = generateNoticeDto("테스트 공지사항12 제목 (개발자노트)", noticeCategoryId4, "테스트 공지사항4 본문");
         Long noticeId1 = noticeService.createNewNotice(memberId, noticeDto1);
         Long noticeId2 = noticeService.createNewNotice(memberId, noticeDto2);
         Long noticeId3 = noticeService.createNewNotice(memberId, noticeDto3);
@@ -229,10 +233,11 @@ public class TestDataInit {
         return dto;
     }
 
-    private static NoticeDto generateNoticeDto(String title, NoticeCategory category, String content) {
+    private static NoticeDto generateNoticeDto(String title, Long categoryId, String content) {
         NoticeDto noticeDto = new NoticeDto();
         noticeDto.setTitle(title);
-        noticeDto.setCategory(category);
+//        noticeDto.setCategory(category);
+        noticeDto.setCategoryId(categoryId);
         noticeDto.setContent(content);
         return noticeDto;
     }

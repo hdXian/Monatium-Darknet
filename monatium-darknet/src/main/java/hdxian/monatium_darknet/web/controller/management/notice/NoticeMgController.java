@@ -39,10 +39,10 @@ public class NoticeMgController {
     // 공지사항 목록 (대시보드 -> 공지사항 관리)
     @GetMapping
     public String noticeList_Paging(@RequestParam(value = "page", required = false, defaultValue = "1") Integer pageNumber,
-                                    @RequestParam(value = "category", required = false) NoticeCategory category,
+                                    @RequestParam(value = "category", required = false) Long categoryId,
                                     @RequestParam(value = "query", required = false) String title, Model model) {
         NoticeSearchCond searchCond = new NoticeSearchCond();
-        searchCond.setCategory(category);
+        searchCond.setCategoryId(categoryId);
         searchCond.setTitle(title);
         Page<Notice> noticePage = noticeService.findAll_Paging(searchCond, pageNumber);
 
@@ -51,7 +51,7 @@ public class NoticeMgController {
         List<Notice> noticeList = noticePage.getContent();
         model.addAttribute("noticeList", noticeList);
 
-        model.addAttribute("curCategory", category);
+        model.addAttribute("curCategoryId", categoryId);
         model.addAttribute("page", noticePage);
         model.addAttribute("query", title);
         return "management/notice/noticeList";
@@ -169,6 +169,11 @@ public class NoticeMgController {
         return ResponseEntity.ok().build();
     }
 
+    @ModelAttribute("categoryList")
+    public List<NoticeCategory> categoryList() {
+        return noticeService.findAllNoticeCategories();
+    }
+
     @ModelAttribute("faviconUrl")
     public String faviconUrl() {
         return imageUrlService.getElleafFaviconUrl();
@@ -179,7 +184,7 @@ public class NoticeMgController {
 
     private NoticeForm generateNoticeForm(Notice notice) {
         NoticeForm noticeForm = new NoticeForm();
-        noticeForm.setCategory(notice.getCategory());
+        noticeForm.setCategoryId(notice.getCategory().getId());
         noticeForm.setTitle(notice.getTitle());
         noticeForm.setContent(notice.getContent());
 
@@ -187,11 +192,11 @@ public class NoticeMgController {
     }
 
     private NoticeDto generateNoticeDto(NoticeForm noticeForm) {
-        NoticeCategory category = noticeForm.getCategory();
+        Long categoryId = noticeForm.getCategoryId();
         String title = noticeForm.getTitle();
         String htmlContent = noticeForm.getContent();
 
-        return new NoticeDto(category, title, htmlContent);
+        return new NoticeDto(categoryId, title, htmlContent);
     }
 
     private void setPages(int totalPages, int pageNumber, Model model) {

@@ -14,7 +14,8 @@ public class Notice {
     @Column(name = "notice_id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "notice_category_id")
     private NoticeCategory category;
 
     @Enumerated(EnumType.STRING)
@@ -47,6 +48,7 @@ public class Notice {
         notice.setStatus(NoticeStatus.PRIVATE); // 처음 상태는 비공개
 
         member.addNotice(notice); // 연관관계 추가 (setCharacter()도 여기서 설정됨)
+        category.addNotice(notice);
 
         return notice;
     }

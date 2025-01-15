@@ -2,7 +2,7 @@ package hdxian.monatium_darknet.repository;
 
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.Notice;
-import hdxian.monatium_darknet.domain.notice.NoticeCategory;
+import hdxian.monatium_darknet.domain.notice.NoticeCategoryDeprecated;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.MemberService;
 import hdxian.monatium_darknet.service.dto.MemberDto;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -39,7 +38,7 @@ class NoticeRepositoryTest {
         Member lily = memberService.findOne(lily_id);
 
         // when
-        Notice notice = Notice.createNotice(lily, NoticeCategory.NOTICE, "공지사항제목", "공지사항본문");
+        Notice notice = Notice.createNotice(lily, NoticeCategoryDeprecated.NOTICE, "공지사항제목", "공지사항본문");
         Long notice_id = noticeRepository.save(notice);
 
         // then
@@ -51,7 +50,7 @@ class NoticeRepositoryTest {
         Notice findNotice = find.get();
         assertThat(findNotice.getId()).isEqualTo(notice_id);
         assertThat(findNotice.getMember()).isEqualTo(lily);
-        assertThat(findNotice.getCategory()).isEqualTo(NoticeCategory.NOTICE);
+        assertThat(findNotice.getCategory()).isEqualTo(NoticeCategoryDeprecated.NOTICE);
         assertThat(findNotice.getTitle()).isEqualTo("공지사항제목");
         assertThat(findNotice.getContent()).isEqualTo("공지사항본문");
 
@@ -74,10 +73,10 @@ class NoticeRepositoryTest {
         Member amelia = memberService.findOne(ameliaId);
 
         // 공지 3개
-        Notice notice1 = Notice.createNotice(lily, NoticeCategory.NOTICE, "릴리 공지 제목", "릴리 공지 본문");
-        Notice notice2 = Notice.createNotice(lily, NoticeCategory.EVENT, "릴리 이벤트 제목", "릴리 이벤트 본문");
+        Notice notice1 = Notice.createNotice(lily, NoticeCategoryDeprecated.NOTICE, "릴리 공지 제목", "릴리 공지 본문");
+        Notice notice2 = Notice.createNotice(lily, NoticeCategoryDeprecated.EVENT, "릴리 이벤트 제목", "릴리 이벤트 본문");
 
-        Notice notice3 = Notice.createNotice(amelia, NoticeCategory.NOTICE, "아멜리아 공지 제목", "아멜리아 공지 본문");
+        Notice notice3 = Notice.createNotice(amelia, NoticeCategoryDeprecated.NOTICE, "아멜리아 공지 제목", "아멜리아 공지 본문");
 
         // when
         noticeRepository.save(notice1);
@@ -111,20 +110,20 @@ class NoticeRepositoryTest {
         Member amelia = memberService.findOne(ameliaId);
 
         // 공지 2개
-        Notice notice1 = Notice.createNotice(lily, NoticeCategory.NOTICE, "릴리 공지1 제목", "릴리 공지1 본문");
-        Notice notice2 = Notice.createNotice(amelia, NoticeCategory.NOTICE, "아멜리아 공지2 제목", "아멜리아 공지2 본문");
+        Notice notice1 = Notice.createNotice(lily, NoticeCategoryDeprecated.NOTICE, "릴리 공지1 제목", "릴리 공지1 본문");
+        Notice notice2 = Notice.createNotice(amelia, NoticeCategoryDeprecated.NOTICE, "아멜리아 공지2 제목", "아멜리아 공지2 본문");
 
         // 이벤트 2개
-        Notice event1 = Notice.createNotice(lily, NoticeCategory.EVENT, "릴리 이벤트1 제목", "릴리 이벤트1 본문");
-        Notice event2 = Notice.createNotice(amelia, NoticeCategory.EVENT, "아멜리아 이벤트2 제목", "아멜리아 이벤트2 본문");
+        Notice event1 = Notice.createNotice(lily, NoticeCategoryDeprecated.EVENT, "릴리 이벤트1 제목", "릴리 이벤트1 본문");
+        Notice event2 = Notice.createNotice(amelia, NoticeCategoryDeprecated.EVENT, "아멜리아 이벤트2 제목", "아멜리아 이벤트2 본문");
 
         // 업데이트 3개
-        Notice update1 = Notice.createNotice(lily, NoticeCategory.UPDATE, "릴리 업데이트1 제목", "릴리 업데이트1 본문");
-        Notice update2 = Notice.createNotice(lily, NoticeCategory.UPDATE, "릴리 업데이트2 제목", "릴리 업데이트2 본문");
-        Notice update3 = Notice.createNotice(amelia, NoticeCategory.UPDATE, "아멜리아 업데이트3 제목", "아멜리아 업데이트3 본문");
+        Notice update1 = Notice.createNotice(lily, NoticeCategoryDeprecated.UPDATE, "릴리 업데이트1 제목", "릴리 업데이트1 본문");
+        Notice update2 = Notice.createNotice(lily, NoticeCategoryDeprecated.UPDATE, "릴리 업데이트2 제목", "릴리 업데이트2 본문");
+        Notice update3 = Notice.createNotice(amelia, NoticeCategoryDeprecated.UPDATE, "아멜리아 업데이트3 제목", "아멜리아 업데이트3 본문");
 
         // 개발자 노트 1개
-        Notice dev1 = Notice.createNotice(amelia, NoticeCategory.DEV, "아멜리아 개발자노트1 제목", "아멜리아 개발자노트1 본문");
+        Notice dev1 = Notice.createNotice(amelia, NoticeCategoryDeprecated.DEV, "아멜리아 개발자노트1 제목", "아멜리아 개발자노트1 본문");
 
         // when
         noticeRepository.save(notice1);
@@ -142,19 +141,19 @@ class NoticeRepositoryTest {
         // then
         NoticeSearchCond searchCond = new NoticeSearchCond();
 
-        searchCond.setCategory(NoticeCategory.NOTICE);
+        searchCond.setCategory(NoticeCategoryDeprecated.NOTICE);
         List<Notice> noticeList = noticeRepository.findAll(searchCond);
         assertThat(noticeList).containsExactlyInAnyOrder(notice1, notice2);
 
-        searchCond.setCategory(NoticeCategory.EVENT);
+        searchCond.setCategory(NoticeCategoryDeprecated.EVENT);
         List<Notice> eventList = noticeRepository.findAll(searchCond);
         assertThat(eventList).containsExactlyInAnyOrder(event1, event2);
 
-        searchCond.setCategory(NoticeCategory.UPDATE);
+        searchCond.setCategory(NoticeCategoryDeprecated.UPDATE);
         List<Notice> updateList = noticeRepository.findAll(searchCond);
         assertThat(updateList).containsExactlyInAnyOrder(update1, update2, update3);
 
-        searchCond.setCategory(NoticeCategory.DEV);
+        searchCond.setCategory(NoticeCategoryDeprecated.DEV);
         List<Notice> devList = noticeRepository.findAll(searchCond);
         assertThat(devList).containsExactlyInAnyOrder(dev1);
 

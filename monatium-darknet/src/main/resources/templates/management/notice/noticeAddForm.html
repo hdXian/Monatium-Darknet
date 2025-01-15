@@ -29,11 +29,9 @@
 
         <div class="mb-3">
             <label for="category" class="form-label">카테고리</label>
-            <select th:field="*{category}" th:errorclass="field-error" id="category" name="category" class="form-select" required>
-                <option value="NOTICE">공지사항</option>
-                <option value="EVENT">이벤트</option>
-                <option value="UPDATE">업데이트</option>
-                <option value="DEV">개발자 노트</option>
+            <select th:field="*{categoryId}" th:errorclass="field-error" id="category" name="category" class="form-select" required>
+                <option value="" disabled selected>카테고리를 선택하세요</option>
+                <option th:each="category : ${categoryList}" th:value="${category.id}" th:text="${category.name}"></option>
             </select>
             <div class="field-error" th:errors="*{category}"></div>
         </div>
