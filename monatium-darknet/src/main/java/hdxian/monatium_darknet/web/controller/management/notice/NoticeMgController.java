@@ -38,7 +38,7 @@ public class NoticeMgController {
 
     // 공지사항 목록 (대시보드 -> 공지사항 관리)
     @GetMapping
-    public String noticeList_Paging(@RequestParam(value = "page", required = false, defaultValue = "1") Integer pageNumber,
+    public String noticeList(@RequestParam(value = "page", required = false, defaultValue = "1") Integer pageNumber,
                                     @RequestParam(value = "category", required = false) Long categoryId,
                                     @RequestParam(value = "query", required = false) String title, Model model) {
         NoticeSearchCond searchCond = new NoticeSearchCond();
@@ -169,6 +169,102 @@ public class NoticeMgController {
         return ResponseEntity.ok().build();
     }
 
+    // 공지사항 카테고리 추가 폼
+    @GetMapping("/categories/new")
+    public String categoryForm(HttpSession session, Model model) {
+        NoticeCategoryForm categoryForm = Optional.ofNullable((NoticeCategoryForm) session.getAttribute(NOTICE_CATEGORY_FORM)).orElse(new NoticeCategoryForm());
+
+        model.addAttribute(NOTICE_CATEGORY_FORM, categoryForm);
+        return "management/notice/categoryAddForm";
+    }
+
+    // 공지사항 카테고리 추가
+    @PostMapping("/categories/new")
+    public String addCategory(HttpSession session, @RequestParam("action") String action,
+                              @Validated @ModelAttribute(NOTICE_CATEGORY_FORM) NoticeCategoryForm categoryForm, BindingResult bindingResult,
+                              Model model) {
+
+        // 취소 버튼을 누른 경우
+        if (action.equals("cancel")) {
+            clearSessionAttributes(session);
+            return "redirect:/management/notices";
+        }
+
+        // 완료 버튼을 누른 경우
+        if (action.equals("complete")) {
+
+            if(bindingResult.hasErrors()) {
+                return "management/notice/categoryAddForm";
+            }
+
+            String name = categoryForm.getName();
+            Long savedId = noticeService.createNewNoticeCategory(name);
+
+            clearSessionAttributes(session);
+            return "redirect:/management/notices";
+        }
+        // 임시 저장 버튼을 누른 경우
+        else {
+            session.setAttribute(NOTICE_CATEGORY_FORM, categoryForm);
+            return "redirect:/management/notices/categories/new";
+        }
+
+    }
+
+    // 공지사항 카테고리 수정 폼
+    @GetMapping("/categories/{categoryId}/edit")
+    public String categoryEditForm(HttpSession session, Model model, @PathVariable("categoryId") Long categoryId) {
+        NoticeCategory category = noticeService.findOneCategory(categoryId);
+
+        NoticeCategoryForm categoryForm = Optional.ofNullable((NoticeCategoryForm) session.getAttribute(NOTICE_CATEGORY_FORM)).orElse(generateCategoryForm(category));
+
+        model.addAttribute("categoryId", categoryId);
+        model.addAttribute(NOTICE_CATEGORY_FORM, categoryForm);
+        return "management/notice/categoryEditForm";
+    }
+
+    private NoticeCategoryForm generateCategoryForm(NoticeCategory category) {
+        return new NoticeCategoryForm(category.getName(), category.getStatus());
+    }
+
+    // 공지사항 카테고리 수정
+    @PostMapping("/categories/{categoryId}/edit")
+    public String editCategory(HttpSession session, @RequestParam("action") String action,
+                               @PathVariable("categoryId") Long categoryId,
+                               @Validated @ModelAttribute(NOTICE_CATEGORY_FORM) NoticeCategoryForm categoryForm, BindingResult bindingResult,
+                               Model model) {
+
+        // 취소 버튼을 누른 경우
+        if (action.equals("cancel")) {
+            clearSessionAttributes(session);
+            return "redirect:/management/notices";
+        }
+
+        // 완료 버튼을 누른 경우
+        if (action.equals("complete")) {
+
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("categoryId", categoryId);
+                return "management/notice/categoryEditForm";
+            }
+
+            // 카테고리 업데이트 로직
+            Long updatedId = noticeService.updateNoticeCategory(categoryId, categoryForm.getName(), categoryForm.getStatus());
+
+            clearSessionAttributes(session);
+            return "redirect:/management/notices";
+        }
+        // 취소 버튼을 누른 경우
+        else {
+            session.setAttribute(NOTICE_CATEGORY_FORM, categoryForm);
+            return "redirect:/management/notices/categories/" + categoryId + "/edit";
+        }
+
+
+    }
+
+    // 공지사항 카테고리 삭제
+
     @ModelAttribute("categoryList")
     public List<NoticeCategory> categoryList() {
         return noticeService.findAllNoticeCategories();
@@ -221,6 +317,7 @@ public class NoticeMgController {
 
     private void clearSessionAttributes(HttpSession session) {
         session.removeAttribute(NOTICE_FORM);
+        session.removeAttribute(NOTICE_CATEGORY_FORM);
     }
 
 }

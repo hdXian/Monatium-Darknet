@@ -17,6 +17,9 @@ public class NoticeCategory {
 
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private NoticeCategoryStatus status;
+
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Notice> notices = new ArrayList<>();
 
@@ -37,6 +40,7 @@ public class NoticeCategory {
     public static NoticeCategory createNoticeCategory(String name) {
         NoticeCategory noticeCategory = new NoticeCategory();
         noticeCategory.setName(name);
+        noticeCategory.setStatus(NoticeCategoryStatus.PRIVATE); // 기본은 비공개
 
         return noticeCategory;
     }

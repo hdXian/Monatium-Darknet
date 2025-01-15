@@ -239,6 +239,23 @@ public class NoticeService {
         return noticeCategoryRepository.save(category);
     }
 
+    @Transactional
+    public Long updateNoticeCategory(Long categoryId, String name, NoticeCategoryStatus status) {
+        NoticeCategory category = findOneCategory(categoryId);
+        category.setName(name);
+        category.setStatus(status);
+
+        return category.getId();
+    }
+
+    public NoticeCategory findOneCategory(Long categoryId) {
+        Optional<NoticeCategory> find = noticeCategoryRepository.findOne(categoryId);
+        if (find.isEmpty()) {
+            throw new RuntimeException("해당 공지사항 카테고리가 없습니다. id=" + categoryId);
+        }
+        return find.get();
+    }
+
     public List<NoticeCategory> findAllNoticeCategories() {
         return noticeCategoryRepository.findAll();
     }
