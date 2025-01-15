@@ -55,4 +55,9 @@ public class HomeController {
         return imageUrlService.getAsideBaseUrl();
     }
 
+    @ModelAttribute("staticMainUrl")
+    public String mainBaseUrl() {
+        return imageUrlService.getStaticImageBaseUrl() + "main/";
+    }
+
 }

@@ -49,13 +49,17 @@ public class ImageUrlService {
         return staticImg_baseUrl + "thumbnail/" + "default_skin_thumbnail" + ext_png;
     }
 
+    public String getStaticImageBaseUrl() {
+        return staticImg_baseUrl;
+    }
+
 
     // === api image urls ===
     public String getTempImageBaseUrl() {
         return api_baseUrl + "images/" + "tmp/";
     }
 
-    public String getImageBaseUrl() {
+    public String getApiImageBaseUrl() {
         return api_baseUrl + "images/";
     }
 

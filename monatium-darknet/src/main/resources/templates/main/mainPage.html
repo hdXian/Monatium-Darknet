@@ -36,12 +36,12 @@
         <p>귀염뽀짝 볼따구들과 우당탕탕 대모험!</p>
         <!--/*[[ Google Play 다운로드 링크 ]]*/-->
         <a href="https://play.google.com/store/apps/details?id=com.epidgames.trickcalrevive" target="_blank">
-            <img th:src="@{/imgs/main/google_play.png}" alt="Google Play에서 다운로드" style="width: 180px; margin-right: 10px;">
+            <img th:src="@{|${staticMainUrl}google_play.png|}" alt="Google Play에서 다운로드" style="width: 180px; margin-right: 10px;">
         </a>
 
         <!--/*[[ App Store 다운로드 링크 ]]*/-->
         <a href="https://apps.apple.com/kr/app/%ED%8A%B8%EB%A6%AD%EC%BB%AC-revive/id6443824730" target="_blank">
-            <img th:src="@{/imgs/main/app_store.png}" alt="App Store에서 다운로드" style="width: 180px;">
+            <img th:src="@{|${staticMainUrl}app_store.png|}" alt="App Store에서 다운로드" style="width: 180px;">
         </a>
     </div>
 </section>
@@ -65,7 +65,7 @@
                              th:classappend="${iterStat.index == 0} ? 'active' : ''"
                              class="carousel-item">
 
-                            <img th:src="@{/imgs/main/notice3.jpg}"
+                            <img th:src="@{|${staticMainUrl}notice3.jpg|}"
                                  class="img-fluid rounded mb-3"
                                  alt="업데이트 1">
 
@@ -87,19 +87,19 @@
 
                     <div class="col-4">
                         <a href="https://www.youtube.com/@epidgames6350" target="_blank" class="text-decoration-none">
-                            <img th:src="@{/imgs/main/sns_sc_1.webp}" class="img-fluid rounded shadow mb-2" alt="유튜브">
+                            <img th:src="@{|${staticMainUrl}sns_sc_1.webp|}" class="img-fluid rounded shadow mb-2" alt="유튜브">
                             <div class="media-text fw-bold">유튜브 바로가기</div>
                         </a>
                     </div>
                     <div class="col-4">
                         <a href="https://x.com/Trickcal_Re" target="_blank" class="text-decoration-none">
-                            <img th:src="@{/imgs/main/sns_sc_2.png}" class="img-fluid rounded shadow mb-2" alt="X">
+                            <img th:src="@{|${staticMainUrl}sns_sc_2.png|}" class="img-fluid rounded shadow mb-2" alt="X">
                             <div class="media-text fw-bold">공식 X</div>
                         </a>
                     </div>
                     <div class="col-4">
                         <a href="https://game.naver.com/lounge/Trickcal/home" target="_blank" class="text-decoration-none">
-                            <img th:src="@{/imgs/main/sns_sc_3.webp}" class="img-fluid rounded shadow mb-2" alt="네이버 라운지">
+                            <img th:src="@{|${staticMainUrl}sns_sc_3.webp|}" class="img-fluid rounded shadow mb-2" alt="네이버 라운지">
                             <div class="media-text fw-bold ">공식 네이버 라운지</div>
                         </a>
                     </div>
@@ -112,28 +112,28 @@
                 <!--/*[[ 첫 번째 이미지 ]]*/-->
                 <div class="notice-img-container position-relative">
                     <a th:href="@{/notices?category=notice}">
-                        <img th:src="@{/imgs/main/notice_sc1.png}" class="img-fluid rounded shadow" alt="공지사항">
+                        <img th:src="@{|${staticMainUrl}notice_sc1.png|}" class="img-fluid rounded shadow" alt="공지사항">
                     </a>
                 </div>
 
                 <!--/*[[ 두 번째 이미지 ]]*/-->
                 <div class="notice-img-container position-relative">
                     <a th:href="@{/notices?category=update}">
-                        <img th:src="@{/imgs/main/notice_sc2.png}" class="img-fluid rounded shadow" alt="업데이트">
+                        <img th:src="@{|${staticMainUrl}notice_sc2.png|}" class="img-fluid rounded shadow" alt="업데이트">
                     </a>
                 </div>
 
                 <!--/*[[ 세 번째 이미지 ]]*/-->
                 <div class="notice-img-container position-relative">
                     <a th:href="@{/notices?category=event}">
-                        <img th:src="@{/imgs/main/notice_sc3.png}" class="img-fluid rounded shadow" alt="이벤트">
+                        <img th:src="@{|${staticMainUrl}notice_sc3.png|}" class="img-fluid rounded shadow" alt="이벤트">
                     </a>
                 </div>
 
                 <!--/*[[ 네 번째 이미지 ]]*/-->
                 <div class="notice-img-container position-relative">
                     <a th:href="@{/notices?category=dev}">
-                        <img th:src="@{/imgs/main/notice_sc4.png}" class="img-fluid rounded shadow" alt="개발자 노트">
+                        <img th:src="@{|${staticMainUrl}notice_sc4.png|}" class="img-fluid rounded shadow" alt="개발자 노트">
                     </a>
                 </div>
 
@@ -283,35 +283,35 @@
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="carousel-image-container">
-                                    <img th:src="@{/imgs/main/battle/battle01.png}" class="d-block w-100 carousel-img" alt="전투 이미지 1">
+                                    <img th:src="@{|${staticMainUrl}battle/battle01.png|}" class="d-block w-100 carousel-img" alt="전투 이미지 1">
                                 </div>
                                 <div class="carousel-caption">
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="carousel-image-container">
-                                    <img th:src="@{/imgs/main/battle/battle02.jpg}" class="d-block w-100 carousel-img" alt="전투 이미지 1">
+                                    <img th:src="@{|${staticMainUrl}battle/battle02.jpg|}" class="d-block w-100 carousel-img" alt="전투 이미지 1">
                                 </div>
                                 <div class="carousel-caption">
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="carousel-image-container">
-                                    <img th:src="@{/imgs/main/battle/battle03.jpg}" class="d-block w-100 carousel-img" alt="전투 이미지 1">
+                                    <img th:src="@{|${staticMainUrl}battle/battle03.jpg|}" class="d-block w-100 carousel-img" alt="전투 이미지 1">
                                 </div>
                                 <div class="carousel-caption">
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="carousel-image-container">
-                                    <img th:src="@{/imgs/main/battle/battle04.jpg}" class="d-block w-100 carousel-img" alt="전투 이미지 1">
+                                    <img th:src="@{|${staticMainUrl}battle/battle04.jpg|}" class="d-block w-100 carousel-img" alt="전투 이미지 1">
                                 </div>
                                 <div class="carousel-caption">
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="carousel-image-container">
-                                    <img th:src="@{/imgs/main/battle/battle05.jpg}" class="d-block w-100 carousel-img" alt="전투 이미지 1">
+                                    <img th:src="@{|${staticMainUrl}battle/battle05.jpg|}" class="d-block w-100 carousel-img" alt="전투 이미지 1">
                                 </div>
                                 <div class="carousel-caption">
                                 </div>
@@ -334,7 +334,7 @@
                             <div class="carousel-item active">
 
                                 <div class="carousel-image-container">
-                                    <img th:src="@{/imgs/main/theme/theme01.jpg}" class="d-block w-100 " alt="테마극장 이미지 1">
+                                    <img th:src="@{|${staticMainUrl}theme/theme01.jpg|}" class="d-block w-100 " alt="테마극장 이미지 1">
                                 </div>
                                 <div class="carousel-caption">
                                 </div>
@@ -343,7 +343,7 @@
 
                             <div class="carousel-item">
                                 <div class="carousel-image-container">
-                                    <img th:src="@{/imgs/main/theme/theme02.jpg}" class="d-block w-100" alt="테마극장 이미지 2">
+                                    <img th:src="@{|${staticMainUrl}theme/theme02.jpg|}" class="d-block w-100" alt="테마극장 이미지 2">
                                 </div>
                                 <div class="carousel-caption">
                                 </div>
@@ -351,7 +351,7 @@
 
                             <div class="carousel-item">
                                 <div class="carousel-image-container">
-                                    <img th:src="@{/imgs/main/theme/theme03.jpg}" class="d-block w-100" alt="테마극장 이미지 2">
+                                    <img th:src="@{|${staticMainUrl}theme/theme03.jpg|}" class="d-block w-100" alt="테마극장 이미지 2">
                                 </div>
                                 <div class="carousel-caption">
                                 </div>
@@ -359,7 +359,7 @@
 
                             <div class="carousel-item">
                                 <div class="carousel-image-container">
-                                    <img th:src="@{/imgs/main/theme/theme04.jpg}" class="d-block w-100" alt="테마극장 이미지 2">
+                                    <img th:src="@{|${staticMainUrl}theme/theme04.jpg|}" class="d-block w-100" alt="테마극장 이미지 2">
                                 </div>
                                 <div class="carousel-caption">
                                 </div>
@@ -381,21 +381,21 @@
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="carousel-image-container">
-                                    <img th:src="@{/imgs/main/adventure/adventure01.jpg}" class="d-block w-100" alt="모험 이미지 1">
+                                    <img th:src="@{|${staticMainUrl}adventure/adventure01.jpg|}" class="d-block w-100" alt="모험 이미지 1">
                                 </div>
                                 <div class="carousel-caption">
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="carousel-image-container">
-                                    <img th:src="@{/imgs/main/adventure/adventure02.jpg}" class="d-block w-100" alt="모험 이미지 2">
+                                    <img th:src="@{|${staticMainUrl}adventure/adventure02.jpg|}" class="d-block w-100" alt="모험 이미지 2">
                                 </div>
                                 <div class="carousel-caption">
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="carousel-image-container">
-                                    <img th:src="@{/imgs/main/adventure/adventure03.jpg}" class="d-block w-100" alt="모험 이미지 2">
+                                    <img th:src="@{|${staticMainUrl}adventure/adventure03.jpg|}" class="d-block w-100" alt="모험 이미지 2">
                                 </div>
                                 <div class="carousel-caption">
                                 </div>
