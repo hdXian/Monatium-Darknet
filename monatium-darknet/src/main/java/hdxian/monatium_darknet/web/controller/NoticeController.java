@@ -1,6 +1,7 @@
 package hdxian.monatium_darknet.web.controller;
 
 import hdxian.monatium_darknet.domain.notice.Notice;
+import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import hdxian.monatium_darknet.domain.notice.NoticeCategoryDeprecated;
 import hdxian.monatium_darknet.domain.notice.NoticeStatus;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
@@ -36,9 +37,13 @@ public class NoticeController {
         setPages(noticePage.getTotalPages(), pageNumber, model);
 
         List<Notice> noticeList = noticePage.getContent();
-        model.addAttribute("noticeList", noticeList);
+        List<NoticeCategory> categoryList = noticeService.findAllNoticeCategories();
 
+
+        model.addAttribute("noticeList", noticeList);
         model.addAttribute("page", noticePage);
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("curCategoryId", categoryId);
 
         return "notice/noticeList";
     }

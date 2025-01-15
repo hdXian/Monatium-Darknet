@@ -11,7 +11,6 @@ public class NoticeForm {
     private String title;
 
     @NotNull
-//    private NoticeCategory category;
     private Long categoryId;
 
     @NotBlank
