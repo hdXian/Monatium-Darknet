@@ -1,6 +1,5 @@
 package hdxian.monatium_darknet.service.dto;
 
-import hdxian.monatium_darknet.domain.skin.SkinGrade;
 import lombok.Data;
 
 import java.util.List;
