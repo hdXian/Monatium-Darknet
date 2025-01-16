@@ -41,6 +41,7 @@ public class CharacterService {
 
         // 캐릭터 기본 정보 저장
         Character ch = Character.createCharacter(
+                chDto.getLangCode(),
                 chDto.getName(),
                 chDto.getSubtitle(),
                 chDto.getCv(),
@@ -77,6 +78,7 @@ public class CharacterService {
     public Long updateCharacter(Long characterId, CharacterDto updateParam, CharacterImageDto chImagePaths, AsideImageDto asideImagePaths) {
         Character ch = findOne(characterId);
 
+        Optional.ofNullable(updateParam.getLangCode()).ifPresent(ch::setLangCode);
         Optional.ofNullable(updateParam.getName()).ifPresent(ch::setName);
         Optional.ofNullable(updateParam.getSubtitle()).ifPresent(ch::setSubtitle);
         Optional.ofNullable(updateParam.getCv()).ifPresent(ch::setCv);

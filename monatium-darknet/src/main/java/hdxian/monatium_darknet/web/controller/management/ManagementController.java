@@ -11,13 +11,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 // 로그인 및 대시보드 관련 요청 처리
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/management")
-public class LoginController {
+public class ManagementController {
 
     // TODO - **중요** 아무나 로그인할 수 없도록 접근 권한 설정 필요
     private final LoginService loginService;
@@ -73,6 +76,18 @@ public class LoginController {
             session.invalidate(); // 세션 파기
         }
         return "redirect:/management";
+    }
+
+    @GetMapping("/lang-change")
+    public String changeLanguage(@RequestParam("lang") String lang,
+                                 @RequestHeader(value = "Referer", required = false, defaultValue = "/management") String referer) {
+        try {
+            URI uri = new URI(referer);
+            String path = uri.getPath();
+            return "redirect:" + (path != null ? path : "/management");
+        } catch (URISyntaxException e) {
+            return "redirect:/management";
+        }
     }
 
 }
