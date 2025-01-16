@@ -1,11 +1,13 @@
 package hdxian.monatium_darknet.web.controller.management.character;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.exception.character.CharacterImageProcessException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
+import hdxian.monatium_darknet.repository.dto.CharacterSearchCond;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.CharacterService;
 import hdxian.monatium_darknet.service.ImagePathService;
@@ -27,10 +29,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
@@ -58,8 +62,10 @@ public class CharacterMgController {
     // -> 이런 행동을 할 이유가 거의 없으니 그냥 세션 클리어 시키는 것도 좋아보임. 아 구분이 안되는구나. 세션 데이터에 id를 추가하는 방식도 괜찮아보임.
 
     @GetMapping
-    public String characterList(HttpSession session, Model model) {
-        List<Character> characterList = characterService.findAll();
+    public String characterList(HttpSession session, LangCode langCode, Model model) {
+        CharacterSearchCond searchCond = new CharacterSearchCond();
+        searchCond.setLangCode(langCode);
+        List<Character> characterList = characterService.findAll(searchCond);
 
         clearSessionAttributes(session); // 다른 페이지에 머물다 돌아온 경우에도 세션 데이터 초기화 (redirect, url 직접 입력 등)
         model.addAttribute("characterList", characterList);
@@ -67,8 +73,9 @@ public class CharacterMgController {
     }
 
     @GetMapping("/preview/{characterId}")
-    public String preView(@PathVariable("characterId") Long characterId, Model model) {
-        Character character = characterService.findOne(characterId);
+    public String preView(@PathVariable("characterId") Long characterId, LangCode langCode, Model model) {
+        // langCode에 따라 지정한 캐릭터를 조회
+        Character character = characterService.findOneByLangCode(characterId, langCode);
 
         SkinSearchCond searchCond = new SkinSearchCond();
         searchCond.setCharacterId(characterId);
@@ -268,7 +275,7 @@ public class CharacterMgController {
     }
 
     @PostMapping("/new/complete")
-    public String chAddComplete(HttpSession session,
+    public String chAddComplete(HttpSession session, LangCode langCode,
                                 @RequestParam("action")String action,
                                 @Validated @ModelAttribute(CHFORM_STEP1) ChFormStep1 chForm1, BindingResult br1,
                                 @Validated @ModelAttribute(CHFORM_STEP2) ChFormStep2 chForm2, BindingResult br2,
@@ -300,7 +307,7 @@ public class CharacterMgController {
                 return "management/characters/addChSummary";
             }
 
-            CharacterDto charDto = generateCharDto(chForm1, chForm2, chForm3, chForm4); // 캐릭터 정보
+            CharacterDto charDto = generateCharDto(langCode, chForm1, chForm2, chForm3, chForm4); // 캐릭터 정보
 
             CharacterImageDto chImages = generateChImagePathsFromTemp(session); // 캐릭터 이미지 파일 경로
             AsideImageDto asideImages = null;
@@ -365,7 +372,7 @@ public class CharacterMgController {
 
     // 캐릭터 수정
     @PostMapping("/edit/{characterId}")
-    public String edit(HttpSession session, Model model, @RequestParam("action")String action,
+    public String edit(HttpSession session, Model model, @RequestParam("action")String action, LangCode langCode,
                        @PathVariable("characterId") Long characterId,
                        @Validated @ModelAttribute("chFormStep1") ChFormStep1 chForm1, BindingResult br1,
                        @Validated @ModelAttribute("chFormStep2") ChFormStep2 chForm2, BindingResult br2,
@@ -405,7 +412,7 @@ public class CharacterMgController {
                 return "management/characters/characterEditForm";
             }
 
-            CharacterDto updateDto = generateCharDto(chForm1, chForm2, chForm3, chForm4);
+            CharacterDto updateDto = generateCharDto(langCode, chForm1, chForm2, chForm3, chForm4);
 
             // 변경하지 않는 이미지 경로는 null로 전달됨
             CharacterImageDto chImages = generateChImagePathsFromTemp_Edit(session);
@@ -849,9 +856,10 @@ public class CharacterMgController {
     }
 
     // 폼 객체에서 데이터를 뽑아 chService에 전달할 Dto 생성 (캐릭터 생성, 수정)
-    private CharacterDto generateCharDto(ChFormStep1 chForm1, ChFormStep2 chForm2, ChFormStep3 chForm3, ChFormStep4 chForm4) {
+    private CharacterDto generateCharDto(LangCode langCode, ChFormStep1 chForm1, ChFormStep2 chForm2, ChFormStep3 chForm3, ChFormStep4 chForm4) {
 
         CharacterDto dto = new CharacterDto();
+        dto.setLangCode(langCode);
 
         // chForm1
         dto.setName(chForm1.getName());

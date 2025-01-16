@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.aside.AsideSpec;
@@ -73,13 +74,13 @@ public class TestDataInit {
 
         // 캐릭터 추가
         List<CharacterDto> dtos = new ArrayList<>();
-        dtos.add(generateCharDto("에르핀"));
-        dtos.add(generateCharDto("벨리타"));
-        dtos.add(generateCharDto("버터"));
-        dtos.add(generateCharDto("다야"));
-        dtos.add(generateCharDto("나이아"));
-        dtos.add(generateCharDto("셀리네"));
-        dtos.add(generateCharDto("엘레나"));
+        dtos.add(generateCharDto("에르핀", LangCode.KO));
+        dtos.add(generateCharDto("벨리타", LangCode.KO));
+        dtos.add(generateCharDto("버터", LangCode.KO));
+        dtos.add(generateCharDto("다야", LangCode.KO));
+        dtos.add(generateCharDto("나이아", LangCode.KO));
+        dtos.add(generateCharDto("셀리네", LangCode.KO));
+        dtos.add(generateCharDto("엘레나", LangCode.KO));
 
 //        List<Long> Ids = new ArrayList<>();
         for (CharacterDto dto : dtos) {
@@ -242,7 +243,7 @@ public class TestDataInit {
         return noticeDto;
     }
 
-    private static CharacterDto generateCharDto(String name) {
+    private static CharacterDto generateCharDto(String name, LangCode langCode) {
         // 능력치 (하드코딩)
         CharacterStat stat = new CharacterStat(7, 3, 4);
 
@@ -256,7 +257,6 @@ public class TestDataInit {
         enhancedAttack.addAttribute(name+" 강화공격 속성2", "40%");
 
         // 저학년 스킬
-        // TODO - 캐릭터 이미지 url처럼 이미지 경로 관리 방식을 업데이트 해야함 (현재 thymeleaf로 반쯤 하드코딩 중)
         Skill lowSkill = Skill.createLowSkill(name+" 저학년스킬", name + "저학년스킬 설명");
         lowSkill.addAttribute(name+" 저학년스킬 속성", "350%");
 
@@ -280,6 +280,7 @@ public class TestDataInit {
         Aside aside = Aside.createAside(name + "어사이드", name + "어사이드 설명", level1, level2, level3);
 
         CharacterDto dto = new CharacterDto();
+        dto.setLangCode(langCode);
         dto.setName(name);
         dto.setSubtitle(name+"수식언");
         dto.setCv(name+"성우");

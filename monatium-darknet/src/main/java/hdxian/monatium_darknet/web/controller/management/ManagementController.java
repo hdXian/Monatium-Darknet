@@ -78,9 +78,11 @@ public class ManagementController {
         return "redirect:/management";
     }
 
-    @GetMapping("/lang-change")
+    @PostMapping("/lang-change")
     public String changeLanguage(@RequestParam("lang") String lang,
                                  @RequestHeader(value = "Referer", required = false, defaultValue = "/management") String referer) {
+
+        log.info("lang change called: lang = {}", lang);
         try {
             URI uri = new URI(referer);
             String path = uri.getPath();

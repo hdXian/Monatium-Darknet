@@ -1,11 +1,13 @@
 package hdxian.monatium_darknet.service;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.card.Card;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.character.CharacterStatus;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinStatus;
+import hdxian.monatium_darknet.exception.CustomBusinessLogicException;
 import hdxian.monatium_darknet.exception.character.CharacterNotFoundException;
 import hdxian.monatium_darknet.repository.CardRepository;
 import hdxian.monatium_darknet.repository.CharacterRepository;
@@ -17,6 +19,7 @@ import hdxian.monatium_darknet.service.dto.AsideImageDto;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,6 +80,10 @@ public class CharacterService {
     @Transactional
     public Long updateCharacter(Long characterId, CharacterDto updateParam, CharacterImageDto chImagePaths, AsideImageDto asideImagePaths) {
         Character ch = findOne(characterId);
+
+        if (ch.getLangCode() != updateParam.getLangCode()) {
+            throw new CustomBusinessLogicException("수정하려는 캐릭터의 언어 코드가 맞지 않습니다. chId = " + characterId + ", langCode = " + updateParam.getLangCode());
+        }
 
         Optional.ofNullable(updateParam.getLangCode()).ifPresent(ch::setLangCode);
         Optional.ofNullable(updateParam.getName()).ifPresent(ch::setName);
@@ -161,6 +168,11 @@ public class CharacterService {
     public Character findOne(Long id) {
         Optional<Character> find = characterRepository.findOne(id);
         return find.orElseThrow(() -> new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId = " + id));
+    }
+
+    public Character findOneByLangCode(Long id, LangCode langCode) {
+        Optional<Character> find = characterRepository.findOneByLangCode(id, langCode);
+        return find.orElseThrow(() -> new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. id=" + id + ", langCode=" + langCode.name()));
     }
 
     public Character findOneActive(Long id) {

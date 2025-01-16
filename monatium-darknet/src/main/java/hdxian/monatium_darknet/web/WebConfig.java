@@ -1,20 +1,24 @@
 package hdxian.monatium_darknet.web;
 
+import hdxian.monatium_darknet.web.argumentResolver.LangCodeArgumentResolver;
 import hdxian.monatium_darknet.web.converter.*;
 import hdxian.monatium_darknet.web.interceptor.LoginCheckInterceptor;
-import org.springframework.context.annotation.Bean;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import java.util.Locale;
+import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
+
+    private final LocaleResolver localeResolver; // DI (class ApplicationConfig)
 
     // String <-> NoticeCategory 컨버터 등록
     @Override
@@ -42,8 +46,14 @@ public class WebConfig implements WebMvcConfigurer {
 
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
         localeChangeInterceptor.setParamName("lang");
+
         registry.addInterceptor(localeChangeInterceptor)
                 .addPathPatterns("/management/**");
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(new LangCodeArgumentResolver(localeResolver));
     }
 
 }

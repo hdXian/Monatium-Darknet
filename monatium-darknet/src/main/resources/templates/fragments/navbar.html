@@ -100,9 +100,9 @@
                 <!--/*[[ 서비스 언어 선택 ]]*/-->
                 <li class="nav-item dropdown d-flex align-items-center">
                     <span class="nav-link me-2">서비스 언어:</span>
-                    <form th:action="@{/management/lang-change}" method="get" class="d-inline-block">
+                    <form th:action="@{/management/lang-change}" method="post" class="d-inline-block">
                         <select class="form-select form-select-sm bg-light text-dark border-0" id="languageSelect" name="lang" onchange="this.form.submit()">
-                            <option th:value="ko" th:selected="${#locale.language == 'ko'}">한국어</option>
+                            <option th:value="ko_KR" th:selected="${#locale.language == 'ko_KR'}">한국어</option>
                             <option th:value="en" th:selected="${#locale.language == 'en'}">English</option>
                             <option th:value="jp" th:selected="${#locale.language == 'jp'}">日本語</option>
                         </select>
