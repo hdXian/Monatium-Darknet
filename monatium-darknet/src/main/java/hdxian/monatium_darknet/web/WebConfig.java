@@ -48,7 +48,7 @@ public class WebConfig implements WebMvcConfigurer {
         localeChangeInterceptor.setParamName("lang");
 
         registry.addInterceptor(localeChangeInterceptor)
-                .addPathPatterns("/management/**");
+                .addPathPatterns("/**");
     }
 
     @Override

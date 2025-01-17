@@ -1,6 +1,6 @@
 @font-face {
-    font-family: 'MobileGothicPOP';
-    src: url('/font/ONE_Mobile_POP_OTF.otf') format('opentype'), url('/font/ONE_Mobile_POP.ttf') format('truetype');
+    font-family: 'ONE-Mobile-POP';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-POP.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }

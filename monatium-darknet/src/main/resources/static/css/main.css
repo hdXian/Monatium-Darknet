@@ -1,5 +1,5 @@
 body {
-    font-family: 'MobileGothicPOP', 'Noto Sans JP', sans-serif;
+    font-family: 'ONE-Mobile-POP', 'Noto Sans JP', sans-serif;
     /* background: url('../images/bkg_worldtree.jpg') no-repeat center center; */
     background-size: cover; /* 이미지를 화면에 꽉 채우기 */
     background-attachment: fixed; /* 스크롤 시에도 배경 고정 */
@@ -8,8 +8,16 @@ body {
     scroll-behavior: smooth;
 }
 
+.lang-option-ko {
+    font-family: 'ONE-Mobile-POP', sans-serif;
+}
+
+.lang-option-en {
+    font-family: 'ONE-Mobile-POP', sans-serif;
+}
+
 .lang-option-jp {
-    font-family: 'Noto Sans JP';
+    font-family: 'Noto Sans JP', sans-serif;
     font-weight: bold;
 }
 

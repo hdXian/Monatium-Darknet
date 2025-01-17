@@ -46,10 +46,12 @@
             <!--/*[[ 언어 선택 드롭다운 ]]*/-->
             <div class="dropdown language-select me-4">
                 <form th:action="@{/lang-change}" method="post" class="d-inline-block">
-                    <select class="form-select form-select-sm bg-light text-dark border-0" id="languageSelect" name="lang" onchange="this.form.submit()">
-                        <option th:value="ko_KR" th:selected="${#locale.language == 'ko_KR'}">한국어</option>
-                        <option th:value="en" th:selected="${#locale.language == 'en'}">English</option>
-                        <option th:value="jp" th:selected="${#locale.language == 'jp'}" class="lang-option-jp">日本語</option>
+                    <select class="form-select form-select-sm bg-light text-dark " id="languageSelect"
+                            th:classappend="${langCode == 'JP'} ? 'lang-option-jp' : ''"
+                            name="lang" onchange="this.form.submit()">
+                        <option th:value="ko_KR" th:selected="${langCode == 'KO'}" class="lang-option-ko">한국어</option>
+                        <option th:value="en" th:selected="${langCode == 'EN'}" class="lang-option-en">English</option>
+                        <option th:value="jp" th:selected="${langCode == 'JP'}" class="lang-option-jp">日本語</option>
                     </select>
                 </form>
 <!--                <a class="nav-link nav-text dropdown-toggle" href="#" role="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">-->

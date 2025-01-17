@@ -29,7 +29,7 @@ public class LangCodeArgumentResolver implements HandlerMethodArgumentResolver {
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-        // SessionLocaleResolver를 통해 Locale 가져오기
+        // CookieLocaleResolver를 통해 Locale 가져오기
         Locale locale = localeResolver.resolveLocale(request);
         log.info("argumentResolver locale = {}, locale.language = {}", locale, locale.getLanguage());
         return LangCode.valueOf(locale.getLanguage().toUpperCase());

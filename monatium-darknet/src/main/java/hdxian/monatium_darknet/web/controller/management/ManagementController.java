@@ -82,12 +82,12 @@ public class ManagementController {
     public String changeLanguage(@RequestParam("lang") String lang,
                                  @RequestHeader(value = "Referer", required = false, defaultValue = "/management") String referer) {
 
-        log.info("lang change called: lang = {}", lang);
         try {
             URI uri = new URI(referer);
             String path = uri.getPath();
             return "redirect:" + (path != null ? path : "/management");
         } catch (URISyntaxException e) {
+            log.error("URI Syntax Error occurs on url '/management/lang-change'");
             return "redirect:/management";
         }
     }
