@@ -28,14 +28,13 @@ public class HomeController {
     // 메인 화면에 캐릭터 정보도 뿌려야 함
     
     @GetMapping("/")
-    public String home(Model model, LangCode langCode) {
+    public String home(Model model) {
 
         List<Notice> noticeList = noticeService.findAll();
         List<Character> characterList = characterService.findAll();
 
         model.addAttribute("noticeList", noticeList);
         model.addAttribute("characterList", characterList);
-        model.addAttribute("langCode", langCode.name());
         return "main/mainPage";
     }
 
@@ -63,7 +62,6 @@ public class HomeController {
 
     @ModelAttribute("iconBaseUrl")
     public String iconBasesUrl() {
-//        return imageUrlService.getIconBaseUrl();
         return imageUrlService.getIconBaseUrl();
     }
 

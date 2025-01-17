@@ -8,19 +8,6 @@ body {
     scroll-behavior: smooth;
 }
 
-.lang-option-ko {
-    font-family: 'ONE-Mobile-POP', sans-serif;
-}
-
-.lang-option-en {
-    font-family: 'ONE-Mobile-POP', sans-serif;
-}
-
-.lang-option-jp {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-weight: bold;
-}
-
 /* 상단 네비게이션 스타일 (이동) */
 
 /* 각 섹션 스타일 */

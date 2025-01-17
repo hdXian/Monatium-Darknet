@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.web.controller;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.card.*;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.character.CharacterStatus;
@@ -32,10 +33,11 @@ public class WikiController {
     private final ImageUrlService imageUrlService;
 
     @GetMapping("/characters")
-    public String characterList(Model model) {
+    public String characterList(Model model, LangCode langCode) {
 
         CharacterSearchCond searchCond = new CharacterSearchCond();
         searchCond.setStatus(CharacterStatus.ACTIVE); // 활성화 캐릭터만 조회
+        searchCond.setLangCode(langCode);
         List<Character> characterList = characterService.findAll(searchCond);
 
         model.addAttribute("characterList", characterList);
