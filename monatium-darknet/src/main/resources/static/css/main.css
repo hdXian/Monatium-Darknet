@@ -8,6 +8,11 @@ body {
     scroll-behavior: smooth;
 }
 
+.lang-option-jp {
+    font-family: 'Noto Sans JP';
+    font-weight: bold;
+}
+
 /* 상단 네비게이션 스타일 (이동) */
 
 /* 각 섹션 스타일 */
