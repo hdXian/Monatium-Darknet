@@ -3,6 +3,8 @@ package hdxian.monatium_darknet.service;
 import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.card.Card;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.domain.character.CharacterEn;
+import hdxian.monatium_darknet.domain.character.CharacterKo;
 import hdxian.monatium_darknet.domain.character.CharacterStatus;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
@@ -76,6 +78,30 @@ public class CharacterService {
         return savedId;
     }
 
+    @Transactional
+    public Long createNewCharacter(LangCode langCode, CharacterDto chDto, CharacterImageDto chImagePaths, AsideImageDto asideImagePaths) {
+
+        Long savedId;
+        if (langCode == LangCode.KO) {
+            CharacterKo characterKo = generateCharacterKo(chDto);
+            savedId = characterRepository.saveKo(characterKo);
+        }
+        else if (langCode == LangCode.EN) {
+            CharacterEn characterEn = generateCharacterEn(chDto);
+            savedId = characterRepository.saveEn(characterEn);
+        }
+        else {
+            return null;
+        }
+
+        imagePathService.saveCharacterImages(langCode, savedId, chImagePaths);
+        if (asideImagePaths != null) {
+            imagePathService.saveAsideImages(langCode, savedId, asideImagePaths);
+        }
+
+        return savedId;
+    }
+
     // 캐릭터 업데이트
     @Transactional
     public Long updateCharacter(Long characterId, CharacterDto updateParam, CharacterImageDto chImagePaths, AsideImageDto asideImagePaths) {
@@ -126,9 +152,42 @@ public class CharacterService {
     }
 
     @Transactional
+    public void activateCharacter(LangCode langCode, Long characterId) {
+        if (langCode == LangCode.KO) {
+            CharacterKo ch = findOneKo(characterId);
+            ch.setStatus(CharacterStatus.ACTIVE);
+        }
+        else if (langCode == LangCode.EN) {
+            CharacterEn ch = findOneEn(characterId);
+            ch.setStatus(CharacterStatus.ACTIVE);
+        }
+        else {
+            Character ch = findOne(characterId);
+            ch.setStatus(CharacterStatus.ACTIVE);
+        }
+
+    }
+
+    @Transactional
     public void disableCharacter(Long characterId) {
         Character ch = findOne(characterId);
         ch.setStatus(CharacterStatus.DISABLED);
+    }
+
+    @Transactional
+    public void disableCharacter(LangCode langCode, Long characterId) {
+        if (langCode == LangCode.KO) {
+            CharacterKo ch = findOneKo(characterId);
+            ch.setStatus(CharacterStatus.DISABLED);
+        }
+        else if (langCode == LangCode.EN) {
+            CharacterEn ch = findOneEn(characterId);
+            ch.setStatus(CharacterStatus.DISABLED);
+        }
+        else {
+            Character ch = findOne(characterId);
+            ch.setStatus(CharacterStatus.DISABLED);
+        }
     }
 
     @Transactional
@@ -170,6 +229,16 @@ public class CharacterService {
         return find.orElseThrow(() -> new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId = " + id));
     }
 
+    public CharacterKo findOneKo(Long id) {
+        Optional<CharacterKo> find = characterRepository.findOneKo(id);
+        return find.orElseThrow(() -> new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId = " + id));
+    }
+
+    public CharacterEn findOneEn(Long id) {
+        Optional<CharacterEn> find = characterRepository.findOneEn(id);
+        return find.orElseThrow(() -> new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId = " + id));
+    }
+
     public Character findOneByLangCode(Long id, LangCode langCode) {
         Optional<Character> find = characterRepository.findOneByLangCode(id, langCode);
         return find.orElseThrow(() -> new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. id=" + id + ", langCode=" + langCode.name()));
@@ -183,6 +252,22 @@ public class CharacterService {
         return find.get();
     }
 
+    public CharacterKo findOneActiveKo(Long id) {
+        Optional<CharacterKo> find = characterRepository.findOneKo(id);
+        if (find.isEmpty() || find.get().getStatus() != CharacterStatus.ACTIVE) {
+            throw new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId = " + id);
+        }
+        return find.get();
+    }
+
+    public CharacterEn findOneActiveEn(Long id) {
+        Optional<CharacterEn> find = characterRepository.findOneEn(id);
+        if (find.isEmpty() || find.get().getStatus() != CharacterStatus.ACTIVE) {
+            throw new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId = " + id);
+        }
+        return find.get();
+    }
+
     public List<Character> findAll() {
         CharacterSearchCond searchCond = new CharacterSearchCond();
         return characterRepository.findAll(searchCond);
@@ -190,6 +275,63 @@ public class CharacterService {
 
     public List<Character> findAll(CharacterSearchCond searchCond) {
         return characterRepository.findAll(searchCond);
+    }
+
+    public List<CharacterKo> findAllKo(CharacterSearchCond searchCond) {
+        return characterRepository.findAllKo(searchCond);
+    }
+
+    public List<CharacterEn> findAllEn(CharacterSearchCond searchCond) {
+        return characterRepository.findAllEn(searchCond);
+    }
+
+    // === private ===
+    private CharacterKo generateCharacterKo(CharacterDto chDto) {
+        return CharacterKo.createCharacterKo(
+                chDto.getLangCode(),
+                chDto.getName(),
+                chDto.getSubtitle(),
+                chDto.getCv(),
+                chDto.getGrade(),
+                chDto.getQuote(),
+                chDto.getTmi(),
+                chDto.getFavorite(),
+                chDto.getRace(),
+                chDto.getPersonality(),
+                chDto.getRole(),
+                chDto.getAttackType(),
+                chDto.getPosition(),
+                chDto.getStat(),
+                chDto.getNormalAttack(),
+                chDto.getEnhancedAttack(),
+                chDto.getLowSKill(),
+                chDto.getHighSkill(),
+                chDto.getAside()
+        );
+    }
+
+    private CharacterEn generateCharacterEn(CharacterDto chDto) {
+        return CharacterEn.createCharacterEn(
+                chDto.getLangCode(),
+                chDto.getName(),
+                chDto.getSubtitle(),
+                chDto.getCv(),
+                chDto.getGrade(),
+                chDto.getQuote(),
+                chDto.getTmi(),
+                chDto.getFavorite(),
+                chDto.getRace(),
+                chDto.getPersonality(),
+                chDto.getRole(),
+                chDto.getAttackType(),
+                chDto.getPosition(),
+                chDto.getStat(),
+                chDto.getNormalAttack(),
+                chDto.getEnhancedAttack(),
+                chDto.getLowSKill(),
+                chDto.getHighSkill(),
+                chDto.getAside()
+        );
     }
 
 }

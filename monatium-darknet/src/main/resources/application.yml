@@ -48,6 +48,8 @@ file:
   wikiDir: imgs/wiki/
   iconDir: imgs/wiki/icons/
   chDir: imgs/wiki/characters/
+  chKoDir: imgs/ko/wiki/characters/
+  chEnDir: imgs/en/wiki/characters/
   asideDir: imgs/wiki/asides/
   spellCardDir: imgs/wiki/cards/spell/
   artifactCardDir: imgs/wiki/cards/artifact/

@@ -1,6 +1,7 @@
 package hdxian.monatium_darknet.domain.character;
 
-import hdxian.monatium_darknet.domain.*;
+import hdxian.monatium_darknet.domain.LangCode;
+import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import jakarta.persistence.*;
@@ -11,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-//@MappedSuperclass // 나중에 Character 엔티티 안쓸 때 붙이면 될듯. (그때는 Inheritance도 지우고)
+@Table(name = "character_ko")
 @Getter @Setter
-public class Character {
+public class CharacterKo {
 
     @Id @GeneratedValue
-    @Column(name = "character_id")
+    @Column(name = "character_ko_id")
     private Long id; // id
 
     private String name; // 이름
@@ -72,26 +73,26 @@ public class Character {
     @JoinColumn(name = "aside_id")
     private Aside aside; // 어사이드
 
-    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Skin> skins = new ArrayList<>();
+//    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    private List<Skin> skins = new ArrayList<>();
 
 //    @Embedded
 //    private CharacterUrl urls; // 이미지 url
 
     // for JPA spec (일반 비즈니스 로직에서 사용 x)
-    protected Character() {
+    protected CharacterKo() {
     }
 
     // 연관관계 메서드 (nulls allowed)
-    public void addSkin(Skin skin) {
-        skins.add(skin);
-        skin.setCharacter(this);
-    }
-
-    public void removeSkin(Skin skin) {
-        skins.remove(skin);
-        skin.setCharacter(null);
-    }
+//    public void addSkin(Skin skin) {
+//        skins.add(skin);
+//        skin.setCharacter(this);
+//    }
+//
+//    public void removeSkin(Skin skin) {
+//        skins.remove(skin);
+//        skin.setCharacter(null);
+//    }
 
     public void setAside(Aside aside) {
         if (aside != null) {
@@ -104,12 +105,12 @@ public class Character {
     }
 
     // 생성 메서드
-    public static Character createCharacter(LangCode langCode, String name, String subtitle, String cv,
-                                            Integer grade, String quote, String tmi, String favorite,
-                                            Race race, Personality personality, Role role, AttackType attackType, Position position, CharacterStat stat,
-                                            Attack normalAttack, Attack enhancedAttack, Skill lowSkill, Skill highSkill, Aside aside)
+    public static CharacterKo createCharacterKo(LangCode langCode, String name, String subtitle, String cv,
+                                              Integer grade, String quote, String tmi, String favorite,
+                                              Race race, Personality personality, Role role, AttackType attackType, Position position, CharacterStat stat,
+                                              Attack normalAttack, Attack enhancedAttack, Skill lowSkill, Skill highSkill, Aside aside)
     {
-        Character character = new Character();
+        CharacterKo character = new CharacterKo();
         character.setLangCode(langCode);
         character.setName(name);
         character.setSubtitle(subtitle);

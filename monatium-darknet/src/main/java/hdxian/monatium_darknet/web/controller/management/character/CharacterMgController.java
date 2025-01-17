@@ -3,6 +3,8 @@ package hdxian.monatium_darknet.web.controller.management.character;
 import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.domain.character.CharacterEn;
+import hdxian.monatium_darknet.domain.character.CharacterKo;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.exception.character.CharacterImageProcessException;
 import hdxian.monatium_darknet.file.FileDto;
@@ -23,6 +25,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,6 +40,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import static hdxian.monatium_darknet.domain.character.QCharacter.character;
 import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
 
 
@@ -64,24 +68,48 @@ public class CharacterMgController {
     @GetMapping
     public String characterList(HttpSession session, LangCode langCode, Model model) {
         CharacterSearchCond searchCond = new CharacterSearchCond();
-        searchCond.setLangCode(langCode);
-        List<Character> characterList = characterService.findAll(searchCond);
+//        searchCond.setLangCode(langCode);
+//        List<Character> characterList = characterService.findAll(searchCond);
+        if (langCode == LangCode.KO) {
+            List<CharacterKo> characterList = characterService.findAllKo(searchCond);
+            model.addAttribute("characterList", characterList);
+        }
+        else if (langCode == LangCode.EN) {
+            List<CharacterEn> characterList = characterService.findAllEn(searchCond);
+            model.addAttribute("characterList", characterList);
+        }
+        else {
+            List<Character> characterList = characterService.findAll(searchCond);
+            model.addAttribute("characterList", characterList);
+        }
 
         clearSessionAttributes(session); // 다른 페이지에 머물다 돌아온 경우에도 세션 데이터 초기화 (redirect, url 직접 입력 등)
-        model.addAttribute("characterList", characterList);
+//        model.addAttribute("characterList", characterList);
         return "management/characters/characterList";
     }
 
     @GetMapping("/preview/{characterId}")
     public String preView(@PathVariable("characterId") Long characterId, LangCode langCode, Model model) {
         // langCode에 따라 지정한 캐릭터를 조회
-        Character character = characterService.findOneByLangCode(characterId, langCode);
+//        Character character = characterService.findOneByLangCode(characterId, langCode);
+        if (langCode == LangCode.KO) {
+            CharacterKo character = characterService.findOneKo(characterId);
+            model.addAttribute("character", character);
+        }
+        else if (langCode == LangCode.EN) {
+            CharacterEn character = characterService.findOneEn(characterId);
+            model.addAttribute("character", character);
+        }
+        else {
+            Character character = characterService.findOneByLangCode(characterId, langCode);
+            model.addAttribute("character", character);
+        }
 
         SkinSearchCond searchCond = new SkinSearchCond();
         searchCond.setCharacterId(characterId);
         List<Skin> skinList = skinService.findAllSkin(searchCond);
 
-        model.addAttribute("character", character);
+//        model.addAttribute("character", character);
         model.addAttribute("skinList", skinList);
         model.addAttribute("skinBaseUrl", imageUrlService.getSkinBaseUrl());
         return "/management/characters/characterPreview";
@@ -315,7 +343,8 @@ public class CharacterMgController {
                 asideImages = generateAsideImagePathsFromTemp(session); // 어사이드 이미지 파일 경로
             }
 
-            Long characterId = characterService.createNewCharacter(charDto, chImages, asideImages);
+//            Long characterId = characterService.createNewCharacter(charDto, chImages, asideImages);
+            Long characterId = characterService.createNewCharacter(langCode, charDto, chImages, asideImages);
             clearSessionAttributes(session); // 세션 데이터 모두 지우기
             return "redirect:/management/characters";
         }
@@ -432,19 +461,21 @@ public class CharacterMgController {
     }
 
     @PostMapping("/activate/{characterId}")
-    public ResponseEntity<Void> activate(@PathVariable("characterId") Long characterId) {
-        characterService.activateCharacter(characterId);
+    public ResponseEntity<Void> activate(@PathVariable("characterId") Long characterId, LangCode langCode) {
+//        characterService.activateCharacter(characterId);
+        characterService.activateCharacter(langCode, characterId);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/disable/{characterId}")
-    public ResponseEntity<Void> deactivate(@PathVariable("characterId") Long characterId) {
-        characterService.disableCharacter(characterId);
+    public ResponseEntity<Void> deactivate(@PathVariable("characterId") Long characterId, LangCode langCode) {
+//        characterService.disableCharacter(characterId);
+        characterService.disableCharacter(langCode, characterId);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/del/{characterId}")
-    public String delete(@PathVariable("characterId")Long characterId) {
+    public String delete(@PathVariable("characterId")Long characterId, LangCode langCode) {
         characterService.deleteCharacter(characterId);
         return "redirect:/management/characters";
     }
