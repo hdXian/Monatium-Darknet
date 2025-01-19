@@ -190,11 +190,11 @@
                 <div class="row" id="characterList">
 
                     <!--/*[[ 캐릭터 카드 ]]*/-->
-                    <div th:each="character : ${characterList}"
+                    <div th:each="character, stat : ${characterList}"
                          class="col-6 col-sm-4 col-lg-2 mb-4 character-item"
                          th:classappend="| ${{character.race}} ${{character.personality}} ${{character.role}} ${{character.attackType}} ${{character.position}}| "> <!--/*[[ 모바일에서 2개, 데스크탑에서 6개 ]]*/-->
 
-                        <a th:href="@{ /wiki/characters/{id} (id=${character.id}) }" class="card-link"> <!--/*[[ 누르면 넘어가는 이미지 ]]*/-->
+                        <a th:href="@{ /{lang}/wiki/characters/{count} (lang=${language}, count=${stat.count}) }" class="card-link"> <!--/*[[ 누르면 넘어가는 이미지 ]]*/-->
                             <div class="card">
                                 <!--/*[[ 캐릭터 이미지 ]]*/-->
                                 <img th:src="@{ |${chBaseUrl}profile/${character.id}| }" class="card-img-top" alt="캐릭터 프로필 이미지">

@@ -47,6 +47,7 @@ import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
 @Slf4j
 @Controller
 @RequestMapping("/management/characters")
+@SessionAttributes(CURRENT_LANG_CODE)
 @RequiredArgsConstructor
 public class CharacterMgController {
 
@@ -61,55 +62,36 @@ public class CharacterMgController {
     private final ChFormStep3Validator chForm3Validator;
     private final ChFormStep4Validator chForm4Validator;
 
+    @ModelAttribute(CURRENT_LANG_CODE)
+    public LangCode currentLangCode(HttpSession session) {
+        return Optional.ofNullable((LangCode) session.getAttribute(CURRENT_LANG_CODE)).orElse(LangCode.KO);
+    }
+
     // TODO - url 옮겨다니면 세션 데이터 꼬이는 문제 해결 필요
     // ex) 수정 페이지에서 임시저장 한 뒤 (세션에 데이터 저장) 다른 캐릭터 정보 수정 페이지에 진입
     // -> 이런 행동을 할 이유가 거의 없으니 그냥 세션 클리어 시키는 것도 좋아보임. 아 구분이 안되는구나. 세션 데이터에 id를 추가하는 방식도 괜찮아보임.
 
     @GetMapping
-    public String characterList(HttpSession session, LangCode langCode, Model model) {
+    public String characterList(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode, HttpSession session, Model model) {
         CharacterSearchCond searchCond = new CharacterSearchCond();
-//        searchCond.setLangCode(langCode);
-//        List<Character> characterList = characterService.findAll(searchCond);
-        if (langCode == LangCode.KO) {
-            List<CharacterKo> characterList = characterService.findAllKo(searchCond);
-            model.addAttribute("characterList", characterList);
-        }
-        else if (langCode == LangCode.EN) {
-            List<CharacterEn> characterList = characterService.findAllEn(searchCond);
-            model.addAttribute("characterList", characterList);
-        }
-        else {
-            List<Character> characterList = characterService.findAll(searchCond);
-            model.addAttribute("characterList", characterList);
-        }
+        searchCond.setLangCode(langCode);
+        List<Character> characterList = characterService.findAll(searchCond);
 
         clearSessionAttributes(session); // 다른 페이지에 머물다 돌아온 경우에도 세션 데이터 초기화 (redirect, url 직접 입력 등)
-//        model.addAttribute("characterList", characterList);
+        model.addAttribute("characterList", characterList);
         return "management/characters/characterList";
     }
 
     @GetMapping("/preview/{characterId}")
-    public String preView(@PathVariable("characterId") Long characterId, LangCode langCode, Model model) {
+    public String preView(@PathVariable("characterId") Long characterId, Model model) {
         // langCode에 따라 지정한 캐릭터를 조회
-//        Character character = characterService.findOneByLangCode(characterId, langCode);
-        if (langCode == LangCode.KO) {
-            CharacterKo character = characterService.findOneKo(characterId);
-            model.addAttribute("character", character);
-        }
-        else if (langCode == LangCode.EN) {
-            CharacterEn character = characterService.findOneEn(characterId);
-            model.addAttribute("character", character);
-        }
-        else {
-            Character character = characterService.findOneByLangCode(characterId, langCode);
-            model.addAttribute("character", character);
-        }
+        Character character = characterService.findOne(characterId);
 
         SkinSearchCond searchCond = new SkinSearchCond();
         searchCond.setCharacterId(characterId);
         List<Skin> skinList = skinService.findAllSkin(searchCond);
 
-//        model.addAttribute("character", character);
+        model.addAttribute("character", character);
         model.addAttribute("skinList", skinList);
         model.addAttribute("skinBaseUrl", imageUrlService.getSkinBaseUrl());
         return "/management/characters/characterPreview";
@@ -303,7 +285,7 @@ public class CharacterMgController {
     }
 
     @PostMapping("/new/complete")
-    public String chAddComplete(HttpSession session, LangCode langCode,
+    public String chAddComplete(HttpSession session, @ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
                                 @RequestParam("action")String action,
                                 @Validated @ModelAttribute(CHFORM_STEP1) ChFormStep1 chForm1, BindingResult br1,
                                 @Validated @ModelAttribute(CHFORM_STEP2) ChFormStep2 chForm2, BindingResult br2,
@@ -343,8 +325,8 @@ public class CharacterMgController {
                 asideImages = generateAsideImagePathsFromTemp(session); // 어사이드 이미지 파일 경로
             }
 
-//            Long characterId = characterService.createNewCharacter(charDto, chImages, asideImages);
-            Long characterId = characterService.createNewCharacter(langCode, charDto, chImages, asideImages);
+            Long characterId = characterService.createNewCharacter(charDto, chImages, asideImages);
+//            Long characterId = characterService.createNewCharacter(langCode, charDto, chImages, asideImages);
             clearSessionAttributes(session); // 세션 데이터 모두 지우기
             return "redirect:/management/characters";
         }
@@ -401,7 +383,8 @@ public class CharacterMgController {
 
     // 캐릭터 수정
     @PostMapping("/edit/{characterId}")
-    public String edit(HttpSession session, Model model, @RequestParam("action")String action, LangCode langCode,
+    public String edit(HttpSession session, Model model, @RequestParam("action")String action,
+                       @ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
                        @PathVariable("characterId") Long characterId,
                        @Validated @ModelAttribute("chFormStep1") ChFormStep1 chForm1, BindingResult br1,
                        @Validated @ModelAttribute("chFormStep2") ChFormStep2 chForm2, BindingResult br2,
@@ -461,21 +444,21 @@ public class CharacterMgController {
     }
 
     @PostMapping("/activate/{characterId}")
-    public ResponseEntity<Void> activate(@PathVariable("characterId") Long characterId, LangCode langCode) {
-//        characterService.activateCharacter(characterId);
-        characterService.activateCharacter(langCode, characterId);
+    public ResponseEntity<Void> activate(@PathVariable("characterId") Long characterId) {
+        characterService.activateCharacter(characterId);
+//        characterService.activateCharacter(langCode, characterId);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/disable/{characterId}")
-    public ResponseEntity<Void> deactivate(@PathVariable("characterId") Long characterId, LangCode langCode) {
-//        characterService.disableCharacter(characterId);
-        characterService.disableCharacter(langCode, characterId);
+    public ResponseEntity<Void> deactivate(@PathVariable("characterId") Long characterId) {
+        characterService.disableCharacter(characterId);
+//        characterService.disableCharacter(langCode, characterId);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/del/{characterId}")
-    public String delete(@PathVariable("characterId")Long characterId, LangCode langCode) {
+    public String delete(@PathVariable("characterId")Long characterId) {
         characterService.deleteCharacter(characterId);
         return "redirect:/management/characters";
     }

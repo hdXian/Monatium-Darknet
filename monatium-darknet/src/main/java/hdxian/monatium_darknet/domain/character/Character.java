@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-//@MappedSuperclass // 나중에 Character 엔티티 안쓸 때 붙이면 될듯. (그때는 Inheritance도 지우고)
 @Getter @Setter
 public class Character {
 

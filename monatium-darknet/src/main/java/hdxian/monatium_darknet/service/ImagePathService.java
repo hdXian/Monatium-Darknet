@@ -221,33 +221,6 @@ public class ImagePathService {
 
     }
 
-    @Transactional // 예외 터지면 관련 트랜잭션 롤백
-    public void saveCharacterImages(LangCode langCode, Long characterId, CharacterImageDto src) {
-        if (langCode == null || characterId == null || src == null) {
-            throw new CharacterImageProcessException("langCode 또는 characterId 또는 characterImage src가 null입니다.");
-        }
-
-        CharacterImageDto dst = generateChImagePaths(langCode, characterId);
-
-        try {
-            if (src.getProfileImage() != null) {
-                fileStorageService.copyFile(new FileDto(src.getProfileImage()), new FileDto(dst.getProfileImage()));
-            }
-            if (src.getPortraitImage() != null) {
-                fileStorageService.copyFile(new FileDto(src.getPortraitImage()), new FileDto(dst.getPortraitImage()));
-            }
-            if (src.getBodyImage() != null) {
-                fileStorageService.copyFile(new FileDto(src.getBodyImage()), new FileDto(dst.getBodyImage()));
-            }
-            if (src.getLowSkillImage() != null) {
-                fileStorageService.copyFile(new FileDto(src.getLowSkillImage()), new FileDto(dst.getLowSkillImage()));
-            }
-        } catch (IOException e) {
-            throw new CharacterImageProcessException(e);
-        }
-
-    }
-
     // 어사이드 이미지 정보 저장
     @Transactional // 예외 터지면 관련 트랜잭션 롤백
     public void saveAsideImages(Long characterId, AsideImageDto src) {
@@ -256,33 +229,6 @@ public class ImagePathService {
         }
 
         AsideImageDto dst = generateAsideImagePaths(characterId);
-
-        try {
-            if (src.getAsideImage() != null) {
-                fileStorageService.copyFile(new FileDto(src.getAsideImage()), new FileDto(dst.getAsideImage()));
-            }
-            if (src.getLv1Image() != null) {
-                fileStorageService.copyFile(new FileDto(src.getLv1Image()), new FileDto(dst.getLv1Image()));
-            }
-            if (src.getLv2Image() != null) {
-                fileStorageService.copyFile(new FileDto(src.getLv2Image()), new FileDto(dst.getLv2Image()));
-            }
-            if (src.getLv3Image() != null) {
-                fileStorageService.copyFile(new FileDto(src.getLv3Image()), new FileDto(dst.getLv3Image()));
-            }
-        } catch (IOException e) {
-            throw new CharacterImageProcessException(e);
-        }
-
-    }
-
-    @Transactional // 예외 터지면 관련 트랜잭션 롤백
-    public void saveAsideImages(LangCode langCode, Long characterId, AsideImageDto src) {
-        if (langCode == null || characterId == null || src == null) {
-            throw new CharacterImageProcessException("langCode 또는 characterId 또는 asideImage src가 null입니다.");
-        }
-
-        AsideImageDto dst = generateAsideImagePaths(langCode, characterId);
 
         try {
             if (src.getAsideImage() != null) {

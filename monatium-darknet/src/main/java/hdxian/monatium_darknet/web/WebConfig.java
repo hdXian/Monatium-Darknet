@@ -18,8 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-    private final LocaleResolver localeResolver; // DI (class ApplicationConfig)
-
     // String <-> NoticeCategory 컨버터 등록
     @Override
     public void addFormatters(FormatterRegistry registry) {
@@ -30,6 +28,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addConverter(new StringToPositionConverter());
 
         registry.addConverter(new CustomEnumToStringConverter());
+
+        registry.addConverter(new StringToLangCodeConverter());
     }
 
     // 로그인 인증 인터셉터 등록
@@ -44,16 +44,7 @@ public class WebConfig implements WebMvcConfigurer {
 //                        "/management", "/management/login"); // 제외 경로 지정 (화이트리스트)
         // management 관련 경로는 별도의 로직을 추가해야 함.
 
-        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-        localeChangeInterceptor.setParamName("lang");
-
-        registry.addInterceptor(localeChangeInterceptor)
-                .addPathPatterns("/**");
     }
 
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new LangCodeArgumentResolver(localeResolver));
-    }
 
 }

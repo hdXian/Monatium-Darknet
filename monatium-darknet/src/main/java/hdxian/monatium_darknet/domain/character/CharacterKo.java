@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+//@Entity
 @Table(name = "character_ko")
 @Getter @Setter
 public class CharacterKo {

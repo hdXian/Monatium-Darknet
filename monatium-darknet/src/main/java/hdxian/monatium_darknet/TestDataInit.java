@@ -74,26 +74,37 @@ public class TestDataInit {
 
         // 캐릭터 추가
         List<CharacterDto> dtos = new ArrayList<>();
-        dtos.add(generateCharDto("에르핀", LangCode.KO));
-        dtos.add(generateCharDto("벨리타", LangCode.KO));
-        dtos.add(generateCharDto("버터", LangCode.KO));
-        dtos.add(generateCharDto("다야", LangCode.KO));
-        dtos.add(generateCharDto("나이아", LangCode.KO));
-        dtos.add(generateCharDto("셀리네", LangCode.KO));
-        dtos.add(generateCharDto("엘레나", LangCode.KO));
+        dtos.add(generateCharDtoKo("에르핀", LangCode.KO));
+        dtos.add(generateCharDtoEn("Erpin", LangCode.EN));
+        dtos.add(generateCharDtoJp("エルピン", LangCode.JP));
 
-//        List<Long> Ids = new ArrayList<>();
+        dtos.add(generateCharDtoKo("벨리타", LangCode.KO));
+        dtos.add(generateCharDtoEn("Belita", LangCode.EN));
+        dtos.add(generateCharDtoJp("ベリタ", LangCode.JP));
+
+        dtos.add(generateCharDtoKo("버터", LangCode.KO));
+        dtos.add(generateCharDtoEn("Butter", LangCode.EN));
+        dtos.add(generateCharDtoJp("バター", LangCode.JP));
+
+        dtos.add(generateCharDtoKo("다야", LangCode.KO));
+        dtos.add(generateCharDtoEn("Daya", LangCode.EN));
+        dtos.add(generateCharDtoJp("ダヤ", LangCode.JP));
+
+        dtos.add(generateCharDtoKo("나이아", LangCode.KO));
+        dtos.add(generateCharDtoEn("Naia", LangCode.EN));
+        dtos.add(generateCharDtoJp("ナイア", LangCode.JP));
+
+        dtos.add(generateCharDtoKo("셀리네", LangCode.KO));
+        dtos.add(generateCharDtoEn("Seline", LangCode.EN));
+        dtos.add(generateCharDtoJp("セリネ", LangCode.JP));
+
+        dtos.add(generateCharDtoKo("엘레나", LangCode.KO));
+        dtos.add(generateCharDtoEn("Elena", LangCode.EN));
+        dtos.add(generateCharDtoJp("エレナ", LangCode.JP));
+
         for (CharacterDto dto : dtos) {
             Long chId = characterService.createNewCharacter(dto, new CharacterImageDto(null, null, null, null), null);
-//            Ids.add(chId);
         }
-
-//        String baseUrl = "/imgs/wiki/characters/";
-//        CharacterUrl url;
-//        for (Long id : Ids) {
-//            url = new CharacterUrl(baseUrl + id + "/portrait.webp",baseUrl + id + "/profile.webp", baseUrl + id + "/bodyShot.webp");
-//            characterService.updateCharacterUrls(id, url);
-//        }
 
         // 스킨 테스트 데이터 추가 (하드코딩, 1개 넣었음)
         SkinDto skinDto1 = generateSkinDto("하드워킹 홀리데이");
@@ -120,9 +131,6 @@ public class TestDataInit {
         skinService.linkSkinAndCategory(skinId1, skinCategoryId2);
         skinService.linkSkinAndCategory(skinId2, skinCategoryId2);
         skinService.linkSkinAndCategory(skinId3, skinCategoryId2);
-
-//        String skinBaseUrl = "/imgs/wiki/skin/";
-//        skinService.updateImageUrl(skinId, skinBaseUrl + 1L + "/" + skinId + ".webp");
 
         // 아티팩트 카드 테스트 데이터 추가
         CardDto cardDto1 = generateArtifactDto("벨리타의 지팡이", CardGrade.LEGENDARY); // 벨리타는 2번
@@ -169,23 +177,6 @@ public class TestDataInit {
         Long spellId8 = cardService.createNewSpellCard(spellDto8, null);
 
         String cardBaseUrl = "/imgs/wiki/card/";
-
-//        cardService.updateImageUrl(cardId1, cardBaseUrl + "artifact/" + cardId1 + ".webp");
-//        cardService.updateImageUrl(cardId2, cardBaseUrl + "artifact/" + cardId2 + ".webp");
-//        cardService.updateImageUrl(cardId3, cardBaseUrl + "artifact/" + cardId3 + ".webp");
-//        cardService.updateImageUrl(cardId4, cardBaseUrl + "artifact/" + cardId4 + ".webp");
-//        cardService.updateImageUrl(cardId5, cardBaseUrl + "artifact/" + cardId5 + ".webp");
-//        cardService.updateImageUrl(cardId6, cardBaseUrl + "artifact/" + cardId6 + ".webp");
-//        cardService.updateImageUrl(cardId7, cardBaseUrl + "artifact/" + cardId7 + ".webp");
-//
-//        cardService.updateImageUrl(spellId1, cardBaseUrl + "spell/" + spellId1 + ".webp");
-//        cardService.updateImageUrl(spellId2, cardBaseUrl + "spell/" + spellId2 + ".webp");
-//        cardService.updateImageUrl(spellId3, cardBaseUrl + "spell/" + spellId3 + ".webp");
-//        cardService.updateImageUrl(spellId4, cardBaseUrl + "spell/" + spellId4 + ".webp");
-//        cardService.updateImageUrl(spellId5, cardBaseUrl + "spell/" + spellId5 + ".webp");
-//        cardService.updateImageUrl(spellId6, cardBaseUrl + "spell/" + spellId6 + ".webp");
-//        cardService.updateImageUrl(spellId7, cardBaseUrl + "spell/" + spellId7 + ".webp");
-//        cardService.updateImageUrl(spellId8, cardBaseUrl + "spell/" + spellId8 + ".webp");
     }
 
     private static Skill generateAttachmentSkill(String name) {
@@ -243,7 +234,7 @@ public class TestDataInit {
         return noticeDto;
     }
 
-    private static CharacterDto generateCharDto(String name, LangCode langCode) {
+    private static CharacterDto generateCharDtoKo(String name, LangCode langCode) {
         // 능력치 (하드코딩)
         CharacterStat stat = new CharacterStat(7, 3, 4);
 
@@ -265,29 +256,29 @@ public class TestDataInit {
         highSkill.addAttribute(name+"고학년스킬 속성", "525%");
 
         // 이미지 url들
-        CharacterUrl urls = new CharacterUrl(name+"portrait_url", name+"profile_url", name+"body_url");
+//        CharacterUrl urls = new CharacterUrl(name+"portrait_url", name+"profile_url", name+"body_url");
 
         // 어사이드
-        AsideSpec level1 = AsideSpec.createAsideSpec(name + "어사이드1레벨", name + "어사이드1레벨 설명");
+        AsideSpec level1 = AsideSpec.createAsideSpec(name + " 어사이드1레벨", name + " 어사이드1레벨 설명");
         level1.addAttribute("어사이드 1단계 속성", "111%");
 
-        AsideSpec level2 = AsideSpec.createAsideSpec(name + "어사이드2레벨", name + "어사이드2레벨 설명");
+        AsideSpec level2 = AsideSpec.createAsideSpec(name + " 어사이드2레벨", name + " 어사이드2레벨 설명");
         level2.addAttribute("어사이드 2단계 속성", "222%");
 
-        AsideSpec level3 = AsideSpec.createAsideSpec(name + "어사이드3레벨", name + "어사이드3레벨 설명");
+        AsideSpec level3 = AsideSpec.createAsideSpec(name + " 어사이드3레벨", name + " 어사이드3레벨 설명");
         level3.addAttribute("어사이드 3단계 속성", "333%");
 
-        Aside aside = Aside.createAside(name + "어사이드", name + "어사이드 설명", level1, level2, level3);
+        Aside aside = Aside.createAside(name + " 어사이드", name + " 어사이드 설명", level1, level2, level3);
 
         CharacterDto dto = new CharacterDto();
         dto.setLangCode(langCode);
         dto.setName(name);
-        dto.setSubtitle(name+"수식언");
-        dto.setCv(name+"성우");
+        dto.setSubtitle(name+" 수식언");
+        dto.setCv(name+" 성우");
         dto.setGrade(3);
-        dto.setQuote(name+"한마디");
-        dto.setTmi(name+"tmi");
-        dto.setFavorite(name+"최애");
+        dto.setQuote(name+" 한마디");
+        dto.setTmi(name+" tmi");
+        dto.setFavorite(name+" 최애");
         dto.setRace(Race.FAIRY);
         dto.setPersonality(Personality.PURE);
         dto.setRole(Role.DEALER);
@@ -304,6 +295,126 @@ public class TestDataInit {
         return dto;
     }
 
+    private static CharacterDto generateCharDtoEn(String name, LangCode langCode) {
+        // 능력치 (하드코딩)
+        CharacterStat stat = new CharacterStat(7, 3, 4);
 
+        // 일반공격
+        Attack normalAttack = Attack.createNormalAttack(name+" normalAttack description");
+        normalAttack.addAttribute(name+" normalAttack attribute", "50%");
+
+        // 강화 공격
+        Attack enhancedAttack = Attack.createEnhancedAttack(name+" enhancedAttack description");
+        enhancedAttack.addAttribute(name+" enhancedAttack attribute", "11%");
+        enhancedAttack.addAttribute(name+" enhancedAttack attribute2", "22%");
+
+        // 저학년 스킬
+        Skill lowSkill = Skill.createLowSkill(name+" lowSkill", name + " lowSkill description");
+        lowSkill.addAttribute(name+" lowSkill attribute", "350%");
+
+        // 고학년 스킬
+        Skill highSkill = Skill.createHighSkill(name+" highSkill", name+" highSkill description", 15);
+        highSkill.addAttribute(name+"highSkill attribute", "525%");
+
+        // 이미지 url들
+//        CharacterUrl urls = new CharacterUrl(name+"portrait_url", name+"profile_url", name+"body_url");
+
+        // 어사이드
+        AsideSpec level1 = AsideSpec.createAsideSpec(name + " asideLv1", name + " asideLv1 description");
+        level1.addAttribute("asideLv1 attribute", "111%");
+
+        AsideSpec level2 = AsideSpec.createAsideSpec(name + "asideLv2", name + "asideLv2 description");
+        level2.addAttribute("asideLv2 attribute", "222%");
+
+        AsideSpec level3 = AsideSpec.createAsideSpec(name + "asideLv3", name + "asideLv3 description");
+        level3.addAttribute("asideLv3 attribute", "333%");
+
+        Aside aside = Aside.createAside(name + " aside", name + "aside description", level1, level2, level3);
+
+        CharacterDto dto = new CharacterDto();
+        dto.setLangCode(langCode);
+        dto.setName(name);
+        dto.setSubtitle(name+" subtitle");
+        dto.setCv(name+" cv");
+        dto.setGrade(3);
+        dto.setQuote(name+" quote");
+        dto.setTmi(name+" tmi");
+        dto.setFavorite(name+" favorite");
+        dto.setRace(Race.FAIRY);
+        dto.setPersonality(Personality.PURE);
+        dto.setRole(Role.DEALER);
+        dto.setAttackType(AttackType.MAGICAL);
+        dto.setPosition(Position.BACK);
+        dto.setStat(stat);
+        dto.setNormalAttack(normalAttack);
+        dto.setEnhancedAttack(enhancedAttack);
+        dto.setLowSKill(lowSkill);
+        dto.setHighSkill(highSkill);
+        dto.setAside(aside);
+//        dto.setUrls(urls);
+
+        return dto;
+    }
+
+    private static CharacterDto generateCharDtoJp(String name, LangCode langCode) {
+        // 能力値 (ハードコーディング)
+        CharacterStat stat = new CharacterStat(7, 3, 4);
+
+        // 通常攻撃
+        Attack normalAttack = Attack.createNormalAttack(name + " 通常攻撃の説明");
+        normalAttack.addAttribute(name + " 通常攻撃の属性", "50%");
+
+        // 強化攻撃
+        Attack enhancedAttack = Attack.createEnhancedAttack(name + " 強化攻撃の説明");
+        enhancedAttack.addAttribute(name + " 強化攻撃の属性", "11%");
+        enhancedAttack.addAttribute(name + " 強化攻撃の属性2", "22%");
+
+        // 初級スキル
+        Skill lowSkill = Skill.createLowSkill(name + " 初級スキル", name + " 初級スキルの説明");
+        lowSkill.addAttribute(name + " 初級スキルの属性", "350%");
+
+        // 上級スキル
+        Skill highSkill = Skill.createHighSkill(name + " 上級スキル", name + " 上級スキルの説明", 15);
+        highSkill.addAttribute(name + " 上級スキルの属性", "525%");
+
+        // イメージURL
+//    CharacterUrl urls = new CharacterUrl(name + " ポートレートURL", name + " プロフィールURL", name + " ボディURL");
+
+        // アサイド
+        AsideSpec level1 = AsideSpec.createAsideSpec(name + " アサイドLv1", name + " アサイドLv1の説明");
+        level1.addAttribute("アサイドLv1の属性", "111%");
+
+        AsideSpec level2 = AsideSpec.createAsideSpec(name + " アサイドLv2", name + " アサイドLv2の説明");
+        level2.addAttribute("アサイドLv2の属性", "222%");
+
+        AsideSpec level3 = AsideSpec.createAsideSpec(name + " アサイドLv3", name + " アサイドLv3の説明");
+        level3.addAttribute("アサイドLv3の属性", "333%");
+
+        Aside aside = Aside.createAside(name + " アサイド", name + " アサイドの説明", level1, level2, level3);
+
+        CharacterDto dto = new CharacterDto();
+        dto.setLangCode(langCode);
+        dto.setName(name);
+        dto.setSubtitle(name + " サブタイトル");
+        dto.setCv(name + " cv");
+        dto.setGrade(3);
+        dto.setQuote(name + " セリフ");
+        dto.setTmi(name + " TMI");
+        dto.setFavorite(name + " 好きなもの");
+        dto.setRace(Race.FAIRY);
+        dto.setPersonality(Personality.PURE);
+        dto.setRole(Role.DEALER);
+        dto.setAttackType(AttackType.MAGICAL);
+        dto.setPosition(Position.BACK);
+        dto.setStat(stat);
+        dto.setNormalAttack(normalAttack);
+        dto.setEnhancedAttack(enhancedAttack);
+        dto.setLowSKill(lowSkill);
+        dto.setHighSkill(highSkill);
+        dto.setAside(aside);
+//    dto.setUrls(urls);
+
+        return dto;
+    }
 
 }

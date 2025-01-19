@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.web.controller.management;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
+
+import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
 
 // 로그인 및 대시보드 관련 요청 처리
 
@@ -25,8 +29,16 @@ public class ManagementController {
     // TODO - **중요** 아무나 로그인할 수 없도록 접근 권한 설정 필요
     private final LoginService loginService;
 
+    @ModelAttribute(CURRENT_LANG_CODE)
+    public LangCode currentLangCode(HttpSession session) {
+        if (session == null || session.getAttribute(CURRENT_LANG_CODE) == null) {
+            return LangCode.KO;
+        }
+        return (LangCode) session.getAttribute(CURRENT_LANG_CODE);
+    }
+
     @GetMapping
-    public String home(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false)Member loginMember) {
+    public String home(@SessionAttribute(name = LOGIN_MEMBER, required = false)Member loginMember) {
         // 세션이 없으면 로그인 화면으로
         if (loginMember == null) {
             return "redirect:/management/login";
@@ -62,7 +74,7 @@ public class ManagementController {
 
         // 로그인 성공 시
         HttpSession session = request.getSession(); // 세션이 있으면 있는 세션 반환, 없으면 새로운 세션 생성
-        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember); // 세션에 로그인한 회원 정보 보관
+        session.setAttribute(LOGIN_MEMBER, loginMember); // 세션에 로그인한 회원 정보 보관
 
         return "redirect:/management";
     }
@@ -79,9 +91,12 @@ public class ManagementController {
     }
 
     @PostMapping("/lang-change")
-    public String changeLanguage(@RequestParam("lang") String lang,
+    public String changeLanguage(@RequestParam("lang") String lang, HttpSession session,
                                  @RequestHeader(value = "Referer", required = false, defaultValue = "/management") String referer) {
 
+        LangCode changeLangCode = LangCode.valueOf(lang.toUpperCase());
+        session.setAttribute(CURRENT_LANG_CODE, changeLangCode);
+        log.info("lang changed in management: langCode = {}", changeLangCode);
         try {
             URI uri = new URI(referer);
             String path = uri.getPath();

@@ -12,6 +12,8 @@ import hdxian.monatium_darknet.repository.dto.CardSearchCond;
 import hdxian.monatium_darknet.repository.dto.CharacterSearchCond;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.*;
+import hdxian.monatium_darknet.web.controller.management.SessionConst;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
@@ -22,10 +24,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Optional;
+
+import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/wiki")
+@RequestMapping("/{lang}/wiki")
 public class WikiController {
 
     private final CharacterService characterService;
@@ -36,50 +41,31 @@ public class WikiController {
     private final ImageUrlService imageUrlService;
 
     @GetMapping("/characters")
-    public String characterList(Model model, LangCode langCode) {
+    public String characterList(@PathVariable("lang") LangCode langCode, Model model) {
 
         CharacterSearchCond searchCond = new CharacterSearchCond();
         searchCond.setStatus(CharacterStatus.ACTIVE); // 활성화 캐릭터만 조회
-//        searchCond.setLangCode(langCode);
-        if (langCode == LangCode.KO) {
-            List<CharacterKo> characterList = characterService.findAllKo(searchCond);
-            model.addAttribute("characterList", characterList);
-        }
-        else if (langCode == LangCode.EN) {
-            List<CharacterEn> characterList = characterService.findAllEn(searchCond);
-            model.addAttribute("characterList", characterList);
-        }
-        else {
-            List<Character> characterList = characterService.findAll(searchCond);
-            model.addAttribute("characterList", characterList);
-        }
+        searchCond.setLangCode(langCode);
+        List<Character> characterList = characterService.findAll(searchCond);
 
+        model.addAttribute("characterList", characterList);
         return "wiki/characterList";
     }
 
-    @GetMapping("/characters/{id}")
-    public String characterInfo(@PathVariable("id") Long characterId, LangCode langCode, Model model) {
+    @GetMapping("/characters/{count}")
+    public String characterInfo(@PathVariable("lang") LangCode langCode,
+                                @PathVariable("count") Integer count, Model model) {
 
-        if (langCode == LangCode.KO) {
-            CharacterKo character = characterService.findOneActiveKo(characterId);
-            model.addAttribute("character", character);
-        }
-        else if (langCode == LangCode.EN) {
-            CharacterEn character = characterService.findOneEn(characterId);
-            model.addAttribute("character", character);
-        }
-        else {
-            Character character = characterService.findOneActive(characterId);
-            model.addAttribute("character", character);
-        }
+        int index = (count - 1);
+        Character character = characterService.findOneWiki(langCode, index);
 
         SkinSearchCond searchCond = new SkinSearchCond();
-        searchCond.setCharacterId(characterId);
+        searchCond.setCharacterId(character.getId());
         searchCond.setStatus(SkinStatus.ACTIVE); // 활성화된 스킨만 노출
         List<Skin> skinList = skinService.findAllSkin(searchCond);
 
+        model.addAttribute("character", character);
         model.addAttribute("skinList", skinList);
-
         return "wiki/characterDetail";
     }
 
@@ -117,6 +103,11 @@ public class WikiController {
 
 
     // === ModelAttribute ===
+    @ModelAttribute("language")
+    public String languageModelAttr(@PathVariable("lang") LangCode langCode) {
+        return langCode.name().toLowerCase();
+    }
+
     @ModelAttribute("faviconUrl")
     public String faviconUrl() {
         return imageUrlService.getErpinFaviconUrl();
