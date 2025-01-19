@@ -44,13 +44,14 @@ file:
   dir: D:/Dev/trickcal_unofficial/files/
   imgDir: imgs/
   tempDir: temp/
+  wikiDir: wiki/
   noticeDir: imgs/notices/
-  wikiDir: imgs/wiki/
   iconDir: imgs/wiki/icons/
   chDir: imgs/wiki/characters/
   chKoDir: imgs/ko/wiki/characters/
   chEnDir: imgs/en/wiki/characters/
   asideDir: imgs/wiki/asides/
+  cardDir: cards/
   spellCardDir: imgs/wiki/cards/spell/
   artifactCardDir: imgs/wiki/cards/artifact/
   skinDir: imgs/wiki/skins/

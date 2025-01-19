@@ -62,6 +62,7 @@ public class CharacterMgController {
     private final ChFormStep3Validator chForm3Validator;
     private final ChFormStep4Validator chForm4Validator;
 
+    // 관리 기능에서는 LangCode를 세션에서 관리함 -> url을 언어코드 별로 나누지 않기 때문
     @ModelAttribute(CURRENT_LANG_CODE)
     public LangCode currentLangCode(HttpSession session) {
         return Optional.ofNullable((LangCode) session.getAttribute(CURRENT_LANG_CODE)).orElse(LangCode.KO);
@@ -446,14 +447,12 @@ public class CharacterMgController {
     @PostMapping("/activate/{characterId}")
     public ResponseEntity<Void> activate(@PathVariable("characterId") Long characterId) {
         characterService.activateCharacter(characterId);
-//        characterService.activateCharacter(langCode, characterId);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/disable/{characterId}")
     public ResponseEntity<Void> deactivate(@PathVariable("characterId") Long characterId) {
         characterService.disableCharacter(characterId);
-//        characterService.disableCharacter(langCode, characterId);
         return ResponseEntity.ok().build();
     }
 

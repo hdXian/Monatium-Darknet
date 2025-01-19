@@ -29,6 +29,7 @@ public class ManagementController {
     // TODO - **중요** 아무나 로그인할 수 없도록 접근 권한 설정 필요
     private final LoginService loginService;
 
+    // 세션이 없거나 세션에 저장된 LangCode가 없는 경우 기본 LangCode (KO) 리턴
     @ModelAttribute(CURRENT_LANG_CODE)
     public LangCode currentLangCode(HttpSession session) {
         if (session == null || session.getAttribute(CURRENT_LANG_CODE) == null) {
@@ -38,7 +39,7 @@ public class ManagementController {
     }
 
     @GetMapping
-    public String home(@SessionAttribute(name = LOGIN_MEMBER, required = false)Member loginMember) {
+    public String home(@SessionAttribute(name = LOGIN_MEMBER, required = false) Member loginMember) {
         // 세션이 없으면 로그인 화면으로
         if (loginMember == null) {
             return "redirect:/management/login";
@@ -50,7 +51,7 @@ public class ManagementController {
 
     // 로그인 화면
     @GetMapping("/login")
-    public String loginForm(@ModelAttribute("loginForm")LoginForm form) {
+    public String loginForm(@ModelAttribute("loginForm") LoginForm form) {
         return "management/loginForm";
     }
 
@@ -90,6 +91,7 @@ public class ManagementController {
         return "redirect:/management";
     }
 
+    // lang으로 전달한 언어 코드로 LangCode 객체를 파싱 -> 해당 LangCode 객체를 세션의 CURRENT_LANG_CODE 속성으로 설정
     @PostMapping("/lang-change")
     public String changeLanguage(@RequestParam("lang") String lang, HttpSession session,
                                  @RequestHeader(value = "Referer", required = false, defaultValue = "/management") String referer) {

@@ -2,6 +2,7 @@ package hdxian.monatium_darknet.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.card.*;
 import hdxian.monatium_darknet.repository.dto.CardSearchCond;
 import jakarta.persistence.EntityManager;
@@ -89,8 +90,10 @@ public class CardRepository {
         );
     }
 
+    // queryDsl
     public List<Card> findAll(CardSearchCond searchCond) {
         CardType cardType = searchCond.getCardType();
+        LangCode langCode = searchCond.getLangCode();
         String name = searchCond.getName();
         List<CardGrade> gradeList = searchCond.getGradeList();
         CardStatus status = searchCond.getStatus();
@@ -98,15 +101,24 @@ public class CardRepository {
         return queryFactory.select(card)
                 .from(card)
                 .where(
+                        equalsLangCode(langCode),
                         equalsType(cardType),
                         likeName(name),
                         inGradeList(gradeList),
                         equalsStatus(status)
                 )
+                .orderBy(card.grade.desc())
                 .fetch();
     }
 
     // === private BooleanExpression ===
+    private BooleanExpression equalsLangCode(LangCode langCode) {
+        if (langCode != null) {
+            return card.langCode.eq(langCode);
+        }
+        return null;
+    }
+
     private BooleanExpression equalsId(Long cardId) {
         if (cardId != null)
             return card.id.eq(cardId);

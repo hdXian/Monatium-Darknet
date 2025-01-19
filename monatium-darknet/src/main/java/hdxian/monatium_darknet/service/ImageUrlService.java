@@ -72,6 +72,9 @@ public class ImageUrlService {
     }
 
     // 카드 이미지 -> /api/images/card/{id}
+    public String getCardBaseUrl() {
+        return api_baseUrl + "images/" + "card/";
+    }
     public String getSpellCardBaseUrl() {
         return api_baseUrl + "images/" + "card/" + "spell/";
     }

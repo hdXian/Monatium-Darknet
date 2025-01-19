@@ -39,6 +39,9 @@ public class ImagePathService {
     @Value("${file.asideDir}")
     private String asideDir;
 
+    @Value("${file.cardDir}")
+    private String cardDir;
+
     @Value("${file.spellCardDir}")
     private String spellCardDir;
 
@@ -128,6 +131,12 @@ public class ImagePathService {
     }
 
     // === 카드 관련 이미지 ===
+    // TODO - 카드 이미지 통합할 것
+    public String getCardFileName(Long cardId) {
+        // imgs/wiki/cards/{cardId}.webp
+        return imgDir + wikiDir + cardDir + cardId + ext_webp;
+    }
+
     public String getSpellCardFileName(Long cardId) {
         return spellCardDir + cardId + ext_webp;
     }

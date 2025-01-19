@@ -40,6 +40,7 @@ public class WikiController {
     private final ImagePathService imagePathService;
     private final ImageUrlService imageUrlService;
 
+    // /{lang}/wiki/characters -> @PathVariable("lang")
     @GetMapping("/characters")
     public String characterList(@PathVariable("lang") LangCode langCode, Model model) {
 
@@ -70,13 +71,15 @@ public class WikiController {
     }
 
     @GetMapping("/cards/artifact")
-    public String artifactList(Model model) {
+    public String artifactList(@PathVariable("lang") LangCode langCode, Model model) {
         CardSearchCond searchCond = new CardSearchCond();
+        searchCond.setLangCode(langCode);
         searchCond.setCardType(CardType.ARTIFACT);
         searchCond.setStatus(CardStatus.ACTIVE);
         List<Card> cardList = cardService.findAll(searchCond);
 
-        String cardBaseUrl = imageUrlService.getArtifactCardBaseUrl();
+//        String cardBaseUrl = imageUrlService.getArtifactCardBaseUrl();
+        String cardBaseUrl = imageUrlService.getCardBaseUrl();
         String portraitBaseUrl = imageUrlService.getChBaseUrl() + "portrait/";
 
         model.addAttribute("cardList", cardList);
@@ -87,22 +90,25 @@ public class WikiController {
     }
 
     @GetMapping("/cards/spell")
-    public String spellList(Model model) {
+    public String spellList(@PathVariable("lang") LangCode langCode, Model model) {
         CardSearchCond searchCond = new CardSearchCond();
+        searchCond.setLangCode(langCode);
         searchCond.setCardType(CardType.SPELL);
         searchCond.setStatus(CardStatus.ACTIVE);
         List<Card> cardList = cardService.findAll(searchCond);
 
-        String baseUrl = imageUrlService.getSpellCardBaseUrl();
+        String cardBaseUrl = imageUrlService.getCardBaseUrl();
+//        String cardBaseUrl = imageUrlService.getSpellCardBaseUrl();
 
         model.addAttribute("cardList", cardList);
-        model.addAttribute("baseUrl", baseUrl);
+        model.addAttribute("cardBaseUrl", cardBaseUrl);
 
         return "wiki/spellCardList";
     }
 
 
     // === ModelAttribute ===
+    // navbar.html의 언어 선택 창 렌더링에 사용되는 ${language}
     @ModelAttribute("language")
     public String languageModelAttr(@PathVariable("lang") LangCode langCode) {
         return langCode.name().toLowerCase();
@@ -115,7 +121,6 @@ public class WikiController {
 
     @ModelAttribute("iconBaseUrl")
     public String iconBaseUrl() {
-//        return imageUrlService.getIconBaseUrl();
         return imageUrlService.getIconBaseUrl();
     }
 

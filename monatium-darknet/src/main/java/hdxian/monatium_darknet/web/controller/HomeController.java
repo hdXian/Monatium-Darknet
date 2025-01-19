@@ -29,16 +29,15 @@ public class HomeController {
     private final CharacterService characterService;
     private final ImageUrlService imageUrlService;
 
-    // 메인 화면에 캐릭터 정보도 뿌려야 함
-    
     @GetMapping("/")
     public String home(Locale locale, RedirectAttributes redirectAttributes) {
+        // 여기서 바인딩되는 Locale은 Accept-language 헤더 기반의 LocaleResolver로부터 받아온 Lcoale (기본 LocaleResolver)
         redirectAttributes.addAttribute("lang", locale.getLanguage());
         return "redirect:/{lang}";
     }
 
     @GetMapping("/{lang}")
-    public String home2(@PathVariable("lang") LangCode langCode, Model model) {
+    public String homeLang(@PathVariable("lang") LangCode langCode, Model model) {
         log.info("langCode = {}", langCode);
 
         List<Notice> noticeList = noticeService.findAll();
@@ -64,19 +63,6 @@ public class HomeController {
 
     }
 
-    private String generateRedirectPath(String path, String lang) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("/").append(lang);
-
-        StringTokenizer tkn = new StringTokenizer(path, "/");
-        tkn.nextToken(); // 첫 토큰이 지역명. 해당 토큰은 버림.
-        while (tkn.hasMoreTokens()) {
-            sb.append("/").append(tkn.nextToken());
-        }
-
-        return sb.toString();
-    }
-
     @ModelAttribute("faviconUrl")
     public String faviconUrl() {
         return imageUrlService.getErpinFaviconUrl();
@@ -100,6 +86,22 @@ public class HomeController {
     @ModelAttribute("staticMainUrl")
     public String mainBaseUrl() {
         return imageUrlService.getStaticImageBaseUrl() + "main/";
+    }
+
+    // === private ===
+    // 지정한 lang으로 path의 언어 코드 부분을 변경해서 리턴
+    // ex) ko/wiki/characters -> en/wiki/characters
+    private String generateRedirectPath(String path, String lang) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("/").append(lang);
+
+        StringTokenizer tkn = new StringTokenizer(path, "/");
+        tkn.nextToken(); // 첫 토큰이 지역명. 해당 토큰은 버림.
+        while (tkn.hasMoreTokens()) {
+            sb.append("/").append(tkn.nextToken());
+        }
+
+        return sb.toString();
     }
 
 }

@@ -133,67 +133,155 @@ public class TestDataInit {
         skinService.linkSkinAndCategory(skinId3, skinCategoryId2);
 
         // 아티팩트 카드 테스트 데이터 추가
-        CardDto cardDto1 = generateArtifactDto("벨리타의 지팡이", CardGrade.LEGENDARY); // 벨리타는 2번
-        CardDto cardDto2 = generateArtifactDto("엘다인 램프", CardGrade.LEGENDARY);
-        CardDto cardDto3 = generateArtifactDto("용광검", CardGrade.LEGENDARY);
+        // KO
+        List<CardDto> koCardDtos = new ArrayList<>();
+        koCardDtos.add(generateArtifactDtoKo("엘다인 램프", CardGrade.LEGENDARY));
+        koCardDtos.add(generateArtifactDtoKo("용광검", CardGrade.LEGENDARY));
 
-        CardDto cardDto4 = generateArtifactDto("날카로운 지팡이", CardGrade.RARE);
-        CardDto cardDto5 = generateArtifactDto("참회의 메이스", CardGrade.RARE);
+        koCardDtos.add(generateArtifactDtoKo("날카로운 지팡이", CardGrade.RARE));
+        koCardDtos.add(generateArtifactDtoKo("참회의 메이스", CardGrade.RARE));
 
-        CardDto cardDto6 = generateArtifactDto("엘프산 요술봉", CardGrade.ADVANCED);
-        CardDto cardDto7 = generateArtifactDto("급조한 목검", CardGrade.NORMAL);
+        koCardDtos.add(generateArtifactDtoKo("엘프산 요술봉", CardGrade.ADVANCED));
+        koCardDtos.add(generateArtifactDtoKo("급조한 목검", CardGrade.NORMAL));
+        for (CardDto koCardDto : koCardDtos) {
+            cardService.createNewArtifactCard(koCardDto, null);
+        }
+
+        // EN
+        List<CardDto> enCardDtos = new ArrayList<>();
+        enCardDtos.add(generateArtifactDtoEn("Eldain Lamp", CardGrade.LEGENDARY));
+        enCardDtos.add(generateArtifactDtoEn("Dragonforge Sword", CardGrade.LEGENDARY));
+
+        enCardDtos.add(generateArtifactDtoEn("Sharp Staff", CardGrade.RARE));
+        enCardDtos.add(generateArtifactDtoEn("Mace of Repentance", CardGrade.RARE));
+
+        enCardDtos.add(generateArtifactDtoEn("Elven Mountain Wand", CardGrade.ADVANCED));
+        enCardDtos.add(generateArtifactDtoEn("Improvised Wooden Sword", CardGrade.NORMAL));
+        for (CardDto enCardDto : enCardDtos) {
+            cardService.createNewArtifactCard(enCardDto, null);
+        }
+
+        // JP
+        List<CardDto> jpCardDtos = new ArrayList<>();
+        jpCardDtos.add(generateArtifactDtoJp("エルダインのランプ", CardGrade.LEGENDARY));
+        jpCardDtos.add(generateArtifactDtoJp("ドラゴンフォージの剣", CardGrade.LEGENDARY));
+
+        jpCardDtos.add(generateArtifactDtoJp("鋭い杖", CardGrade.RARE));
+        jpCardDtos.add(generateArtifactDtoJp("懺悔のメイス", CardGrade.RARE));
+
+        jpCardDtos.add(generateArtifactDtoJp("エルフ山の魔法の杖", CardGrade.ADVANCED));
+        jpCardDtos.add(generateArtifactDtoJp("即席の木剣", CardGrade.NORMAL));
+        for (CardDto jpCardDto : jpCardDtos) {
+            cardService.createNewArtifactCard(jpCardDto, null);
+        }
 
         // 스펠 카드 테스트 데이터 추가
-        CardDto spellDto1 = generateSpellDto("단체 월반", CardGrade.LEGENDARY);
-        CardDto spellDto2 = generateSpellDto("수상한 물약", CardGrade.LEGENDARY);
+        // KO
+        List<CardDto> koSpellDtos = new ArrayList<>();
+        koSpellDtos.add(generateSpellDtoKo("단체 월반", CardGrade.LEGENDARY));
+        koSpellDtos.add(generateSpellDtoKo("수상한 물약", CardGrade.LEGENDARY));
 
-        CardDto spellDto3 = generateSpellDto("사기진작", CardGrade.RARE);
-        CardDto spellDto4 = generateSpellDto("효율적인 회복", CardGrade.RARE);
+        koSpellDtos.add(generateSpellDtoKo("사기진작", CardGrade.RARE));
+        koSpellDtos.add(generateSpellDtoKo("효율적인 회복", CardGrade.RARE));
 
-        CardDto spellDto5 = generateSpellDto("학자", CardGrade.ADVANCED);
-        CardDto spellDto6 = generateSpellDto("회심의 일격", CardGrade.ADVANCED);
+        koSpellDtos.add(generateSpellDtoKo("학자", CardGrade.ADVANCED));
+        koSpellDtos.add(generateSpellDtoKo("회심의 일격", CardGrade.ADVANCED));
 
-        CardDto spellDto7 = generateSpellDto("자기 계발", CardGrade.NORMAL);
-        CardDto spellDto8 = generateSpellDto("그건 내 잔상", CardGrade.NORMAL);
+        koSpellDtos.add(generateSpellDtoKo("자기 계발", CardGrade.NORMAL));
+        koSpellDtos.add(generateSpellDtoKo("그건 내 잔상", CardGrade.NORMAL));
+        for (CardDto koSpellDto : koSpellDtos) {
+            cardService.createNewSpellCard(koSpellDto, null);
+        }
 
-        Skill attachmentSkill = generateAttachmentSkill("블랙홀 오브 위치");
+        // EN
+        List<CardDto> enSpellDtos = new ArrayList<>();
+        enSpellDtos.add(generateSpellDtoEn("Group Promotion", CardGrade.LEGENDARY));
+        enSpellDtos.add(generateSpellDtoEn("Suspicious Potion", CardGrade.LEGENDARY));
 
-        Long cardId1 = cardService.createNewArtifactCard(cardDto1, 2L, attachmentSkill, null);
-        Long cardId2 = cardService.createNewArtifactCard(cardDto2, null);
-        Long cardId3 = cardService.createNewArtifactCard(cardDto3, null);
+        enSpellDtos.add(generateSpellDtoEn("Boost Morale", CardGrade.RARE));
+        enSpellDtos.add(generateSpellDtoEn("Efficient Recovery", CardGrade.RARE));
 
-        Long cardId4 = cardService.createNewArtifactCard(cardDto4, null);
-        Long cardId5 = cardService.createNewArtifactCard(cardDto5, null);
-        Long cardId6 = cardService.createNewArtifactCard(cardDto6, null);
-        Long cardId7 = cardService.createNewArtifactCard(cardDto7, null);
+        enSpellDtos.add(generateSpellDtoEn("Scholar", CardGrade.ADVANCED));
+        enSpellDtos.add(generateSpellDtoEn("Critical Strike", CardGrade.ADVANCED));
 
-        Long spellId1 = cardService.createNewSpellCard(spellDto1, null);
-        Long spellId2 = cardService.createNewSpellCard(spellDto2, null);
-        Long spellId3 = cardService.createNewSpellCard(spellDto3, null);
-        Long spellId4 = cardService.createNewSpellCard(spellDto4, null);
-        Long spellId5 = cardService.createNewSpellCard(spellDto5, null);
-        Long spellId6 = cardService.createNewSpellCard(spellDto6, null);
-        Long spellId7 = cardService.createNewSpellCard(spellDto7, null);
-        Long spellId8 = cardService.createNewSpellCard(spellDto8, null);
+        enSpellDtos.add(generateSpellDtoEn("Self Improvement", CardGrade.NORMAL));
+        enSpellDtos.add(generateSpellDtoEn("That's My Afterimage", CardGrade.NORMAL));
+        for (CardDto enSpellDto : enSpellDtos) {
+            cardService.createNewSpellCard(enSpellDto, null);
+        }
+
+        // JP
+        List<CardDto> jpSpellDtos = new ArrayList<>();
+        jpSpellDtos.add(generateSpellDtoJp("グループ昇級", CardGrade.LEGENDARY)); // 단체 월반
+        jpSpellDtos.add(generateSpellDtoJp("怪しいポーション", CardGrade.LEGENDARY)); // 수상한 물약
+
+        jpSpellDtos.add(generateSpellDtoJp("士気高揚", CardGrade.RARE)); // 사기진작
+        jpSpellDtos.add(generateSpellDtoJp("効率的な回復", CardGrade.RARE)); // 효율적인 회복
+
+        jpSpellDtos.add(generateSpellDtoJp("学者", CardGrade.ADVANCED)); // 학자
+        jpSpellDtos.add(generateSpellDtoJp("会心の一撃", CardGrade.ADVANCED)); // 회심의 일격
+
+        jpSpellDtos.add(generateSpellDtoJp("自己啓発", CardGrade.NORMAL)); // 자기 계발
+        jpSpellDtos.add(generateSpellDtoJp("それは私の残像だ", CardGrade.NORMAL)); // 그건 내 잔상
+        for (CardDto jpSpellDto : jpSpellDtos) {
+            cardService.createNewSpellCard(jpSpellDto, null);
+        }
+
+        // 애착 사도가 있는 아티팩트 카드 추가
+        CardDto cardDto_belita_ko = generateArtifactDtoKo("벨리타의 지팡이", CardGrade.LEGENDARY); // 벨리타는 4번
+        CardDto cardDto_belita_en = generateArtifactDtoEn("Staff of Belita", CardGrade.LEGENDARY); // Velita is 5th
+        CardDto cardDto_belita_jp = generateArtifactDtoJp("ベリタの杖", CardGrade.LEGENDARY); // Velita is 6th
+
+        Skill attachmentSkillKo = generateAttachmentSkillKo("블랙홀 오브 위치"); // KO
+        Skill attachmentSkillEn = generateAttachmentSkillEn("Black Hole of the Witch"); // EN
+        Skill attachmentSkillJp = generateAttachmentSkillJp("魔女のブラックホール"); // JP
+
+        Long cardId1 = cardService.createNewArtifactCard(cardDto_belita_ko, 4L, attachmentSkillKo, null);
+        Long cardId2 = cardService.createNewArtifactCard(cardDto_belita_en, 5L, attachmentSkillEn, null);
+        Long cardId3 = cardService.createNewArtifactCard(cardDto_belita_jp, 6L, attachmentSkillJp, null);
 
         String cardBaseUrl = "/imgs/wiki/card/";
     }
 
-    private static Skill generateAttachmentSkill(String name) {
+    // attachmentSkill
+    private static Skill generateAttachmentSkillKo(String name) {
         Skill attachmentSkill = Skill.createAttachmentSkill(name, name + " 설명", name + "애착 아티팩트 레벨 3 효과");
         attachmentSkill.addAttribute(name + " 속성1 이름", name + " 속성1 수치");
         attachmentSkill.addAttribute(name + " 속성2 이름", name + " 속성2 수치");
         return attachmentSkill;
     }
 
-    private static CardDto generateSpellDto(String name, CardGrade grade) {
+    private static Skill generateAttachmentSkillEn(String name) {
+        Skill attachmentSkill = Skill.createAttachmentSkill(
+                name,
+                name + " description",
+                name + " Attachment Artifact Level 3 Effect"
+        );
+        attachmentSkill.addAttribute(name + " Attribute 1 Name", name + " Attribute 1 Value");
+        attachmentSkill.addAttribute(name + " Attribute 2 Name", name + " Attribute 2 Value");
+        return attachmentSkill;
+    }
+
+    private static Skill generateAttachmentSkillJp(String name) {
+        Skill attachmentSkill = Skill.createAttachmentSkill(
+                name,
+                name + " 説明",
+                name + " アタッチアーティファクト レベル3 効果"
+        );
+        attachmentSkill.addAttribute(name + " 属性1 名称", name + " 属性1 値");
+        attachmentSkill.addAttribute(name + " 属性2 名称", name + " 属性2 値");
+        return attachmentSkill;
+    }
+
+    // spellDto
+    private static CardDto generateSpellDtoKo(String name, CardGrade grade) {
         CardDto dto = new CardDto();
+        dto.setLangCode(LangCode.KO);
         dto.setName(name);
         dto.setDescription(name + "스펠카드 설명");
         dto.setStory(name + "스펠카드 이야기");
         dto.setCost(14);
         dto.setGrade(grade);
-//        dto.setImageUrl(name + "스펠카드이미지url");
 
         dto.addAttribute(name + "스펠카드 효과1", name + "스펠카드 효과1 수치");
         dto.addAttribute(name + "스펠카드 효과2", name + "스펠카드 효과2 수치");
@@ -201,14 +289,45 @@ public class TestDataInit {
         return dto;
     }
 
-    private static CardDto generateArtifactDto(String name, CardGrade grade) {
+    private static CardDto generateSpellDtoEn(String name, CardGrade grade) {
         CardDto dto = new CardDto();
+        dto.setLangCode(LangCode.EN);
+        dto.setName(name);
+        dto.setDescription(name + " Spell Card Description");
+        dto.setStory(name + " Spell Card Story");
+        dto.setCost(14);
+        dto.setGrade(grade);
+
+        dto.addAttribute(name + " Spell Card Effect 1", name + " Spell Card Effect 1 Value");
+        dto.addAttribute(name + " Spell Card Effect 2", name + " Spell Card Effect 2 Value");
+
+        return dto;
+    }
+
+    private static CardDto generateSpellDtoJp(String name, CardGrade grade) {
+        CardDto dto = new CardDto();
+        dto.setLangCode(LangCode.JP);
+        dto.setName(name);
+        dto.setDescription(name + " スペルカード説明");
+        dto.setStory(name + " スペルカードストーリー");
+        dto.setCost(14);
+        dto.setGrade(grade);
+
+        dto.addAttribute(name + " スペルカード効果1", name + " スペルカード効果1の値");
+        dto.addAttribute(name + " スペルカード効果2", name + " スペルカード効果2の値");
+
+        return dto;
+    }
+
+    // artifactDto
+    private static CardDto generateArtifactDtoKo(String name, CardGrade grade) {
+        CardDto dto = new CardDto();
+        dto.setLangCode(LangCode.KO);
         dto.setName(name);
         dto.setDescription(name + "아티팩트카드 설명");
         dto.setStory(name + "아티팩트카드 이야기");
         dto.setCost(14);
         dto.setGrade(grade);
-//        dto.setImageUrl(name + "아티팩트카드이미지url");
 
         dto.addAttribute(name + "아티팩트카드 효과1", name + "아티팩트카드 효과1 수치");
         dto.addAttribute(name + "아티팩트카드 효과2", name + "아티팩트카드 효과2 수치");
@@ -216,6 +335,37 @@ public class TestDataInit {
         return dto;
     }
 
+    private static CardDto generateArtifactDtoEn(String name, CardGrade grade) {
+        CardDto dto = new CardDto();
+        dto.setLangCode(LangCode.EN);
+        dto.setName(name);
+        dto.setDescription(name + " Artifact Card Description");
+        dto.setStory(name + " Artifact Card Story");
+        dto.setCost(14);
+        dto.setGrade(grade);
+
+        dto.addAttribute(name + " Artifact Card Effect 1", name + " Artifact Card Effect 1 Value");
+        dto.addAttribute(name + " Artifact Card Effect 2", name + " Artifact Card Effect 2 Value");
+
+        return dto;
+    }
+
+    private static CardDto generateArtifactDtoJp(String name, CardGrade grade) {
+        CardDto dto = new CardDto();
+        dto.setLangCode(LangCode.JP);
+        dto.setName(name);
+        dto.setDescription(name + " アーティファクトカード説明");
+        dto.setStory(name + " アーティファクトカードストーリー");
+        dto.setCost(14);
+        dto.setGrade(grade);
+
+        dto.addAttribute(name + " アーティファクトカード効果1", name + " アーティファクトカード効果1の値");
+        dto.addAttribute(name + " アーティファクトカード効果2", name + " アーティファクトカード効果2の値");
+
+        return dto;
+    }
+
+    // skinDto
     private static SkinDto generateSkinDto(String name) {
         SkinDto dto = new SkinDto();
         dto.setName(name);
@@ -225,6 +375,7 @@ public class TestDataInit {
         return dto;
     }
 
+    // noticeDto
     private static NoticeDto generateNoticeDto(String title, Long categoryId, String content) {
         NoticeDto noticeDto = new NoticeDto();
         noticeDto.setTitle(title);
@@ -234,6 +385,7 @@ public class TestDataInit {
         return noticeDto;
     }
 
+    // characterDto
     private static CharacterDto generateCharDtoKo(String name, LangCode langCode) {
         // 능력치 (하드코딩)
         CharacterStat stat = new CharacterStat(7, 3, 4);

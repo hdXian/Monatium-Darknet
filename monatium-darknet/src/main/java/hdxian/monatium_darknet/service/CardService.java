@@ -4,6 +4,7 @@ import hdxian.monatium_darknet.domain.Attribute;
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.card.*;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.exception.card.CardLangCodeMisMatchException;
 import hdxian.monatium_darknet.exception.card.CardNotFoundException;
 import hdxian.monatium_darknet.exception.card.DuplicateCardNameException;
 import hdxian.monatium_darknet.exception.character.CharacterNotFoundException;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -36,6 +36,7 @@ public class CardService {
         checkCardName(cardDto.getName());
 
         Card spellCard = Card.createSpellCard(
+                cardDto.getLangCode(),
                 cardDto.getName(),
                 cardDto.getGrade(),
                 cardDto.getDescription(),
@@ -58,6 +59,7 @@ public class CardService {
         checkCardName(cardDto.getName());
 
         Card artifactCard = Card.createArtifactCard(
+                cardDto.getLangCode(),
                 cardDto.getName(),
                 cardDto.getGrade(),
                 cardDto.getDescription(),
@@ -86,6 +88,7 @@ public class CardService {
         Character character = findCharacter.get();
 
         Card artifactCard = Card.createArtifactCard(
+                cardDto.getLangCode(),
                 cardDto.getName(),
                 cardDto.getGrade(),
                 cardDto.getDescription(),
@@ -113,7 +116,7 @@ public class CardService {
             checkCardName(updateParam.getName());
         }
 
-        updateCard(spellCard, updateParam); // 더티 체킹 업데이트
+        updateCardInfo(spellCard, updateParam); // 더티 체킹 업데이트
 
         // imagePath가 null이다 -> 변경하지 않는다
         if (imagePath != null) {
@@ -132,7 +135,7 @@ public class CardService {
             checkCardName(updateParam.getName());
         }
 
-        updateCard(artifactCard, updateParam);
+        updateCardInfo(artifactCard, updateParam);
 
         // imagePath가 null이다 -> 변경하지 않는다
         if (imagePath != null) {
@@ -168,7 +171,12 @@ public class CardService {
             checkCardName(updateParam.getName());
         }
 
-        updateCard(artifactCard, updateParam, updateCharacter, updateSkill); // character와 skill은 인자로 null이 전달되면 null로 세팅됨 (애착 사도 효과 제거)
+        updateCardInfo(artifactCard, updateParam); // character와 skill은 인자로 null이 전달되면 null로 세팅됨 (애착 사도 효과 제거)
+
+        // 추가적으로 애착 사도, 애착 아티팩트 스킬 업데이트
+        artifactCard.setCharacter(updateCharacter);
+
+        artifactCard.setAttachmentSkill(updateSkill);
 
         // imagePath가 null이다 -> 변경하지 않는다
         if (imagePath != null) {
@@ -226,7 +234,13 @@ public class CardService {
         return cardRepository.findAll(searchCond);
     }
 
-    private static void updateCard(Card card, CardDto updateParam) {
+    private static void updateCardInfo(Card card, CardDto updateParam) {
+
+        // 카드의 LangCode는 기본적으로 수정 불가하도록 설계
+        if (card.getLangCode() != updateParam.getLangCode()) {
+            throw new CardLangCodeMisMatchException("수정하려는 카드의 LangCode가 맞지 않습니다. cardId = " + card.getId() + ", updateParam langCode=" + updateParam.getLangCode());
+        }
+
         card.setName(updateParam.getName());
         card.setGrade(updateParam.getGrade());
         card.setDescription(updateParam.getDescription());
@@ -236,15 +250,6 @@ public class CardService {
         List<Attribute> attributes = card.getAttributes();
         attributes.clear();
         attributes.addAll(updateParam.getAttributes());
-    }
-
-    private static void updateCard(Card artifactCard, CardDto updateParam, Character updateCharacter, Skill updateSkill) {
-        // 카드 정보 업데이트
-        updateCard(artifactCard, updateParam);
-
-        artifactCard.setCharacter(updateCharacter);
-
-        artifactCard.setAttachmentSkill(updateSkill);
     }
 
     private void checkCardName(String cardName) {

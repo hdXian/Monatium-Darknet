@@ -1,6 +1,7 @@
 package hdxian.monatium_darknet.domain.card;
 
 import hdxian.monatium_darknet.domain.Attribute;
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.character.Character;
 import jakarta.persistence.*;
@@ -17,6 +18,9 @@ public class Card {
     @Id @GeneratedValue
     @Column(name = "card_id")
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    private LangCode langCode;
 
     @Enumerated(EnumType.STRING)
     private CardType type;
@@ -60,8 +64,9 @@ public class Card {
     }
 
     // 생성 메서드
-    public static Card createSpellCard(String name, CardGrade grade, String description, String story, Integer cost, List<Attribute> attributes) {
+    public static Card createSpellCard(LangCode langCode, String name, CardGrade grade, String description, String story, Integer cost, List<Attribute> attributes) {
         Card card = new Card();
+        card.setLangCode(langCode);
         card.setType(CardType.SPELL);
         card.setName(name);
         card.setGrade(grade);
@@ -76,8 +81,9 @@ public class Card {
         return card;
     }
 
-    public static Card createArtifactCard(String name, CardGrade grade, String description, String story, Integer cost, List<Attribute> attributes) {
+    public static Card createArtifactCard(LangCode langCode, String name, CardGrade grade, String description, String story, Integer cost, List<Attribute> attributes) {
         Card card = new Card();
+        card.setLangCode(langCode);
         card.setType(CardType.ARTIFACT);
         card.setName(name);
         card.setGrade(grade);
@@ -95,10 +101,11 @@ public class Card {
         return card;
     }
 
-    public static Card createArtifactCard(String name, CardGrade grade, String description, String story, Integer cost, List<Attribute> attributes,
+    public static Card createArtifactCard(LangCode langCode, String name, CardGrade grade, String description, String story, Integer cost, List<Attribute> attributes,
                                           Character character, Skill attachmentSkill) {
 
         Card card = new Card();
+        card.setLangCode(langCode);
         card.setType(CardType.ARTIFACT);
         card.setName(name);
         card.setGrade(grade);
