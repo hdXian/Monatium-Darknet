@@ -5,6 +5,7 @@ import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinCategoryMapping;
 import hdxian.monatium_darknet.domain.skin.SkinStatus;
+import hdxian.monatium_darknet.exception.IllegalLangCodeException;
 import hdxian.monatium_darknet.exception.skin.SkinCategoryNotFoundException;
 import hdxian.monatium_darknet.exception.skin.SkinNotFoundException;
 import hdxian.monatium_darknet.repository.SkinCategoryRepository;
@@ -12,6 +13,7 @@ import hdxian.monatium_darknet.repository.SkinRepository;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.dto.SkinDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +41,7 @@ public class SkinService {
         Character character = characterService.findOne(characterId);
 
         Skin skin = Skin.createSkin(
+                skinDto.getLangCode(),
                 skinDto.getName(),
                 skinDto.getDescription(),
                 character
@@ -61,16 +64,14 @@ public class SkinService {
         return savedId;
     }
 
-//    @Transactional
-//    public void updateImageUrl(Long skinId, String imageUrl) {
-//        Skin skin = findOneSkin(skinId);
-//        skin.setImageUrl(imageUrl);
-//    }
-
     // 스킨 업데이트
     @Transactional
     public Long updateSkin(Long skinId, SkinDto updateParam, Long characterId, String tempImagePath) {
         Skin skin = findOneSkin(skinId);
+
+        if (skin.getLangCode() != updateParam.getLangCode()) {
+            throw new IllegalLangCodeException("스킨의 언어 코드가 맞지 않습니다. skinId = " + skin.getId() + ", langCode = " + updateParam.getLangCode());
+        }
 
         skin.setName(updateParam.getName());
         skin.setDescription(updateParam.getDescription());

@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.web.controller.management.skin;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
@@ -34,9 +35,10 @@ import java.util.Optional;
 import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
 
 @Slf4j
-@RequiredArgsConstructor
 @Controller
 @RequestMapping("/management/skins")
+@SessionAttributes(CURRENT_LANG_CODE)
+@RequiredArgsConstructor
 public class SkinMgController {
 
     private final SkinService skinService;
@@ -48,11 +50,19 @@ public class SkinMgController {
 
     private final SkinFormValidator skinFormValidator;
 
+    @ModelAttribute(CURRENT_LANG_CODE)
+    public LangCode crntLangCode(HttpSession session) {
+        return Optional.ofNullable((LangCode)session.getAttribute(CURRENT_LANG_CODE)).orElse(LangCode.KO);
+    }
+
     // 스킨 목록
     @GetMapping
-    public String skinList(HttpSession session, Model model, @RequestParam(value = "category", required = false) Long categoryId) {
+    public String skinList(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
+                           @RequestParam(value = "category", required = false) Long categoryId,
+                           HttpSession session, Model model) {
         clearSessionAttributes(session);
         SkinSearchCond searchCond = new SkinSearchCond();
+        searchCond.setLangCode(langCode);
         if (categoryId != null) {
             searchCond.getCategoryIds().add(categoryId);
             SkinCategory category = skinService.findOneCategory(categoryId);
@@ -82,7 +92,8 @@ public class SkinMgController {
 
     // 스킨 추가 요청
     @PostMapping("/new")
-    public String addSkin(HttpSession session, @RequestParam("action") String action,
+    public String addSkin(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
+                          HttpSession session, @RequestParam("action") String action,
                           @Validated @ModelAttribute("skinForm") SkinForm skinForm, BindingResult bindingResult, Model model) {
 
         // 0. 취소 버튼을 누른 경우
@@ -110,7 +121,7 @@ public class SkinMgController {
                 return "management/skins/skinAddForm";
             }
 
-            SkinDto skinDto = generateSkinDto(skinForm);
+            SkinDto skinDto = generateSkinDto(langCode, skinForm);
             Long characterId = skinForm.getCharacterId();
 
             // 2-1. 이미지의 임시저장 경로를 생성 (세션에 이미지 url이 없으면 null 리턴), 없으면 디폴트 썸네일의 이미지 경로를 가져와서 지정
@@ -145,7 +156,8 @@ public class SkinMgController {
     }
 
     @PostMapping("/edit/{skinId}")
-    public String editSkin(HttpSession session, @RequestParam("action") String action,
+    public String editSkin(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
+                           HttpSession session, @RequestParam("action") String action,
                            @PathVariable("skinId") Long skinId,
                            @Validated@ModelAttribute("skinForm") SkinForm skinForm, BindingResult bindingResult, Model model) {
 
@@ -178,7 +190,8 @@ public class SkinMgController {
             // 2. 이미지의 임시 저장 경로를 추출 (세션에 이미지 url이 없으면 null 리턴됨), 없으면 그대로 null 넘겨서 이미지 변경 안되도록 할꺼임
             String imageTempPath = getSkinImageTempPath(session);
 
-            SkinDto updateParam = generateSkinDto(skinForm);
+            // updateParam에 langCode 넣어서 넘김. 서비스 계층에서 원래 스킨의 langCode와 맞지 않으면 예외 발생.
+            SkinDto updateParam = generateSkinDto(langCode, skinForm);
             Long characterId = skinForm.getCharacterId();
             Long updatedId = skinService.updateSkin(skinId, updateParam, characterId, imageTempPath);
 
@@ -405,8 +418,9 @@ public class SkinMgController {
 
     }
 
-    private SkinDto generateSkinDto(SkinForm skinForm) {
+    private SkinDto generateSkinDto(LangCode langCode, SkinForm skinForm) {
         SkinDto dto = new SkinDto();
+        dto.setLangCode(langCode);
         dto.setName(skinForm.getName());
         dto.setDescription(skinForm.getStory());
         ArrayList<Long> categoryIds = new ArrayList<>(new HashSet<>(skinForm.getCategoryIds())); // 중복되는 카테고리 값이 없도록 set으로 한번 필터링

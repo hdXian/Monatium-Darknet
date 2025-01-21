@@ -27,7 +27,6 @@ public class SkinCategory {
     // 연관관계 메서드
     // Skin의 addSkinCategory() 쪽에서도 이걸 호출해야 돼서 public으로 따로 열어놔야 함.
     public void addMapping(SkinCategoryMapping mapping) {
-//        System.out.println("category.addMapping = " + mapping);
         mappings.add(mapping);
     }
 
