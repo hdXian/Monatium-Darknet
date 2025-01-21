@@ -107,7 +107,7 @@ public class CardRepository {
                         inGradeList(gradeList),
                         equalsStatus(status)
                 )
-                .orderBy(card.grade.desc())
+                .orderBy(card.gradeOrder.asc())
                 .fetch();
     }
 

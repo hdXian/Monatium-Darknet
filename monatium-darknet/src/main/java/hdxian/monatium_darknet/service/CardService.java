@@ -243,6 +243,7 @@ public class CardService {
 
         card.setName(updateParam.getName());
         card.setGrade(updateParam.getGrade());
+        card.setGradeOrder(card.getGrade().getOrder());
         card.setDescription(updateParam.getDescription());
         card.setStory(updateParam.getStory());
         card.setCost(updateParam.getCost());

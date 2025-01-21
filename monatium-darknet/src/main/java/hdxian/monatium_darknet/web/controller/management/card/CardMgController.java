@@ -127,21 +127,6 @@ public class CardMgController {
                           @Validated @ModelAttribute("cardForm") CardForm cardForm, BindingResult bindingResult,
                           Model model) {
 
-        log.info("cardForm = {}", cardForm);
-
-        cardFormValidator.validate(cardForm, bindingResult); // 폼 검증 추가
-
-        if (bindingResult.hasErrors()) {
-            String tempImageUrl = getImageUrl(session, imageUrlService.getDefaultThumbnailUrl());
-            model.addAttribute(CARD_IMAGE_URL, tempImageUrl);
-
-            CharacterSearchCond chSearchCond = new CharacterSearchCond();
-            chSearchCond.setLangCode(langCode);
-            List<Character> characterList = characterService.findAll(chSearchCond);
-            model.addAttribute("characterList", characterList);
-            return "management/cards/cardAddForm";
-        }
-
         // 0. 취소 버튼 클릭 시 세션 데이터를 초기화하고 목록으로 리다이렉트
         if (action.equals("cancel")) {
             clearSessionAttributes(session);
@@ -160,7 +145,21 @@ public class CardMgController {
 
         // 4. 완료 버튼을 누른 경우 카드 정보를 저장하고 목록으로 리다이렉트
         if (action.equals("complete")) {
-            Long cardId = saveCard(session, cardForm);
+
+            // 완료 버튼을 누를 시에만 검증 수행
+            cardFormValidator.validate(cardForm, bindingResult);
+
+            if (bindingResult.hasErrors()) {
+                model.addAttribute(CARD_IMAGE_URL, tempImageUrl);
+
+                CharacterSearchCond chSearchCond = new CharacterSearchCond();
+                chSearchCond.setLangCode(langCode);
+                List<Character> characterList = characterService.findAll(chSearchCond);
+                model.addAttribute("characterList", characterList);
+                return "management/cards/cardAddForm";
+            }
+
+            Long cardId = saveCard(langCode, session, cardForm);
 
             clearSessionAttributes(session);
 
@@ -351,10 +350,11 @@ public class CardMgController {
 
     }
 
-    private Long saveCard(HttpSession session, CardForm cardForm) {
+    private Long saveCard(LangCode langCode, HttpSession session, CardForm cardForm) {
         // 1. 카드 데이터 저장
         // 2. 이미지를 임시 경로에서 정식 경로로 이동
         CardDto cardDto = cardForm.generateCardDto();
+        cardDto.setLangCode(langCode);
         String tempFilePath = getImagePath(session);
         Long cardId;
 

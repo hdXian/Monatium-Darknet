@@ -28,6 +28,10 @@ public class Card {
     @Enumerated(EnumType.STRING)
     private CardGrade grade; // ENUM [NORMAL, ADVANCED, RARE, LEGENDARY] 일반, 고급, 희귀, 전설
 
+    // 어플리케이션 코드 레벨에서 직접 수정하지 않는 필드. 반드시 JPA의 이벤트 리스너를 통해서만 업데이트.
+    @Column(name = "grade_order")
+    private Integer gradeOrder;
+
     private String name;
     private String description;
     private String story;
@@ -70,6 +74,7 @@ public class Card {
         card.setType(CardType.SPELL);
         card.setName(name);
         card.setGrade(grade);
+        card.setGradeOrder(grade.getOrder()); // gradeOrder는 외부에서 임의로 수정하지 못하게 해야함
         card.setDescription(description);
         card.setStory(story);
         card.setCost(cost);
@@ -87,6 +92,7 @@ public class Card {
         card.setType(CardType.ARTIFACT);
         card.setName(name);
         card.setGrade(grade);
+        card.setGradeOrder(grade.getOrder()); // gradeOrder는 외부에서 임의로 수정하지 못하게 해야함
         card.setDescription(description);
         card.setStory(story);
         card.setCost(cost);
@@ -109,6 +115,7 @@ public class Card {
         card.setType(CardType.ARTIFACT);
         card.setName(name);
         card.setGrade(grade);
+        card.setGradeOrder(grade.getOrder()); // gradeOrder는 외부에서 임의로 수정하지 못하게 해야함
         card.setDescription(description);
         card.setStory(story);
         card.setCost(cost);
