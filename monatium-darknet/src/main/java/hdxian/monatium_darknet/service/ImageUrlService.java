@@ -75,13 +75,6 @@ public class ImageUrlService {
     public String getCardBaseUrl() {
         return api_baseUrl + "images/" + "card/";
     }
-    public String getSpellCardBaseUrl() {
-        return api_baseUrl + "images/" + "card/" + "spell/";
-    }
-
-    public String getArtifactCardBaseUrl() {
-        return api_baseUrl + "images/" + "card/" + "artifact/";
-    }
 
     public String getSkinBaseUrl() {
         return api_baseUrl + "images/" + "skin/";

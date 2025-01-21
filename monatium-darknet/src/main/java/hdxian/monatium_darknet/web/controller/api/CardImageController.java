@@ -35,28 +35,4 @@ public class CardImageController {
                 .body(resource);
     }
 
-    @GetMapping("/spell/{cardId}")
-    public ResponseEntity<Resource> getSpellCardImage(@PathVariable("cardId")Long cardId) throws IOException {
-        String fullPath = fileStorageService.getFullPath(imagePathService.getSpellCardFileName(cardId));
-
-        UrlResource resource = new UrlResource("file:" + fullPath);
-        String contentType = fileStorageService.getContentType(fullPath);
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .body(resource);
-    }
-
-    @GetMapping("/artifact/{cardId}")
-    public ResponseEntity<Resource> getArtifactCardImage(@PathVariable("cardId")Long cardId) throws IOException {
-        String fullPath = fileStorageService.getFullPath(imagePathService.getArtifactCardFileName(cardId));
-
-        UrlResource resource = new UrlResource("file:" + fullPath);
-        String contentType = fileStorageService.getContentType(fullPath);
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .body(resource);
-    }
-
 }

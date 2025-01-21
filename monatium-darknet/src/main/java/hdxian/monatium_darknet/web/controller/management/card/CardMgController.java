@@ -75,7 +75,6 @@ public class CardMgController {
         searchCond.setCardType(CardType.SPELL);
         List<Card> cardList = cardService.findAll(searchCond);
 
-//        String baseUrl = imageUrlService.getSpellCardBaseUrl();
         String baseUrl = imageUrlService.getCardBaseUrl();
 
         model.addAttribute("cardList", cardList);
@@ -92,7 +91,6 @@ public class CardMgController {
         searchCond.setCardType(CardType.ARTIFACT);
         List<Card> cardList = cardService.findAll(searchCond);
 
-//        String baseUrl = imageUrlService.getArtifactCardBaseUrl();
         String baseUrl = imageUrlService.getCardBaseUrl();
 
         model.addAttribute("cardList", cardList);
@@ -189,14 +187,8 @@ public class CardMgController {
         chSearchCond.setLangCode(langCode);
         List<Character> characterList = characterService.findAll(chSearchCond);
 
-        if (cardForm.getCardType() == CardType.SPELL) {
-            String imageUrl = getImageUrl(session, imageUrlService.getSpellCardBaseUrl() + cardId);
-            model.addAttribute(CARD_IMAGE_URL, imageUrl);
-        }
-        else {
-            String imageUrl = getImageUrl(session, imageUrlService.getArtifactCardBaseUrl() + cardId);
-            model.addAttribute(CARD_IMAGE_URL, imageUrl);
-        }
+        String imageUrl = getImageUrl(session, imageUrlService.getCardBaseUrl() + cardId);
+        model.addAttribute(CARD_IMAGE_URL, imageUrl);
 
         model.addAttribute("cardId", cardId);
         model.addAttribute(CARD_FORM, cardForm);
@@ -217,13 +209,7 @@ public class CardMgController {
         cardFormValidator.validate(cardForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            String imageUrl;
-            if (cardForm.getCardType() == CardType.SPELL) {
-                imageUrl = getImageUrl(session, imageUrlService.getSpellCardBaseUrl() + cardId);
-            }
-            else {
-                imageUrl = getImageUrl(session, imageUrlService.getArtifactCardBaseUrl() + cardId);
-            }
+            String imageUrl = getImageUrl(session, imageUrlService.getCardBaseUrl() + cardId);
             model.addAttribute(CARD_IMAGE_URL, imageUrl);
 
             CharacterSearchCond chSearchCond = new CharacterSearchCond();
@@ -247,13 +233,7 @@ public class CardMgController {
         saveCardImageToTemp(session, cardForm.getImage());
 
         // 2. 임시경로 이미지에 대한 url을 생성하고 모델에 추가한다.
-        String imageUrl;
-        if (cardForm.getCardType() == CardType.SPELL) {
-            imageUrl = getImageUrl(session, imageUrlService.getSpellCardBaseUrl() + cardId);
-        }
-        else {
-            imageUrl = getImageUrl(session, imageUrlService.getArtifactCardBaseUrl() + cardId);
-        }
+        String imageUrl = imageUrlService.getCardBaseUrl() + cardId;
         model.addAttribute(CARD_IMAGE_URL, imageUrl);
 
         // 3. 세션의 폼 데이터를 업데이트한다.

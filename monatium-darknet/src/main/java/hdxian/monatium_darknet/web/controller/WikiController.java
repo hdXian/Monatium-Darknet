@@ -78,7 +78,6 @@ public class WikiController {
         searchCond.setStatus(CardStatus.ACTIVE);
         List<Card> cardList = cardService.findAll(searchCond);
 
-//        String cardBaseUrl = imageUrlService.getArtifactCardBaseUrl();
         String cardBaseUrl = imageUrlService.getCardBaseUrl();
         String portraitBaseUrl = imageUrlService.getChBaseUrl() + "portrait/";
 
@@ -98,7 +97,6 @@ public class WikiController {
         List<Card> cardList = cardService.findAll(searchCond);
 
         String cardBaseUrl = imageUrlService.getCardBaseUrl();
-//        String cardBaseUrl = imageUrlService.getSpellCardBaseUrl();
 
         model.addAttribute("cardList", cardList);
         model.addAttribute("cardBaseUrl", cardBaseUrl);

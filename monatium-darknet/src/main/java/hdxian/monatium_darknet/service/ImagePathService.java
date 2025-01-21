@@ -78,27 +78,6 @@ public class ImagePathService {
         return new CharacterImageDto(profilePath, portraitPath, bodyPath, lowSkillPath);
     }
 
-    public CharacterImageDto generateChImagePaths(LangCode langCode, Long characterId) {
-        String basePath;
-        if (langCode == LangCode.KO) {
-            basePath = chKoDir + (characterId + "/");
-        }
-        else if (langCode == LangCode.EN) {
-            basePath = chEnDir + (characterId + "/");
-        }
-        else {
-            throw new CharacterImageProcessException("저장할 캐릭터의 langCode가 유효하지 않습니다. langCode = " + langCode);
-        }
-
-        String portraitPath = basePath + ("portrait" + ext_webp); // {characterId}/portrait{.ext}
-        String profilePath = basePath+ ("profile" + ext_webp);
-        String bodyPath = basePath + ("bodyShot" + ext_webp);
-
-        String lowSkillPath = basePath + ("lowSkill" + ext_webp);
-
-        return new CharacterImageDto(profilePath, portraitPath, bodyPath, lowSkillPath);
-    }
-
     public AsideImageDto generateAsideImagePaths(Long characterId) {
         String basePath = chDir + (characterId + "/");
 
@@ -110,28 +89,7 @@ public class ImagePathService {
         return new AsideImageDto(asidePath, lv1Path, lv2Path, lv3Path);
     }
 
-    public AsideImageDto generateAsideImagePaths(LangCode langCode, Long characterId) {
-        String basePath;
-        if (langCode == LangCode.KO) {
-            basePath = chKoDir + (characterId + "/");
-        }
-        else if (langCode == LangCode.EN) {
-            basePath = chEnDir + (characterId + "/");
-        }
-        else {
-            throw new CharacterImageProcessException("저장할 캐릭터의 langCode가 유효하지 않습니다. langCode = " + langCode);
-        }
-
-        String asidePath = basePath + "aside" + ext_webp;
-        String lv1Path = basePath + "asideLv1" + ext_webp;
-        String lv2Path = basePath + "asideLv2" + ext_webp;
-        String lv3Path = basePath + "asideLv3" + ext_webp;
-
-        return new AsideImageDto(asidePath, lv1Path, lv2Path, lv3Path);
-    }
-
     // === 카드 관련 이미지 ===
-    // TODO - 카드 이미지 통합할 것
     public String getCardFileName(Long cardId) {
         // imgs/wiki/cards/{cardId}.webp
         return imgDir + wikiDir + cardDir + cardId + ext_webp;
@@ -171,28 +129,12 @@ public class ImagePathService {
     }
 
     @Transactional
-    public void saveSpellCardImage(Long cardId, String src) {
+    public void saveCardImage(Long cardId, String src) {
         if (cardId == null || src == null) {
             throw new CardImageProcessException("cardId 또는 src가 null입니다.");
         }
 
-        String dst = getSpellCardFileName(cardId);
-
-        try {
-            fileStorageService.copyFile(new FileDto(src), new FileDto(dst));
-        } catch (IOException e) {
-            throw new CardImageProcessException(e);
-        }
-
-    }
-
-    @Transactional
-    public void saveArtifactCardImage(Long cardId, String src) {
-        if (cardId == null || src == null) {
-            throw new CardImageProcessException("cardId 또는 src가 null입니다.");
-        }
-
-        String dst = getArtifactCardFileName(cardId);
+        String dst = getCardFileName(cardId);
 
         try {
             fileStorageService.copyFile(new FileDto(src), new FileDto(dst));

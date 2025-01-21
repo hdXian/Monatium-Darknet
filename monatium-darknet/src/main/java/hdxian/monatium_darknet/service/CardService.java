@@ -48,7 +48,8 @@ public class CardService {
         Long savedId = cardRepository.save(spellCard);
         // TODO - 테스트 데이터 정리 후 null 검증 제거 필요
         if (tempImagePath != null) {
-            imagePathService.saveSpellCardImage(savedId, tempImagePath);
+//            imagePathService.saveSpellCardImage(savedId, tempImagePath);
+            imagePathService.saveCardImage(savedId, tempImagePath);
         }
 
         return savedId;
@@ -70,7 +71,8 @@ public class CardService {
 
         Long savedId = cardRepository.save(artifactCard);
         if (tempImagePath != null) {
-            imagePathService.saveArtifactCardImage(savedId, tempImagePath);
+//            imagePathService.saveArtifactCardImage(savedId, tempImagePath);
+            imagePathService.saveCardImage(savedId, tempImagePath);
         }
 
         return savedId;
@@ -101,7 +103,8 @@ public class CardService {
 
         Long savedId = cardRepository.save(artifactCard);
         if (tempImagePath != null) {
-            imagePathService.saveArtifactCardImage(savedId, tempImagePath);
+//            imagePathService.saveArtifactCardImage(savedId, tempImagePath);
+            imagePathService.saveCardImage(savedId, tempImagePath);
         }
 
         return savedId;
@@ -120,7 +123,8 @@ public class CardService {
 
         // imagePath가 null이다 -> 변경하지 않는다
         if (imagePath != null) {
-            imagePathService.saveSpellCardImage(cardId, imagePath); // 카드 이미지 업데이트
+//            imagePathService.saveSpellCardImage(cardId, imagePath); // 카드 이미지 업데이트
+            imagePathService.saveCardImage(cardId, imagePath);
         }
 
         return spellCard.getId();
@@ -139,7 +143,8 @@ public class CardService {
 
         // imagePath가 null이다 -> 변경하지 않는다
         if (imagePath != null) {
-            imagePathService.saveArtifactCardImage(cardId, imagePath);
+//            imagePathService.saveArtifactCardImage(cardId, imagePath);
+            imagePathService.saveCardImage(cardId, imagePath);
         }
 
         return artifactCard.getId();
@@ -180,7 +185,8 @@ public class CardService {
 
         // imagePath가 null이다 -> 변경하지 않는다
         if (imagePath != null) {
-            imagePathService.saveArtifactCardImage(cardId, imagePath);
+//            imagePathService.saveArtifactCardImage(cardId, imagePath);
+            imagePathService.saveCardImage(cardId, imagePath);
         }
 
         return artifactCard.getId();
