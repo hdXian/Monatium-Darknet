@@ -60,7 +60,7 @@ public class NoticeController {
 
     @GetMapping("/{noticeId}/images/{imageName}")
     public ResponseEntity<UrlResource> getNoticeImage(@PathVariable("noticeId") Long noticeId, @PathVariable("imageName") String imageName) throws MalformedURLException {
-        String url = noticeService.getNoticeImageUrl(noticeId, imageName);
+        String url = noticeService.getNoticeImageFilePath(noticeId, imageName);
         UrlResource resource = new UrlResource("file:" + url);
         return ResponseEntity.ok(resource);
     }

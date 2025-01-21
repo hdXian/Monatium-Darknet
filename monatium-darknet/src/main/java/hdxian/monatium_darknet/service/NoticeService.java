@@ -179,7 +179,7 @@ public class NoticeService {
         return noticeRepository.findAll(searchCond, request);
     }
 
-    public String getNoticeImageUrl(Long noticeId, String imageName) {
+    public String getNoticeImageFilePath(Long noticeId, String imageName) {
         String noticeDir = getNoticeDir(noticeId);
         return fileStorageService.getFileFullPath(new FileDto(noticeDir, imageName));
     }

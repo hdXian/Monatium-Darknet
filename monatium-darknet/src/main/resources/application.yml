@@ -42,18 +42,12 @@ logging.level:
 # file path (local, for test)
 file:
   dir: D:/Dev/trickcal_unofficial/files/
-  imgDir: imgs/
   tempDir: temp/
-  wikiDir: wiki/
+  imgDir: imgs/
   noticeDir: imgs/notices/
-  iconDir: imgs/wiki/icons/
+  wikiDir: imgs/wiki/
   chDir: imgs/wiki/characters/
-  chKoDir: imgs/ko/wiki/characters/
-  chEnDir: imgs/en/wiki/characters/
-  asideDir: imgs/wiki/asides/
-  cardDir: cards/
-  spellCardDir: imgs/wiki/cards/spell/
-  artifactCardDir: imgs/wiki/cards/artifact/
+  cardDir: imgs/wiki/cards/
   skinDir: imgs/wiki/skins/
   thumbnailDir: imgs/thumbnail/
 

@@ -30,23 +30,8 @@ public class ImagePathService {
     @Value("${file.chDir}")
     private String chDir;
 
-    @Value("${file.chKoDir}")
-    private String chKoDir;
-
-    @Value("${file.chEnDir}")
-    private String chEnDir;
-
-    @Value("${file.asideDir}")
-    private String asideDir;
-
     @Value("${file.cardDir}")
     private String cardDir;
-
-    @Value("${file.spellCardDir}")
-    private String spellCardDir;
-
-    @Value("${file.artifactCardDir}")
-    private String artifactCardDir;
 
     @Value("${file.skinDir}")
     private String skinDir;
@@ -92,15 +77,7 @@ public class ImagePathService {
     // === 카드 관련 이미지 ===
     public String getCardFileName(Long cardId) {
         // imgs/wiki/cards/{cardId}.webp
-        return imgDir + wikiDir + cardDir + cardId + ext_webp;
-    }
-
-    public String getSpellCardFileName(Long cardId) {
-        return spellCardDir + cardId + ext_webp;
-    }
-
-    public String getArtifactCardFileName(Long cardId) {
-        return artifactCardDir + cardId + ext_webp;
+        return cardDir + cardId + ext_webp;
     }
 
     // === 스킨 관련 이미지 ===
