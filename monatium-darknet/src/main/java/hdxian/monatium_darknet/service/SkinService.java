@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.service;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
@@ -10,6 +11,7 @@ import hdxian.monatium_darknet.exception.skin.SkinCategoryNotFoundException;
 import hdxian.monatium_darknet.exception.skin.SkinNotFoundException;
 import hdxian.monatium_darknet.repository.SkinCategoryRepository;
 import hdxian.monatium_darknet.repository.SkinRepository;
+import hdxian.monatium_darknet.repository.dto.SkinCategorySearchCond;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.dto.SkinDto;
 import lombok.RequiredArgsConstructor;
@@ -109,14 +111,14 @@ public class SkinService {
 
     // 카테고리 추가
     @Transactional
-    public Long createNewSkinCategory(String name) {
-        SkinCategory skinCategory = SkinCategory.createSkinCategory(name);
+    public Long createNewSkinCategory(LangCode langCode, String name) {
+        SkinCategory skinCategory = SkinCategory.createSkinCategory(name, langCode);
         return categoryRepository.save(skinCategory);
     }
 
     @Transactional
-    public Long createNewSkinCategory(String name, List<Long> skinIds) {
-        SkinCategory skinCategory = SkinCategory.createSkinCategory(name);
+    public Long createNewSkinCategory(LangCode langCode, String name, List<Long> skinIds) {
+        SkinCategory skinCategory = SkinCategory.createSkinCategory(name, langCode);
 
         Long savedCategoryId = categoryRepository.save(skinCategory);
 
@@ -132,6 +134,8 @@ public class SkinService {
     // 카테고리 변경 (이름밖에 없긴함)
     @Transactional
     public Long updateSkinCategory(Long categoryId, String updateName, List<Long> skinIds) {
+        // langCode 변경 못하게 아예 인자로도 받지 않음
+
         SkinCategory category = findOneCategory(categoryId);
 
         category.setName(updateName);
@@ -203,14 +207,19 @@ public class SkinService {
 
         // 카테고리와의 연관고리도 끊는다.
         // 모든 mapping들을 고아 객체로 만들어 JPA가 자동으로 삭제하도록 함. (skin의 mappings의 orphanRemoval = true)
-        List<SkinCategory> categories = findCategoriesBySkin(skinId);
+        SkinCategorySearchCond categorySc = new SkinCategorySearchCond();
+        categorySc.setSkinId(skinId);
+//        List<SkinCategory> categories = findCategoriesBySkin(skinId);
+        List<SkinCategory> categories = findAllCategories(categorySc);
         for (SkinCategory category : categories) {
             skin.removeCategory(category);
         }
 
-        // character와의 연관관계도 제거해야 함
+        // character와의 연관관계도 제거해야 함 -> 이거 하면 cascade ALL 때문에 스킨이 실제로 삭제됨.
 //        Character skinCharacter = skin.getCharacter();
 //        skinCharacter.removeSkin(skin);
+
+        skin.setCharacter(null); // 연관관계만 제거 (skin의 characterId 필드만 null로 업데이트)
 
 //        skinRepository.delete(skin);
     }
@@ -223,7 +232,6 @@ public class SkinService {
         searchCond.getCategoryIds().add(categoryId);
         // 모든 스킨과의 연관관계를 제거 (연관관계, mapping 추가를 skin에서만 하기 때문)
         List<Skin> skins = findAllSkin(searchCond);
-//        List<Skin> skins = findSkinsByCategory(categoryId);
         for (Skin skin : skins) {
             skin.removeCategory(categoryToRemove);
         }
@@ -261,16 +269,17 @@ public class SkinService {
     }
 
     // 카테고리 리스트
-    public List<SkinCategory> findCategoriesBySkin(Long skinId) {
-        return categoryRepository.findBySkinId(skinId);
-    }
-
-    public List<SkinCategory> findCategoriesByName(String name) {
-        return categoryRepository.findByName(name);
-    }
+//    private List<SkinCategory> findCategoriesBySkin(Long skinId) {
+//        return categoryRepository.findBySkinId(skinId);
+//    }
 
     public List<SkinCategory> findAllCategories() {
-        return categoryRepository.findAll();
+        SkinCategorySearchCond searchCond = new SkinCategorySearchCond();
+        return categoryRepository.findAll(searchCond);
+    }
+
+    public List<SkinCategory> findAllCategories(SkinCategorySearchCond searchCond) {
+        return categoryRepository.findAll(searchCond);
     }
 
 }

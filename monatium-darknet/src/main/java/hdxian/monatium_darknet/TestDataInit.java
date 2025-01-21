@@ -127,50 +127,81 @@ public class TestDataInit {
         SkinDto skinDto14 = generateSkinDtoEn("Party Night Monatium");
         SkinDto skinDto15 = generateSkinDtoJp("パーティーナイトモラトリアム");
 
+        // 에르핀
         Long skinId1 = skinService.createNewSkin(1L, skinDto1, null);
         Long skinId2 = skinService.createNewSkin(2L, skinDto2, null);
         Long skinId3 = skinService.createNewSkin(3L, skinDto3, null);
-        Long skinId4 = skinService.createNewSkin(4L, skinDto4, null);
-        Long skinId5 = skinService.createNewSkin(5L, skinDto5, null);
-        Long skinId6 = skinService.createNewSkin(6L, skinDto6, null);
-        Long skinId7 = skinService.createNewSkin(7L, skinDto7, null);
-        Long skinId8 = skinService.createNewSkin(8L, skinDto8, null);
-        Long skinId9 = skinService.createNewSkin(9L, skinDto9, null);
-        Long skinId10 = skinService.createNewSkin(10L, skinDto10, null);
-        Long skinId11 = skinService.createNewSkin(11L, skinDto11, null);
-        Long skinId12 = skinService.createNewSkin(12L, skinDto12, null);
-        Long skinId13 = skinService.createNewSkin(13L, skinDto13, null);
-        Long skinId14 = skinService.createNewSkin(14L, skinDto14, null);
-        Long skinId15 = skinService.createNewSkin(15L, skinDto15, null);
 
-        Long skinCategoryId1 = skinService.createNewSkinCategory("상시 판매");
-        Long skinCategoryId2 = skinService.createNewSkinCategory("할인 중");
-        Long skinCategoryId3 = skinService.createNewSkinCategory("할로윈 이벤트"); // 해당하는 스킨이 없는 카테고리
+        // 버터
+        Long skinId4 = skinService.createNewSkin(7L, skinDto4, null);
+        Long skinId5 = skinService.createNewSkin(8L, skinDto5, null);
+        Long skinId6 = skinService.createNewSkin(9L, skinDto6, null);
+
+        // 다야
+        Long skinId7 = skinService.createNewSkin(10L, skinDto7, null);
+        Long skinId8 = skinService.createNewSkin(11L, skinDto8, null);
+        Long skinId9 = skinService.createNewSkin(12L, skinDto9, null);
+
+        // 셀리네
+        Long skinId10 = skinService.createNewSkin(16L, skinDto10, null);
+        Long skinId11 = skinService.createNewSkin(17L, skinDto11, null);
+        Long skinId12 = skinService.createNewSkin(18L, skinDto12, null);
+
+        // 엘레나
+        Long skinId13 = skinService.createNewSkin(19L, skinDto13, null);
+        Long skinId14 = skinService.createNewSkin(20L, skinDto14, null);
+        Long skinId15 = skinService.createNewSkin(21L, skinDto15, null);
+
+        Long skinCategoryId1 = skinService.createNewSkinCategory(LangCode.KO, "상시 판매");
+        Long skinCategoryId2 = skinService.createNewSkinCategory(LangCode.EN, "Always On Sale");
+        Long skinCategoryId3 = skinService.createNewSkinCategory(LangCode.JP, "常時販売");
+
+        Long skinCategoryId4 = skinService.createNewSkinCategory(LangCode.KO, "할인 중");
+        Long skinCategoryId5 = skinService.createNewSkinCategory(LangCode.EN, "On Discount");
+        Long skinCategoryId6 = skinService.createNewSkinCategory(LangCode.JP, "割引中");
+
+        // 해당하는 스킨이 없는 카테고리
+        Long skinCategoryId7 = skinService.createNewSkinCategory(LangCode.KO, "할로윈 이벤트");
+        Long skinCategoryId8 = skinService.createNewSkinCategory(LangCode.EN, "Halloween Event");
+        Long skinCategoryId9 = skinService.createNewSkinCategory(LangCode.JP, "ハロウィンイベント");
+
+        // 상시 판매
+        // KO
         skinService.linkSkinAndCategory(skinId1, skinCategoryId1);
-        skinService.linkSkinAndCategory(skinId2, skinCategoryId1);
-        skinService.linkSkinAndCategory(skinId3, skinCategoryId1);
         skinService.linkSkinAndCategory(skinId4, skinCategoryId1);
-        skinService.linkSkinAndCategory(skinId5, skinCategoryId1);
-        skinService.linkSkinAndCategory(skinId6, skinCategoryId1);
         skinService.linkSkinAndCategory(skinId7, skinCategoryId1);
-        skinService.linkSkinAndCategory(skinId8, skinCategoryId1);
-        skinService.linkSkinAndCategory(skinId9, skinCategoryId1);
         skinService.linkSkinAndCategory(skinId10, skinCategoryId1);
-        skinService.linkSkinAndCategory(skinId11, skinCategoryId1);
-        skinService.linkSkinAndCategory(skinId12, skinCategoryId1);
         skinService.linkSkinAndCategory(skinId13, skinCategoryId1);
-        skinService.linkSkinAndCategory(skinId14, skinCategoryId1);
-        skinService.linkSkinAndCategory(skinId15, skinCategoryId1);
 
-        skinService.linkSkinAndCategory(skinId1, skinCategoryId2);
+        // EN
         skinService.linkSkinAndCategory(skinId2, skinCategoryId2);
-        skinService.linkSkinAndCategory(skinId3, skinCategoryId2);
-        skinService.linkSkinAndCategory(skinId4, skinCategoryId2);
         skinService.linkSkinAndCategory(skinId5, skinCategoryId2);
-        skinService.linkSkinAndCategory(skinId6, skinCategoryId2);
-        skinService.linkSkinAndCategory(skinId7, skinCategoryId2);
         skinService.linkSkinAndCategory(skinId8, skinCategoryId2);
-        skinService.linkSkinAndCategory(skinId9, skinCategoryId2);
+        skinService.linkSkinAndCategory(skinId11, skinCategoryId2);
+        skinService.linkSkinAndCategory(skinId14, skinCategoryId2);
+
+        // JP
+        skinService.linkSkinAndCategory(skinId3, skinCategoryId3);
+        skinService.linkSkinAndCategory(skinId6, skinCategoryId3);
+        skinService.linkSkinAndCategory(skinId9, skinCategoryId3);
+        skinService.linkSkinAndCategory(skinId12, skinCategoryId3);
+        skinService.linkSkinAndCategory(skinId15, skinCategoryId3);
+
+        // 할인 중
+        // KO
+        skinService.linkSkinAndCategory(skinId1, skinCategoryId4);
+        skinService.linkSkinAndCategory(skinId4, skinCategoryId4);
+        skinService.linkSkinAndCategory(skinId7, skinCategoryId4);
+
+        // EN
+        skinService.linkSkinAndCategory(skinId2, skinCategoryId5);
+        skinService.linkSkinAndCategory(skinId5, skinCategoryId5);
+        skinService.linkSkinAndCategory(skinId8, skinCategoryId5);
+
+        // JP
+        skinService.linkSkinAndCategory(skinId1, skinCategoryId6);
+        skinService.linkSkinAndCategory(skinId2, skinCategoryId6);
+        skinService.linkSkinAndCategory(skinId3, skinCategoryId6);
 
 
         // 아티팩트 카드 테스트 데이터 추가

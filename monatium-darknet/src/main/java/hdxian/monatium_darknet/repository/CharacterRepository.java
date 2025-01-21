@@ -58,11 +58,13 @@ public class CharacterRepository {
         return Optional.ofNullable(find);
     }
 
+    // wiki에서 사용하는 메서드
     public Optional<Character> findByLangCodeAndIndex(LangCode langCode, int index) {
         return Optional.ofNullable(
                 queryFactory.selectFrom(character)
                         .where(
-                                equalsLangCode(langCode)
+                                equalsLangCode(langCode),
+                                equalsStatus(CharacterStatus.ACTIVE)
                         )
                         .orderBy(character.id.asc())
                         .offset(index)
