@@ -106,18 +106,42 @@ public class TestDataInit {
             Long chId = characterService.createNewCharacter(dto, new CharacterImageDto(null, null, null, null), null);
         }
 
-        // 스킨 테스트 데이터 추가 (하드코딩, 1개 넣었음)
-        SkinDto skinDto1 = generateSkinDto("하드워킹 홀리데이");
-        SkinDto skinDto2 = generateSkinDto("세이프티 가드");
-        SkinDto skinDto3 = generateSkinDto("학생회장의 품격");
-        SkinDto skinDto4 = generateSkinDto("무미호의 전설");
-        SkinDto skinDto5 = generateSkinDto("파티 나잇 모나티엄");
+        // 스킨 테스트 데이터 추가
+        SkinDto skinDto1 = generateSkinDtoKo("하드워킹 홀리데이");
+        SkinDto skinDto2 = generateSkinDtoEn("Hardworking Holiday");
+        SkinDto skinDto3 = generateSkinDtoJp("ハードワーキングホリデー");
+
+        SkinDto skinDto4 = generateSkinDtoKo("세이프티 가드");
+        SkinDto skinDto5 = generateSkinDtoEn("Safety Guard");
+        SkinDto skinDto6 = generateSkinDtoJp("セーフティガード");
+
+        SkinDto skinDto7 = generateSkinDtoKo("학생회장의 품격");
+        SkinDto skinDto8 = generateSkinDtoEn("Dignity of the Student Council President");
+        SkinDto skinDto9 = generateSkinDtoJp("生徒会長の品格");
+
+        SkinDto skinDto10 = generateSkinDtoKo("무미호의 전설");
+        SkinDto skinDto11 = generateSkinDtoEn("Legend of none-tail fox");
+        SkinDto skinDto12 = generateSkinDtoJp("無尾狐の伝説");
+
+        SkinDto skinDto13 = generateSkinDtoKo("파티 나잇 모나티엄");
+        SkinDto skinDto14 = generateSkinDtoEn("Party Night Monatium");
+        SkinDto skinDto15 = generateSkinDtoJp("パーティーナイトモラトリアム");
 
         Long skinId1 = skinService.createNewSkin(1L, skinDto1, null);
-        Long skinId2 = skinService.createNewSkin(3L, skinDto2, null);
-        Long skinId3 = skinService.createNewSkin(4L, skinDto3, null);
-        Long skinId4 = skinService.createNewSkin(6L, skinDto4, null);
-        Long skinId5 = skinService.createNewSkin(7L, skinDto5, null);
+        Long skinId2 = skinService.createNewSkin(2L, skinDto2, null);
+        Long skinId3 = skinService.createNewSkin(3L, skinDto3, null);
+        Long skinId4 = skinService.createNewSkin(4L, skinDto4, null);
+        Long skinId5 = skinService.createNewSkin(5L, skinDto5, null);
+        Long skinId6 = skinService.createNewSkin(6L, skinDto6, null);
+        Long skinId7 = skinService.createNewSkin(7L, skinDto7, null);
+        Long skinId8 = skinService.createNewSkin(8L, skinDto8, null);
+        Long skinId9 = skinService.createNewSkin(9L, skinDto9, null);
+        Long skinId10 = skinService.createNewSkin(10L, skinDto10, null);
+        Long skinId11 = skinService.createNewSkin(11L, skinDto11, null);
+        Long skinId12 = skinService.createNewSkin(12L, skinDto12, null);
+        Long skinId13 = skinService.createNewSkin(13L, skinDto13, null);
+        Long skinId14 = skinService.createNewSkin(14L, skinDto14, null);
+        Long skinId15 = skinService.createNewSkin(15L, skinDto15, null);
 
         Long skinCategoryId1 = skinService.createNewSkinCategory("상시 판매");
         Long skinCategoryId2 = skinService.createNewSkinCategory("할인 중");
@@ -127,10 +151,27 @@ public class TestDataInit {
         skinService.linkSkinAndCategory(skinId3, skinCategoryId1);
         skinService.linkSkinAndCategory(skinId4, skinCategoryId1);
         skinService.linkSkinAndCategory(skinId5, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId6, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId7, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId8, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId9, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId10, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId11, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId12, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId13, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId14, skinCategoryId1);
+        skinService.linkSkinAndCategory(skinId15, skinCategoryId1);
 
         skinService.linkSkinAndCategory(skinId1, skinCategoryId2);
         skinService.linkSkinAndCategory(skinId2, skinCategoryId2);
         skinService.linkSkinAndCategory(skinId3, skinCategoryId2);
+        skinService.linkSkinAndCategory(skinId4, skinCategoryId2);
+        skinService.linkSkinAndCategory(skinId5, skinCategoryId2);
+        skinService.linkSkinAndCategory(skinId6, skinCategoryId2);
+        skinService.linkSkinAndCategory(skinId7, skinCategoryId2);
+        skinService.linkSkinAndCategory(skinId8, skinCategoryId2);
+        skinService.linkSkinAndCategory(skinId9, skinCategoryId2);
+
 
         // 아티팩트 카드 테스트 데이터 추가
         // KO
@@ -366,11 +407,29 @@ public class TestDataInit {
     }
 
     // skinDto
-    private static SkinDto generateSkinDto(String name) {
+    private static SkinDto generateSkinDtoKo(String name) {
         SkinDto dto = new SkinDto();
+        dto.setLangCode(LangCode.KO);
         dto.setName(name);
-//        dto.setGrade(grade);
         dto.setDescription(name + " 스킨 설명");
+
+        return dto;
+    }
+
+    private static SkinDto generateSkinDtoEn(String name) {
+        SkinDto dto = new SkinDto();
+        dto.setLangCode(LangCode.EN);
+        dto.setName(name);
+        dto.setDescription(name + " skin description");
+
+        return dto;
+    }
+
+    private static SkinDto generateSkinDtoJp(String name) {
+        SkinDto dto = new SkinDto();
+        dto.setLangCode(LangCode.JP);
+        dto.setName(name);
+        dto.setDescription(name + " スキンの説明");
 
         return dto;
     }

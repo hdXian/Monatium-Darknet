@@ -22,6 +22,7 @@ public class Skin {
     @Enumerated(EnumType.STRING)
     private SkinStatus status;
 
+    @Enumerated(EnumType.STRING)
     private LangCode langCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -54,6 +55,7 @@ public class Skin {
     // === 생성 메서드 ===
     public static Skin createSkin(LangCode langCode, String name, String description, Character character) {
         Skin skin = new Skin();
+        skin.setLangCode(langCode);
         skin.setName(name);
         skin.setDescription(description);
         skin.setStatus(SkinStatus.DISABLE);
