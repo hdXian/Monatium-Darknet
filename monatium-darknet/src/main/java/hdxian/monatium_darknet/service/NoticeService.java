@@ -2,6 +2,8 @@ package hdxian.monatium_darknet.service;
 
 import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.notice.*;
+import hdxian.monatium_darknet.exception.IllegalLangCodeException;
+import hdxian.monatium_darknet.exception.notice.NoticeCategoryNotFoundException;
 import hdxian.monatium_darknet.exception.notice.NoticeImageProcessException;
 import hdxian.monatium_darknet.exception.notice.NoticeNotFoundException;
 import hdxian.monatium_darknet.file.FileDto;
@@ -49,12 +51,12 @@ public class NoticeService {
         Long categoryId = noticeDto.getCategoryId();
         Optional<NoticeCategory> findCategory = noticeCategoryRepository.findOne(categoryId);
         if (findCategory.isEmpty()) {
-            throw new RuntimeException("해당 공지사항 카테고리가 없습니다.");
+            throw new NoticeCategoryNotFoundException("해당 공지사항 카테고리가 없습니다.");
         }
 
         NoticeCategory category = findCategory.get();
         if (langCode != category.getLangCode()) {
-            throw new RuntimeException("공지사항 카테고리의 언어 코드가 맞지 않습니다. Category LangCode = " + category.getLangCode() + ", Notice LangCode = " + langCode);
+            throw new IllegalLangCodeException("공지사항 카테고리의 언어 코드가 맞지 않습니다. Category LangCode = " + category.getLangCode() + ", Notice LangCode = " + langCode);
         }
 
         String htmlContent = htmlContentUtil.cleanHtmlContent(noticeDto.getContent()); // html 콘텐츠 필터링
@@ -88,20 +90,20 @@ public class NoticeService {
         Notice notice = findOne(noticeId);
 
         if (notice.getLangCode() != updateParam.getLangCode()) {
-            throw new RuntimeException("공지사항의 언어 코드가 맞지 않습니다. id = " + notice.getId() + ", langCode = " + notice.getLangCode());
+            throw new IllegalLangCodeException("수정하는 공지사항의 언어 코드가 맞지 않습니다. id = " + notice.getId() + ", langCode = " + notice.getLangCode());
         }
 
         // 해당 카테고리 유무 검증
         Long categoryId = updateParam.getCategoryId();
         Optional<NoticeCategory> findCategory = noticeCategoryRepository.findOne(categoryId);
         if (findCategory.isEmpty()) {
-            throw new RuntimeException("해당 공지사항 카테고리가 없습니다.");
+            throw new NoticeCategoryNotFoundException("해당 공지사항 카테고리가 없습니다.");
         }
 
         // 공지사항-카테고리 간 언어코드 일치 검증
         NoticeCategory category = findCategory.get();
         if (notice.getLangCode() != category.getLangCode()) {
-            throw new RuntimeException("공지사항 카테고리의 언어 코드가 맞지 않습니다. Category LangCode = " + category.getLangCode() + ", Notice LangCode = " + notice.getLangCode());
+            throw new IllegalLangCodeException("카테고리와 공지사항의 언어 코드가 맞지 않습니다. Category LangCode = " + category.getLangCode() + ", Notice LangCode = " + notice.getLangCode());
         }
 
         notice.setCategory(category);
@@ -261,7 +263,7 @@ public class NoticeService {
     public NoticeCategory findOneCategory(Long categoryId) {
         Optional<NoticeCategory> find = noticeCategoryRepository.findOne(categoryId);
         if (find.isEmpty()) {
-            throw new RuntimeException("해당 공지사항 카테고리가 없습니다. id=" + categoryId);
+            throw new NoticeCategoryNotFoundException("해당 공지사항 카테고리가 없습니다. id=" + categoryId);
         }
         return find.get();
     }
