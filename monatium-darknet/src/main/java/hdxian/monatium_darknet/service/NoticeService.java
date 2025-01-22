@@ -51,9 +51,13 @@ public class NoticeService {
         if (findCategory.isEmpty()) {
             throw new RuntimeException("해당 공지사항 카테고리가 없습니다.");
         }
-        NoticeCategory category = findCategory.get();
 
-        String htmlContent = htmlContentUtil.cleanHtmlContent(noticeDto.getContent());
+        NoticeCategory category = findCategory.get();
+        if (langCode != category.getLangCode()) {
+            throw new RuntimeException("공지사항 카테고리의 언어 코드가 맞지 않습니다. Category LangCode = " + category.getLangCode() + ", Notice LangCode = " + langCode);
+        }
+
+        String htmlContent = htmlContentUtil.cleanHtmlContent(noticeDto.getContent()); // html 콘텐츠 필터링
 
         // 1. 우선 공지사항을 저장해 ID 획득
         Notice notice = Notice.createNotice(langCode, member, category, title, htmlContent);
@@ -87,12 +91,19 @@ public class NoticeService {
             throw new RuntimeException("공지사항의 언어 코드가 맞지 않습니다. id = " + notice.getId() + ", langCode = " + notice.getLangCode());
         }
 
+        // 해당 카테고리 유무 검증
         Long categoryId = updateParam.getCategoryId();
         Optional<NoticeCategory> findCategory = noticeCategoryRepository.findOne(categoryId);
         if (findCategory.isEmpty()) {
             throw new RuntimeException("해당 공지사항 카테고리가 없습니다.");
         }
+
+        // 공지사항-카테고리 간 언어코드 일치 검증
         NoticeCategory category = findCategory.get();
+        if (notice.getLangCode() != category.getLangCode()) {
+            throw new RuntimeException("공지사항 카테고리의 언어 코드가 맞지 않습니다. Category LangCode = " + category.getLangCode() + ", Notice LangCode = " + notice.getLangCode());
+        }
+
         notice.setCategory(category);
 
         notice.setTitle(updateParam.getTitle());
@@ -241,13 +252,14 @@ public class NoticeService {
 
     // === NoticeCategory ===
     @Transactional
-    public Long createNewNoticeCategory(String name) {
-        NoticeCategory category = NoticeCategory.createNoticeCategory(name);
+    public Long createNewNoticeCategory(LangCode langCode, String name) {
+        NoticeCategory category = NoticeCategory.createNoticeCategory(langCode, name);
         return noticeCategoryRepository.save(category);
     }
 
     @Transactional
     public Long updateNoticeCategory(Long categoryId, String name, NoticeCategoryStatus status) {
+        // 카테고리 업데이트할 때는 langCode를 아예 인자로 받지 않음.
         NoticeCategory category = findOneCategory(categoryId);
         category.setName(name);
         category.setStatus(status);
@@ -261,6 +273,10 @@ public class NoticeService {
             throw new RuntimeException("해당 공지사항 카테고리가 없습니다. id=" + categoryId);
         }
         return find.get();
+    }
+
+    public List<NoticeCategory> findCategoriesByLangCode(LangCode langCode) {
+        return noticeCategoryRepository.findByLangCode(langCode);
     }
 
     public List<NoticeCategory> findAllNoticeCategories() {

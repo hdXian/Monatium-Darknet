@@ -41,7 +41,7 @@ class NoticeRepositoryTest {
         Long lily_id = memberService.createNewMember(dto);
         Member lily = memberService.findOne(lily_id);
 
-        NoticeCategory noticeCategory = NoticeCategory.createNoticeCategory("공지사항");
+        NoticeCategory noticeCategory = NoticeCategory.createNoticeCategory(LangCode.KO, "공지사항");
         Long category_id = noticeCategoryRepository.save(noticeCategory);
 
         // when
@@ -79,7 +79,7 @@ class NoticeRepositoryTest {
         Member lily = memberService.findOne(lilyId);
         Member amelia = memberService.findOne(ameliaId);
 
-        NoticeCategory category = NoticeCategory.createNoticeCategory("공지사항");
+        NoticeCategory category = NoticeCategory.createNoticeCategory(LangCode.KO, "공지사항");
         Long categoryId = noticeCategoryRepository.save(category);
 
         // 공지 3개
@@ -119,10 +119,10 @@ class NoticeRepositoryTest {
         Member lily = memberService.findOne(lilyId);
         Member amelia = memberService.findOne(ameliaId);
 
-        NoticeCategory category1 = NoticeCategory.createNoticeCategory("공지사항");
-        NoticeCategory category2 = NoticeCategory.createNoticeCategory("이벤트");
-        NoticeCategory category3 = NoticeCategory.createNoticeCategory("업데이트");
-        NoticeCategory category4 = NoticeCategory.createNoticeCategory("개발자노트");
+        NoticeCategory category1 = NoticeCategory.createNoticeCategory(LangCode.KO, "공지사항");
+        NoticeCategory category2 = NoticeCategory.createNoticeCategory(LangCode.KO, "이벤트");
+        NoticeCategory category3 = NoticeCategory.createNoticeCategory(LangCode.KO, "업데이트");
+        NoticeCategory category4 = NoticeCategory.createNoticeCategory(LangCode.KO, "개발자노트");
 
         Long categoryId1 = noticeCategoryRepository.save(category1);
         Long categoryId2 = noticeCategoryRepository.save(category2);

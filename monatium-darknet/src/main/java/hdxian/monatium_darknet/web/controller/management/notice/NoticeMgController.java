@@ -191,7 +191,8 @@ public class NoticeMgController {
 
     // 공지사항 카테고리 추가
     @PostMapping("/categories/new")
-    public String addCategory(HttpSession session, @RequestParam("action") String action,
+    public String addCategory(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
+                              HttpSession session, @RequestParam("action") String action,
                               @Validated @ModelAttribute(NOTICE_CATEGORY_FORM) NoticeCategoryForm categoryForm, BindingResult bindingResult,
                               Model model) {
 
@@ -209,7 +210,7 @@ public class NoticeMgController {
             }
 
             String name = categoryForm.getName();
-            Long savedId = noticeService.createNewNoticeCategory(name);
+            Long savedId = noticeService.createNewNoticeCategory(langCode, name);
 
             clearSessionAttributes(session);
             return "redirect:/management/notices";
@@ -277,8 +278,8 @@ public class NoticeMgController {
     // 공지사항 카테고리 삭제
 
     @ModelAttribute("categoryList")
-    public List<NoticeCategory> categoryList() {
-        return noticeService.findAllNoticeCategories();
+    public List<NoticeCategory> categoryList(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode) {
+        return noticeService.findCategoriesByLangCode(langCode);
     }
 
     @ModelAttribute("faviconUrl")

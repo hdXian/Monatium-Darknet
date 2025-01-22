@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.domain.notice;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +21,9 @@ public class NoticeCategory {
     @Enumerated(EnumType.STRING)
     private NoticeCategoryStatus status;
 
+    @Enumerated(EnumType.STRING)
+    private LangCode langCode;
+
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Notice> notices = new ArrayList<>();
 
@@ -37,8 +41,9 @@ public class NoticeCategory {
     }
 
     // 생성 메서드
-    public static NoticeCategory createNoticeCategory(String name) {
+    public static NoticeCategory createNoticeCategory(LangCode langCode, String name) {
         NoticeCategory noticeCategory = new NoticeCategory();
+        noticeCategory.setLangCode(langCode);
         noticeCategory.setName(name);
         noticeCategory.setStatus(NoticeCategoryStatus.PRIVATE); // 기본은 비공개
 
