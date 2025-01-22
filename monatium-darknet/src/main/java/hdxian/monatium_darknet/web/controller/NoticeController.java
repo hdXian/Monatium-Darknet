@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.web.controller;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.notice.*;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.ImageUrlService;
@@ -16,7 +17,7 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 @Controller
-@RequestMapping("/notices")
+@RequestMapping("/{lang}/notices")
 @RequiredArgsConstructor
 public class NoticeController {
 
@@ -24,10 +25,12 @@ public class NoticeController {
     private final ImageUrlService imageUrlService;
 
     @GetMapping
-    public String noticeList(@RequestParam(value = "page", required = false, defaultValue = "1") Integer pageNumber,
+    public String noticeList(@PathVariable("lang") LangCode langCode,
+                             @RequestParam(value = "page", required = false, defaultValue = "1") Integer pageNumber,
                              @RequestParam(value = "category", required = false) Long categoryId,
                              @RequestParam(value = "query", required = false) String title, Model model) {
         NoticeSearchCond searchCond = new NoticeSearchCond();
+        searchCond.setLangCode(langCode);
         searchCond.setCategoryId(categoryId);
         searchCond.setTitle(title);
         searchCond.setStatus(NoticeStatus.PUBLIC); // 공개 상태인 공지사항만 노출
@@ -37,7 +40,8 @@ public class NoticeController {
         setPages(noticePage.getTotalPages(), pageNumber, model);
 
         List<Notice> noticeList = noticePage.getContent();
-        List<NoticeCategory> categoryList = noticeService.findAllNoticeCategories();
+        List<NoticeCategory> categoryList = noticeService.findCategoriesByLangCode(langCode);
+//        List<NoticeCategory> categoryList = noticeService.findAllNoticeCategories();
 
 
         model.addAttribute("noticeList", noticeList);
@@ -49,7 +53,7 @@ public class NoticeController {
     }
 
     @GetMapping("/{noticeId}")
-    public String getDetail(@PathVariable("noticeId") Long noticeId, Model model) {
+    public String getDetail(@PathVariable("lang") LangCode langCode, @PathVariable("noticeId") Long noticeId, Model model) {
         Notice notice = noticeService.findOnePublic(noticeId);
         noticeService.incrementView(noticeId); // 조회수 증가
 
@@ -63,6 +67,11 @@ public class NoticeController {
         String url = noticeService.getNoticeImageFilePath(noticeId, imageName);
         UrlResource resource = new UrlResource("file:" + url);
         return ResponseEntity.ok(resource);
+    }
+
+    @ModelAttribute("language")
+    public String lang(@PathVariable("lang") LangCode langCode) {
+        return langCode.name().toLowerCase();
     }
 
     @ModelAttribute("faviconUrl")

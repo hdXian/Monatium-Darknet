@@ -28,11 +28,11 @@
         <div class="category-menu">
             <h5>카테고리</h5>
             <ul>
-                <li class="nav-item"> <a class="nav-link" th:href="@{/notices}" th:classappend="${curCategoryId == null} ? 'active'">전체</a> </li>
+                <li class="nav-item"> <a class="nav-link" th:href="@{/{lang}/notices (lang=${language})}" th:classappend="${curCategoryId == null} ? 'active'">전체</a> </li>
                 <li class="nav-item" th:each="category : ${categoryList}">
                     <a class="nav-link"
                        th:classappend="${curCategoryId == category.id} ? 'active'"
-                       th:href="@{/notices(category=${category.id})}"
+                       th:href="@{/{lang}/notices (lang=${language}, category=${category.id})}"
                        th:text="${category.name}">
                         <!-- 카테고리 이름 -->
                     </a>
@@ -63,7 +63,7 @@
 
                     <!--/*[[ 제목 및 날짜 ]]*/-->
                     <div class="notice-content">
-                        <a th:href="@{ /notices/{id} (id=${notice.id}) }"
+                        <a th:href="@{ /{lang}/notices/{id} (lang=${language}, id=${notice.id}) }"
                            class="notice-title"
                            th:text="${notice.title}"> 공지사항 제목 </a>
 
