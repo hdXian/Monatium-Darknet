@@ -63,6 +63,10 @@ public class ImageUrlService {
         return api_baseUrl + "images/";
     }
 
+    public String getNoticeImageBaseUrl() {
+        return api_baseUrl + "images/" + "notice/";
+    }
+
     public String getChBaseUrl() {
         return api_baseUrl + "images/" + "character/";
     }

@@ -62,13 +62,6 @@ public class NoticeController {
         return "notice/noticeDetail";
     }
 
-    @GetMapping("/{noticeId}/images/{imageName}")
-    public ResponseEntity<UrlResource> getNoticeImage(@PathVariable("noticeId") Long noticeId, @PathVariable("imageName") String imageName) throws MalformedURLException {
-        String url = noticeService.getNoticeImageFilePath(noticeId, imageName);
-        UrlResource resource = new UrlResource("file:" + url);
-        return ResponseEntity.ok(resource);
-    }
-
     @ModelAttribute("language")
     public String lang(@PathVariable("lang") LangCode langCode) {
         return langCode.name().toLowerCase();

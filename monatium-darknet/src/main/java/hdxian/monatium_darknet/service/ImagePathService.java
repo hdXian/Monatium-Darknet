@@ -8,6 +8,7 @@ import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.service.dto.AsideImageDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,9 @@ public class ImagePathService {
 
     @Value("${file.imgDir}")
     private String imgDir;
+
+    @Value("${file.noticeDir}")
+    private String noticeDir;
 
     @Value("${file.wikiDir}")
     private String wikiDir;
@@ -49,6 +53,11 @@ public class ImagePathService {
     }
 
     // 서버 스토리지 내 이미지 저장 경로를 리턴
+
+    // === 공지사항 관련 이미지 ===
+    public String getNoticeDir(Long noticeId) {
+        return noticeDir + (noticeId + "/");
+    }
 
     // === 캐릭터 관련 이미지 ===
     public CharacterImageDto generateChImagePaths(Long characterId) {

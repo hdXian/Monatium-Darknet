@@ -33,10 +33,10 @@ public class NoticeService {
     private final MemberService memberService;
     private final LocalFileStorageService fileStorageService;
 
-    private final HtmlContentUtil htmlContentUtil;
+    private final ImagePathService imagePathService;
+    private final ImageUrlService imageUrlService;
 
-    @Value("${file.noticeDir}")
-    private String noticeBaseDir;
+    private final HtmlContentUtil htmlContentUtil;
 
     // 공지사항 추가 기능
     @Transactional
@@ -69,12 +69,12 @@ public class NoticeService {
         // 3. 이미지 속성이 있을 경우에만 파일 수정 작업을 수행
         if (!imgSrcs.isEmpty()) {
             // 3. 추출한 src를 바탕으로 이미지 파일명 수정 및 경로 변경 (서버 내 경로)
-            // {basePath}/temp/abcdef.png -> {basePath}}/notice/{noticeId}/img_01.png
+            // {basePath}/temp/abcdef.png -> {basePath}}/notices/{noticeId}/img_01.png
             List<String> changedImgSrcs;
 
             changedImgSrcs = moveNoticeImageFiles(noticeId, imgSrcs);
 
-            String baseSrc = "/notices/" + noticeId + "/images/";
+            String baseSrc = imageUrlService.getNoticeImageBaseUrl() + (noticeId + "/");
             String updatedContent = htmlContentUtil.updateImgSrc(htmlContent, baseSrc, changedImgSrcs);
 
             notice.setContent(updatedContent);
@@ -120,7 +120,7 @@ public class NoticeService {
             changedFileNames = moveNoticeImageFiles(noticeId, imgSrcs);
 
             // img 태그의 src에 사용할 url. 서버 스토리지에 저장되는 경로와 다름.
-            String baseSrc = "/notices/" + noticeId + "/images/";
+            String baseSrc = imageUrlService.getNoticeImageBaseUrl() + (noticeId + "/");
             String updatedContent = htmlContentUtil.updateImgSrc(htmlContent, baseSrc, changedFileNames);
             notice.setContent(updatedContent);
         }
@@ -196,11 +196,6 @@ public class NoticeService {
         return noticeRepository.findAll(searchCond, request);
     }
 
-    public String getNoticeImageFilePath(Long noticeId, String imageName) {
-        String noticeDir = getNoticeDir(noticeId);
-        return fileStorageService.getFileFullPath(new FileDto(noticeDir, imageName));
-    }
-
     // 임시 저장 경로에 있던 공지사항 이미지들을 정식 경로에 저장
     public List<String> moveNoticeImageFiles(Long noticeId, List<String> imgSrcs) {
 
@@ -209,7 +204,7 @@ public class NoticeService {
         List<String> changedFileNames = new ArrayList<>();
 
         // 공지사항을 저장할 폴더 경로
-        String targetDir = getNoticeDir(noticeId);
+        String targetDir = imagePathService.getNoticeDir(noticeId);
 
         int seq = 1;
         String fileName, ext, saveFileName;
@@ -222,7 +217,7 @@ public class NoticeService {
             saveFileName = String.format("img_%02d%s", seq, ext); // saveFileName = "img_01.png"
 
             // url이 /api로 시작하면 temp 경로에 있는 파일임
-            if (src.startsWith("/api")) {
+            if (src.startsWith("/api/images/tmp")) {
                 from = new FileDto(tempDir, fileName); // from : temp 폴더에 저장돼있는 "o2p2aRmhWArow8cHh5x9_awsec2_logo.png" 이라는 이름의 파일
                 to = new FileDto(targetDir, saveFileName); // to : noticeBaseDir에 noticeId를 붙여 만든 경로에 "img_01.png" 라는 이름의 파일(로 저장하겠다)
             }
@@ -243,10 +238,6 @@ public class NoticeService {
         }
 
         return changedFileNames;
-    }
-
-    private String getNoticeDir(Long noticeId) {
-        return noticeBaseDir + (noticeId + "/");
     }
 
 
