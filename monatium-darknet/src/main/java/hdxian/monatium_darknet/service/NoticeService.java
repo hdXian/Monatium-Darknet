@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.service;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.notice.*;
 import hdxian.monatium_darknet.exception.notice.NoticeImageProcessException;
 import hdxian.monatium_darknet.exception.notice.NoticeNotFoundException;
@@ -43,6 +44,7 @@ public class NoticeService {
 
         Member member = memberService.findOne(memberId);
         String title = noticeDto.getTitle();
+        LangCode langCode = noticeDto.getLangCode();
 
         Long categoryId = noticeDto.getCategoryId();
         Optional<NoticeCategory> findCategory = noticeCategoryRepository.findOne(categoryId);
@@ -54,7 +56,7 @@ public class NoticeService {
         String htmlContent = htmlContentUtil.cleanHtmlContent(noticeDto.getContent());
 
         // 1. 우선 공지사항을 저장해 ID 획득
-        Notice notice = Notice.createNotice(member, category, title, htmlContent);
+        Notice notice = Notice.createNotice(langCode, member, category, title, htmlContent);
         Long noticeId = noticeRepository.save(notice);
 
         // 2. 공지사항 본문에서 img 태그들의 src 속성들을 추출 ("/api/images/abcdef.png")
@@ -80,6 +82,10 @@ public class NoticeService {
     @Transactional
     public Long updateNotice(Long noticeId, NoticeDto updateParam) {
         Notice notice = findOne(noticeId);
+
+        if (notice.getLangCode() != updateParam.getLangCode()) {
+            throw new RuntimeException("공지사항의 언어 코드가 맞지 않습니다. id = " + notice.getId() + ", langCode = " + notice.getLangCode());
+        }
 
         Long categoryId = updateParam.getCategoryId();
         Optional<NoticeCategory> findCategory = noticeCategoryRepository.findOne(categoryId);

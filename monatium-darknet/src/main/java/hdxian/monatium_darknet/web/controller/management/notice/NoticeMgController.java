@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.web.controller.management.notice;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
@@ -28,20 +29,28 @@ import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
 
 @Slf4j
 @Controller
-@RequiredArgsConstructor
 @RequestMapping("/management/notices")
+@SessionAttributes(CURRENT_LANG_CODE)
+@RequiredArgsConstructor
 public class NoticeMgController {
 
     private final MemberService memberService;
     private final NoticeService noticeService;
     private final ImageUrlService imageUrlService;
 
+    @ModelAttribute(CURRENT_LANG_CODE)
+    public LangCode crntLangCode(HttpSession session) {
+        return Optional.ofNullable((LangCode)session.getAttribute(CURRENT_LANG_CODE)).orElse(LangCode.KO);
+    }
+
     // 공지사항 목록 (대시보드 -> 공지사항 관리)
     @GetMapping
-    public String noticeList(@RequestParam(value = "page", required = false, defaultValue = "1") Integer pageNumber,
-                                    @RequestParam(value = "category", required = false) Long categoryId,
-                                    @RequestParam(value = "query", required = false) String title, Model model) {
+    public String noticeList(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
+                             @RequestParam(value = "page", required = false, defaultValue = "1") Integer pageNumber,
+                             @RequestParam(value = "category", required = false) Long categoryId,
+                             @RequestParam(value = "query", required = false) String title, Model model) {
         NoticeSearchCond searchCond = new NoticeSearchCond();
+        searchCond.setLangCode(langCode);
         searchCond.setCategoryId(categoryId);
         searchCond.setTitle(title);
         Page<Notice> noticePage = noticeService.findAll_Paging(searchCond, pageNumber);
@@ -69,7 +78,8 @@ public class NoticeMgController {
 
     // 공지사항 작성 기능
     @PostMapping("/new")
-    public String createNotice(HttpSession session, @RequestParam("action") String action,
+    public String createNotice(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
+                               HttpSession session, @RequestParam("action") String action,
                                @SessionAttribute(LOGIN_MEMBER) Member member,
                                @Validated @ModelAttribute(NOTICE_FORM) NoticeForm noticeForm, BindingResult bindingResult) {
 
@@ -85,7 +95,7 @@ public class NoticeMgController {
                 return "management/notice/noticeAddForm";
             }
 
-            NoticeDto noticeDto = generateNoticeDto(noticeForm);
+            NoticeDto noticeDto = generateNoticeDto(langCode, noticeForm);
             Long savedId = noticeService.createNewNotice(member.getId(), noticeDto);
 
             clearSessionAttributes(session);
@@ -115,7 +125,8 @@ public class NoticeMgController {
 
     // 공지사항 수정
     @PostMapping("/{noticeId}/edit")
-    public String edit(HttpSession session, @RequestParam("action") String action,
+    public String edit(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
+                       HttpSession session, @RequestParam("action") String action,
                        @PathVariable("noticeId") Long noticeId,
                        @SessionAttribute(LOGIN_MEMBER) Member member,
                        @Validated @ModelAttribute(NOTICE_FORM) NoticeForm noticeForm, BindingResult bindingResult,
@@ -135,7 +146,7 @@ public class NoticeMgController {
                 return "management/notice/noticeEditForm";
             }
 
-            NoticeDto updateParam = generateNoticeDto(noticeForm);
+            NoticeDto updateParam = generateNoticeDto(langCode, noticeForm);
             Long updatedId = noticeService.updateNotice(noticeId, updateParam);
             clearSessionAttributes(session);
             return "redirect:/management/notices";
@@ -287,12 +298,12 @@ public class NoticeMgController {
         return noticeForm;
     }
 
-    private NoticeDto generateNoticeDto(NoticeForm noticeForm) {
+    private NoticeDto generateNoticeDto(LangCode langCode, NoticeForm noticeForm) {
         Long categoryId = noticeForm.getCategoryId();
         String title = noticeForm.getTitle();
         String htmlContent = noticeForm.getContent();
 
-        return new NoticeDto(categoryId, title, htmlContent);
+        return new NoticeDto(langCode, categoryId, title, htmlContent);
     }
 
     private void setPages(int totalPages, int pageNumber, Model model) {

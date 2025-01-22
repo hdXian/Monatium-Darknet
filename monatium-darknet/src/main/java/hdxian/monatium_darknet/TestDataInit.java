@@ -45,20 +45,21 @@ public class TestDataInit {
         Long noticeCategoryId4 = noticeService.createNewNoticeCategory("개발자노트");
 
         // 공지사항 추가
-        NoticeDto noticeDto1 = generateNoticeDto("테스트 공지사항1 제목 (공지사항)", noticeCategoryId1, "테스트 공지사항1 본문");
-        NoticeDto noticeDto2 = generateNoticeDto("테스트 공지사항2 제목 (업데이트)", noticeCategoryId2, "테스트 공지사항2 본문");
-        NoticeDto noticeDto3 = generateNoticeDto("테스트 공지사항3 제목 (이벤트)", noticeCategoryId3, "테스트 공지사항3 본문");
-        NoticeDto noticeDto4 = generateNoticeDto("테스트 공지사항4 제목 (개발자노트)", noticeCategoryId4, "테스트 공지사항4 본문");
+        NoticeDto noticeDto1 = generateNoticeDto("테스트 공지사항1 제목 (공지사항)", noticeCategoryId1, "테스트 공지사항1 본문", LangCode.KO);
+        NoticeDto noticeDto2 = generateNoticeDto("테스트 공지사항2 제목 (업데이트)", noticeCategoryId2, "테스트 공지사항2 본문", LangCode.KO);
+        NoticeDto noticeDto3 = generateNoticeDto("테스트 공지사항3 제목 (이벤트)", noticeCategoryId3, "테스트 공지사항3 본문", LangCode.KO);
+        NoticeDto noticeDto4 = generateNoticeDto("테스트 공지사항4 제목 (개발자노트)", noticeCategoryId4, "테스트 공지사항4 본문", LangCode.KO);
 
-        NoticeDto noticeDto5 = generateNoticeDto("테스트 공지사항5 제목 (공지사항)", noticeCategoryId1, "테스트 공지사항4 본문");
-        NoticeDto noticeDto6 = generateNoticeDto("테스트 공지사항6 제목 (업데이트)", noticeCategoryId2, "테스트 공지사항4 본문");
-        NoticeDto noticeDto7 = generateNoticeDto("테스트 공지사항7 제목 (이벤트)", noticeCategoryId3, "테스트 공지사항4 본문");
-        NoticeDto noticeDto8 = generateNoticeDto("테스트 공지사항8 제목 (개발자노트)", noticeCategoryId4, "테스트 공지사항4 본문");
+        NoticeDto noticeDto5 = generateNoticeDto("테스트 공지사항5 제목 (공지사항)", noticeCategoryId1, "테스트 공지사항4 본문", LangCode.KO);
+        NoticeDto noticeDto6 = generateNoticeDto("테스트 공지사항6 제목 (업데이트)", noticeCategoryId2, "테스트 공지사항4 본문", LangCode.KO);
+        NoticeDto noticeDto7 = generateNoticeDto("테스트 공지사항7 제목 (이벤트)", noticeCategoryId3, "테스트 공지사항4 본문", LangCode.KO);
+        NoticeDto noticeDto8 = generateNoticeDto("테스트 공지사항8 제목 (개발자노트)", noticeCategoryId4, "테스트 공지사항4 본문", LangCode.KO);
 
-        NoticeDto noticeDto9 = generateNoticeDto("테스트 공지사항9 제목 (공지사항)", noticeCategoryId1, "테스트 공지사항4 본문");
-        NoticeDto noticeDto10 = generateNoticeDto("테스트 공지사항10 제목 (업데이트)", noticeCategoryId2, "테스트 공지사항4 본문");
-        NoticeDto noticeDto11 = generateNoticeDto("테스트 공지사항11 제목 (이벤트)", noticeCategoryId3, "테스트 공지사항4 본문");
-        NoticeDto noticeDto12 = generateNoticeDto("테스트 공지사항12 제목 (개발자노트)", noticeCategoryId4, "테스트 공지사항4 본문");
+        NoticeDto noticeDto9 = generateNoticeDto("테스트 공지사항9 제목 (공지사항)", noticeCategoryId1, "테스트 공지사항4 본문", LangCode.KO);
+        NoticeDto noticeDto10 = generateNoticeDto("테스트 공지사항10 제목 (업데이트)", noticeCategoryId2, "테스트 공지사항4 본문", LangCode.KO);
+        NoticeDto noticeDto11 = generateNoticeDto("테스트 공지사항11 제목 (이벤트)", noticeCategoryId3, "테스트 공지사항4 본문", LangCode.KO);
+        NoticeDto noticeDto12 = generateNoticeDto("테스트 공지사항12 제목 (개발자노트)", noticeCategoryId4, "테스트 공지사항4 본문", LangCode.KO);
+
         Long noticeId1 = noticeService.createNewNotice(memberId, noticeDto1);
         Long noticeId2 = noticeService.createNewNotice(memberId, noticeDto2);
         Long noticeId3 = noticeService.createNewNotice(memberId, noticeDto3);
@@ -71,6 +72,48 @@ public class TestDataInit {
         Long noticeId10 = noticeService.createNewNotice(memberId, noticeDto10);
         Long noticeId11 = noticeService.createNewNotice(memberId, noticeDto11);
         Long noticeId12 = noticeService.createNewNotice(memberId, noticeDto12);
+
+        // 공지사항 추가 (En)
+        List<NoticeDto> noticeDtosEn = new ArrayList<>();
+        noticeDtosEn.add(generateNoticeDto("Test Notice 13 Title (Notice)", noticeCategoryId1, "Test Notice 13 Body", LangCode.EN));
+        noticeDtosEn.add(generateNoticeDto("Test Notice 14 Title (Update)", noticeCategoryId2, "Test Notice 14 Body", LangCode.EN));
+        noticeDtosEn.add(generateNoticeDto("Test Notice 15 Title (Event)", noticeCategoryId3, "Test Notice 15 Body", LangCode.EN));
+        noticeDtosEn.add(generateNoticeDto("Test Notice 16 Title (Developer Note)", noticeCategoryId4, "Test Notice 16 Body", LangCode.EN));
+
+        noticeDtosEn.add(generateNoticeDto("Test Notice 17 Title (Notice)", noticeCategoryId1, "Test Notice 17 Body", LangCode.EN));
+        noticeDtosEn.add(generateNoticeDto("Test Notice 18 Title (Update)", noticeCategoryId2, "Test Notice 18 Body", LangCode.EN));
+        noticeDtosEn.add(generateNoticeDto("Test Notice 19 Title (Event)", noticeCategoryId3, "Test Notice 19 Body", LangCode.EN));
+        noticeDtosEn.add(generateNoticeDto("Test Notice 20 Title (Developer Note)", noticeCategoryId4, "Test Notice 20 Body", LangCode.EN));
+
+        noticeDtosEn.add(generateNoticeDto("Test Notice 21 Title (Notice)", noticeCategoryId1, "Test Notice 21 Body", LangCode.EN));
+        noticeDtosEn.add(generateNoticeDto("Test Notice 22 Title (Update)", noticeCategoryId2, "Test Notice 22 Body", LangCode.EN));
+        noticeDtosEn.add(generateNoticeDto("Test Notice 23 Title (Event)", noticeCategoryId3, "Test Notice 23 Body", LangCode.EN));
+        noticeDtosEn.add(generateNoticeDto("Test Notice 24 Title (Developer Note)", noticeCategoryId4, "Test Notice 24 Body", LangCode.EN));
+
+        for (NoticeDto noticeDto : noticeDtosEn) {
+            noticeService.createNewNotice(memberId, noticeDto);
+        }
+
+        // 공지사항 추가 (JP)
+        List<NoticeDto> noticeDtosJp = new ArrayList<>();
+        noticeDtosJp.add(generateNoticeDto("テスト通知 25 タイトル (お知らせ)", noticeCategoryId1, "テスト通知 25 本文", LangCode.JP));
+        noticeDtosJp.add(generateNoticeDto("テスト通知 26 タイトル (アップデート)", noticeCategoryId2, "テスト通知 26 本文", LangCode.JP));
+        noticeDtosJp.add(generateNoticeDto("テスト通知 27 タイトル (イベント)", noticeCategoryId3, "テスト通知 27 本文", LangCode.JP));
+        noticeDtosJp.add(generateNoticeDto("テスト通知 28 タイトル (開発者ノート)", noticeCategoryId4, "テスト通知 28 本文", LangCode.JP));
+
+        noticeDtosJp.add(generateNoticeDto("テスト通知 29 タイトル (お知らせ)", noticeCategoryId1, "テスト通知 29 本文", LangCode.JP));
+        noticeDtosJp.add(generateNoticeDto("テスト通知 30 タイトル (アップデート)", noticeCategoryId2, "テスト通知 30 本文", LangCode.JP));
+        noticeDtosJp.add(generateNoticeDto("テスト通知 31 タイトル (イベント)", noticeCategoryId3, "テスト通知 31 本文", LangCode.JP));
+        noticeDtosJp.add(generateNoticeDto("テスト通知 32 タイトル (開発者ノート)", noticeCategoryId4, "テスト通知 32 本文", LangCode.JP));
+
+        noticeDtosJp.add(generateNoticeDto("テスト通知 33 タイトル (お知らせ)", noticeCategoryId1, "テスト通知 33 本文", LangCode.JP));
+        noticeDtosJp.add(generateNoticeDto("テスト通知 34 タイトル (アップデート)", noticeCategoryId2, "テスト通知 34 本文", LangCode.JP));
+        noticeDtosJp.add(generateNoticeDto("テスト通知 35 タイトル (イベント)", noticeCategoryId3, "テスト通知 35 本文", LangCode.JP));
+        noticeDtosJp.add(generateNoticeDto("テスト通知 36 タイトル (開発者ノート)", noticeCategoryId4, "テスト通知 36 本文", LangCode.JP));
+
+        for (NoticeDto noticeDto : noticeDtosJp) {
+            noticeService.createNewNotice(memberId, noticeDto);
+        }
 
         // 캐릭터 추가
         List<CharacterDto> dtos = new ArrayList<>();
@@ -466,8 +509,9 @@ public class TestDataInit {
     }
 
     // noticeDto
-    private static NoticeDto generateNoticeDto(String title, Long categoryId, String content) {
+    private static NoticeDto generateNoticeDto(String title, Long categoryId, String content, LangCode langCode) {
         NoticeDto noticeDto = new NoticeDto();
+        noticeDto.setLangCode(langCode);
         noticeDto.setTitle(title);
 //        noticeDto.setCategory(category);
         noticeDto.setCategoryId(categoryId);

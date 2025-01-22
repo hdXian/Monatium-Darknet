@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.repository.dto;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.notice.NoticeCategoryStatus;
 import hdxian.monatium_darknet.domain.notice.NoticeStatus;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NoticeSearchCond {
+    private LangCode langCode;
     private Long categoryId;
     private NoticeCategoryStatus categoryStatus;
     private NoticeStatus status; // PUBLIC, PRIVATE, DELETED
