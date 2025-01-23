@@ -16,12 +16,13 @@ import java.util.*;
 @Slf4j
 public class UrlLocaleResolver extends AcceptHeaderLocaleResolver {
 
-    private final Set<String> enableLangParams = new HashSet<>(Set.of("ko, en, jp"));
+    private final Set<String> enableLangParams = new HashSet<>(Set.of("ko", "en", "jp"));
     private final Set<Locale> enableLocales = new HashSet<>(Set.of(Locale.KOREAN, Locale.ENGLISH, Locale.JAPANESE));
 
     @Override
     public Locale resolveLocale(HttpServletRequest request) {
         String uri = request.getRequestURI();
+//        log.info("UrlLocalResolver 동작: uri = {}", uri);
 
         StringTokenizer tkn = new StringTokenizer(uri, "/");
         String lang;

@@ -23,19 +23,19 @@
             <div class="collapse navbar-collapse" id="common_navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link me-3 nav-text" href="#notice">새소식</a>
+                        <a class="nav-link me-3 nav-text" href="#notice" th:text="#{navbar.news}">새소식</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link me-3 nav-text" href="#worldview">세계관</a>
+                        <a class="nav-link me-3 nav-text" href="#worldview" th:text="#{navbar.worldView}">세계관</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link me-3 nav-text" href="#characters">캐릭터</a>
+                        <a class="nav-link me-3 nav-text" href="#characters" th:text="#{navbar.characters}">캐릭터</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link me-3 nav-text" href="#photozone">인게임</a>
+                        <a class="nav-link me-3 nav-text" href="#photozone" th:text="#{navbar.inGame}">인게임</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-text" th:href="@{/{lang}/wiki/characters (lang=${language})}">교단 기록소</a>
+                        <a class="nav-link nav-text" th:href="@{/{lang}/wiki/characters (lang=${language})}" th:text="#{navbar.wiki}">교단 기록소</a>
                     </li>
                 </ul>
             </div>
