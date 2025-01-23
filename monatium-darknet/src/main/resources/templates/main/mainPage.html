@@ -213,9 +213,11 @@
                     <div class="character-info-text text-center">
 
                         <!--/*[[ 종족명 및 심볼 ]]*/-->
-                        <div class="d-flex align-items-center justify-content-center gap-2" th:text="|#{race.txt}:|">
-                            종족:
-                            <th:block th:switch="${{character.race}}" th:case="'fairy'">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                            <span th:text="|#{race.txt}:|">
+                                종족:
+                            </span>
+                            <th:block th:switch="${{character.race}}">
                                 <span th:case="'fairy'" th:text="#{race.fairy}" class="character-race">종족명</span>
                                 <span th:case="'witch'" th:text="#{race.witch}" class="character-race">종족명</span>
                                 <span th:case="'furry'" th:text="#{race.furry}" class="character-race">종족명</span>

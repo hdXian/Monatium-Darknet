@@ -2,13 +2,18 @@ package hdxian.monatium_darknet.web.controller;
 
 import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.domain.character.CharacterStatus;
 import hdxian.monatium_darknet.domain.notice.Notice;
+import hdxian.monatium_darknet.domain.notice.NoticeStatus;
+import hdxian.monatium_darknet.repository.dto.CharacterSearchCond;
+import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.CharacterService;
 import hdxian.monatium_darknet.service.ImageUrlService;
 import hdxian.monatium_darknet.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cglib.core.Local;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,8 +46,16 @@ public class HomeController {
     public String homeLang(@PathVariable("lang") LangCode langCode, Model model) {
         log.info("langCode = {}", langCode);
 
-        List<Notice> noticeList = noticeService.findAll();
-        List<Character> characterList = characterService.findAll();
+        NoticeSearchCond nsc = new NoticeSearchCond();
+        nsc.setLangCode(langCode);
+        nsc.setStatus(NoticeStatus.PUBLIC);
+        Page<Notice> noticePage = noticeService.findAll_Paging(nsc, 1);
+        List<Notice> noticeList = noticePage.getContent();
+
+        CharacterSearchCond csc = new CharacterSearchCond();
+        csc.setLangCode(langCode);
+        csc.setStatus(CharacterStatus.ACTIVE);
+        List<Character> characterList = characterService.findAll(csc);
 
         model.addAttribute("noticeList", noticeList);
         model.addAttribute("characterList", characterList);
