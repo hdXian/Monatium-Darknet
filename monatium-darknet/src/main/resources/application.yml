@@ -7,8 +7,10 @@ server:
 spring:
   profiles:
     active: dev # local
+
   messages:
     basename: messages, errors
+    encoding: UTF-8
 
   datasource:
     url: jdbc:h2:tcp://localhost/~/monatium-darknet

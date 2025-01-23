@@ -13,6 +13,7 @@ import org.springframework.web.servlet.LocaleResolver;
 
 import java.util.Locale;
 
+@Deprecated
 @Slf4j
 @RequiredArgsConstructor
 public class LangCodeArgumentResolver implements HandlerMethodArgumentResolver {

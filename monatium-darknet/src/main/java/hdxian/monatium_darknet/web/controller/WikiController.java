@@ -40,6 +40,16 @@ public class WikiController {
     private final ImagePathService imagePathService;
     private final ImageUrlService imageUrlService;
 
+    // 커스텀 UrlLocaleResolver가 /{lang} 파라미터 혹은 accept language 헤더를 기반으로 Locale을 설정해주기 때문에,
+    // 핸들러 메서드에서는 인자로 LangCode 대신 Locale을 받아서 사용해도 문제 없음.
+    // 그러나 @PathVariable 누락으로 인한 혼란을 방지하기 위해 LangCode 바인딩을 그대로 사용함.
+
+    // 1. GET /ko/wiki/characters
+    // 2. PathVariable {lang}에 LangCode를 바인딩하기 위해 StringToLangCodeConverter 동작
+    // 3-1. ko -> LangCode.KO 바인딩 성공 시 핸들러 메서드 정상 호출 ( LangCode.valueOf(ko.toUpperCase()) )
+    // 3-2-1. 바인딩 실패 시 (lang 문자열이 en, ko, jp가 아니어서 파라미터 바인딩에 실패한 경우) IllegalLangCodeEx 발생
+    // 3-2-2. ExControllerAdvice에서 해당 예외를 받아 handle 수행. (LocaleResolver로 받아온 locale을 바탕으로 url을 수정해서 리다이렉트 해줌.)
+
     // /{lang}/wiki/characters -> @PathVariable("lang")
     @GetMapping("/characters")
     public String characterList(@PathVariable("lang") LangCode langCode, Model model) {
@@ -54,8 +64,7 @@ public class WikiController {
     }
 
     @GetMapping("/characters/{count}")
-    public String characterInfo(@PathVariable("lang") LangCode langCode,
-                                @PathVariable("count") Integer count, Model model) {
+    public String characterInfo(@PathVariable("lang") LangCode langCode, @PathVariable("count") Integer count, Model model) {
 
         int index = (count - 1);
         Character character = characterService.findOneWiki(langCode, index);
