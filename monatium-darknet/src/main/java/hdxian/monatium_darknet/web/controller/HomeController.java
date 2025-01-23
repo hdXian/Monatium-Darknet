@@ -31,7 +31,8 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Locale locale, RedirectAttributes redirectAttributes) {
-        // 여기서 바인딩되는 Locale은 Accept-language 헤더 기반의 LocaleResolver로부터 받아온 Lcoale (기본 LocaleResolver) -> 이제는 URI 기반임
+        // 여기서 바인딩되는 Locale은 Accept-language 헤더 기반의 LocaleResolver로부터 받아온 Lcoale (기본 LocaleResolver)
+        // -> UrlLocaleResolver에서 accept lang 헤더 기반으로 가져옴
         redirectAttributes.addAttribute("lang", locale.getLanguage());
         return "redirect:/{lang}";
     }

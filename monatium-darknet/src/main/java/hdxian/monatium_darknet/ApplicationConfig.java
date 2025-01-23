@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
 
+import java.util.Locale;
+
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
@@ -21,7 +23,9 @@ public class ApplicationConfig {
 
     @Bean
     public LocaleResolver localeResolver() {
-        return new UrlLocaleResolver();
+        UrlLocaleResolver localeResolver = new UrlLocaleResolver();
+        localeResolver.setDefaultLocale(Locale.ENGLISH);
+        return localeResolver;
     }
 
 }
