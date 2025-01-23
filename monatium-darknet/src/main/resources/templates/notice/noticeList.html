@@ -4,7 +4,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: common_header(~{::title}, ~{::link})}">
-    <title>공지사항</title>
+    <title th:text="#{notice.title}">공지사항</title>
     <link rel="stylesheet" th:href="@{/css/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/font.css}">
@@ -26,9 +26,14 @@
 
         <!--/*[[ 카테고리 필터링 메뉴 ]]*/-->
         <div class="category-menu">
-            <h5>카테고리</h5>
+            <h5 th:text="#{notice.category}">카테고리</h5>
             <ul>
-                <li class="nav-item"> <a class="nav-link" th:href="@{/{lang}/notices (lang=${language})}" th:classappend="${curCategoryId == null} ? 'active'">전체</a> </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/{lang}/notices (lang=${language})}"
+                       th:text="#{notice.list.all}"
+                       th:classappend="${curCategoryId == null} ? 'active'">전체</a>
+                </li>
                 <li class="nav-item" th:each="category : ${categoryList}">
                     <a class="nav-link"
                        th:classappend="${curCategoryId == category.id} ? 'active'"
@@ -44,13 +49,13 @@
         <div class="notice-list-section">
 
             <!--/*[[ 공지사항 제목 ]]*/-->
-            <h2 class="text-center mb-5">새소식 및 공지사항</h2>
+            <h2 class="text-center mb-5" th:text="#{notice.list.title}">새소식 및 공지사항</h2>
 
             <div class="notice-search d-flex justify-content-end mb-3">
-                <form class="d-flex w-30" method="get" th:action="@{/notices}">
-                    <input type="text" name="query" class="form-control form-control-sm" placeholder="검색할 제목을 입력하세요" th:value="${query}">
+                <form class="d-flex w-30" method="get" th:action="@{/{lang}/notices (lang=${language})}">
+                    <input type="text" name="query" class="form-control form-control-sm" th:placeholder="#{notice.list.search.placeholder}" th:value="${query}">
                     <input type="hidden" name="category" class="form-control" th:value="${curCategoryId}">
-                    <button class="btn btn-sm btn-primary ms-2" type="submit">검색</button>
+                    <button class="btn btn-sm btn-primary ms-2" type="submit" th:text="#{notice.list.search.button}">검색</button>
                 </form>
             </div>
 
@@ -81,7 +86,7 @@
                     <ul class="pagination justify-content-center">
                         <!--/*[[ 이전 버튼 ]]*/-->
                         <li class="page-item" th:classappend="${!page.hasPrevious()} ? 'disabled'">
-                            <a class="page-link" th:href="@{/notices(page=${(page.number+1) - 1})}" aria-label="Previous">
+                            <a class="page-link" th:href="@{/{lang}/notices (lang=${language}, page=${(page.number+1) - 1})}" aria-label="Previous">
                                 <span aria-hidden="true"> << </span>
                             </a>
                         </li>
@@ -89,12 +94,12 @@
                         <!--/*[[ 페이지 번호 버튼 ]]*/-->
                         <li class="page-item" th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"
                             th:classappend="${(pageNum-1) == page.number} ? 'active' : ''">
-                            <a class="page-link" th:href="@{/notices(page=${pageNum})}" th:text="${pageNum}"></a>
+                            <a class="page-link" th:href="@{/{lang}/notices (lang=${language}, page=${pageNum})}" th:text="${pageNum}"></a>
                         </li>
 
                         <!--/*[[ 다음 버튼 ]]*/-->
                         <li class="page-item" th:classappend="${!page.hasNext()} ? 'disabled'">
-                            <a class="page-link" th:href="@{/notices(page=${(page.number+1) + 1})}" aria-label="Next">
+                            <a class="page-link" th:href="@{/{lang}/notices (lang=${language}, page=${(page.number+1) + 1})}" aria-label="Next">
                                 <span aria-hidden="true"> >> </span>
                             </a>
                         </li>
@@ -104,7 +109,7 @@
 
             <!--/*[[ 뒤로가기 버튼 ]]*/-->
             <div class="text-center">
-              <a href="/" class="btn btn-back">메인으로 돌아가기</a>
+              <a th:href="@{/{lang} (lang=${language})}" class="btn btn-back" th:text="#{notice.back}">메인으로 돌아가기</a>
             </div>
         </div>
 
