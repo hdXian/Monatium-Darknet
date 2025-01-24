@@ -2,6 +2,7 @@ package hdxian.monatium_darknet.web.controller.management;
 
 import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.notice.Member;
+import hdxian.monatium_darknet.service.ImageUrlService;
 import hdxian.monatium_darknet.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -28,6 +29,8 @@ public class ManagementController {
 
     // TODO - **중요** 아무나 로그인할 수 없도록 접근 권한 설정 필요
     private final LoginService loginService;
+
+    private final ImageUrlService imageUrlService;
 
     // 세션이 없거나 세션에 저장된 LangCode가 없는 경우 기본 LangCode (KO) 리턴
     @ModelAttribute(CURRENT_LANG_CODE)
@@ -107,6 +110,11 @@ public class ManagementController {
             log.error("URI Syntax Error occurs on url '/management/lang-change'");
             return "redirect:/management";
         }
+    }
+
+    @ModelAttribute("faviconUrl")
+    public String faviconUrl() {
+        return imageUrlService.getElleafFaviconUrl();
     }
 
 }
