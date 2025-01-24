@@ -3,7 +3,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: common_header(~{::title}, ~{::link})}">
-    <title th:text="|사도 정보 - ${character.name}|">캐릭터 정보창 제목</title>
+    <title th:text="|${character.name} - #{page.title}|">캐릭터 정보창 제목</title>
     <link rel="stylesheet" th:href="@{/css/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/font.css}">
@@ -26,16 +26,16 @@
     <div class="row">
         <!--/*[[ 좌측 탭 네비게이션 ]]*/-->
         <nav class="col-md-3 col-lg-2 side-nav">
-            <a th:href="@{/{lang}/wiki/characters (lang=${language})}" class="active">사도</a>
-            <a th:href="@{/{lang}/wiki/cards/artifact (lang=${language})}">아티팩트 카드</a>
-            <a th:href="@{/{lang}/wiki/cards/spell (lang=${language})}">스펠 카드</a>
+            <a th:href="@{/{lang}/wiki/characters (lang=${language})}" class="active" th:text="#{character.tab.character}">사도</a>
+            <a th:href="@{/{lang}/wiki/cards/artifact (lang=${language})}" th:text="#{character.tab.artifact}">아티팩트 카드</a>
+            <a th:href="@{/{lang}/wiki/cards/spell (lang=${language})}" th:text="#{character.tab.spell}">스펠 카드</a>
         </nav>
 
         <!--/*[[ 본문 콘텐츠 섹션 ]]*/-->
         <main th:object="${character}" class="col-md-9 col-lg-10 content">
             <!--/*[[ 프로필 섹션 ]]*/-->
             <section id="profile" class="mb-5 container">
-                <h2 class="mb-4">프로필</h2>
+                <h2 class="mb-4" th:text="#{character.detail.profile}">프로필</h2>
                 <hr class="title-underline">
                 <div class="row align-items-center">
                     <!--/*[[ 좌측: 프로필 이미지와 정보 ]]*/-->
@@ -58,20 +58,20 @@
                                 <div class="character-extras mt-4">
                                     <!--/*[[ 종족 정보 ]]*/-->
                                     <div class="mb-3">
-                                        <h4 class="mb-1">종족</h4>
+                                        <h4 class="mb-1" th:text="#{race.txt}">종족</h4>
                                         <div th:switch="*{{race}}" class="d-flex align-items-center justify-content-center">
-                                            <p th:case="'fairy'" th:text="요정" class="character-race mb-0 me-2">종족명</p>
-                                            <p th:case="'witch'" th:text="마녀" class="character-race mb-0 me-2">종족명</p>
-                                            <p th:case="'furry'" th:text="수인" class="character-race mb-0 me-2">종족명</p>
-                                            <p th:case="'dragon'" th:text="용족" class="character-race mb-0 me-2">종족명</p>
-                                            <p th:case="'ghost'" th:text="유령" class="character-race mb-0 me-2">종족명</p>
-                                            <p th:case="'spirit'" th:text="정령" class="character-race mb-0 me-2">종족명</p>
-                                            <p th:case="'elf'" th:text="엘프" class="character-race mb-0 me-2">종족명</p>
+                                            <p th:case="'fairy'" th:text="#{race.fairy}" class="character-race mb-0 me-2">종족명</p>
+                                            <p th:case="'witch'" th:text="#{race.witch}" class="character-race mb-0 me-2">종족명</p>
+                                            <p th:case="'furry'" th:text="#{race.furry}" class="character-race mb-0 me-2">종족명</p>
+                                            <p th:case="'dragon'" th:text="#{race.dragon}" class="character-race mb-0 me-2">종족명</p>
+                                            <p th:case="'ghost'" th:text="#{race.ghost}" class="character-race mb-0 me-2">종족명</p>
+                                            <p th:case="'spirit'" th:text="#{race.spirit}" class="character-race mb-0 me-2">종족명</p>
+                                            <p th:case="'elf'" th:text="#{race.elf}" class="character-race mb-0 me-2">종족명</p>
                                             <img th:src=" @{ |${iconBaseUrl}race_*{{race}}.webp| }" alt="종족 심볼" class="race-symbol">
                                         </div>
                                     </div>
                                     <div class="mb-3">
-                                        <h4 class="mb-1">한마디</h4>
+                                        <h4 class="mb-1" th:text="#{character.detail.quote}">한마디</h4>
                                         <p th:text="|&quot;*{quote}&quot;|" class="character-quote">"캐릭터 한마디 내용"</p>
                                     </div>
                                     <div>
@@ -86,34 +86,34 @@
                     <!--/*[[ 우측: 특성 정보 ]]*/-->
                     <div class="col-md-6">
                         <div class="traits-section">
-                            <h4 class="mb-3 mt-3">특성 정보</h4>
+                            <h4 class="mb-3 mt-3" th:text="#{character.detail.traitInfo}">특성 정보</h4>
                             <!--/*[[ 성격, 역할, 공격 방식, 배치: 아이콘과 수평 정렬 ]]*/-->
                             <div class="traits-icons d-flex justify-content-between mb-4">
                                 <!--/*[[ 성격 ]]*/-->
                                 <div th:switch="*{{personality}}" class="trait">
                                     <th:block th:case="'gloomy'">
                                         <img th:src="@{ |${iconBaseUrl}personality_*{{personality}}.webp| }" alt="성격 아이콘" class="img-fluid">
-                                        <p class="trait-label"><span class="trait-category">성격:</span> <span class="trait-value">우울</span></p>
+                                        <p class="trait-label"><span class="trait-category" th:text="|#{personality.txt}: |">성격:</span> <span class="trait-value" th:text="#{personality.gloomy}">우울</span></p>
                                     </th:block>
 
                                     <th:block th:case="'activity'">
                                         <img th:src="@{ |${iconBaseUrl}personality_*{{personality}}.webp| }" alt="성격 아이콘" class="img-fluid">
-                                        <p class="trait-label"><span class="trait-category">성격:</span> <span class="trait-value">활발</span></p>
+                                        <p class="trait-label"><span class="trait-category" th:text="|#{personality.txt}:|">성격:</span> <span class="trait-value" th:text="#{personality.activity}">활발</span></p>
                                     </th:block>
 
                                     <th:block th:case="'pure'">
                                         <img th:src="@{ |${iconBaseUrl}personality_*{{personality}}.webp| }" alt="성격 아이콘" class="img-fluid">
-                                        <p class="trait-label"><span class="trait-category">성격:</span> <span class="trait-value">순수</span></p>
+                                        <p class="trait-label"><span class="trait-category" th:text="|#{personality.txt}:|">성격:</span> <span class="trait-value" th:text="#{personality.pure}">순수</span></p>
                                     </th:block>
 
                                     <th:block th:case="'madness'">
                                         <img th:src="@{ |${iconBaseUrl}personality_*{{personality}}.webp| }" alt="성격 아이콘" class="img-fluid">
-                                        <p class="trait-label"><span class="trait-category">성격:</span> <span class="trait-value">광기</span></p>
+                                        <p class="trait-label"><span class="trait-category" th:text="|#{personality.txt}:|">성격:</span> <span class="trait-value" th:text="#{personality.madness}">광기</span></p>
                                     </th:block>
 
                                     <th:block th:case="'cool'">
                                         <img th:src="@{ |${iconBaseUrl}personality_*{{personality}}.webp| }" alt="성격 아이콘" class="img-fluid">
-                                        <p class="trait-label"><span class="trait-category">성격:</span> <span class="trait-value">냉정</span></p>
+                                        <p class="trait-label"><span class="trait-category" th:text="|#{personality.txt}:|">성격:</span> <span class="trait-value" th:text="#{personality.cool}">냉정</span></p>
                                     </th:block>
                                 </div>
 
@@ -121,17 +121,17 @@
                                 <div th:switch="*{{role}}" class="trait">
                                     <th:block th:case="'dealer'">
                                         <img th:src="@{ |${iconBaseUrl}class_*{{role}}.webp| }" alt="역할 아이콘" class="img-fluid">
-                                        <p class="trait-label"><span class="trait-category">역할:</span> <span class="trait-value">딜러</span></p>
+                                        <p class="trait-label"><span class="trait-category" th:text="|#{role.txt}: |">역할:</span> <span class="trait-value" th:text="#{role.dealer}">딜러</span></p>
                                     </th:block>
 
                                     <th:block th:case="'tanker'">
                                         <img th:src="@{ |${iconBaseUrl}class_*{{role}}.webp| }" alt="역할 아이콘" class="img-fluid">
-                                        <p class="trait-label"><span class="trait-category">역할:</span> <span class="trait-value">탱커</span></p>
+                                        <p class="trait-label"><span class="trait-category" th:text="|#{role.txt}: |">역할:</span> <span class="trait-value" th:text="#{role.tanker}">탱커</span></p>
                                     </th:block>
 
                                     <th:block th:case="'supporter'">
                                         <img th:src="@{ |${iconBaseUrl}class_*{{role}}.webp| }" alt="역할 아이콘" class="img-fluid">
-                                        <p class="trait-label"><span class="trait-category">역할:</span> <span class="trait-value">서포터</span></p>
+                                        <p class="trait-label"><span class="trait-category" th:text="|#{role.txt}: |">역할:</span> <span class="trait-value" th:text="#{role.supporter}">서포터</span></p>
                                     </th:block>
                                 </div>
 
@@ -139,12 +139,12 @@
                                 <div th:switch="*{{attackType}}" class="trait">
                                     <th:block th:case="'physical'">
                                         <img th:src="@{ |${iconBaseUrl}attackType_*{{attackType}}.webp| }" alt="공격 방식 아이콘" class="img-fluid">
-                                        <p class="trait-label"><span class="trait-category">공격 방식:</span> <span class="trait-value">물리</span></p>
+                                        <p class="trait-label"><span class="trait-category" th:text="|#{attackType.txt}: |">공격 방식:</span> <span class="trait-value" th:text="#{attackType.physical}">물리</span></p>
                                     </th:block>
 
                                     <th:block th:case="'magical'">
                                         <img th:src="@{ |${iconBaseUrl}attackType_*{{attackType}}.webp| }" alt="공격 방식 아이콘" class="img-fluid">
-                                        <p class="trait-label"><span class="trait-category">공격 방식:</span> <span class="trait-value">마법</span></p>
+                                        <p class="trait-label"><span class="trait-category" th:text="|#{attackType.txt}: |">공격 방식:</span> <span class="trait-value" th:text="#{attackType.magical}">마법</span></p>
                                     </th:block>
                                 </div>
 
@@ -152,22 +152,22 @@
                                 <div th:switch="*{{position}}" class="trait">
                                     <th:block th:case="'front'">
                                         <img th:src="@{ |${iconBaseUrl}position_*{{position}}.webp| }" alt="배치 아이콘" class="img-fluid">
-                                        <p class="trait-label"><span class="trait-category">배치:</span> <span class="trait-value">전열</span></p>
+                                        <p class="trait-label"><span class="trait-category" th:text="|#{position.txt}: |">배치:</span> <span class="trait-value" th:text="#{position.front}">전열</span></p>
                                     </th:block>
 
                                     <th:block th:case="'middle'">
                                         <img th:src="@{ |${iconBaseUrl}position_*{{position}}.webp| }" alt="배치 아이콘" class="img-fluid">
-                                        <p class="trait-label"><span class="trait-category">배치:</span> <span class="trait-value">중열</span></p>
+                                        <p class="trait-label"><span class="trait-category" th:text="|#{position.txt}: |">배치:</span> <span class="trait-value" th:text="#{position.middle}">중열</span></p>
                                     </th:block>
 
                                     <th:block th:case="'back'">
                                         <img th:src="@{ |${iconBaseUrl}position_*{{position}}.webp| }" alt="배치 아이콘" class="img-fluid">
-                                        <p class="trait-label"><span class="trait-category">배치:</span> <span class="trait-value">후열</span></p>
+                                        <p class="trait-label"><span class="trait-category" th:text="|#{position.txt}: |">배치:</span> <span class="trait-value" th:text="#{position.back}">후열</span></p>
                                     </th:block>
 
                                     <th:block th:case="'all'">
                                         <img th:src="@{ |${iconBaseUrl}position_*{{position}}.webp| }" alt="배치 아이콘" class="img-fluid">
-                                        <p class="trait-label"><span class="trait-category">배치:</span> <span class="trait-value">전체</span></p>
+                                        <p class="trait-label"><span class="trait-category" th:text="|#{position.txt}: |">배치:</span> <span class="trait-value" th:text="#{position.all}">전체</span></p>
                                     </th:block>
                                 </div>
                             </div>
@@ -175,7 +175,7 @@
                             <!--/*[[ 스테이터스 게이지 ]]*/-->
                             <div class="status-bars">
                                 <div class="status-bar mb-3">
-                                    <label for="status-aggressive">깡</label>
+                                    <label for="status-aggressive" th:text="#{character.detail.aggressive}">깡</label>
                                     <div class="progress" id="status-aggressive">
                                         <div class="progress-bar strength-bar" role="progressbar"
                                              th:style="|width: *{stat.aggressive * 10}%|"
@@ -184,7 +184,7 @@
                                     </div>
                                 </div>
                                 <div class="status-bar mb-3">
-                                    <label for="status-endurance">맷집</label>
+                                    <label for="status-endurance" th:text="#{character.detail.endurance}">맷집</label>
                                     <div class="progress" id="status-endurance">
                                         <div class="progress-bar endurance-bar" role="progressbar"
                                              th:style="|width: *{stat.endurance * 10}%|"
@@ -194,7 +194,7 @@
                                 </div>
 
                                 <div class="status-bar mb-3">
-                                    <label for="status-trick">재주</label>
+                                    <label for="status-trick" th:text="#{character.detail.trick}">재주</label>
                                     <div class="progress" id="status-trick">
                                         <div class="progress-bar skill-bar" role="progressbar"
                                              th:style="|width: *{stat.trick * 10}%|"
@@ -211,7 +211,7 @@
 
             <!--/*[[ 스킬 섹션 ]]*/-->
             <section id="skills" class="mb-5 container">
-                <h2 class="mb-4">스킬</h2>
+                <h2 class="mb-4" th:text="#{character.detail.skill}">스킬</h2>
                 <hr class="title-underline">
                 <div class="row">
                     <!--/*[[ 일반 공격 ]]*/-->
@@ -224,14 +224,14 @@
                                     <img th:case="'magical'" th:src="@{ |${iconBaseUrl}normalAttack_*{{attackType}}.webp| }" alt="일반 공격 이미지" class="img-fluid rounded skill-image">
                                 </div>
                                 
-                                <h4 class="card-title text-center">
+                                <h4 class="card-title text-center" th:text="#{character.detail.attack}">
                                     일반 공격
                                 </h4>
                                 <hr class="my-2"> <!--/*[[ 구분선 추가 ]]*/-->
 
                                 <!--/*[[ 기본 공격 설명 ]]*/-->
                                 <div class="mb-3">
-                                    <h5 class="skill-subtitle">기본</h5>
+                                    <h5 class="skill-subtitle" th:text="#{character.detail.basic}">기본</h5>
                                     <p th:text="*{normalAttack.description}" class="card-text">기본공격 설명</p>
                                     <ul class="list-unstyled">
                                         <li th:each="attribute: *{normalAttack.attributes}">
@@ -244,7 +244,7 @@
                                 <!--/*[[ 강화 공격 설명 (있을 때만 렌더링) ]]*/-->
                                 <div th:if="*{enhancedAttack != null}">
                                     <hr class="my-2"> <!--/*[[ 기본 공격과 강화 공격 사이의 구분선 ]]*/-->
-                                    <h5 class="skill-subtitle">강화</h5>
+                                    <h5 class="skill-subtitle" th:text="#{character.detail.enhanced}">강화</h5>
                                     <p th:text="*{enhancedAttack.description}" class="card-text">강화공격 설명</p>
                                     <ul class="list-unstyled">
                                         <li th:each="attribute: *{enhancedAttack.attributes}">
@@ -268,7 +268,7 @@
                                 </div>
                                 
                                 <h4 class="card-title text-center">
-                                    <span class="skill-title-prefix">저학년 스킬:</span>
+                                    <span class="skill-title-prefix" th:text="|#{character.detail.lowSkill}:|">저학년 스킬:</span>
                                     <span th:text="*{lowSkill.name}">저학년 스킬 이름</span>
                                 </h4>
                                 <hr class="my-2">
@@ -293,7 +293,7 @@
                                 </div>
                                 
                                 <h4 class="card-title text-center">
-                                    <span class="skill-title-prefix">고학년 스킬:</span>
+                                    <span class="skill-title-prefix" th:text="|#{character.detail.highSkill}:|">고학년 스킬:</span>
                                     <span th:text="*{highSkill.name}">고학년 스킬 이름</span>
                                 </h4>
                                 <hr class="my-2">
@@ -312,7 +312,7 @@
             
             <!--/*[[ 어사이드 섹션 ]]*/-->
             <section id="aside" class="mt-5 container">
-                <h2 class="mb-4">어사이드</h2>
+                <h2 class="mb-4" th:text="#{character.detail.aside}">어사이드</h2>
                 <hr class="title-underline">
 
                 <div th:if="${character.aside != null}" class="container aside-content">
@@ -445,7 +445,7 @@
 
             <!--/*[[ 사복 섹션 ]]*/-->
             <section id="skins" class="mt-5 container">
-                <h2 class="mb-4">사복</h2>
+                <h2 class="mb-4" th:text="#{character.detail.skin}">사복</h2>
                 <hr class="title-underline">
                 <div class="skin-row">
 
