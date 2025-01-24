@@ -10,7 +10,7 @@
         <!--/*[[ 왼쪽: 로고와 메뉴 ]]*/-->
         <div class="d-flex align-items-center">
             <!--/*[[ 로고 ]]*/-->
-            <a class="navbar-brand me-4" href="/">
+            <a class="navbar-brand me-4" th:href="@{/{lang} (lang=${language})}">
                 <img th:src="@{/imgs/logo.png}" alt="게임 로고">
             </a>
 
