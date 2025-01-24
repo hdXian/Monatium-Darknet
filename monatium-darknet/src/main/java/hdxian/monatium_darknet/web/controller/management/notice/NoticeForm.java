@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.web.controller.management.notice;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class NoticeForm {
@@ -12,6 +13,8 @@ public class NoticeForm {
 
     @NotNull
     private Long categoryId;
+
+    private MultipartFile thumbnailImg;
 
     @NotBlank
     private String content;

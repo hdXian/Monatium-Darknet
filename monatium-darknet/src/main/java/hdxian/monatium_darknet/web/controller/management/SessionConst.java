@@ -8,6 +8,7 @@ public interface SessionConst {
     // 공지사항 기능 관련 상수
     public static final String NOTICE_FORM = "noticeForm";
     public static final String NOTICE_CATEGORY_FORM = "categoryForm";
+    public static final String NOTICE_THUMBNAIL_URL = "thumbnailUrl";
 
     // 캐릭터 추가 기능 관련 상수
     // 단계별 폼 객체를 세션에 저장할 때 지정하는 attr 이름

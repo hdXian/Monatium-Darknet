@@ -38,6 +38,15 @@
             <div class="field-error" th:errors="*{categoryId}"></div>
         </div>
 
+        <div class="mb-3">
+            <label for="thumbnailImg" class="form-label">썸네일 이미지</label>
+            <input type="file" id="thumbnailImg" name="thumbnailImg" class="form-control"
+                   accept="image/*" onchange="previewImage(this)">
+            <div class="mt-3">
+                <img id="thumbnail-preview" class="img-thumbnail" th:src="@{|${thumbnailUrl}|}" style="max-width: 300px;" alt="썸네일 미리보기">
+            </div>
+        </div>
+
         <!--/*[[ Quill 에디터 ]]*/-->
         <div class="mb-3">
             <label for="editor" class="form-label">내용</label>

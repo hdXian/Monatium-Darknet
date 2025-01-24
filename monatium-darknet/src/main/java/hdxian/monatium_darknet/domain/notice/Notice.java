@@ -25,6 +25,9 @@ public class Notice {
     @Enumerated(EnumType.STRING)
     private LangCode langCode;
 
+    @Column(name = "thumbnail")
+    private String thumbnailFileName;
+
     private String title;
     private LocalDateTime date;
     private Long views;

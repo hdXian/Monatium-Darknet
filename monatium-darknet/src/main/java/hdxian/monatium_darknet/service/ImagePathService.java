@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.service;
 import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.exception.card.CardImageProcessException;
 import hdxian.monatium_darknet.exception.character.CharacterImageProcessException;
+import hdxian.monatium_darknet.exception.notice.NoticeImageProcessException;
 import hdxian.monatium_darknet.exception.skin.SkinImageProcessException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 
@@ -55,8 +57,34 @@ public class ImagePathService {
     // 서버 스토리지 내 이미지 저장 경로를 리턴
 
     // === 공지사항 관련 이미지 ===
+    public String getNoticeDefaultThumbnailFilePath() {
+        return thumbnailDir + "notice_defaultThumbnail" + ext_png;
+    }
+
     public String getNoticeDir(Long noticeId) {
         return noticeDir + (noticeId + "/");
+    }
+
+    @Transactional
+    public String saveNoticeThumbnail(Long noticeId, String src) {
+        // 여기서 들어오는 src는 임시저장 파일의 전체 경로임
+        if (noticeId == null) {
+            throw new NoticeImageProcessException("noticeId가 null입니다.");
+        }
+
+        if (!StringUtils.hasText(src))
+            src = getNoticeDefaultThumbnailFilePath();
+
+        String ext = fileStorageService.extractExt(src);
+        String dst = getNoticeDir(noticeId) + "thumbnail" + ext;
+
+        try {
+            fileStorageService.copyFile(new FileDto(src), new FileDto(dst));
+            return fileStorageService.extractFileName(dst); // FileDto dst.getFileName()도 가능.
+        } catch (IOException e) {
+            throw new NoticeImageProcessException(e);
+        }
+
     }
 
     // === 캐릭터 관련 이미지 ===

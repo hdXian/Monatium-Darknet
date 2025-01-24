@@ -42,7 +42,7 @@ public class NoticeService {
 
     // 공지사항 추가 기능
     @Transactional
-    public Long createNewNotice(Long memberId, NoticeDto noticeDto) {
+    public Long createNewNotice(Long memberId, NoticeDto noticeDto, String thumbnailFilePath) {
 
         Member member = memberService.findOne(memberId);
         String title = noticeDto.getTitle();
@@ -82,11 +82,17 @@ public class NoticeService {
             notice.setContent(updatedContent);
         }
 
+        // 썸네일 이미지를 저장해야 함. 인자로 이미지 파일 이름이 들어올텐데,
+        // 이게 null이면 카테고리에 따라 기본 썸네일 이미지로 저장해야 함
+        // null이 아니면 해당 이미지로 썸네일을 저장해야 함.
+        String thumbnailFileName = imagePathService.saveNoticeThumbnail(notice.getId(), thumbnailFilePath); // thumbnail.ext
+        notice.setThumbnailFileName(thumbnailFileName);
+
         return notice.getId();
     }
 
     @Transactional
-    public Long updateNotice(Long noticeId, NoticeDto updateParam) {
+    public Long updateNotice(Long noticeId, NoticeDto updateParam, String thumbnailFilePath) {
         Notice notice = findOne(noticeId);
 
         if (notice.getLangCode() != updateParam.getLangCode()) {
@@ -133,6 +139,16 @@ public class NoticeService {
 
         // 업데이트 시간으로 변경
         notice.setDate(LocalDateTime.now());
+
+        // 썸네일 이미지를 업데이트 해야함. null이면 업데이트 안함.
+        if (thumbnailFilePath != null) {
+            // 다른 imagePathService의 이미지 저장 메서드들과 다르게, saveNoticeThumbnail()는 이미지 경로로 null이 들어오면 기본 이미지를 저장해버림.
+            // 공지사항은 썸네일 이미지를 지정하지 않으면 기본 썸네일을 적용한다는 규칙이 있어, 동작이 다르기 때문.
+            // 공지사항 업데이트 로직은 업데이트 할 이미지가 없으면 기존 썸네일을 유지해야 하기 때문에, 기본 이미지로 저장하는 해당 메서드를 아예 호출하면 안 됨.
+            // 여기서 메서드에 전달하는 thumbnailFilePath는 썸네일이 변경되어 임시저장 경로에 있는 이미지 뿐임.
+            String thumbnailFileName = imagePathService.saveNoticeThumbnail(notice.getId(), thumbnailFilePath);
+            notice.setThumbnailFileName(thumbnailFileName);
+        }
 
         return notice.getId();
     }

@@ -4,6 +4,9 @@ import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategory;
+import hdxian.monatium_darknet.exception.notice.NoticeImageProcessException;
+import hdxian.monatium_darknet.file.FileDto;
+import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
 import hdxian.monatium_darknet.service.ImageUrlService;
 import hdxian.monatium_darknet.service.MemberService;
@@ -19,7 +22,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +42,7 @@ public class NoticeMgController {
     private final MemberService memberService;
     private final NoticeService noticeService;
     private final ImageUrlService imageUrlService;
+    private final LocalFileStorageService fileStorageService;
 
     @ModelAttribute(CURRENT_LANG_CODE)
     public LangCode crntLangCode(HttpSession session) {
@@ -70,9 +76,10 @@ public class NoticeMgController {
     @GetMapping("/new")
     public String noticeForm(HttpSession session, Model model) {
         NoticeForm noticeForm = Optional.ofNullable((NoticeForm) session.getAttribute(NOTICE_FORM)).orElse(new NoticeForm());
-        System.out.println("noticeForm in getForm() = " + noticeForm);
+        String thumbnailUrl = Optional.ofNullable((String) session.getAttribute(NOTICE_THUMBNAIL_URL)).orElse(imageUrlService.getDefaultThumbnailUrl());
 
         model.addAttribute(NOTICE_FORM, noticeForm);
+        model.addAttribute(NOTICE_THUMBNAIL_URL, thumbnailUrl);
         return "management/notice/noticeAddForm";
     }
 
@@ -81,12 +88,16 @@ public class NoticeMgController {
     public String createNotice(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
                                HttpSession session, @RequestParam("action") String action,
                                @SessionAttribute(LOGIN_MEMBER) Member member,
-                               @Validated @ModelAttribute(NOTICE_FORM) NoticeForm noticeForm, BindingResult bindingResult) {
+                               @Validated @ModelAttribute(NOTICE_FORM) NoticeForm noticeForm, BindingResult bindingResult, Model model) {
 
         // 취소 버튼을 누른 경우
         if (action.equals("cancel")) {
             return "redirect:/management/notices";
         }
+
+        // 임시 경로에 썸네일 이미지를 저장하고 url을 세션에 저장해야 함
+        saveThumbnailImageToTemp(session, noticeForm.getThumbnailImg());
+        noticeForm.setThumbnailImg(null); // 세션에 url만 저장하고 폼 객체 필드는 비워둠. 폼 객체를 세션에 저장해야 하는데, 이미지 파일까지 같이 저장하기엔 메모리 낭비가 큼.
 
         // 완료 버튼을 누른 경우
         if (action.equals("complete")) {
@@ -96,7 +107,8 @@ public class NoticeMgController {
             }
 
             NoticeDto noticeDto = generateNoticeDto(langCode, noticeForm);
-            Long savedId = noticeService.createNewNotice(member.getId(), noticeDto);
+            String thumbnailFilePath = generateThumbnailFilePath(session);
+            Long savedId = noticeService.createNewNotice(member.getId(), noticeDto, thumbnailFilePath);
 
             clearSessionAttributes(session);
             return "redirect:/management/notices";
@@ -117,8 +129,14 @@ public class NoticeMgController {
 
         NoticeForm noticeForm = Optional.ofNullable((NoticeForm) session.getAttribute(NOTICE_FORM)).orElse(generateNoticeForm(notice));
 
+        // 세션에 저장된 url을 가져온다.
+        // 세션에 없으면 notice에 저장된 썸네일 파일명을 가져온 뒤, noticeImageBaseUrl과 합쳐서 넣는다.
+        String thumbnailUrl = Optional.ofNullable((String) session.getAttribute(NOTICE_THUMBNAIL_URL))
+                .orElse(imageUrlService.getNoticeImageBaseUrl() + (noticeId + "/") + notice.getThumbnailFileName());
+
         model.addAttribute("noticeId", noticeId);
         model.addAttribute(NOTICE_FORM, noticeForm);
+        model.addAttribute(NOTICE_THUMBNAIL_URL, thumbnailUrl);
 
         return "management/notice/noticeEditForm";
     }
@@ -138,6 +156,10 @@ public class NoticeMgController {
             return "redirect:/management/notices";
         }
 
+        // 임시 경로에 썸네일 이미지를 저장하고 url을 세션에 저장해야 함
+        saveThumbnailImageToTemp(session, noticeForm.getThumbnailImg());
+        noticeForm.setThumbnailImg(null); // 세션에 url만 저장하고 폼 객체 필드는 비워둠. 폼 객체를 세션에 저장해야 하는데, 이미지 파일까지 같이 저장하기엔 메모리 낭비가 큼.
+
         // 완료 버튼을 누른 경우
         if (action.equals("complete")) {
 
@@ -147,11 +169,14 @@ public class NoticeMgController {
             }
 
             NoticeDto updateParam = generateNoticeDto(langCode, noticeForm);
-            Long updatedId = noticeService.updateNotice(noticeId, updateParam);
+            // 세션에 url이 남아있으면 이미지를 바꾼다는 의미. 찾아와야 함. 없으면 null 리턴.
+            String thumbnailFilePath = generateThumbnailFilePath(session);
+
+            Long updatedId = noticeService.updateNotice(noticeId, updateParam, thumbnailFilePath);
             clearSessionAttributes(session);
             return "redirect:/management/notices";
         }
-        // 취소 버튼을 누른 경우
+        // 임시저장 버튼을 누른 경우
         else {
             session.setAttribute(NOTICE_FORM, noticeForm);
             return "redirect:/management/notices/" + noticeId + "/edit";
@@ -235,10 +260,6 @@ public class NoticeMgController {
         return "management/notice/categoryEditForm";
     }
 
-    private NoticeCategoryForm generateCategoryForm(NoticeCategory category) {
-        return new NoticeCategoryForm(category.getName(), category.getStatus());
-    }
-
     // 공지사항 카테고리 수정
     @PostMapping("/categories/{categoryId}/edit")
     public String editCategory(HttpSession session, @RequestParam("action") String action,
@@ -266,7 +287,7 @@ public class NoticeMgController {
             clearSessionAttributes(session);
             return "redirect:/management/notices";
         }
-        // 취소 버튼을 누른 경우
+        // 임시저장 버튼을 누른 경우
         else {
             session.setAttribute(NOTICE_CATEGORY_FORM, categoryForm);
             return "redirect:/management/notices/categories/" + categoryId + "/edit";
@@ -289,6 +310,43 @@ public class NoticeMgController {
 
 
     // === private ===
+    private String generateThumbnailFilePath(HttpSession session) {
+        String thumbnailFilePath; // 0. 서비스 계층에 넘길 썸네일 이미지 경로 (tmp 경로)
+        String thumbnailUrl = (String) session.getAttribute(NOTICE_THUMBNAIL_URL); // 1. 세션에서 이미지 url을 가져옴
+        // 2-1. 세션에 뭐가 없으면 -> 서비스 계층에 null 넘김 -> 서비스 계층에서도 기본 이미지로 처리할 것
+        if (thumbnailUrl == null) {
+            thumbnailFilePath = null;
+        }
+        // 2-2. 세션에 뭐가 있으면 -> url에서 파일명 추출한 다음 temp 경로 붙여서 서비스 계층에 넘김 -> 서비스 계층에서 해당 경로로 파일 접근해서 옮겨 저장할 것
+        else {
+            String fileName = fileStorageService.extractFileName(thumbnailUrl);
+            thumbnailFilePath = fileStorageService.getTempDir() + fileName;
+        }
+        return thumbnailFilePath;
+    }
+
+    // 임시 경로에 썸네일 이미지를 저장하고 url을 세션에 저장
+    private void saveThumbnailImageToTemp(HttpSession session, MultipartFile imgFile) {
+        if (imgFile == null || imgFile.isEmpty())
+            return;
+
+        try {
+            FileDto fileDto = fileStorageService.saveFileToTemp(imgFile); // 저장된 파일의 fullPath를 받아옴
+//            System.out.println("fileDto = " + fileDto.getTotalPath());
+
+            String tempBaseUrl = imageUrlService.getTempImageBaseUrl();
+            String tempImgUrl = tempBaseUrl + fileDto.getFileName();
+//            System.out.println("tempImgUrl = " + tempImgUrl);
+
+            session.setAttribute(NOTICE_THUMBNAIL_URL, tempImgUrl);
+        } catch (IOException e) {
+            throw new NoticeImageProcessException(e);
+        }
+    }
+
+    private NoticeCategoryForm generateCategoryForm(NoticeCategory category) {
+        return new NoticeCategoryForm(category.getName(), category.getStatus());
+    }
 
     private NoticeForm generateNoticeForm(Notice notice) {
         NoticeForm noticeForm = new NoticeForm();
@@ -330,6 +388,7 @@ public class NoticeMgController {
     private void clearSessionAttributes(HttpSession session) {
         session.removeAttribute(NOTICE_FORM);
         session.removeAttribute(NOTICE_CATEGORY_FORM);
+        session.removeAttribute(NOTICE_THUMBNAIL_URL);
     }
 
 }

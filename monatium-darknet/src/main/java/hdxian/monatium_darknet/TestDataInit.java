@@ -63,7 +63,7 @@ public class TestDataInit {
         noticeDtosKo.add(generateNoticeDto("테스트 공지사항12 제목 (개발자노트)", noticeCategoryIdKo4, "테스트 공지사항4 본문", LangCode.KO));
 
         for (NoticeDto noticeDto : noticeDtosKo) {
-            noticeService.createNewNotice(memberId, noticeDto);
+            noticeService.createNewNotice(memberId, noticeDto, null);
         }
 
 
@@ -91,7 +91,7 @@ public class TestDataInit {
         noticeDtosEn.add(generateNoticeDto("Test Notice 24 Title (Developer Note)", noticeCategoryIdEn4, "Test Notice 24 Body", LangCode.EN));
 
         for (NoticeDto noticeDto : noticeDtosEn) {
-            noticeService.createNewNotice(memberId, noticeDto);
+            noticeService.createNewNotice(memberId, noticeDto, null);
         }
 
 
@@ -119,7 +119,7 @@ public class TestDataInit {
         noticeDtosJp.add(generateNoticeDto("テスト通知 36 タイトル (開発者ノート)", noticeCategoryIdJp4, "テスト通知 36 本文", LangCode.JP));
 
         for (NoticeDto noticeDto : noticeDtosJp) {
-            noticeService.createNewNotice(memberId, noticeDto);
+            noticeService.createNewNotice(memberId, noticeDto, null);
         }
 
         // 캐릭터 추가
