@@ -97,6 +97,11 @@ public class HomeController {
         return imageUrlService.getAsideBaseUrl();
     }
 
+    @ModelAttribute("noticeBaseUrl")
+    public String noticeBaseUrl() {
+        return imageUrlService.getNoticeImageBaseUrl();
+    }
+
     @ModelAttribute("staticMainUrl")
     public String mainBaseUrl() {
         return imageUrlService.getStaticImageBaseUrl() + "main/";
