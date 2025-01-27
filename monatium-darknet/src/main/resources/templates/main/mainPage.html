@@ -65,16 +65,20 @@
                              th:classappend="${iterStat.index == 0} ? 'active' : ''"
                              class="carousel-item">
 
-                            <div class="notice-image-container mb-3">
-                                <img th:src="@{|${noticeBaseUrl}${notice.id}/${notice.thumbnailFileName}|}"
-                                     class="img-fluid rounded"
-                                     alt="공지사항 이미지">
-                            </div>
+                            <a th:href="@{/{lang}/notices/{id} (lang=${language}, id=${notice.id}) }" class="d-block text-decoration-none">
 
-                            <div class="slide-text">
-                                <div class="slide-title" th:text="${notice.title}"></div>
-                                <div class="slide-date" th:text="${#temporals.format(notice.date, 'yyyy-MM-dd')}"></div>
-                            </div>
+                                <div class="notice-image-container mb-3">
+                                    <img th:src="@{|${noticeBaseUrl}${notice.id}/${notice.thumbnailFileName}|}"
+                                         class="img-fluid rounded"
+                                         alt="공지사항 이미지">
+                                </div>
+
+                                <div class="slide-text">
+                                    <div class="slide-title" th:text="${notice.title}"></div>
+                                    <div class="slide-date" th:text="${#temporals.format(notice.date, 'yyyy-MM-dd')}"></div>
+                                </div>
+
+                            </a>
 
                         </div>
 

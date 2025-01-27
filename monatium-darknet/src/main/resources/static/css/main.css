@@ -135,6 +135,16 @@ h2.section-title {
     height: 100%;
 }
 
+.notice-carousel .carousel-item a {
+    text-decoration: none; /* 밑줄 제거 */
+    color: inherit; /* 텍스트 색상을 부모 요소의 색상과 동일하게 설정 */
+}
+
+.notice-carousel .carousel-item a:hover {
+    color: inherit; /* 링크 위로 마우스를 올려도 색상이 변하지 않도록 설정 */
+    text-decoration: none; /* 호버 시에도 밑줄 제거 */
+}
+
 .carousel-item .notice-image-container {
     width: 100%;
     height: 80%;
