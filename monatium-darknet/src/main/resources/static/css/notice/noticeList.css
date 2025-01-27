@@ -1,7 +1,17 @@
+html {
+    height: 100%;
+}
+
 body {
+    height: 100%;
     font-family: 'ONE-Mobile-POP', 'Noto Sans JP', sans-serif;
     background-color: #f0f8ff; /* 밝은 파스텔톤 배경 */
     color: #000000; /* 텍스트를 어두운 색으로 */
+}
+
+.main-content {
+    min-height: 70vh;
+    margin-bottom: 2rem; /* 푸터와 콘텐츠 간격 추가 */
 }
 
 /* 표지 이미지 섹션 */
@@ -18,9 +28,7 @@ body {
 .container-main {
     display: flex;
     margin-top: 30px;
-    max-width: 80%;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 90%;
 }
 
 /* 카테고리 메뉴 (왼쪽) */
@@ -57,14 +65,15 @@ body {
 
 /* 공지사항 리스트 (오른쪽) */
 .notice-list-section {
+    height: auto;
     flex: 1 0 auto;
     margin-left: 20px;
     max-width: 70%;
     margin: 0 auto;
 }
 
-
 .notice-item {
+    height: 15vh;
     display: flex; /* 썸네일과 텍스트를 수평 정렬 */
     align-items: center; /* 수직 중앙 정렬 */
     padding: 2vh 0; /* 화면 높이에 비례한 여백 */
@@ -76,23 +85,20 @@ body {
     background-color: #ffe4b5; /* 항목 호버 시 밝은 배경 */
 }
 
-/*
+
 .thumbnail-container {
-    width: 15%;
-    aspect-ratio: 1;
+    width: 20%;
+    height: 100%;
     flex-shrink: 0;
     border-radius: 0.5rem;
     overflow: hidden;
 }
-*/
 
-/*
 .notice-thumbnail {
     width: 100%;
     height: 100%;
-    object-fit: cover
+    object-fit: contain;
 }
-*/
 
 .notice-category {
     /* width: 15%; */

@@ -48,6 +48,7 @@ public class NoticeController {
         model.addAttribute("page", noticePage);
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("curCategoryId", categoryId);
+        model.addAttribute("query", title);
 
         return "notice/noticeList";
     }
@@ -70,6 +71,11 @@ public class NoticeController {
     @ModelAttribute("faviconUrl")
     public String faviconUrl() {
         return imageUrlService.getErpinFaviconUrl();
+    }
+
+    @ModelAttribute("noticeBaseUrl")
+    public String noticeBaseUrl() {
+        return imageUrlService.getNoticeImageBaseUrl();
     }
 
 

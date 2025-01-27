@@ -6,6 +6,7 @@ import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.aside.AsideSpec;
 import hdxian.monatium_darknet.domain.card.CardGrade;
 import hdxian.monatium_darknet.domain.character.*;
+import hdxian.monatium_darknet.domain.notice.NoticeCategoryStatus;
 import hdxian.monatium_darknet.service.*;
 import hdxian.monatium_darknet.service.dto.*;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,10 @@ public class TestDataInit {
         Long noticeCategoryIdKo2 = noticeService.createNewNoticeCategory(LangCode.KO,"업데이트");
         Long noticeCategoryIdKo3 = noticeService.createNewNoticeCategory(LangCode.KO,"이벤트");
         Long noticeCategoryIdKo4 = noticeService.createNewNoticeCategory(LangCode.KO,"개발자노트");
+        noticeService.updateNoticeCategory(noticeCategoryIdKo1, "공지사항", NoticeCategoryStatus.PUBLIC);
+        noticeService.updateNoticeCategory(noticeCategoryIdKo2, "업데이트", NoticeCategoryStatus.PUBLIC);
+        noticeService.updateNoticeCategory(noticeCategoryIdKo3, "이벤트", NoticeCategoryStatus.PUBLIC);
+        noticeService.updateNoticeCategory(noticeCategoryIdKo4, "개발자노트", NoticeCategoryStatus.PUBLIC);
 
         // 공지사항 추가
         List<NoticeDto> noticeDtosKo = new ArrayList<>();
