@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
@@ -56,6 +57,9 @@ public class HomeController {
         csc.setLangCode(langCode);
         csc.setStatus(CharacterStatus.ACTIVE);
         List<Character> characterList = characterService.findAll(csc);
+        if (characterList.size() > 7) {
+            characterList = characterList.subList(0, 7);
+        }
 
         model.addAttribute("noticeList", noticeList);
         model.addAttribute("characterList", characterList);

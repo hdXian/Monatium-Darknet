@@ -33,11 +33,6 @@
     font-size: 1.25rem; /* 기존보다 글씨 크기 키움 */
 }
 
-.nav-text {
-    /* font-size: 1.3vw; */
-    font-size: min(1.3vw, 20px);
-}
-
 .nav-link:hover {
     color: #FF9800;
 }
@@ -84,16 +79,4 @@
 
 .community-icons img:hover {
     transform: scale(1.2);
-}
-
-/* 화면이 lg 이하로 줄어들면 SNS 아이콘과 다운로드 버튼 숨기기 */
-@media (max-width: 992px) {
-    .community-icons, .btn-download {
-        display: none !important;
-    }
-
-    /* 네비게이션 메뉴 안의 텍스트 메뉴는 항상 보임 */
-    .navbar-nav .nav-item {
-        display: block;
-    }
 }
