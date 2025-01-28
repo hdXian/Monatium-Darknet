@@ -15,11 +15,17 @@ document.addEventListener('click', function(event) {
 
         const requestUrl = isActive ? `/management/characters/disable/${cardId}` : `/management/characters/activate/${cardId}`
 
-        // 요청한 상태를 미리 계산
-
+        // CSRF 토큰 읽기
+        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
         // AJAX 요청
-        fetch(requestUrl, { method: 'POST' })
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: {
+                [csrfHeader]: csrfToken // CSRF 헤더 추가
+                }
+            })
             .then(response => {
                 if (response.ok) {
 
