@@ -6,6 +6,7 @@ import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.aside.AsideSpec;
 import hdxian.monatium_darknet.domain.card.CardGrade;
 import hdxian.monatium_darknet.domain.character.*;
+import hdxian.monatium_darknet.domain.notice.MemberRole;
 import hdxian.monatium_darknet.domain.notice.NoticeCategoryStatus;
 import hdxian.monatium_darknet.service.*;
 import hdxian.monatium_darknet.service.dto.*;
@@ -35,6 +36,7 @@ public class TestDataInit {
         // 관리자 계정 추가
         MemberDto memberDto = new MemberDto();
         memberDto.setLoginId("admin");
+        memberDto.setGrade(MemberRole.SUPER);
         memberDto.setPassword("1234");
         memberDto.setNickName("GM릴2리");
         Long memberId = memberService.createNewMember(memberDto);
