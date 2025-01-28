@@ -71,8 +71,6 @@
                                 <img th:src="@{ |${noticeBaseUrl}${notice.id}/${notice.thumbnailFileName}| }" alt="썸네일" class="notice-thumbnail">
                             </div>
 
-                            <!--                    <div class="notice-category me-3" th:text="|[${notice.category.name}]|">공지사항 카테고리 이름</div>-->
-
                             <!--/*[[ 제목 및 날짜 ]]*/-->
                             <div class="notice-content">
                                 <a th:href="@{ /{lang}/notices/{id} (lang=${language}, id=${notice.id}) }"
