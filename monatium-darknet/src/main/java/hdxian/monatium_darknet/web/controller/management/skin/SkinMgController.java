@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.web.controller.management.skin;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
@@ -7,6 +8,8 @@ import hdxian.monatium_darknet.domain.skin.SkinCategoryMapping;
 import hdxian.monatium_darknet.exception.skin.SkinImageProcessException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
+import hdxian.monatium_darknet.repository.dto.CharacterSearchCond;
+import hdxian.monatium_darknet.repository.dto.SkinCategorySearchCond;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.CharacterService;
 import hdxian.monatium_darknet.service.ImagePathService;
@@ -34,9 +37,10 @@ import java.util.Optional;
 import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
 
 @Slf4j
-@RequiredArgsConstructor
 @Controller
 @RequestMapping("/management/skins")
+@SessionAttributes(CURRENT_LANG_CODE)
+@RequiredArgsConstructor
 public class SkinMgController {
 
     private final SkinService skinService;
@@ -48,11 +52,19 @@ public class SkinMgController {
 
     private final SkinFormValidator skinFormValidator;
 
+    @ModelAttribute(CURRENT_LANG_CODE)
+    public LangCode crntLangCode(HttpSession session) {
+        return Optional.ofNullable((LangCode)session.getAttribute(CURRENT_LANG_CODE)).orElse(LangCode.KO);
+    }
+
     // 스킨 목록
     @GetMapping
-    public String skinList(HttpSession session, Model model, @RequestParam(value = "category", required = false) Long categoryId) {
+    public String skinList(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
+                           @RequestParam(value = "category", required = false) Long categoryId,
+                           HttpSession session, Model model) {
         clearSessionAttributes(session);
         SkinSearchCond searchCond = new SkinSearchCond();
+        searchCond.setLangCode(langCode);
         if (categoryId != null) {
             searchCond.getCategoryIds().add(categoryId);
             SkinCategory category = skinService.findOneCategory(categoryId);
@@ -67,11 +79,18 @@ public class SkinMgController {
 
     // 스킨 추가 페이지
     @GetMapping("/new")
-    public String addSkinForm(HttpSession session, Model model) {
+    public String addSkinForm(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode, HttpSession session, Model model) {
         SkinForm skinForm = Optional.ofNullable((SkinForm) session.getAttribute(SKIN_FORM)).orElse(new SkinForm());
         String skinImageUrl = Optional.ofNullable((String) session.getAttribute(SKIN_IMAGE_URL)).orElse(imageUrlService.getDefaultSkinThumbnailUrl());
-        List<SkinCategory> categoryOptions = skinService.findAllCategories();
-        List<Character> characterList = characterService.findAll();
+
+        SkinCategorySearchCond categorySearchCond = new SkinCategorySearchCond();
+        categorySearchCond.setLangCode(langCode);
+
+        CharacterSearchCond chSearchCond = new CharacterSearchCond();
+        chSearchCond.setLangCode(langCode);
+
+        List<SkinCategory> categoryOptions = skinService.findAllCategories(categorySearchCond);
+        List<Character> characterList = characterService.findAll(chSearchCond);
 
         model.addAttribute(SKIN_FORM, skinForm);
         model.addAttribute(SKIN_IMAGE_URL, skinImageUrl);
@@ -82,7 +101,8 @@ public class SkinMgController {
 
     // 스킨 추가 요청
     @PostMapping("/new")
-    public String addSkin(HttpSession session, @RequestParam("action") String action,
+    public String addSkin(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
+                          HttpSession session, @RequestParam("action") String action,
                           @Validated @ModelAttribute("skinForm") SkinForm skinForm, BindingResult bindingResult, Model model) {
 
         // 0. 취소 버튼을 누른 경우
@@ -90,6 +110,8 @@ public class SkinMgController {
             clearSessionAttributes(session);
             return "redirect:/management/skins";
         }
+
+        ArrayList<Long> categoryIds = new ArrayList<>(new HashSet<>(skinForm.getCategoryIds())); // 중복되는 스킨 카테고리 id 제거
 
         // 1. 이미지를 임시 경로에 저장하고 세션에 url 추가
         saveSkinImageToTemp(session, skinForm.getSkinImage());
@@ -100,8 +122,13 @@ public class SkinMgController {
             skinFormValidator.validate(skinForm, bindingResult);
 
             if (bindingResult.hasErrors()) {
-                List<SkinCategory> categoryOptions = skinService.findAllCategories();
-                List<Character> characterList = characterService.findAll();
+                SkinCategorySearchCond categorySearchCond = new SkinCategorySearchCond();
+                categorySearchCond.setLangCode(langCode);
+
+                CharacterSearchCond chSearchCond = new CharacterSearchCond();
+                chSearchCond.setLangCode(langCode);
+                List<SkinCategory> categoryOptions = skinService.findAllCategories(categorySearchCond);
+                List<Character> characterList = characterService.findAll(chSearchCond);
                 String skinImageUrl = Optional.ofNullable((String) session.getAttribute(SKIN_IMAGE_URL)).orElse(imageUrlService.getDefaultSkinThumbnailUrl());
 
                 model.addAttribute(SKIN_IMAGE_URL, skinImageUrl);
@@ -110,7 +137,7 @@ public class SkinMgController {
                 return "management/skins/skinAddForm";
             }
 
-            SkinDto skinDto = generateSkinDto(skinForm);
+            SkinDto skinDto = generateSkinDto(langCode, skinForm);
             Long characterId = skinForm.getCharacterId();
 
             // 2-1. 이미지의 임시저장 경로를 생성 (세션에 이미지 url이 없으면 null 리턴), 없으면 디폴트 썸네일의 이미지 경로를 가져와서 지정
@@ -122,6 +149,7 @@ public class SkinMgController {
         }
         // 3. 임시 저장 버튼을 누른 경우 -> 세션에 폼 데이터 저장 및 리다이렉트
         else {
+            skinForm.setCategoryIds(categoryIds);
             session.setAttribute(SKIN_FORM, skinForm);
             return "redirect:/management/skins/new";
         }
@@ -130,11 +158,19 @@ public class SkinMgController {
 
     // 스킨 수정 페이지
     @GetMapping("/edit/{skinId}")
-    public String editForm(HttpSession session, @PathVariable("skinId") Long skinId, Model model) {
+    public String editForm(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
+                           HttpSession session, @PathVariable("skinId") Long skinId, Model model) {
         SkinForm skinForm = Optional.ofNullable((SkinForm) session.getAttribute(SKIN_FORM)).orElse(generateSkinEditForm(skinId));
         String skinImageUrl = Optional.ofNullable((String) session.getAttribute(SKIN_IMAGE_URL)).orElse(imageUrlService.getSkinBaseUrl() + skinId);
-        List<SkinCategory> categoryOptions = skinService.findAllCategories();
-        List<Character> characterList = characterService.findAll();
+
+        SkinCategorySearchCond categorySearchCond = new SkinCategorySearchCond();
+        categorySearchCond.setLangCode(langCode);
+
+        CharacterSearchCond chSearchCond = new CharacterSearchCond();
+        chSearchCond.setLangCode(langCode);
+
+        List<SkinCategory> categoryOptions = skinService.findAllCategories(categorySearchCond);
+        List<Character> characterList = characterService.findAll(chSearchCond);
 
         model.addAttribute("skinId", skinId);
         model.addAttribute(SKIN_FORM, skinForm);
@@ -145,7 +181,8 @@ public class SkinMgController {
     }
 
     @PostMapping("/edit/{skinId}")
-    public String editSkin(HttpSession session, @RequestParam("action") String action,
+    public String editSkin(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
+                           HttpSession session, @RequestParam("action") String action,
                            @PathVariable("skinId") Long skinId,
                            @Validated@ModelAttribute("skinForm") SkinForm skinForm, BindingResult bindingResult, Model model) {
 
@@ -154,6 +191,8 @@ public class SkinMgController {
             clearSessionAttributes(session);
             return "redirect:/management/skins";
         }
+
+        ArrayList<Long> categoryIds = new ArrayList<>(new HashSet<>(skinForm.getCategoryIds())); // 중복되는 스킨 카테고리 id 제거
 
         // 1. 스킨 이미지 저장 (비어있으면 변한게 아님 -> 동작하지 않음)
         saveSkinImageToTemp(session, skinForm.getSkinImage());
@@ -164,8 +203,14 @@ public class SkinMgController {
             skinFormValidator.validate(skinForm, bindingResult);
 
             if (bindingResult.hasErrors()) {
-                List<SkinCategory> categoryOptions = skinService.findAllCategories();
-                List<Character> characterList = characterService.findAll();
+                SkinCategorySearchCond categorySearchCond = new SkinCategorySearchCond();
+                categorySearchCond.setLangCode(langCode);
+
+                CharacterSearchCond chSearchCond = new CharacterSearchCond();
+                chSearchCond.setLangCode(langCode);
+
+                List<SkinCategory> categoryOptions = skinService.findAllCategories(categorySearchCond);
+                List<Character> characterList = characterService.findAll(chSearchCond);
                 String skinImageUrl = Optional.ofNullable((String) session.getAttribute(SKIN_IMAGE_URL)).orElse(imageUrlService.getSkinBaseUrl() + skinId);
 
                 model.addAttribute("skinId", skinId);
@@ -178,7 +223,8 @@ public class SkinMgController {
             // 2. 이미지의 임시 저장 경로를 추출 (세션에 이미지 url이 없으면 null 리턴됨), 없으면 그대로 null 넘겨서 이미지 변경 안되도록 할꺼임
             String imageTempPath = getSkinImageTempPath(session);
 
-            SkinDto updateParam = generateSkinDto(skinForm);
+            // updateParam에 langCode 넣어서 넘김. 서비스 계층에서 원래 스킨의 langCode와 맞지 않으면 예외 발생.
+            SkinDto updateParam = generateSkinDto(langCode, skinForm);
             Long characterId = skinForm.getCharacterId();
             Long updatedId = skinService.updateSkin(skinId, updateParam, characterId, imageTempPath);
 
@@ -187,6 +233,7 @@ public class SkinMgController {
         }
         // 3. 임시 저장 버튼을 누른 경우 -> 폼 데이터를 세션에 저장하고 리다이렉트
         else {
+            skinForm.setCategoryIds(categoryIds);
             session.setAttribute(SKIN_FORM, skinForm);
             return "redirect:/management/skins/edit/" + skinId;
         }
@@ -214,14 +261,18 @@ public class SkinMgController {
 
     // === 스킨 카테고리 ===
     @GetMapping("/categories")
-    public String categoryList(@RequestParam(value = "query", required = false) String name, Model model) {
-        List<SkinCategory> categoryList;
-        if (name != null) {
-            categoryList = skinService.findCategoriesByName(name);
-        }
-        else {
-            categoryList = skinService.findAllCategories();
-        }
+    public String categoryList(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
+                               @RequestParam(value = "query", required = false) String name, Model model) {
+        SkinCategorySearchCond categorySc = new SkinCategorySearchCond();
+        categorySc.setLangCode(langCode);
+        categorySc.setName(name);
+        List<SkinCategory> categoryList = skinService.findAllCategories(categorySc);
+//        if (name != null) {
+//            categoryList = skinService.findCategoriesByName(name);
+//        }
+//        else {
+//            categoryList = skinService.findAllCategories();
+//        }
 
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("query", name);
@@ -239,7 +290,8 @@ public class SkinMgController {
     }
 
     @PostMapping("/categories/new")
-    public String addCategory(HttpSession session, @RequestParam("action") String action,
+    public String addCategory(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
+                              HttpSession session, @RequestParam("action") String action,
                               @Validated@ModelAttribute("categoryForm") SkinCategoryForm categoryForm, BindingResult bindingResult,
                               Model model) {
 
@@ -261,7 +313,7 @@ public class SkinMgController {
                 return "management/skins/categoryAddForm";
             }
 
-            Long savedId = skinService.createNewSkinCategory(categoryForm.getName(), skinIds);
+            Long savedId = skinService.createNewSkinCategory(langCode, categoryForm.getName(), skinIds);
 
             clearSessionAttributes(session);
             return "redirect:/management/skins/categories";
@@ -367,7 +419,9 @@ public class SkinMgController {
 
         List<Long> categoryIds = new ArrayList<>();
 
-        List<SkinCategory> categories = skinService.findCategoriesBySkin(skinId);
+        SkinCategorySearchCond categorySc = new SkinCategorySearchCond();
+        categorySc.setSkinId(skinId);
+        List<SkinCategory> categories = skinService.findAllCategories(categorySc);
         for (SkinCategory category : categories) {
             categoryIds.add(category.getId());
         }
@@ -405,8 +459,9 @@ public class SkinMgController {
 
     }
 
-    private SkinDto generateSkinDto(SkinForm skinForm) {
+    private SkinDto generateSkinDto(LangCode langCode, SkinForm skinForm) {
         SkinDto dto = new SkinDto();
+        dto.setLangCode(langCode);
         dto.setName(skinForm.getName());
         dto.setDescription(skinForm.getStory());
         ArrayList<Long> categoryIds = new ArrayList<>(new HashSet<>(skinForm.getCategoryIds())); // 중복되는 카테고리 값이 없도록 set으로 한번 필터링

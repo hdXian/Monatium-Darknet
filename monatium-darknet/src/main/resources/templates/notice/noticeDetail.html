@@ -3,7 +3,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: common_header(~{::title}, ~{::link})}">
-    <title th:text="${notice.title}">공지사항 제목</title>
+    <title th:text="|${notice.title} - #{page.title}|">공지사항 제목</title>
     <link rel="stylesheet" th:href="@{/css/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/font.css}">
@@ -24,7 +24,7 @@
         <div class="notice-section">
             
         <!--/*[[ 공지사항 제목 및 메타 정보 ]]*/-->
-        <h1 class="notice-title" th:text="${notice.title}">[점검] 10월 3일(목) 정기점검 예정 안내</h1>
+        <h1 class="notice-title" th:text="${notice.title}">공지사항 제목</h1>
 
         <!--/*[[ 공지사항 정보 ]]*/-->
         <div class="notice-meta d-flex justify-content-between">
@@ -35,11 +35,9 @@
             <div class="text-end">
                 <span th:text="${#temporals.format(notice.date, 'yyyy-MM-dd')}" class="me-3">작성 날짜</span>
                 <span class="me-3">|</span>
-                <span class="me-3">조회수: <span th:text="${notice.views}">1234</span></span>
+                <span class="me-3"><span th:text="|#{notice.detail.views} : |">조회수: </span> <span th:text="${notice.views}">1234</span></span>
                 <span class="me-3">|</span>
-                <span>카테고리:
-                    <span th:text="${notice.category.name}">카테고리명</span>
-                </span>
+                <span> <span th:text="|#{notice.detail.category} : |"> 카테고리:  </span> <span th:text="${notice.category.name}">카테고리명</span></span>
             </div>
         </div>
         
@@ -52,7 +50,7 @@
 
         <!--/*[[ 공지사항 목록으로 돌아가는 버튼 ]]*/-->
         <div class="text-end">
-            <a href="/notices" class="btn btn-back">목록으로</a>
+            <a th:href="@{/{lang}/notices (lang=${language})}" class="btn btn-back" th:text="#{notice.detail.back}">목록으로</a>
         </div>
     </div>
     </section>

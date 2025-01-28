@@ -1,6 +1,9 @@
 package hdxian.monatium_darknet.service;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.notice.*;
+import hdxian.monatium_darknet.exception.IllegalLangCodeException;
+import hdxian.monatium_darknet.exception.notice.NoticeCategoryNotFoundException;
 import hdxian.monatium_darknet.exception.notice.NoticeImageProcessException;
 import hdxian.monatium_darknet.exception.notice.NoticeNotFoundException;
 import hdxian.monatium_darknet.file.FileDto;
@@ -32,29 +35,34 @@ public class NoticeService {
     private final MemberService memberService;
     private final LocalFileStorageService fileStorageService;
 
-    private final HtmlContentUtil htmlContentUtil;
+    private final ImagePathService imagePathService;
+    private final ImageUrlService imageUrlService;
 
-    @Value("${file.noticeDir}")
-    private String noticeBaseDir;
+    private final HtmlContentUtil htmlContentUtil;
 
     // 공지사항 추가 기능
     @Transactional
-    public Long createNewNotice(Long memberId, NoticeDto noticeDto) {
+    public Long createNewNotice(Long memberId, NoticeDto noticeDto, String thumbnailFilePath) {
 
         Member member = memberService.findOne(memberId);
         String title = noticeDto.getTitle();
+        LangCode langCode = noticeDto.getLangCode();
 
         Long categoryId = noticeDto.getCategoryId();
         Optional<NoticeCategory> findCategory = noticeCategoryRepository.findOne(categoryId);
         if (findCategory.isEmpty()) {
-            throw new RuntimeException("해당 공지사항 카테고리가 없습니다.");
+            throw new NoticeCategoryNotFoundException("해당 공지사항 카테고리가 없습니다.");
         }
-        NoticeCategory category = findCategory.get();
 
-        String htmlContent = htmlContentUtil.cleanHtmlContent(noticeDto.getContent());
+        NoticeCategory category = findCategory.get();
+        if (langCode != category.getLangCode()) {
+            throw new IllegalLangCodeException("공지사항 카테고리의 언어 코드가 맞지 않습니다. Category LangCode = " + category.getLangCode() + ", Notice LangCode = " + langCode);
+        }
+
+        String htmlContent = htmlContentUtil.cleanHtmlContent(noticeDto.getContent()); // html 콘텐츠 필터링
 
         // 1. 우선 공지사항을 저장해 ID 획득
-        Notice notice = Notice.createNotice(member, category, title, htmlContent);
+        Notice notice = Notice.createNotice(langCode, member, category, title, htmlContent);
         Long noticeId = noticeRepository.save(notice);
 
         // 2. 공지사항 본문에서 img 태그들의 src 속성들을 추출 ("/api/images/abcdef.png")
@@ -63,30 +71,47 @@ public class NoticeService {
         // 3. 이미지 속성이 있을 경우에만 파일 수정 작업을 수행
         if (!imgSrcs.isEmpty()) {
             // 3. 추출한 src를 바탕으로 이미지 파일명 수정 및 경로 변경 (서버 내 경로)
-            // {basePath}/temp/abcdef.png -> {basePath}}/notice/{noticeId}/img_01.png
+            // {basePath}/temp/abcdef.png -> {basePath}}/notices/{noticeId}/img_01.png
             List<String> changedImgSrcs;
 
             changedImgSrcs = moveNoticeImageFiles(noticeId, imgSrcs);
 
-            String baseSrc = "/notices/" + noticeId + "/images/";
+            String baseSrc = imageUrlService.getNoticeImageBaseUrl() + (noticeId + "/");
             String updatedContent = htmlContentUtil.updateImgSrc(htmlContent, baseSrc, changedImgSrcs);
 
             notice.setContent(updatedContent);
         }
 
+        // 썸네일 이미지를 저장해야 함. 인자로 이미지 파일 이름이 들어올텐데,
+        // 이게 null이면 카테고리에 따라 기본 썸네일 이미지로 저장해야 함
+        // null이 아니면 해당 이미지로 썸네일을 저장해야 함.
+        String thumbnailFileName = imagePathService.saveNoticeThumbnail(notice.getId(), thumbnailFilePath); // thumbnail.ext
+        notice.setThumbnailFileName(thumbnailFileName);
+
         return notice.getId();
     }
 
     @Transactional
-    public Long updateNotice(Long noticeId, NoticeDto updateParam) {
+    public Long updateNotice(Long noticeId, NoticeDto updateParam, String thumbnailFilePath) {
         Notice notice = findOne(noticeId);
 
+        if (notice.getLangCode() != updateParam.getLangCode()) {
+            throw new IllegalLangCodeException("수정하는 공지사항의 언어 코드가 맞지 않습니다. id = " + notice.getId() + ", langCode = " + notice.getLangCode());
+        }
+
+        // 해당 카테고리 유무 검증
         Long categoryId = updateParam.getCategoryId();
         Optional<NoticeCategory> findCategory = noticeCategoryRepository.findOne(categoryId);
         if (findCategory.isEmpty()) {
-            throw new RuntimeException("해당 공지사항 카테고리가 없습니다.");
+            throw new NoticeCategoryNotFoundException("해당 공지사항 카테고리가 없습니다.");
         }
+
+        // 공지사항-카테고리 간 언어코드 일치 검증
         NoticeCategory category = findCategory.get();
+        if (notice.getLangCode() != category.getLangCode()) {
+            throw new IllegalLangCodeException("카테고리와 공지사항의 언어 코드가 맞지 않습니다. Category LangCode = " + category.getLangCode() + ", Notice LangCode = " + notice.getLangCode());
+        }
+
         notice.setCategory(category);
 
         notice.setTitle(updateParam.getTitle());
@@ -103,7 +128,7 @@ public class NoticeService {
             changedFileNames = moveNoticeImageFiles(noticeId, imgSrcs);
 
             // img 태그의 src에 사용할 url. 서버 스토리지에 저장되는 경로와 다름.
-            String baseSrc = "/notices/" + noticeId + "/images/";
+            String baseSrc = imageUrlService.getNoticeImageBaseUrl() + (noticeId + "/");
             String updatedContent = htmlContentUtil.updateImgSrc(htmlContent, baseSrc, changedFileNames);
             notice.setContent(updatedContent);
         }
@@ -114,6 +139,16 @@ public class NoticeService {
 
         // 업데이트 시간으로 변경
         notice.setDate(LocalDateTime.now());
+
+        // 썸네일 이미지를 업데이트 해야함. null이면 업데이트 안함.
+        if (thumbnailFilePath != null) {
+            // 다른 imagePathService의 이미지 저장 메서드들과 다르게, saveNoticeThumbnail()는 이미지 경로로 null이 들어오면 기본 이미지를 저장해버림.
+            // 공지사항은 썸네일 이미지를 지정하지 않으면 기본 썸네일을 적용한다는 규칙이 있어, 동작이 다르기 때문.
+            // 공지사항 업데이트 로직은 업데이트 할 이미지가 없으면 기존 썸네일을 유지해야 하기 때문에, 기본 이미지로 저장하는 해당 메서드를 아예 호출하면 안 됨.
+            // 여기서 메서드에 전달하는 thumbnailFilePath는 썸네일이 변경되어 임시저장 경로에 있는 이미지 뿐임.
+            String thumbnailFileName = imagePathService.saveNoticeThumbnail(notice.getId(), thumbnailFilePath);
+            notice.setThumbnailFileName(thumbnailFileName);
+        }
 
         return notice.getId();
     }
@@ -179,11 +214,6 @@ public class NoticeService {
         return noticeRepository.findAll(searchCond, request);
     }
 
-    public String getNoticeImageUrl(Long noticeId, String imageName) {
-        String noticeDir = getNoticeDir(noticeId);
-        return fileStorageService.getFileFullPath(new FileDto(noticeDir, imageName));
-    }
-
     // 임시 저장 경로에 있던 공지사항 이미지들을 정식 경로에 저장
     public List<String> moveNoticeImageFiles(Long noticeId, List<String> imgSrcs) {
 
@@ -192,7 +222,7 @@ public class NoticeService {
         List<String> changedFileNames = new ArrayList<>();
 
         // 공지사항을 저장할 폴더 경로
-        String targetDir = getNoticeDir(noticeId);
+        String targetDir = imagePathService.getNoticeDir(noticeId);
 
         int seq = 1;
         String fileName, ext, saveFileName;
@@ -205,7 +235,7 @@ public class NoticeService {
             saveFileName = String.format("img_%02d%s", seq, ext); // saveFileName = "img_01.png"
 
             // url이 /api로 시작하면 temp 경로에 있는 파일임
-            if (src.startsWith("/api")) {
+            if (src.startsWith("/api/images/tmp")) {
                 from = new FileDto(tempDir, fileName); // from : temp 폴더에 저장돼있는 "o2p2aRmhWArow8cHh5x9_awsec2_logo.png" 이라는 이름의 파일
                 to = new FileDto(targetDir, saveFileName); // to : noticeBaseDir에 noticeId를 붙여 만든 경로에 "img_01.png" 라는 이름의 파일(로 저장하겠다)
             }
@@ -228,20 +258,17 @@ public class NoticeService {
         return changedFileNames;
     }
 
-    private String getNoticeDir(Long noticeId) {
-        return noticeBaseDir + (noticeId + "/");
-    }
-
 
     // === NoticeCategory ===
     @Transactional
-    public Long createNewNoticeCategory(String name) {
-        NoticeCategory category = NoticeCategory.createNoticeCategory(name);
+    public Long createNewNoticeCategory(LangCode langCode, String name) {
+        NoticeCategory category = NoticeCategory.createNoticeCategory(langCode, name);
         return noticeCategoryRepository.save(category);
     }
 
     @Transactional
     public Long updateNoticeCategory(Long categoryId, String name, NoticeCategoryStatus status) {
+        // 카테고리 업데이트할 때는 langCode를 아예 인자로 받지 않음.
         NoticeCategory category = findOneCategory(categoryId);
         category.setName(name);
         category.setStatus(status);
@@ -252,9 +279,13 @@ public class NoticeService {
     public NoticeCategory findOneCategory(Long categoryId) {
         Optional<NoticeCategory> find = noticeCategoryRepository.findOne(categoryId);
         if (find.isEmpty()) {
-            throw new RuntimeException("해당 공지사항 카테고리가 없습니다. id=" + categoryId);
+            throw new NoticeCategoryNotFoundException("해당 공지사항 카테고리가 없습니다. id=" + categoryId);
         }
         return find.get();
+    }
+
+    public List<NoticeCategory> findCategoriesByLangCode(LangCode langCode) {
+        return noticeCategoryRepository.findByLangCode(langCode);
     }
 
     public List<NoticeCategory> findAllNoticeCategories() {

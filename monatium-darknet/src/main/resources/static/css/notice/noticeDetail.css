@@ -6,7 +6,6 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
-    font-family: 'MobileGothicPOP', 'Noto Sans JP', sans-serif;
     background-color: #f0f8ff;
     color: #000;
 }

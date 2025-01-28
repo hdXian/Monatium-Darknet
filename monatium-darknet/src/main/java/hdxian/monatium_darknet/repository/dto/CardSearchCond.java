@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.repository.dto;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.card.CardGrade;
 import hdxian.monatium_darknet.domain.card.CardStatus;
 import hdxian.monatium_darknet.domain.card.CardType;
@@ -14,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CardSearchCond {
 
+    private LangCode langCode;
     private CardType cardType;
     private String name;
     private List<CardGrade> gradeList;

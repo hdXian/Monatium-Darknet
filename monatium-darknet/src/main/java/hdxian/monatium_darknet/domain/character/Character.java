@@ -41,6 +41,12 @@ public class Character {
     @Enumerated(EnumType.STRING)
     private Position position; // 위치 ENUM [FRONT, MIDDLE, BACK, ALL]
 
+    @Enumerated(EnumType.STRING)
+    private CharacterStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private LangCode langCode;
+
     // 깡, 맷집, 재주
     @Embedded
     private CharacterStat stat;
@@ -68,9 +74,6 @@ public class Character {
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Skin> skins = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    private CharacterStatus status;
-
 //    @Embedded
 //    private CharacterUrl urls; // 이미지 url
 
@@ -92,7 +95,7 @@ public class Character {
     public void setAside(Aside aside) {
         if (aside != null) {
             this.aside = aside; // setAside() 호출하면 안됨. 무한재귀임.
-            aside.setCharacter(this);
+//            aside.setCharacter(this);
         }
         else {
             this.aside = null;
@@ -100,12 +103,13 @@ public class Character {
     }
 
     // 생성 메서드
-    public static Character createCharacter(String name, String subtitle, String cv,
+    public static Character createCharacter(LangCode langCode, String name, String subtitle, String cv,
                                             Integer grade, String quote, String tmi, String favorite,
                                             Race race, Personality personality, Role role, AttackType attackType, Position position, CharacterStat stat,
                                             Attack normalAttack, Attack enhancedAttack, Skill lowSkill, Skill highSkill, Aside aside)
     {
         Character character = new Character();
+        character.setLangCode(langCode);
         character.setName(name);
         character.setSubtitle(subtitle);
         character.setCv(cv);

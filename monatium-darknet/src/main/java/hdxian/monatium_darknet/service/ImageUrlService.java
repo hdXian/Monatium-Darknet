@@ -63,6 +63,10 @@ public class ImageUrlService {
         return api_baseUrl + "images/";
     }
 
+    public String getNoticeImageBaseUrl() {
+        return api_baseUrl + "images/" + "notice/";
+    }
+
     public String getChBaseUrl() {
         return api_baseUrl + "images/" + "character/";
     }
@@ -72,12 +76,8 @@ public class ImageUrlService {
     }
 
     // 카드 이미지 -> /api/images/card/{id}
-    public String getSpellCardBaseUrl() {
-        return api_baseUrl + "images/" + "card/" + "spell/";
-    }
-
-    public String getArtifactCardBaseUrl() {
-        return api_baseUrl + "images/" + "card/" + "artifact/";
+    public String getCardBaseUrl() {
+        return api_baseUrl + "images/" + "card/";
     }
 
     public String getSkinBaseUrl() {

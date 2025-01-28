@@ -2,6 +2,7 @@ package hdxian.monatium_darknet.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.character.*;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.repository.dto.CharacterSearchCond;
@@ -57,8 +58,24 @@ public class CharacterRepository {
         return Optional.ofNullable(find);
     }
 
+    // wiki에서 사용하는 메서드
+    public Optional<Character> findByLangCodeAndIndex(LangCode langCode, int index) {
+        return Optional.ofNullable(
+                queryFactory.selectFrom(character)
+                        .where(
+                                equalsLangCode(langCode),
+                                equalsStatus(CharacterStatus.ACTIVE)
+                        )
+                        .orderBy(character.id.asc())
+                        .offset(index)
+                        .limit(1)
+                        .fetchOne()
+        );
+    }
+
     // queryDsl
     public List<Character> findAll(CharacterSearchCond searchCond) {
+        LangCode langCode = searchCond.getLangCode();
         String name = searchCond.getName();
         List<Integer> gradeList = searchCond.getGradeList();
         List<Race> raceList = searchCond.getRaceList();
@@ -71,6 +88,7 @@ public class CharacterRepository {
         return queryFactory.select(character)
                 .from(character)
                 .where(
+                        equalsLangCode(langCode),
                         likeName(name),
                         inGradeList(gradeList),
                         inRaceList(raceList),
@@ -84,6 +102,20 @@ public class CharacterRepository {
     }
 
     // === private BooleanExpression
+    private BooleanExpression equalsId(Long id) {
+        if (id != null) {
+            return character.id.eq(id);
+        }
+        return null;
+    }
+
+    private BooleanExpression equalsLangCode(LangCode langCode) {
+        if (langCode != null) {
+            return character.langCode.eq(langCode);
+        }
+        return null;
+    }
+
     private BooleanExpression likeName(String name) {
         if (StringUtils.hasText(name)) {
             return character.name.like("%" + name + "%");
@@ -145,6 +177,5 @@ public class CharacterRepository {
         }
         return character.status.ne(CharacterStatus.DELETED); // 조건 없어도 기본적으로 DELETED 제외
     }
-
 
 }

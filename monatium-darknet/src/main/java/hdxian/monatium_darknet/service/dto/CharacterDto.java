@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.service.dto;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.character.*;
@@ -7,6 +8,8 @@ import lombok.Data;
 
 @Data
 public class CharacterDto {
+
+    private LangCode langCode;
 
     private String name; // 이름
     private String subtitle; // 수식언

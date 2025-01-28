@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.repository.dto;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.character.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CharacterSearchCond {
+
+    private LangCode langCode;
 
     private String name; // 이름
     private List<Integer> gradeList;

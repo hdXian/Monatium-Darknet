@@ -1,17 +1,21 @@
 package hdxian.monatium_darknet.service;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.exception.card.CardImageProcessException;
 import hdxian.monatium_darknet.exception.character.CharacterImageProcessException;
+import hdxian.monatium_darknet.exception.notice.NoticeImageProcessException;
 import hdxian.monatium_darknet.exception.skin.SkinImageProcessException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.service.dto.AsideImageDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 
@@ -23,20 +27,17 @@ public class ImagePathService {
     @Value("${file.imgDir}")
     private String imgDir;
 
+    @Value("${file.noticeDir}")
+    private String noticeDir;
+
     @Value("${file.wikiDir}")
     private String wikiDir;
 
     @Value("${file.chDir}")
     private String chDir;
 
-    @Value("${file.asideDir}")
-    private String asideDir;
-
-    @Value("${file.spellCardDir}")
-    private String spellCardDir;
-
-    @Value("${file.artifactCardDir}")
-    private String artifactCardDir;
+    @Value("${file.cardDir}")
+    private String cardDir;
 
     @Value("${file.skinDir}")
     private String skinDir;
@@ -54,6 +55,37 @@ public class ImagePathService {
     }
 
     // 서버 스토리지 내 이미지 저장 경로를 리턴
+
+    // === 공지사항 관련 이미지 ===
+    public String getNoticeDefaultThumbnailFilePath() {
+        return thumbnailDir + "notice_defaultThumbnail" + ext_png;
+    }
+
+    public String getNoticeDir(Long noticeId) {
+        return noticeDir + (noticeId + "/");
+    }
+
+    @Transactional
+    public String saveNoticeThumbnail(Long noticeId, String src) {
+        // 여기서 들어오는 src는 임시저장 파일의 전체 경로임
+        if (noticeId == null) {
+            throw new NoticeImageProcessException("noticeId가 null입니다.");
+        }
+
+        if (!StringUtils.hasText(src))
+            src = getNoticeDefaultThumbnailFilePath();
+
+        String ext = fileStorageService.extractExt(src);
+        String dst = getNoticeDir(noticeId) + "thumbnail" + ext;
+
+        try {
+            fileStorageService.copyFile(new FileDto(src), new FileDto(dst));
+            return fileStorageService.extractFileName(dst); // FileDto dst.getFileName()도 가능.
+        } catch (IOException e) {
+            throw new NoticeImageProcessException(e);
+        }
+
+    }
 
     // === 캐릭터 관련 이미지 ===
     public CharacterImageDto generateChImagePaths(Long characterId) {
@@ -80,12 +112,9 @@ public class ImagePathService {
     }
 
     // === 카드 관련 이미지 ===
-    public String getSpellCardFileName(Long cardId) {
-        return spellCardDir + cardId + ext_webp;
-    }
-
-    public String getArtifactCardFileName(Long cardId) {
-        return artifactCardDir + cardId + ext_webp;
+    public String getCardFileName(Long cardId) {
+        // imgs/wiki/cards/{cardId}.webp
+        return cardDir + cardId + ext_webp;
     }
 
     // === 스킨 관련 이미지 ===
@@ -114,28 +143,12 @@ public class ImagePathService {
     }
 
     @Transactional
-    public void saveSpellCardImage(Long cardId, String src) {
+    public void saveCardImage(Long cardId, String src) {
         if (cardId == null || src == null) {
             throw new CardImageProcessException("cardId 또는 src가 null입니다.");
         }
 
-        String dst = getSpellCardFileName(cardId);
-
-        try {
-            fileStorageService.copyFile(new FileDto(src), new FileDto(dst));
-        } catch (IOException e) {
-            throw new CardImageProcessException(e);
-        }
-
-    }
-
-    @Transactional
-    public void saveArtifactCardImage(Long cardId, String src) {
-        if (cardId == null || src == null) {
-            throw new CardImageProcessException("cardId 또는 src가 null입니다.");
-        }
-
-        String dst = getArtifactCardFileName(cardId);
+        String dst = getCardFileName(cardId);
 
         try {
             fileStorageService.copyFile(new FileDto(src), new FileDto(dst));

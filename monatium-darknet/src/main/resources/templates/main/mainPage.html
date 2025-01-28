@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: common_header(~{::title}, ~{::link})}">
-    <title>짭릭컬 리리바이브</title>
+    <title th:text="#{home.title}">짭릭컬 리리바이브</title>
+    <link rel="stylesheet" th:href="@{/css/font.css}">
     <link rel="stylesheet" th:href="@{/css/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
-    <link rel="stylesheet" th:href="@{/css/font.css}">
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <!--/*[[ 커스텀 css ]]*/-->
 
@@ -32,8 +32,8 @@
 
     <!--/*[[ 히어로 콘텐츠 (비디오 위에 표시) ]]*/-->
     <div class="hero-content">
-        <h1>트릭컬 리바이브</h1>
-        <p>귀염뽀짝 볼따구들과 우당탕탕 대모험!</p>
+        <h1 th:text="#{home.hero.title}">트릭컬 리바이브</h1>
+        <p th:text="#{home.hero.subtitle}">귀염뽀짝 볼따구들과 우당탕탕 대모험!</p>
         <!--/*[[ Google Play 다운로드 링크 ]]*/-->
         <a href="https://play.google.com/store/apps/details?id=com.epidgames.trickcalrevive" target="_blank">
             <img th:src="@{|${staticMainUrl}google_play.png|}" alt="Google Play에서 다운로드" style="width: 180px; margin-right: 10px;">
@@ -58,21 +58,27 @@
             <!--/*[[ 왼쪽: 슬라이드 (Carousel) ]]*/-->
             <div class="notice-content-col d-flex flex-column align-items-center justify-content-center" data-aos="fade-right">
 
-                <div id="noticeCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+                <div id="noticeCarousel" class="carousel slide mb-4 notice-carousel" data-bs-ride="carousel">
                     <div class="carousel-inner">
 
                         <div th:each="notice, iterStat : ${noticeList}"
                              th:classappend="${iterStat.index == 0} ? 'active' : ''"
                              class="carousel-item">
 
-                            <img th:src="@{|${staticMainUrl}notice3.jpg|}"
-                                 class="img-fluid rounded mb-3"
-                                 alt="업데이트 1">
+                            <a th:href="@{/{lang}/notices/{id} (lang=${language}, id=${notice.id}) }" class="d-block text-decoration-none">
 
-                            <div class="slide-text">
-                                <div class="slide-title" th:text="${notice.title}"></div>
-                                <div class="slide-date" th:text="${#temporals.format(notice.date, 'yyyy-MM-dd')}"></div>
-                            </div>
+                                <div class="notice-image-container mb-3">
+                                    <img th:src="@{|${noticeBaseUrl}${notice.id}/${notice.thumbnailFileName}|}"
+                                         class="img-fluid rounded"
+                                         alt="공지사항 이미지">
+                                </div>
+
+                                <div class="slide-text">
+                                    <div class="slide-title" th:text="${notice.title}"></div>
+                                    <div class="slide-date" th:text="${#temporals.format(notice.date, 'yyyy-MM-dd')}"></div>
+                                </div>
+
+                            </a>
 
                         </div>
 
@@ -83,24 +89,24 @@
                 <div class="notice-media row text-center">  <!--/*[[ 중앙 정렬을 위해 text-center 추가 ]]*/-->
 
                     <!--/*[[ 미디어 타이틀 ]]*/-->
-                    <div class="notice-media-title w-100 mb-2">미디어</div>
+                    <div class="notice-media-title w-100 mb-2" th:text="#{home.media.title}">미디어</div>
 
                     <div class="col-4">
                         <a href="https://www.youtube.com/@epidgames6350" target="_blank" class="text-decoration-none">
                             <img th:src="@{|${staticMainUrl}sns_sc_1.webp|}" class="img-fluid rounded shadow mb-2" alt="유튜브">
-                            <div class="media-text fw-bold">유튜브 바로가기</div>
+                            <div class="media-text fw-bold" th:text="#{home.media.youtube}">유튜브 바로가기</div>
                         </a>
                     </div>
                     <div class="col-4">
                         <a href="https://x.com/Trickcal_Re" target="_blank" class="text-decoration-none">
                             <img th:src="@{|${staticMainUrl}sns_sc_2.png|}" class="img-fluid rounded shadow mb-2" alt="X">
-                            <div class="media-text fw-bold">공식 X</div>
+                            <div class="media-text fw-bold" th:text="#{home.media.x}">공식 X</div>
                         </a>
                     </div>
                     <div class="col-4">
                         <a href="https://game.naver.com/lounge/Trickcal/home" target="_blank" class="text-decoration-none">
                             <img th:src="@{|${staticMainUrl}sns_sc_3.webp|}" class="img-fluid rounded shadow mb-2" alt="네이버 라운지">
-                            <div class="media-text fw-bold ">공식 네이버 라운지</div>
+                            <div class="media-text fw-bold" th:text="#{home.media.lounge}">공식 네이버 라운지</div>
                         </a>
                     </div>
                 </div>
@@ -111,35 +117,35 @@
             <div class="notice-content-col d-flex flex-column gap-3" data-aos="fade-left">
                 <!--/*[[ 첫 번째 이미지 ]]*/-->
                 <div class="notice-img-container position-relative">
-                    <a th:href="@{/notices?category=notice}">
+                    <a th:href="@{/{lang}/notices?category=notice (lang=${language})}">
                         <img th:src="@{|${staticMainUrl}notice_sc1.png|}" class="img-fluid rounded shadow" alt="공지사항">
                     </a>
                 </div>
 
                 <!--/*[[ 두 번째 이미지 ]]*/-->
                 <div class="notice-img-container position-relative">
-                    <a th:href="@{/notices?category=update}">
+                    <a th:href="@{/{lang}/notices?category=update (lang=${language})}">
                         <img th:src="@{|${staticMainUrl}notice_sc2.png|}" class="img-fluid rounded shadow" alt="업데이트">
                     </a>
                 </div>
 
                 <!--/*[[ 세 번째 이미지 ]]*/-->
                 <div class="notice-img-container position-relative">
-                    <a th:href="@{/notices?category=event}">
+                    <a th:href="@{/{lang}/notices?category=event (lang=${language})}">
                         <img th:src="@{|${staticMainUrl}notice_sc3.png|}" class="img-fluid rounded shadow" alt="이벤트">
                     </a>
                 </div>
 
                 <!--/*[[ 네 번째 이미지 ]]*/-->
                 <div class="notice-img-container position-relative">
-                    <a th:href="@{/notices?category=dev}">
+                    <a th:href="@{/{lang}/notices?category=dev (lang=${language})}">
                         <img th:src="@{|${staticMainUrl}notice_sc4.png|}" class="img-fluid rounded shadow" alt="개발자 노트">
                     </a>
                 </div>
 
                 <!--/*[[ 더보기 버튼: 하단 우측 정렬 ]]*/-->
                 <div class="w-100 d-flex justify-content-end">
-                    <a th:href="@{/notices}" class="notice-button btn btn-custom btn-lg"> 공지사항 더보기 </a>
+                    <a th:href="@{/{lang}/notices (lang=${language})}" class="notice-button btn btn-custom btn-lg" th:text="#{home.news.more}"> 공지사항 더보기 </a>
                 </div>
             </div>
 
@@ -214,25 +220,27 @@
 
                         <!--/*[[ 종족명 및 심볼 ]]*/-->
                         <div class="d-flex align-items-center justify-content-center gap-2">
-                            종족:
-                            <th:block th:switch="${{character.race}}" th:case="'fairy'">
-                                <span th:case="'fairy'" th:text="요정" class="character-race">종족명</span>
-                                <span th:case="'witch'" th:text="마녀" class="character-race">종족명</span>
-                                <span th:case="'furry'" th:text="수인" class="character-race">종족명</span>
-                                <span th:case="'dragon'" th:text="용족" class="character-race">종족명</span>
-                                <span th:case="'ghost'" th:text="유령" class="character-race">종족명</span>
-                                <span th:case="'spirit'" th:text="정령" class="character-race">종족명</span>
-                                <span th:case="'elf'" th:text="엘프" class="character-race">종족명</span>
+                            <span th:text="|#{race.txt}:|">
+                                종족:
+                            </span>
+                            <th:block th:switch="${{character.race}}">
+                                <span th:case="'fairy'" th:text="#{race.fairy}" class="character-race">종족명</span>
+                                <span th:case="'witch'" th:text="#{race.witch}" class="character-race">종족명</span>
+                                <span th:case="'furry'" th:text="#{race.furry}" class="character-race">종족명</span>
+                                <span th:case="'dragon'" th:text="#{race.dragon}" class="character-race">종족명</span>
+                                <span th:case="'ghost'" th:text="#{race.ghost}" class="character-race">종족명</span>
+                                <span th:case="'spirit'" th:text="#{race.spirit}" class="character-race">종족명</span>
+                                <span th:case="'elf'" th:text="#{race.elf}" class="character-race">종족명</span>
                             </th:block>
                             <img th:src="@{ |${iconBaseUrl}race_${{character.race}}.webp| }" class="symbol-icon" alt="종족 심볼">
                         </div>
 
                         <!--/*[[ 캐릭터 한마디 ]]*/-->
-                        <div class="info-subtitle">한마디</div> <!--/*[[ 소제목 ]]*/-->
+                        <div class="info-subtitle" th:text="#{home.character.quote}">한마디</div> <!--/*[[ 소제목 ]]*/-->
                         <div th:text="${character.quote}">캐릭터 한 마디</div>
 
-                        <!--/*[[ 캐릭터 TMI ]]*/-->
-                        <div class="info-subtitle">좋아하는 것</div> <!--/*[[ 소제목 ]]*/-->
+                        <!--/*[[ 캐릭터 좋아하는 것 ]]*/-->
+                        <div class="info-subtitle" th:text="#{home.character.favorite}">좋아하는 것</div> <!--/*[[ 소제목 ]]*/-->
                         <div th:text="${character.favorite}">캐릭터 좋아하는 것</div>
 
                     </div>
@@ -256,19 +264,19 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="battle-tab" data-bs-toggle="pill" data-bs-target="#battle"
                             type="button" role="tab" aria-controls="battle" aria-selected="true">
-                        <div class="photozone-text">전투</div>
+                        <div class="photozone-text" th:text="#{home.inGame.battle}">전투</div>
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="theater-tab" data-bs-toggle="pill" data-bs-target="#theater"
                             type="button" role="tab" aria-controls="theater" aria-selected="false">
-                        <div class="photozone-text">테마극장</div>
+                        <div class="photozone-text" th:text="#{home.inGame.theme}">테마극장</div>
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="adventure-tab" data-bs-toggle="pill" data-bs-target="#adventure"
                             type="button" role="tab" aria-controls="adventure" aria-selected="false">
-                        <div class="photozone-text">볼따구 라이프</div>
+                        <div class="photozone-text" th:text="#{home.inGame.life}">볼따구 라이프</div>
                     </button>
                 </li>
             </ul>
@@ -420,9 +428,9 @@
     <!--/*[[ 닫기 버튼 ]]*/-->
     <button class="btn-close btn-close-white" onclick="closeRemoteControl()"></button>
     <h4>Quick Menu</h4>
-    <a href="https://coupon.a.prod.service.trickcal.io" class="btn btn-custom">쿠폰 등록</a>
-    <a href="#" class="btn btn-custom">신규 유저 혜택</a>
-    <a href="#" class="btn btn-custom">이벤트 참여</a>
+    <a href="https://coupon.a.prod.service.trickcal.io" class="btn btn-custom" th:text="#{home.quick.coupon}">쿠폰 등록</a>
+    <a href="#" class="btn btn-custom" th:text="#{home.quick.newbie}">신규 유저 혜택</a>
+    <a href="#" class="btn btn-custom" th:text="#{home.quick.event}">이벤트 참여</a>
 </div>
 
 <!--/*[[ 푸터 ]]*/-->

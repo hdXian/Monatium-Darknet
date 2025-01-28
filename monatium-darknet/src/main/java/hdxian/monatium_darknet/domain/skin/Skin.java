@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.domain.skin;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.character.Character;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,7 +9,7 @@ import lombok.Setter;
 import java.util.*;
 
 @Entity
-@Getter @Setter // Setter는 추후 생성 메서드 등으로 대체해야 함
+@Getter @Setter
 public class Skin {
 
     @Id @GeneratedValue
@@ -17,13 +18,12 @@ public class Skin {
 
     private String name;
     private String description;
-//    private String imageUrl;
-
-//    @Enumerated(EnumType.STRING)
-//    private SkinGrade grade;
 
     @Enumerated(EnumType.STRING)
     private SkinStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private LangCode langCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id")
@@ -53,8 +53,9 @@ public class Skin {
 
 
     // === 생성 메서드 ===
-    public static Skin createSkin(String name, String description, Character character) {
+    public static Skin createSkin(LangCode langCode, String name, String description, Character character) {
         Skin skin = new Skin();
+        skin.setLangCode(langCode);
         skin.setName(name);
         skin.setDescription(description);
         skin.setStatus(SkinStatus.DISABLE);

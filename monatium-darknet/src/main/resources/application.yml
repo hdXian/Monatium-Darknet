@@ -7,8 +7,10 @@ server:
 spring:
   profiles:
     active: dev # local
+
   messages:
     basename: messages, errors
+    encoding: UTF-8
 
   datasource:
     url: jdbc:h2:tcp://localhost/~/monatium-darknet
@@ -42,15 +44,12 @@ logging.level:
 # file path (local, for test)
 file:
   dir: D:/Dev/trickcal_unofficial/files/
-  imgDir: imgs/
   tempDir: temp/
+  imgDir: imgs/
   noticeDir: imgs/notices/
   wikiDir: imgs/wiki/
-  iconDir: imgs/wiki/icons/
   chDir: imgs/wiki/characters/
-  asideDir: imgs/wiki/asides/
-  spellCardDir: imgs/wiki/cards/spell/
-  artifactCardDir: imgs/wiki/cards/artifact/
+  cardDir: imgs/wiki/cards/
   skinDir: imgs/wiki/skins/
   thumbnailDir: imgs/thumbnail/
 

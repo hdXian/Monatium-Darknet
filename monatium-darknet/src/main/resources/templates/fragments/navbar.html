@@ -5,114 +5,124 @@
 
 <!--/*[[ 일반 페이지 상단 네비게이션 바 ]]*/-->
 <nav th:fragment="common_navbar" class="navbar navbar-expand-lg navbar-dark sticky-top">
-  <div class="container-fluid px-5">
+    <div class="container-fluid px-5 navbar-container">
+        <!--/*[[ 로고 ]]*/-->
+        <a class="navbar-brand me-4" th:href="@{/{lang} (lang=${language})}">
+            <img th:src="@{/imgs/logo.png}" alt="게임 로고">
+        </a>
 
-    <!--/*[[ 왼쪽: 로고와 메뉴 ]]*/-->
-    <div class="d-flex align-items-center">
-      <!--/*[[ 로고 ]]*/-->
-      <a class="navbar-brand me-4" href="/">
-        <img th:src="@{/imgs/logo.png}" alt="게임 로고">
-      </a>
+        <!--/*[[ 네비게이션 메뉴 (왼쪽 정렬) 화면 작아질 시 나타나는 햄버거 버튼 ]]*/-->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#common_navbarNav" aria-controls="common_navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-      <!--/*[[ 네비게이션 메뉴 (왼쪽 정렬) 화면 작아질 시 나타나는 햄버거 버튼 ]]*/-->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#common_navbarNav" aria-controls="common_navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+        <!--/*[[ 모바일에서 메뉴 숨김 ]]*/-->
+        <div class="collapse navbar-collapse justify-content-between" id="common_navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link me-3 nav-text" href="#notice" th:text="#{navbar.news}">새소식</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link me-3 nav-text" href="#worldview" th:text="#{navbar.worldView}">세계관</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link me-3 nav-text" href="#characters" th:text="#{navbar.characters}">캐릭터</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link me-3 nav-text" href="#photozone" th:text="#{navbar.inGame}">인게임</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-text" th:href="@{/{lang}/wiki/characters (lang=${language})}" th:text="#{navbar.wiki}">교단 기록소</a>
+                </li>
+            </ul>
 
-      <!--/*[[ 모바일에서 메뉴 숨김 ]]*/-->
-      <div class="collapse navbar-collapse" id="common_navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link me-3 nav-text" href="#notice">새소식</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link me-3 nav-text" href="#worldview">세계관</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link me-3 nav-text" href="#characters">캐릭터</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link me-3 nav-text" href="#photozone">인게임</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link nav-text" th:href="@{/wiki/characters}">교단 기록소</a>
-          </li>
-        </ul>
-      </div>
+            <!--/*[[ 오른쪽: 언어 선택, SNS 아이콘, 다운로드 버튼 ]]*/-->
+            <div class="d-flex align-items-center">
+                <!--/*[[ 언어 선택 드롭다운 ]]*/-->
+                <div class="dropdown language-select me-4">
+                    <form th:action="@{/lang-change}" method="post" class="d-inline-block">
+                        <select class="form-select form-select-sm bg-light text-dark " id="languageSelect"
+                                name="lang" onchange="this.form.submit()">
+                            <option th:value="ko" th:selected="${language == 'ko'}">한국어</option>
+                            <option th:value="en" th:selected="${language == 'en'}">English</option>
+                            <option th:value="jp" th:selected="${language == 'jp'}">日本語</option>
+                        </select>
+                    </form>
+                </div>
+
+                <!--/*[[ SNS 아이콘 ]]*/-->
+                <div class="community-icons d-flex me-4">
+                    <a href="https://www.youtube.com/@epidgames6350" target="_blank" class="me-3">
+                        <img th:src="@{/imgs/main/sns_youtube.png}" alt="YouTube">
+                    </a>
+                    <a href="https://x.com/" target="_blank">
+                        <img th:src="@{/imgs/main/sns_x.png}" alt="X (구 트위터)">
+                    </a>
+                </div>
+
+                <!--/*[[ 다운로드 버튼 ]]*/-->
+                <a href="/download" class="btn btn-download" th:text="#{navbar.download}" >다운로드</a>
+            </div>
+
+        </div>
+
     </div>
-
-    <!--/*[[ 오른쪽: 언어 선택, SNS 아이콘, 다운로드 버튼 ]]*/-->
-    <div class="d-flex align-items-center">
-      <!--/*[[ 언어 선택 드롭다운 ]]*/-->
-      <div class="dropdown language-select me-4">
-        <a class="nav-link nav-text dropdown-toggle" href="#" role="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="fas fa-globe"></i> 한국어
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-          <li><a class="dropdown-item nav-text" href="#" style="font-family: 'Noto Sans JP'">日本語</a></li>
-          <li><a class="dropdown-item nav-text" href="#">English</a></li>
-        </ul>
-      </div>
-
-      <!--/*[[ SNS 아이콘 ]]*/-->
-      <div class="community-icons d-flex me-4">
-        <a href="https://www.youtube.com/@epidgames6350" target="_blank" class="me-3">
-          <img th:src="@{/imgs/main/sns_youtube.png}" alt="YouTube">
-        </a>
-        <a href="https://x.com/" target="_blank">
-          <img th:src="@{/imgs/main/sns_x.png}" alt="X (구 트위터)">
-        </a>
-      </div>
-
-      <!--/*[[ 다운로드 버튼 ]]*/-->
-      <a href="/download" class="btn btn-download">다운로드</a>
-    </div>
-
-  </div>
 </nav>
 
 <!--/*[[ 관리자 페이지 상단 네비게이션 바 ]]*/-->
 <nav th:fragment="management_navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" th:href="@{/management}">관리자 대시보드</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#management_navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="management_navbarNav">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/management}">관리자 대시보드</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#management_navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="management_navbarNav">
 
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/management/notices}">공지사항 관리</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/management/characters}">캐릭터 관리</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/management/cards}">카드 관리</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/management/skins}">사복 관리</a>
-        </li>
-      </ul>
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/management/notices}">공지사항 관리</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/management/characters}">캐릭터 관리</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/management/cards}">카드 관리</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/management/skins}">사복 관리</a>
+                </li>
+            </ul>
 
-      <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto">
 
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/}">사이트 홈으로 이동</a>
-        </li>
+                <!--/*[[ 서비스 언어 선택 ]]*/-->
+                <li class="nav-item dropdown d-flex align-items-center">
+                    <span class="nav-link me-2">서비스 언어:</span>
+                    <form th:action="@{/management/lang-change}" method="post" class="d-inline-block">
+                        <select class="form-select form-select-sm bg-light text-dark border-0" id="languageSelectMg" name="lang" onchange="this.form.submit()">
+                            <option th:value="ko" th:selected="${currentLangCode.name() == 'KO'}">한국어</option>
+                            <option th:value="en" th:selected="${currentLangCode.name() == 'EN'}">English</option>
+                            <option th:value="jp" th:selected="${currentLangCode.name() == 'JP'}">日本語</option>
+                        </select>
+                    </form>
+                </li>
 
-        <li class="nav-item">
-          <form th:action="@{/management/logout}" method="post">
-            <button type="submit" class="btn btn-link nav-link">
-              로그아웃
-            </button>
-          </form>
-        </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">사이트 홈으로 이동</a>
+                </li>
 
-      </ul>
+                <li class="nav-item">
+                    <form th:action="@{/management/logout}" method="post">
+                        <button type="submit" class="btn btn-link nav-link">
+                            로그아웃
+                        </button>
+                    </form>
+                </li>
 
+            </ul>
+
+        </div>
     </div>
-  </div>
 </nav>
 
 </body>

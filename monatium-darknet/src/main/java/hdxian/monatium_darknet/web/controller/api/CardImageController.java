@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,21 +23,9 @@ public class CardImageController {
     private final LocalFileStorageService fileStorageService;
     private final ImagePathService imagePathService;
 
-    @GetMapping("/spell/{cardId}")
-    public ResponseEntity<Resource> getSpellCardImage(@PathVariable("cardId")Long cardId) throws IOException {
-        String fullPath = fileStorageService.getFullPath(imagePathService.getSpellCardFileName(cardId));
-
-        UrlResource resource = new UrlResource("file:" + fullPath);
-        String contentType = fileStorageService.getContentType(fullPath);
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .body(resource);
-    }
-
-    @GetMapping("/artifact/{cardId}")
-    public ResponseEntity<Resource> getArtifactCardImage(@PathVariable("cardId")Long cardId) throws IOException {
-        String fullPath = fileStorageService.getFullPath(imagePathService.getArtifactCardFileName(cardId));
+    @GetMapping("/{cardId}")
+    public ResponseEntity<Resource> getCardImage(@PathVariable("cardId") Long cardId) throws IOException {
+        String fullPath = fileStorageService.getFullPath(imagePathService.getCardFileName(cardId));
 
         UrlResource resource = new UrlResource("file:" + fullPath);
         String contentType = fileStorageService.getContentType(fullPath);

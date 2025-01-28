@@ -1,6 +1,7 @@
 package hdxian.monatium_darknet.service.dto;
 
 import hdxian.monatium_darknet.domain.Attribute;
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.card.CardGrade;
 import lombok.Data;
 
@@ -10,6 +11,7 @@ import java.util.List;
 @Data
 public class CardDto {
 
+    private LangCode langCode;
     private String name;
     private CardGrade grade;
     private String description;

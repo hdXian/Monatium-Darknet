@@ -2,6 +2,7 @@ package hdxian.monatium_darknet.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.notice.Notice;
 import hdxian.monatium_darknet.domain.notice.NoticeCategoryStatus;
 import hdxian.monatium_darknet.domain.notice.NoticeStatus;
@@ -59,7 +60,9 @@ public class NoticeRepository {
         return Optional.ofNullable(find);
     }
 
+    // paging
     public Page<Notice> findAll(NoticeSearchCond searchCond, Pageable pageable) {
+        LangCode langCode = searchCond.getLangCode();
         Long categoryId = searchCond.getCategoryId();
         NoticeStatus status = searchCond.getStatus();
         NoticeCategoryStatus categoryStatus = searchCond.getCategoryStatus();
@@ -69,6 +72,7 @@ public class NoticeRepository {
 
         List<Notice> noticeList = queryFactory.selectFrom(notice)
                 .where(
+                        equalsLangCode(langCode),
                         equalsCategoryId(categoryId),
                         equalsStatus(status),
                         equalsCategoryStatus(categoryStatus),
@@ -85,6 +89,7 @@ public class NoticeRepository {
                 queryFactory.select(notice.count())
                         .from(notice)
                         .where(
+                                equalsLangCode(langCode),
                                 equalsCategoryId(categoryId),
                                 equalsStatus(status),
                                 equalsCategoryStatus(categoryStatus),
@@ -100,6 +105,7 @@ public class NoticeRepository {
 
     // queryDsl
     public List<Notice> findAll(NoticeSearchCond searchCond) {
+        LangCode langCode = searchCond.getLangCode();
         Long categoryId = searchCond.getCategoryId();
         NoticeStatus status = searchCond.getStatus();
         NoticeCategoryStatus categoryStatus = searchCond.getCategoryStatus();
@@ -110,6 +116,7 @@ public class NoticeRepository {
         return queryFactory.select(notice)
                 .from(notice)
                 .where(
+                        equalsLangCode(langCode),
                         equalsCategoryId(categoryId),
                         equalsStatus(status),
                         equalsCategoryStatus(categoryStatus),
@@ -118,6 +125,13 @@ public class NoticeRepository {
                         memberIdEq(memberId)
                 )
                 .fetch();
+    }
+
+    // === private BooleanExpression ==
+    private BooleanExpression equalsLangCode(LangCode langCode) {
+        if (langCode != null)
+            return notice.langCode.eq(langCode);
+        return null;
     }
 
     private BooleanExpression equalsCategoryId(Long categoryId) {

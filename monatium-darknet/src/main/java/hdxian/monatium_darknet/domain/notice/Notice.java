@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.domain.notice;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,12 @@ public class Notice {
     @Enumerated(EnumType.STRING)
     private NoticeStatus status; // [PUBLIC, PRIVATE, DELETED]
 
+    @Enumerated(EnumType.STRING)
+    private LangCode langCode;
+
+    @Column(name = "thumbnail")
+    private String thumbnailFileName;
+
     private String title;
     private LocalDateTime date;
     private Long views;
@@ -37,8 +44,9 @@ public class Notice {
     }
 
     // 생성 메서드
-    public static Notice createNotice(Member member, NoticeCategory category, String title, String content) {
+    public static Notice createNotice(LangCode langCode, Member member, NoticeCategory category, String title, String content) {
         Notice notice = new Notice();
+        notice.setLangCode(langCode);
         notice.setCategory(category);
         notice.setTitle(title);
         notice.setContent(content);

@@ -3,7 +3,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: common_header(~{::title}, ~{::link})}">
-    <title>기록소 - 아티팩트 카드</title>
+    <title th:text="|#{card.title.artifact} - #{page.title}|">기록소 - 아티팩트 카드</title>
     <link rel="stylesheet" th:href="@{/css/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/font.css}">
@@ -26,9 +26,9 @@
     <div class="row">
         <!--/*[[ 좌측 탭 네비게이션 ]]*/-->
         <nav class="col-md-3 col-lg-2 side-nav">
-            <a th:href="@{/wiki/characters}">사도</a>
-            <a th:href="@{/wiki/cards/artifact}" class="active">아티팩트 카드</a>
-            <a th:href="@{/wiki/cards/spell}">스펠 카드</a>
+            <a th:href="@{/{lang}/wiki/characters (lang=${language})}" th:text="#{wiki.tab.character}">사도</a>
+            <a th:href="@{/{lang}/wiki/cards/artifact (lang=${language})}" class="active" th:text="#{wiki.tab.artifact}">아티팩트 카드</a>
+            <a th:href="@{/{lang}/wiki/cards/spell (lang=${language})}" th:text="#{wiki.tab.spell}">스펠 카드</a>
         </nav>
 
         <!--/*[[ 우측 콘텐츠 ]]*/-->
@@ -40,36 +40,36 @@
                 <div class="me-3">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="legendaryFilter" value="legendary">
-                        <label class="form-check-label" for="legendaryFilter">전설</label>
+                        <label class="form-check-label" for="legendaryFilter" th:text="#{card.grade.legendary}">전설</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="rareFilter" value="rare">
-                        <label class="form-check-label" for="rareFilter">희귀</label>
+                        <label class="form-check-label" for="rareFilter" th:text="#{card.grade.rare}">희귀</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="advancedFilter" value="advanced">
-                        <label class="form-check-label" for="advancedFilter">고급</label>
+                        <label class="form-check-label" for="advancedFilter" th:text="#{card.grade.advanced}">고급</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="normalFilter" value="normal">
-                        <label class="form-check-label" for="normalFilter">일반</label>
+                        <label class="form-check-label" for="normalFilter" th:text="#{card.grade.normal}">일반</label>
                     </div>
                 </div>
         
                 <!--/*[[ 이름 검색창 ]]*/-->
                 <div class="me-3">
-                    <label for="searchName" class="form-label visually-hidden">이름 검색</label>
-                    <input type="text" class="form-control form-control-sm" id="searchName" placeholder="이름 검색" onkeyup="handleEnter(event)">
+<!--                    <label for="searchName" class="form-label visually-hidden" th:text="#{card.search.button}">이름 검색</label>-->
+                    <input type="text" class="form-control form-control-sm" id="searchName" th:placeholder="#{card.search.placeholder}" onkeyup="handleEnter(event)">
                 </div>
         
                 <!--/*[[ 검색 버튼 ]]*/-->
-                <button type="button" class="btn btn-primary btn-sm" onclick="filterItems()">검색</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="filterItems()" th:text="#{card.search.button}">검색</button>
             </section>
 
             <!--/*[[ 필터된 아티팩트 카드 목록 ]]*/-->
             <section id="items" class="container mt-5">
 
-                <h2 class="section-title">아티팩트 카드</h2>
+                <h2 class="section-title" th:text="#{card.list.title.artifact}">아티팩트 카드</h2>
                 
                 <div class="row" id="artifactList">
 
@@ -85,12 +85,14 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h5 th:text="${card.name}" class="card-title">카드 이름</h5>
                                         <div th:switch="${{card.grade}}" class="artifact-info">
-                                            등급:
-                                            <span th:case="'legendary'" th:text="전설" class="legendary-text me-3">카드 등급</span>
-                                            <span th:case="'rare'" th:text="희귀" class="rare-text me-3">카드 등급</span>
-                                            <span th:case="'advanced'" th:text="고급" class="advanced-text me-3">카드 등급</span>
-                                            <span th:case="'normal'" th:text="일반" class="normal-text me-3">카드 등급</span>
-                                            코스트: <span th:text="${card.cost}" class="green-text">24</span>
+                                            <span th:text="|#{card.grade.txt}: |">등급:</span>
+                                            <span th:case="'legendary'" th:text="#{card.grade.legendary}" class="legendary-text me-3">카드 등급</span>
+                                            <span th:case="'rare'" th:text="#{card.grade.rare}" class="rare-text me-3">카드 등급</span>
+                                            <span th:case="'advanced'" th:text="#{card.grade.advanced}" class="advanced-text me-3">카드 등급</span>
+                                            <span th:case="'normal'" th:text="#{card.grade.normal}" class="normal-text me-3">카드 등급</span>
+
+                                            <span th:text="|#{card.cost.txt}: |">코스트:</span>
+                                            <span th:text="${card.cost}" class="green-text">24</span>
                                         </div>
                                     </div>
                                     <p class="artifact-stats">
@@ -107,7 +109,11 @@
 
                                         <!--/*[[ 애착 아티팩트 보기 버튼 ]]*/-->
                                         <div class="attachment-btn d-flex justify-content-center"> <!--/*[[ 버튼을 가운데 정렬 ]]*/-->
-                                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#attachmentArtifactContent1" aria-expanded="false" aria-controls="attachmentArtifactContent">
+                                            <button class="btn btn-primary" type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#attachmentArtifactContent1"
+                                                    aria-expanded="false"
+                                                    aria-controls="attachmentArtifactContent" th:text="#{card.attachment.txt}">
                                                 누군가의 애착이 느껴지는 물건이에요...
                                             </button>
                                         </div>
@@ -115,11 +121,11 @@
                                         <div id="attachmentArtifactContent1" class="collapse mt-2">
                                             <p class="attachment-title">
                                                 <img th:src=" @{ |${portraitBaseUrl}${card.character.id}| }" alt="애착 사도 이미지" class="attachment-title-icon">
-                                                <span th:text="|${card.character.name}의 애착 아티팩트|">[ ] 의 애착 아티팩트</span>
+                                                <span th:text="|${card.character.name}#{card.attachment.suffix}|">[ ] 의 애착 아티팩트</span>
                                             </p>
                                             <div th:with="skill=${card.attachmentSkill}" class="attachment-info">
-                                                <div class="attachment-level">카드 레벨 1 달성 시</div>
-                                                <div class="attachment-skill mb-1">애착 아티팩트 스킬 : <span th:text="${skill.name}" class="attachment-skill-name"> 애착 아티팩트 스킬 이름 </span></div>
+                                                <div class="attachment-level" th:text="#{card.attachment.effect.lv1}">카드 레벨 1 달성 시</div>
+                                                <div class="attachment-skill mb-1" th:text="|#{card.attachment.skill}: |">애착 아티팩트 스킬 : <span th:text="${skill.name}" class="attachment-skill-name"> 애착 아티팩트 스킬 이름 </span></div>
                                                 <div th:text="${skill.description}" class="attachment-effect"> 애착 아티팩트 스킬 설명 </div>
                                                 <div class="attachment-stat mt-1">
                                                     <div th:each="attribute: ${skill.attributes}">
@@ -127,7 +133,7 @@
                                                         <span th:text="${attribute.attrValue}" class="green-text">애착 아티팩트 속성 수치</span>
                                                     </div>
                                                 </div>
-                                                <div class="attachment-level mt-4">카드 레벨 3 달성 시</div>
+                                                <div class="attachment-level mt-4" th:text="#{card.attachment.effect.lv3}">카드 레벨 3 달성 시</div>
                                                 <div th:text="${skill.attachmentLv3Description}">애착 아티팩트 레벨 3 달성 시 효과</div>
                                             </div>
                                         </div>

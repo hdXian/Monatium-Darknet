@@ -1,8 +1,8 @@
 /* 상단 네비게이션 스타일 */
 .navbar {
-    height: 6vh;
+    min-height: 4vh;
+    height: auto;
     display: flex;
-    align-items: center; /* 모든 자식 요소를 수직 중앙 정렬 */
     justify-content: space-between; /* 양쪽 끝으로 로고와 햄버거 버튼 배치 */
     padding: 0; /* 패딩 제거 */
     background-color: #4682B4;
@@ -31,11 +31,6 @@
 .nav-link {
     color: #FFFFFF;
     font-size: 1.25rem; /* 기존보다 글씨 크기 키움 */
-}
-
-.nav-text {
-    /* font-size: 1.3vw; */
-    font-size: min(1.3vw, 20px);
 }
 
 .nav-link:hover {

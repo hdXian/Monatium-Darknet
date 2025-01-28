@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.service;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.aside.AsideSpec;
@@ -8,6 +9,7 @@ import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.skin.*;
 import hdxian.monatium_darknet.exception.skin.SkinCategoryNotFoundException;
 import hdxian.monatium_darknet.exception.skin.SkinNotFoundException;
+import hdxian.monatium_darknet.repository.dto.SkinCategorySearchCond;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.dto.CharacterDto;
 import hdxian.monatium_darknet.service.dto.CharacterImageDto;
@@ -77,7 +79,7 @@ class SkinServiceTest {
 //    @Rollback(value = false)
     void newCategory() {
         // given
-        Long saved_category_id = skinService.createNewSkinCategory("상시판매");
+        Long saved_category_id = skinService.createNewSkinCategory(LangCode.KO, "상시판매");
 
         // when
         SkinCategory find_category = skinService.findOneCategory(saved_category_id);
@@ -106,9 +108,9 @@ class SkinServiceTest {
         Character erpin = characterService.findOne(erpin_id);
 
         // 카테고리 3개
-        Long category_id_1 = skinService.createNewSkinCategory("상시판매");
-        Long category_id_2 = skinService.createNewSkinCategory("할인중");
-        Long category_id_3 = skinService.createNewSkinCategory("판매종료");
+        Long category_id_1 = skinService.createNewSkinCategory(LangCode.KO, "상시판매");
+        Long category_id_2 = skinService.createNewSkinCategory(LangCode.KO, "할인중");
+        Long category_id_3 = skinService.createNewSkinCategory(LangCode.KO, "판매종료");
 
         SkinCategory category1 = skinService.findOneCategory(category_id_1);
         SkinCategory category2 = skinService.findOneCategory(category_id_2);
@@ -134,6 +136,7 @@ class SkinServiceTest {
 
         // then
         SkinSearchCond searchCond = new SkinSearchCond();
+        SkinCategorySearchCond categorySearchCond = new SkinCategorySearchCond();
 
         // 1번 카테고리 검색 -> 림 스킨
         searchCond.getCategoryIds().add(category_id_1);
@@ -156,11 +159,15 @@ class SkinServiceTest {
         assertThat(result3).containsExactly(erpin_skin);
 
         // 림 스킨 검색 -> 1번, 2번 카테고리
-        List<SkinCategory> result4 = skinService.findCategoriesBySkin(rim_skin_id);
+        categorySearchCond.setSkinId(rim_skin_id);
+        List<SkinCategory> result4 = skinService.findAllCategories(categorySearchCond);
+//        List<SkinCategory> result4 = skinService.findCategoriesBySkin(rim_skin_id);
         assertThat(result4).containsExactlyInAnyOrder(category1, category2);
 
         // 에르핀 스킨 검색 -> 2번, 3번 카테고리
-        List<SkinCategory> result5 = skinService.findCategoriesBySkin(erpin_skin_id);
+        categorySearchCond.setSkinId(erpin_skin_id);
+        List<SkinCategory> result5 = skinService.findAllCategories(categorySearchCond);
+//        List<SkinCategory> result5 = skinService.findCategoriesBySkin(erpin_skin_id);
         assertThat(result5).containsExactlyInAnyOrder(category2, category3);
 
 
@@ -193,7 +200,7 @@ class SkinServiceTest {
         Long erpin_id = characterService.createNewCharacter(erpinDto, generateMockChImage(), null);
         Character erpin = characterService.findOne(erpin_id);
 
-        Long category_id = skinService.createNewSkinCategory("상시판매");
+        Long category_id = skinService.createNewSkinCategory(LangCode.KO, "상시판매");
 
         // when
         // 림 스킨 2개, 에르핀 스킨 2개를 추가
@@ -239,7 +246,7 @@ class SkinServiceTest {
         CharacterDto rimDto = generateCharDto("림");
         Long rim_id = characterService.createNewCharacter(rimDto, generateMockChImage(), null);
 
-        Long categoryId = skinService.createNewSkinCategory("상시판매");
+        Long categoryId = skinService.createNewSkinCategory(LangCode.KO, "상시판매");
 
         SkinDto skinDto = generateSkinDto("라크로스 림크로스");
         Long skinId = skinService.createNewSkin(rim_id, skinDto, null);
@@ -282,7 +289,7 @@ class SkinServiceTest {
     @DisplayName("카테고리 업데이트")
     void update2() {
         // given
-        Long savedId = skinService.createNewSkinCategory("상시판매");
+        Long savedId = skinService.createNewSkinCategory(LangCode.KO, "상시판매");
         SkinCategory originCategory = skinService.findOneCategory(savedId);
 
         // when
@@ -305,8 +312,8 @@ class SkinServiceTest {
         Long charId2 = characterService.createNewCharacter(charDto2, generateMockChImage(), null);
 
         // 카테고리 2개
-        Long cateId1 = skinService.createNewSkinCategory("상시판매");
-        Long cateId2 = skinService.createNewSkinCategory("할인중");
+        Long cateId1 = skinService.createNewSkinCategory(LangCode.KO, "상시판매");
+        Long cateId2 = skinService.createNewSkinCategory(LangCode.KO, "할인중");
 
         // 스킨 2개
         SkinDto skinDto1 = generateSkinDto("스킨1");
@@ -352,7 +359,7 @@ class SkinServiceTest {
         CharacterDto rimDto = generateCharDto("림");
         Long rim_id = characterService.createNewCharacter(rimDto, generateMockChImage(), null);
 
-        Long categoryId = skinService.createNewSkinCategory("상시판매");
+        Long categoryId = skinService.createNewSkinCategory(LangCode.KO, "상시판매");
 
         SkinDto skinDto = generateSkinDto("사라질 운명");
         Long skinId = skinService.createNewSkin(rim_id, skinDto, null);
@@ -390,7 +397,7 @@ class SkinServiceTest {
         CharacterDto rimDto = generateCharDto("림");
         Long rim_id = characterService.createNewCharacter(rimDto, generateMockChImage(), null);
 
-        Long categoryId = skinService.createNewSkinCategory("상시판매");
+        Long categoryId = skinService.createNewSkinCategory(LangCode.KO, "상시판매");
 
         SkinDto skinDto = generateSkinDto("라크로스 림크로스");
         Long skinId = skinService.createNewSkin(rim_id, skinDto, null);
@@ -407,7 +414,10 @@ class SkinServiceTest {
                 .hasMessage("해당 스킨 카테고리가 존재하지 않습니다. categoryId=" + categoryId);
 
         // 검색결과 없어야 함
-        List<SkinCategory> res1 = skinService.findCategoriesBySkin(skinId);
+        SkinCategorySearchCond categorySearchCond = new SkinCategorySearchCond();
+        categorySearchCond.setSkinId(skinId);
+        List<SkinCategory> res1 = skinService.findAllCategories(categorySearchCond);
+//        List<SkinCategory> res1 = skinService.findCategoriesBySkin(skinId);
         assertThat(res1).isEmpty();
 
         // 스킨은 남아있어야 함

@@ -17,8 +17,8 @@ public class Aside {
 
     private String description;
 
-    @OneToOne(mappedBy = "aside")
-    private Character character;
+//    @OneToOne(mappedBy = "aside")
+//    private Character character;
 
     // 어사이드 1단계
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -1,5 +1,6 @@
 package hdxian.monatium_darknet.service;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.notice.*;
 import hdxian.monatium_darknet.exception.notice.NoticeNotFoundException;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
@@ -34,12 +35,12 @@ class NoticeServiceTest {
         Long lilyId = memberService.createNewMember(dto);
         Member lily = memberService.findOne(lilyId);
 
-        Long categoryId = noticeService.createNewNoticeCategory("공지사항");
+        Long categoryId = noticeService.createNewNoticeCategory(LangCode.KO, "공지사항");
         NoticeCategory savedCategory = noticeService.findOneCategory(categoryId);
 
         // when
         NoticeDto noticeDto = generateNoticeDto("공지사항제목", categoryId, "공지사항 본문");
-        Long savedId = noticeService.createNewNotice(lilyId, noticeDto);
+        Long savedId = noticeService.createNewNotice(lilyId, noticeDto, null);
 
         // then
         Notice findNotice = noticeService.findOne(savedId);
@@ -59,12 +60,12 @@ class NoticeServiceTest {
         Long lily_id = memberService.createNewMember(lilyDto);
         Member lily = memberService.findOne(lily_id);
 
-        Long categoryId = noticeService.createNewNoticeCategory("공지사항");
+        Long categoryId = noticeService.createNewNoticeCategory(LangCode.KO, "공지사항");
         NoticeCategory savedCategory = noticeService.findOneCategory(categoryId);
 
         // when
         NoticeDto noticeDto = generateNoticeDto("공지사항제목1", categoryId, "공지사항본문1");
-        Long noticeId = noticeService.createNewNotice(lily_id, noticeDto);
+        Long noticeId = noticeService.createNewNotice(lily_id, noticeDto, null);
 
         // then
         // 있는 공지사항은 정상 조회
@@ -90,7 +91,7 @@ class NoticeServiceTest {
         Long ameliaId = memberService.createNewMember(amelia_dto);
         Member amelia = memberService.findOne(ameliaId);
 
-        Long categoryId = noticeService.createNewNoticeCategory("공지사항");
+        Long categoryId = noticeService.createNewNoticeCategory(LangCode.KO, "공지사항");
         NoticeCategory savedCategory = noticeService.findOneCategory(categoryId);
 
         // when
@@ -99,9 +100,9 @@ class NoticeServiceTest {
 
         NoticeDto updateDto1 = generateNoticeDto("업데이트제목1", categoryId, "업데이트본문1");
 
-        Long noticeId1 = noticeService.createNewNotice(lilyId, noticeDto1); // by 릴1리
-        Long noticeId2 = noticeService.createNewNotice(ameliaId, noticeDto2); // by 아멜리아
-        Long updateId1 = noticeService.createNewNotice(lilyId, updateDto1); // by 릴1리
+        Long noticeId1 = noticeService.createNewNotice(lilyId, noticeDto1, null); // by 릴1리
+        Long noticeId2 = noticeService.createNewNotice(ameliaId, noticeDto2, null); // by 아멜리아
+        Long updateId1 = noticeService.createNewNotice(lilyId, updateDto1, null); // by 릴1리
 
         Notice notice1 = noticeService.findOne(noticeId1);
         Notice notice2 = noticeService.findOne(noticeId2);
@@ -134,16 +135,16 @@ class NoticeServiceTest {
         Long ameliaId = memberService.createNewMember(amelia_dto);
         Member amelia = memberService.findOne(ameliaId);
 
-        Long categoryId1 = noticeService.createNewNoticeCategory("공지사항");
+        Long categoryId1 = noticeService.createNewNoticeCategory(LangCode.KO, "공지사항");
         NoticeCategory savedCategory1 = noticeService.findOneCategory(categoryId1);
 
-        Long categoryId2 = noticeService.createNewNoticeCategory("이벤트");
+        Long categoryId2 = noticeService.createNewNoticeCategory(LangCode.KO, "이벤트");
         NoticeCategory savedCategory2 = noticeService.findOneCategory(categoryId2);
 
-        Long categoryId3 = noticeService.createNewNoticeCategory("업데이트");
+        Long categoryId3 = noticeService.createNewNoticeCategory(LangCode.KO, "업데이트");
         NoticeCategory savedCategory3 = noticeService.findOneCategory(categoryId3);
 
-        Long categoryId4 = noticeService.createNewNoticeCategory("개발자노트");
+        Long categoryId4 = noticeService.createNewNoticeCategory(LangCode.KO, "개발자노트");
         NoticeCategory savedCategory4 = noticeService.findOneCategory(categoryId4);
 
         // 공지 2개
@@ -163,17 +164,17 @@ class NoticeServiceTest {
         NoticeDto devDto1 = generateNoticeDto("개발자노트제목1", categoryId4, "개발자노트제목2");
 
         // when
-        Long noticeId1 = noticeService.createNewNotice(lilyId, noticeDto1);
-        Long noticeId2 = noticeService.createNewNotice(ameliaId, noticeDto2);
+        Long noticeId1 = noticeService.createNewNotice(lilyId, noticeDto1, null);
+        Long noticeId2 = noticeService.createNewNotice(ameliaId, noticeDto2, null);
 
-        Long eventId1 = noticeService.createNewNotice(lilyId, eventDto1);
-        Long eventId2 = noticeService.createNewNotice(ameliaId, eventDto2);
+        Long eventId1 = noticeService.createNewNotice(lilyId, eventDto1, null);
+        Long eventId2 = noticeService.createNewNotice(ameliaId, eventDto2, null);
 
-        Long updateId1 = noticeService.createNewNotice(lilyId, updateDto1);
-        Long updateId2 = noticeService.createNewNotice(lilyId, updateDto2);
-        Long updateId3 = noticeService.createNewNotice(ameliaId, updateDto3);
+        Long updateId1 = noticeService.createNewNotice(lilyId, updateDto1, null);
+        Long updateId2 = noticeService.createNewNotice(lilyId, updateDto2, null);
+        Long updateId3 = noticeService.createNewNotice(ameliaId, updateDto3, null);
 
-        Long devId1 = noticeService.createNewNotice(lilyId, devDto1);
+        Long devId1 = noticeService.createNewNotice(lilyId, devDto1, null);
 
         Notice notice1 = noticeService.findOne(noticeId1);
         Notice notice2 = noticeService.findOne(noticeId2);
@@ -217,10 +218,10 @@ class NoticeServiceTest {
         Long lilyId = memberService.createNewMember(lilyDto);
         Member lily = memberService.findOne(lilyId);
 
-        Long categoryId = noticeService.createNewNoticeCategory("공지사항");
+        Long categoryId = noticeService.createNewNoticeCategory(LangCode.KO, "공지사항");
 
         NoticeDto noticeDto = generateNoticeDto("공지사항제목", categoryId, "공지사항본문");
-        Long savedNoticeId = noticeService.createNewNotice(lilyId, noticeDto);
+        Long savedNoticeId = noticeService.createNewNotice(lilyId, noticeDto, null);
 
         // when
         // 제목, 본문, 카테고리 모두 수정
@@ -242,14 +243,14 @@ class NoticeServiceTest {
         MemberDto lilyDto = generateMemberDto("lily", "1234", "GM릴1리");
         Long lilyId = memberService.createNewMember(lilyDto);
 
-        Long categoryId1 = noticeService.createNewNoticeCategory("공지사항");
-        Long categoryId2 = noticeService.createNewNoticeCategory("이벤트");
+        Long categoryId1 = noticeService.createNewNoticeCategory(LangCode.KO, "공지사항");
+        Long categoryId2 = noticeService.createNewNoticeCategory(LangCode.KO, "이벤트");
 
         NoticeDto noticeDto = generateNoticeDto("공지사항제목", categoryId1, "공지사항본문");
-        Long savedNoticeId1 = noticeService.createNewNotice(lilyId, noticeDto);
+        Long savedNoticeId1 = noticeService.createNewNotice(lilyId, noticeDto, null);
 
         NoticeDto noticeDto2 = generateNoticeDto("이벤트제목", categoryId2, "이벤트본문");
-        Long savedNoticeId2 = noticeService.createNewNotice(lilyId, noticeDto2);
+        Long savedNoticeId2 = noticeService.createNewNotice(lilyId, noticeDto2, null);
 
         // when
         // 1번 공지사항만 삭제
@@ -291,10 +292,10 @@ class NoticeServiceTest {
         Long ameliaId = memberService.createNewMember(amelia_dto);
         Member amelia = memberService.findOne(ameliaId);
 
-        Long categoryId1 = noticeService.createNewNoticeCategory("공지사항");
-        Long categoryId2 = noticeService.createNewNoticeCategory("이벤트");
-        Long categoryId3 = noticeService.createNewNoticeCategory("업데이트");
-        Long categoryId4 = noticeService.createNewNoticeCategory("개발자노트");
+        Long categoryId1 = noticeService.createNewNoticeCategory(LangCode.KO, "공지사항");
+        Long categoryId2 = noticeService.createNewNoticeCategory(LangCode.KO, "이벤트");
+        Long categoryId3 = noticeService.createNewNoticeCategory(LangCode.KO, "업데이트");
+        Long categoryId4 = noticeService.createNewNoticeCategory(LangCode.KO, "개발자노트");
 
         // 공지 2개
         NoticeDto noticeDto1 = generateNoticeDto("공지사항제목1", categoryId1, "공지사항본문1");
@@ -312,15 +313,15 @@ class NoticeServiceTest {
 
         // 릴리 - 공지1, 업데이트2, 개발자노트1
         // 아멜리아 - 공지2, 이벤트1, 업데이트1
-        Long noticeId1 = noticeService.createNewNotice(lilyId, noticeDto1);
-        Long noticeId2 = noticeService.createNewNotice(ameliaId, noticeDto2);
+        Long noticeId1 = noticeService.createNewNotice(lilyId, noticeDto1, null);
+        Long noticeId2 = noticeService.createNewNotice(ameliaId, noticeDto2, null);
 
-        Long eventId1 = noticeService.createNewNotice(ameliaId, eventDto1);
+        Long eventId1 = noticeService.createNewNotice(ameliaId, eventDto1, null);
 
-        Long updateId1 = noticeService.createNewNotice(ameliaId, updateDto1);
-        Long updateId2 = noticeService.createNewNotice(lilyId, updateDto2);
+        Long updateId1 = noticeService.createNewNotice(ameliaId, updateDto1, null);
+        Long updateId2 = noticeService.createNewNotice(lilyId, updateDto2, null);
 
-        Long devId1 = noticeService.createNewNotice(lilyId, devDto1);
+        Long devId1 = noticeService.createNewNotice(lilyId, devDto1, null);
 
         // when
         memberService.deactivateMember(lilyId); // 릴리 회원 삭제
@@ -351,6 +352,7 @@ class NoticeServiceTest {
 
     static NoticeDto generateNoticeDto(String title, Long categoryId, String content) {
         NoticeDto dto = new NoticeDto();
+        dto.setLangCode(LangCode.KO);
         dto.setTitle(title);
         dto.setCategoryId(categoryId);
         dto.setContent(content);

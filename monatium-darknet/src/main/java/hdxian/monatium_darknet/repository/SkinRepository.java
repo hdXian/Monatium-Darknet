@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.ListPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.skin.*;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import jakarta.persistence.EntityManager;
@@ -63,7 +64,7 @@ public class SkinRepository {
 
     // queryDsl
     public List<Skin> findAll(SkinSearchCond searchCond) {
-        System.out.println("searchCond = " + searchCond);
+        LangCode langCode = searchCond.getLangCode();
         String name = searchCond.getName();
         SkinStatus status = searchCond.getStatus();
         Long characterId = searchCond.getCharacterId();
@@ -73,6 +74,7 @@ public class SkinRepository {
                 .from(skin)
                 .leftJoin(skin.mappings, skinCategoryMapping)
                 .where(
+                        equalsLangCode(langCode),
                         likeName(name),
                         equalsStatus(status),
                         equalsCharacterId(characterId),
@@ -83,6 +85,12 @@ public class SkinRepository {
 
 
     // === private BooleanExpression
+
+    private BooleanExpression equalsLangCode(LangCode langCode) {
+        if (langCode != null)
+            return skin.langCode.eq(langCode);
+        return null;
+    }
 
     private BooleanExpression likeName(String name) {
         if (StringUtils.hasText(name)) {

@@ -1,6 +1,7 @@
 package hdxian.monatium_darknet.domain.card;
 
 import hdxian.monatium_darknet.domain.Attribute;
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.character.Character;
 import jakarta.persistence.*;
@@ -19,10 +20,17 @@ public class Card {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    private LangCode langCode;
+
+    @Enumerated(EnumType.STRING)
     private CardType type;
 
     @Enumerated(EnumType.STRING)
     private CardGrade grade; // ENUM [NORMAL, ADVANCED, RARE, LEGENDARY] 일반, 고급, 희귀, 전설
+
+    // 어플리케이션 코드 레벨에서 직접 수정하지 않는 필드. 반드시 JPA의 이벤트 리스너를 통해서만 업데이트.
+    @Column(name = "grade_order")
+    private Integer gradeOrder;
 
     private String name;
     private String description;
@@ -60,11 +68,13 @@ public class Card {
     }
 
     // 생성 메서드
-    public static Card createSpellCard(String name, CardGrade grade, String description, String story, Integer cost, List<Attribute> attributes) {
+    public static Card createSpellCard(LangCode langCode, String name, CardGrade grade, String description, String story, Integer cost, List<Attribute> attributes) {
         Card card = new Card();
+        card.setLangCode(langCode);
         card.setType(CardType.SPELL);
         card.setName(name);
         card.setGrade(grade);
+        card.setGradeOrder(grade.getOrder()); // gradeOrder는 외부에서 임의로 수정하지 못하게 해야함
         card.setDescription(description);
         card.setStory(story);
         card.setCost(cost);
@@ -76,11 +86,13 @@ public class Card {
         return card;
     }
 
-    public static Card createArtifactCard(String name, CardGrade grade, String description, String story, Integer cost, List<Attribute> attributes) {
+    public static Card createArtifactCard(LangCode langCode, String name, CardGrade grade, String description, String story, Integer cost, List<Attribute> attributes) {
         Card card = new Card();
+        card.setLangCode(langCode);
         card.setType(CardType.ARTIFACT);
         card.setName(name);
         card.setGrade(grade);
+        card.setGradeOrder(grade.getOrder()); // gradeOrder는 외부에서 임의로 수정하지 못하게 해야함
         card.setDescription(description);
         card.setStory(story);
         card.setCost(cost);
@@ -95,13 +107,15 @@ public class Card {
         return card;
     }
 
-    public static Card createArtifactCard(String name, CardGrade grade, String description, String story, Integer cost, List<Attribute> attributes,
+    public static Card createArtifactCard(LangCode langCode, String name, CardGrade grade, String description, String story, Integer cost, List<Attribute> attributes,
                                           Character character, Skill attachmentSkill) {
 
         Card card = new Card();
+        card.setLangCode(langCode);
         card.setType(CardType.ARTIFACT);
         card.setName(name);
         card.setGrade(grade);
+        card.setGradeOrder(grade.getOrder()); // gradeOrder는 외부에서 임의로 수정하지 못하게 해야함
         card.setDescription(description);
         card.setStory(story);
         card.setCost(cost);

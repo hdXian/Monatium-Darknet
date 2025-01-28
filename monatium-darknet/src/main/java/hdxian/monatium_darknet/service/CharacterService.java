@@ -1,11 +1,13 @@
 package hdxian.monatium_darknet.service;
 
+import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.card.Card;
 import hdxian.monatium_darknet.domain.character.Character;
 import hdxian.monatium_darknet.domain.character.CharacterStatus;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinStatus;
+import hdxian.monatium_darknet.exception.CustomBusinessLogicException;
 import hdxian.monatium_darknet.exception.character.CharacterNotFoundException;
 import hdxian.monatium_darknet.repository.CardRepository;
 import hdxian.monatium_darknet.repository.CharacterRepository;
@@ -41,6 +43,7 @@ public class CharacterService {
 
         // 캐릭터 기본 정보 저장
         Character ch = Character.createCharacter(
+                chDto.getLangCode(),
                 chDto.getName(),
                 chDto.getSubtitle(),
                 chDto.getCv(),
@@ -77,6 +80,11 @@ public class CharacterService {
     public Long updateCharacter(Long characterId, CharacterDto updateParam, CharacterImageDto chImagePaths, AsideImageDto asideImagePaths) {
         Character ch = findOne(characterId);
 
+        if (ch.getLangCode() != updateParam.getLangCode()) {
+            throw new CustomBusinessLogicException("수정하려는 캐릭터의 언어 코드가 맞지 않습니다. chId = " + characterId + ", langCode = " + updateParam.getLangCode());
+        }
+
+        Optional.ofNullable(updateParam.getLangCode()).ifPresent(ch::setLangCode);
         Optional.ofNullable(updateParam.getName()).ifPresent(ch::setName);
         Optional.ofNullable(updateParam.getSubtitle()).ifPresent(ch::setSubtitle);
         Optional.ofNullable(updateParam.getCv()).ifPresent(ch::setCv);
@@ -161,10 +169,11 @@ public class CharacterService {
         return find.orElseThrow(() -> new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId = " + id));
     }
 
-    public Character findOneActive(Long id) {
-        Optional<Character> find = characterRepository.findOne(id);
+    // 위키 기능에서의 검색 (langCode 기반, 순서 기반, ACTIVE인 캐릭터만)
+    public Character findOneWiki(LangCode langCode, int index) {
+        Optional<Character> find = characterRepository.findByLangCodeAndIndex(langCode, index);
         if (find.isEmpty() || find.get().getStatus() != CharacterStatus.ACTIVE) {
-            throw new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. characterId = " + id);
+            throw new CharacterNotFoundException("대상 캐릭터를 찾을 수 없습니다. langCode = " + langCode + ", index = " + index);
         }
         return find.get();
     }
@@ -177,5 +186,7 @@ public class CharacterService {
     public List<Character> findAll(CharacterSearchCond searchCond) {
         return characterRepository.findAll(searchCond);
     }
+
+    // === private ===
 
 }
