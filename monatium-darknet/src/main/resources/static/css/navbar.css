@@ -1,8 +1,8 @@
 /* 상단 네비게이션 스타일 */
 .navbar {
-    height: 6vh;
+    min-height: 4vh;
+    height: auto;
     display: flex;
-    align-items: center; /* 모든 자식 요소를 수직 중앙 정렬 */
     justify-content: space-between; /* 양쪽 끝으로 로고와 햄버거 버튼 배치 */
     padding: 0; /* 패딩 제거 */
     background-color: #4682B4;
@@ -84,4 +84,16 @@
 
 .community-icons img:hover {
     transform: scale(1.2);
+}
+
+/* 화면이 lg 이하로 줄어들면 SNS 아이콘과 다운로드 버튼 숨기기 */
+@media (max-width: 992px) {
+    .community-icons, .btn-download {
+        display: none !important;
+    }
+
+    /* 네비게이션 메뉴 안의 텍스트 메뉴는 항상 보임 */
+    .navbar-nav .nav-item {
+        display: block;
+    }
 }
