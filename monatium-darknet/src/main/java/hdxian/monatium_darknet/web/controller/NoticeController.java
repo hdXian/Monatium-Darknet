@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -40,9 +41,8 @@ public class NoticeController {
         setPages(noticePage.getTotalPages(), pageNumber, model);
 
         List<Notice> noticeList = noticePage.getContent();
-        List<NoticeCategory> categoryList = noticeService.findCategoriesByLangCode(langCode);
-//        List<NoticeCategory> categoryList = noticeService.findAllNoticeCategories();
-
+        List<NoticeCategory> findCategories = noticeService.findCategoriesByLangCode(langCode);
+        List<NoticeCategory> categoryList = findCategories.stream().filter(category -> category.getStatus() == NoticeCategoryStatus.PUBLIC).toList();
 
         model.addAttribute("noticeList", noticeList);
         model.addAttribute("page", noticePage);
