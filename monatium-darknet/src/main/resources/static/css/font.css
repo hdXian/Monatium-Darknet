@@ -1,6 +1,24 @@
 @font-face {
     font-family: 'ONE-Mobile-POP';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-POP.woff') format('woff');
+    src: url('/fonts/ONE-Mobile-POP.woff') format('woff');
     font-weight: normal;
     font-style: normal;
+}
+
+@font-face {
+    font-family: 'M-PLUS-Rounded';
+    src: url('/fonts/MPLUSRounded1c-Bold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    unicode-range:
+            U+3000-303F, /* 일본어 기호 및 구두점 */
+            U+3040-309F, /* 히라가나 */
+            U+30A0-30FF, /* 가타카나 */
+            U+4E00-9FFF, /* 통합 한자 */
+            U+F900-FAFF; /* 호환 한자 */
+}
+
+/* 3. 글로벌 기본 설정 (영문 등 기타 언어) */
+body {
+    font-family: 'M-PLUS-Rounded', 'ONE-Mobile-POP', sans-serif; /* 기본 폰트 */
 }

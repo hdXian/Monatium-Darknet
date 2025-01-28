@@ -1,6 +1,4 @@
 body {
-    font-family: 'ONE-Mobile-POP', 'Noto Sans JP', sans-serif;
-    /* background: url('../images/bkg_worldtree.jpg') no-repeat center center; */
     background-size: cover; /* 이미지를 화면에 꽉 채우기 */
     background-attachment: fixed; /* 스크롤 시에도 배경 고정 */
     background-color: #F0F8FF; /* 밝은 파스텔톤 배경 */
@@ -8,9 +6,6 @@ body {
     scroll-behavior: smooth;
 }
 
-/* 상단 네비게이션 스타일 (이동) */
-
-/* 각 섹션 스타일 */
 /* 섹션이 네비게이션 바에 가려지지 않도록 여백을 설정 */
 
 /* 섹션 공통 스타일 */
@@ -193,7 +188,7 @@ h2.section-title {
 /* 공식 x, 라운지, ... */
 .notice-media .media-text {
     color: black;
-    font-size: 1.2vw;
+    font-size: 1vw;
 }
 
 .notice-img-container {
