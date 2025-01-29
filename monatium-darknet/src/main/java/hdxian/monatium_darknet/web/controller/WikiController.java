@@ -3,8 +3,6 @@ package hdxian.monatium_darknet.web.controller;
 import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.card.*;
 import hdxian.monatium_darknet.domain.character.Character;
-import hdxian.monatium_darknet.domain.character.CharacterEn;
-import hdxian.monatium_darknet.domain.character.CharacterKo;
 import hdxian.monatium_darknet.domain.character.CharacterStatus;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinStatus;
@@ -12,10 +10,7 @@ import hdxian.monatium_darknet.repository.dto.CardSearchCond;
 import hdxian.monatium_darknet.repository.dto.CharacterSearchCond;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
 import hdxian.monatium_darknet.service.*;
-import hdxian.monatium_darknet.web.controller.management.SessionConst;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.Optional;
-
-import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
 
 @RequiredArgsConstructor
 @Controller

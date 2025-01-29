@@ -4,7 +4,6 @@ import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,11 +28,12 @@ public class DBUserDetailService implements UserDetailsService {
         Member member = find.get();
         String memberRole = member.getRole().name(); // SUPER, NORMAL
 //        log.info("find userDetail from DB: {}", member.getLoginId());
-        return User
-                .withUsername(member.getLoginId())
-                .password(member.getPassword())
-                .roles(memberRole)
-                .build();
+        return new CustomUserDetails(member);
+//        return User
+//                .withUsername(member.getLoginId())
+//                .password(member.getPassword())
+//                .roles(memberRole)
+//                .build();
     }
 
 }

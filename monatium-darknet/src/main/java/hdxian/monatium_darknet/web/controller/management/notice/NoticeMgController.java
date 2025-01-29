@@ -8,6 +8,7 @@ import hdxian.monatium_darknet.exception.notice.NoticeImageProcessException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.repository.dto.NoticeSearchCond;
+import hdxian.monatium_darknet.security.CustomUserDetails;
 import hdxian.monatium_darknet.service.ImageUrlService;
 import hdxian.monatium_darknet.service.MemberService;
 import hdxian.monatium_darknet.service.NoticeService;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -87,7 +89,7 @@ public class NoticeMgController {
     @PostMapping("/new")
     public String createNotice(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
                                HttpSession session, @RequestParam("action") String action,
-                               @SessionAttribute(LOGIN_MEMBER) Member member,
+                               @AuthenticationPrincipal CustomUserDetails userDetails,
                                @Validated @ModelAttribute(NOTICE_FORM) NoticeForm noticeForm, BindingResult bindingResult, Model model) {
 
         // 취소 버튼을 누른 경우
@@ -106,6 +108,7 @@ public class NoticeMgController {
                 return "management/notice/noticeAddForm";
             }
 
+            Member member = userDetails.getMember();
             NoticeDto noticeDto = generateNoticeDto(langCode, noticeForm);
             String thumbnailFilePath = generateThumbnailFilePath(session);
             Long savedId = noticeService.createNewNotice(member.getId(), noticeDto, thumbnailFilePath);
@@ -146,7 +149,6 @@ public class NoticeMgController {
     public String edit(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
                        HttpSession session, @RequestParam("action") String action,
                        @PathVariable("noticeId") Long noticeId,
-                       @SessionAttribute(LOGIN_MEMBER) Member member,
                        @Validated @ModelAttribute(NOTICE_FORM) NoticeForm noticeForm, BindingResult bindingResult,
                        Model model) {
 
