@@ -2,6 +2,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // 모든 공개/비공개 전환 버튼에 클릭 이벤트 추가
     const toggleButtons = document.querySelectorAll('.btn-toggle-status');
 
+    // CSRF 토큰 읽기
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
     toggleButtons.forEach(button => {
         button.addEventListener('click', function () {
             const noticeId = this.getAttribute('data-id'); // 공지사항의 ID
@@ -21,7 +25,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const requestUrl = isPublic ? `/management/notices/unpublish/${noticeId}`
                                         : `/management/notices/publish/${noticeId}`;
 
-            fetch(requestUrl, { method: 'POST' })
+            fetch(requestUrl, {
+                method: 'POST',
+                headers: {
+                    [csrfHeader]: csrfToken
+                }
+            })
             .then(response => {
                 if (response.ok) {
                     // 성공적으로 처리된 경우 상태 변경
@@ -50,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             // 상태 전환 로직 호출
-            // updateStatus(noticeId);
 
         });
     });
@@ -68,7 +76,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             fetch(`/management/notices/${noticeId}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    [csrfHeader]: csrfToken
+                }
             })
             .then(response => {
                 if (response.ok) {
@@ -86,46 +97,3 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
-
-// 상태 전환 함수
-function updateStatus(noticeId) {
-    const button = document.querySelector(`button[data-id="${noticeId}"]`);
-    if (!button) {
-        console.error(`버튼을 찾을 수 없습니다. Notice ID: ${noticeId}`);
-        return;
-    }
-
-    const currentStatus = button.getAttribute('data-status');
-    const isPublic = (currentStatus === 'PUBLIC');
-    const newStatus = isPublic ? 'PRIVATE' : 'PUBLIC';
-
-    const alertMessage = isPublic
-                    ? '공지사항을 비공개 상태로 전환하였습니다.'
-                    : '공지사항을 공개 상태로 전환하였습니다.';
-
-    // 서버에 상태 변경 요청
-    fetch(`/management/notices/${noticeId}/update-status?t=${newStatus}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // 버튼 텍스트 업데이트
-            button.textContent = (data.newStatus === 'PUBLIC') ? '공개 중' : '비공개';
-
-            // 버튼 클래스 업데이트
-            button.classList.remove('btn-success', 'btn-secondary');
-            button.classList.add(data.newStatus === 'PUBLIC' ? 'btn-success' : 'btn-secondary');
-
-            // 버튼의 data-status 속성 업데이트
-            button.setAttribute('data-status', data.newStatus);
-            alert(alertMessage);
-        } else {
-            alert('상태 변경에 실패했습니다.');
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
