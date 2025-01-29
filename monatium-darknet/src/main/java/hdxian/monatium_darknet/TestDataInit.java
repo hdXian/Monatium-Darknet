@@ -256,9 +256,9 @@ public class TestDataInit {
         skinService.linkSkinAndCategory(skinId8, skinCategoryId5);
 
         // JP
-        skinService.linkSkinAndCategory(skinId1, skinCategoryId6);
-        skinService.linkSkinAndCategory(skinId2, skinCategoryId6);
         skinService.linkSkinAndCategory(skinId3, skinCategoryId6);
+        skinService.linkSkinAndCategory(skinId6, skinCategoryId6);
+        skinService.linkSkinAndCategory(skinId9, skinCategoryId6);
 
 
         // 아티팩트 카드 테스트 데이터 추가
