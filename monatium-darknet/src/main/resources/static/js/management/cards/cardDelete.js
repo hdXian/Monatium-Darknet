@@ -9,8 +9,15 @@ document.getElementById('delCard-btn').addEventListener('click', function (event
         const cardId = event.target.getAttribute('data-id');
         const deleteUrl = `/management/cards/del/${cardId}`;
 
+        // CSRF 토큰 읽기
+        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
         fetch(deleteUrl, {
-            method: 'POST'
+            method: 'POST',
+            headers: {
+                [csrfHeader]: csrfToken
+            }
         })
         .then(response => {
             if (response.redirected) {
