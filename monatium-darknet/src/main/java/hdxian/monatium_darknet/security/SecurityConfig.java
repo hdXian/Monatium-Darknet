@@ -17,6 +17,14 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final String sessionId = "JSESSIONID";
+
+    private final String cspDirectives = "default-src 'self'; " +
+            "script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
+            "style-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
+            "font-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com;" +
+            "img-src 'self' data:; " +
+            "frame-ancestors 'none'";
+
     private final MemberRepository memberRepository;
 
     @Bean

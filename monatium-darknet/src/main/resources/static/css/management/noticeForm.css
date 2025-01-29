@@ -11,3 +11,7 @@
     margin-bottom: 20px;
     background-color: #ffffff;
 }
+
+.img-thumbnail {
+    max-width: 300px;
+}
