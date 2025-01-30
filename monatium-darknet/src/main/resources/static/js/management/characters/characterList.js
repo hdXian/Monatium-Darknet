@@ -147,5 +147,8 @@ function resetFilters() {
     filterCharacters();
 }
 
-
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("chSearchBtn").addEventListener("click", filterCharacters);
+    document.getElementById("chSearchClearBtn").addEventListener("click", resetFilters);
+});
 
