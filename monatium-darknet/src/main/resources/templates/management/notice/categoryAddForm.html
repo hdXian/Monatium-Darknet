@@ -4,10 +4,8 @@
 <head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
     <title>공지사항 카테고리 추가</title>
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
-    <link rel="stylesheet" th:href="@{/css/management/noticeForm.css}">
+    <link rel="stylesheet" th:href="@{/css/management/notice/noticeForm.css}">
 </head>
-
-<!-- TODO - 공지사항 관련 인라인 스크립트 제거 -->
 
 <body>
 <!--/*[[ 상단 네비게이션 바 ]]*/-->
@@ -70,7 +68,7 @@
 <!--/*[[ Footer ]]*/-->
 <footer th:replace="~{fragments/footer :: management_footer}"></footer>
 
-<script th:src="@{/js/management/noticeCategoryForm.js}"></script>
+<script th:src="@{/js/management/notice/noticeCategoryForm.js}"></script>
 
 </body>
 </html>
