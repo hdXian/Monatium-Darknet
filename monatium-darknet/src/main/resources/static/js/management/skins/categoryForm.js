@@ -57,7 +57,7 @@ function confirmComplete(button) {
     const form = button.closest('form');
 
     // 사용자 확인 후 폼 제출
-    if (confirm("스킨 카테고리를 저장하시겠습니까?")) {
+    if (confirm("사복 카테고리를 저장하시겠습니까?")) {
         // action 파라미터를 명시적으로 설정
         const hiddenField = document.createElement('input');
         hiddenField.type = 'hidden';
