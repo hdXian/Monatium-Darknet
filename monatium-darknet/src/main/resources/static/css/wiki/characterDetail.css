@@ -164,6 +164,7 @@ body {
 }
 
 .progress-bar {
+    width: 0;
     transition: width 0.6s ease;  /* 게이지 애니메이션 */
 }
 
