@@ -74,3 +74,8 @@ function closeRemoteControl() {
     const remoteControl = document.querySelector('.remote-control');
     remoteControl.style.display = 'none'; // 리모컨 섹션 숨김
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("btnCloseRemote").addEventListener("click", closeRemoteControl);
+});
+
