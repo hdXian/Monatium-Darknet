@@ -34,7 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/management/**").hasAnyRole(MemberRole.SUPER.name(), MemberRole.NORMAL.name())
                         .requestMatchers("/**").permitAll()
                 ) // /management 하위 url 경로에 대해 ADMIN 권한이 있는 유저만 접근 가능하도록 설정. 그 외에는 아무나 접근 가능.
-                .addFilterBefore(cspFilter, UsernamePasswordAuthenticationFilter.class) // 사용자 인증 필터의 앞 순서에 nonceFilter를 추가
+                .addFilterBefore(cspFilter, UsernamePasswordAuthenticationFilter.class) // 사용자 인증 필터의 앞 순서에 cspFilter를 추가
                 .formLogin(form -> form
                         .loginPage("/management/login") // /management/login url로 로그인 페이지를 요청. -> 인증되지 않은 모든 사용자에 대해 해당 경로로 리다이렉트
                         .usernameParameter("loginId")

@@ -121,28 +121,28 @@
             <div class="notice-content-col d-flex flex-column gap-3" data-aos="fade-left">
                 <!--/*[[ 첫 번째 이미지 ]]*/-->
                 <div class="notice-img-container position-relative">
-                    <a th:href="@{/{lang}/notices?category=notice (lang=${language})}">
+                    <a th:href="@{/{lang}/notices?category=1 (lang=${language})}">
                         <img th:src="@{|${staticMainUrl}notice_sc1.png|}" class="img-fluid rounded shadow" alt="공지사항">
                     </a>
                 </div>
 
                 <!--/*[[ 두 번째 이미지 ]]*/-->
                 <div class="notice-img-container position-relative">
-                    <a th:href="@{/{lang}/notices?category=update (lang=${language})}">
+                    <a th:href="@{/{lang}/notices?category=2 (lang=${language})}">
                         <img th:src="@{|${staticMainUrl}notice_sc2.png|}" class="img-fluid rounded shadow" alt="업데이트">
                     </a>
                 </div>
 
                 <!--/*[[ 세 번째 이미지 ]]*/-->
                 <div class="notice-img-container position-relative">
-                    <a th:href="@{/{lang}/notices?category=event (lang=${language})}">
+                    <a th:href="@{/{lang}/notices?category=3 (lang=${language})}">
                         <img th:src="@{|${staticMainUrl}notice_sc3.png|}" class="img-fluid rounded shadow" alt="이벤트">
                     </a>
                 </div>
 
                 <!--/*[[ 네 번째 이미지 ]]*/-->
                 <div class="notice-img-container position-relative">
-                    <a th:href="@{/{lang}/notices?category=dev (lang=${language})}">
+                    <a th:href="@{/{lang}/notices?category=4 (lang=${language})}">
                         <img th:src="@{|${staticMainUrl}notice_sc4.png|}" class="img-fluid rounded shadow" alt="개발자 노트">
                     </a>
                 </div>
