@@ -94,6 +94,7 @@ public class NoticeMgController {
 
         // 취소 버튼을 누른 경우
         if (action.equals("cancel")) {
+            clearSessionAttributes(session);
             return "redirect:/management/notices";
         }
 
