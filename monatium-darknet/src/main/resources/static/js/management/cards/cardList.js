@@ -88,5 +88,8 @@ document.addEventListener('click', function(event) {
     }
 });
 
-
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("searchName").addEventListener("keyup", handleEnter);
+    document.getElementById("cardSearchBtn").addEventListener("click", filterItems);
+});
 
