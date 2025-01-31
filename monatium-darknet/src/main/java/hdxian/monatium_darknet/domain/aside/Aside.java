@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter @Setter // Setter는 추후 생성 메서드 등으로 대체해야 함
 public class Aside {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "aside_id")
     private Long id;
 

@@ -8,10 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "members")
 @Getter @Setter // getter, setter는 추후 개선해야 함
 public class Member {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 

@@ -12,9 +12,10 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
+@Table(name = "game_character")
 public class Character {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "character_id")
     private Long id; // id
 

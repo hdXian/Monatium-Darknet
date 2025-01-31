@@ -15,7 +15,7 @@ import java.util.List;
 @Getter @Setter
 public class Card {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "card_id")
     private Long id;
 

@@ -14,7 +14,7 @@ import java.util.Objects;
 @Getter @Setter
 public class SkinCategory {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "skin_category_id")
     private Long id;
 

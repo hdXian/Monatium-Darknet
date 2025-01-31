@@ -12,7 +12,7 @@ import java.util.*;
 @Getter @Setter
 public class Skin {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "skin_id")
     private Long id;
 

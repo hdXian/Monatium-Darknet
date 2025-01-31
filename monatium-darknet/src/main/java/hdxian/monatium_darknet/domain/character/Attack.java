@@ -13,7 +13,7 @@ import java.util.List;
 @Getter @Setter
 public class Attack {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "attack_id")
     private Long id;
 

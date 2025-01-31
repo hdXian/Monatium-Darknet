@@ -13,7 +13,7 @@ import java.util.List;
 @Getter @Setter // Setter는 추후 생성 메서드 등으로 대체
 public class AsideSpec {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "aside_spec_id")
     private Long id;
 
