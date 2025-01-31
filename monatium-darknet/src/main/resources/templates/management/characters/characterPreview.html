@@ -7,7 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/font.css}">
-    <link rel="stylesheet" th:href="@{/css/wiki/characterDetail.css}">
+    <link rel="stylesheet" th:href="@{/css/management/characters/characterPreview.css}">
     <!--/*[[ 커스텀 css ]]*/-->
 </head>
 
@@ -178,7 +178,7 @@
                                     <label for="status-aggressive">깡</label>
                                     <div class="progress" id="status-aggressive">
                                         <div class="progress-bar strength-bar" role="progressbar"
-                                             th:style="|width: *{stat.aggressive * 10}%|"
+                                             th:data-width="*{stat.aggressive * 10}"
                                              th:aria-valuenow="*{stat.aggressive * 10}" aria-valuemin="0" aria-valuemax="100">
                                         </div>
                                     </div>
@@ -187,7 +187,7 @@
                                     <label for="status-endurance">맷집</label>
                                     <div class="progress" id="status-endurance">
                                         <div class="progress-bar endurance-bar" role="progressbar"
-                                             th:style="|width: *{stat.endurance * 10}%|"
+                                             th:data-width="*{stat.endurance * 10}"
                                              th:aria-valuenow="*{stat.endurance * 10}" aria-valuemin="0" aria-valuemax="100">
                                         </div>
                                     </div>
@@ -197,7 +197,7 @@
                                     <label for="status-trick">재주</label>
                                     <div class="progress" id="status-trick">
                                         <div class="progress-bar skill-bar" role="progressbar"
-                                             th:style="|width: *{stat.trick * 10}%|"
+                                             th:data-width="*{stat.trick * 10}"
                                              th:aria-valuenow="*{stat.trick * 10}" aria-valuemin="0" aria-valuemax="100">
                                         </div>
                                     </div>
@@ -471,7 +471,7 @@
 <!--/*[[ 푸터 ]]*/-->
 <footer th:replace="~{fragments/footer :: common_footer}"></footer>
 
-<script th:src="@{/js/skinCarousel_chDetail.js}" defer></script>
+<script th:src="@{/js/management/characters/characterPreview.js}" defer></script>
 
 </body>
 
