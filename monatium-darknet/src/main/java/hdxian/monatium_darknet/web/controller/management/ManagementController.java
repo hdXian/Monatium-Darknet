@@ -41,7 +41,7 @@ public class ManagementController {
         return (LangCode) session.getAttribute(CURRENT_LANG_CODE);
     }
 
-    @GetMapping
+//    @GetMapping
     public String home(@SessionAttribute(name = LOGIN_MEMBER, required = false) Member loginMember) {
         // 세션이 없으면 로그인 화면으로
         if (loginMember == null) {
@@ -52,6 +52,11 @@ public class ManagementController {
         return "management/dashBoard";
     }
 
+    @GetMapping
+    public String dashBoard() {
+        return "management/dashBoard";
+    }
+
     // 로그인 화면
     @GetMapping("/login")
     public String loginForm(@ModelAttribute("loginForm") LoginForm form) {
@@ -59,7 +64,7 @@ public class ManagementController {
     }
 
     // 로그인 처리
-    @PostMapping("/login")
+//    @PostMapping("/login")
     public String login(@Validated @ModelAttribute("loginForm") LoginForm form, BindingResult bindingResult, HttpServletRequest request) {
 
         if(bindingResult.hasErrors()) {
@@ -84,7 +89,7 @@ public class ManagementController {
     }
 
     // 로그아웃 처리
-    @PostMapping("/logout")
+//    @PostMapping("/logout")
     public String logout(HttpServletRequest request) {
         // 세션을 가져옴. 세션이 없어도 새로 생성하지 않음.
         HttpSession session = request.getSession(false);

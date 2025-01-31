@@ -134,7 +134,7 @@
                                         th:src="${chAdd_profileUrl}"
                                         alt="프로필 이미지 미리보기" 
                                         class="img-thumbnail">
-                                    <input th:field="*{profileImage}" type="file" id="profileImage" name="profileImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
+                                    <input th:field="*{profileImage}" type="file" id="profileImage" name="profileImage" class="form-control d-none img-input" accept="image/*">
                                 </div>
                             </div>
     
@@ -146,7 +146,7 @@
                                         th:src="${chAdd_portraitUrl}"
                                         alt="초상화 이미지 미리보기" 
                                         class="img-thumbnail">
-                                    <input th:field="*{portraitImage}" type="file" id="portraitImage" name="portraitImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
+                                    <input th:field="*{portraitImage}" type="file" id="portraitImage" name="portraitImage" class="form-control d-none img-input" accept="image/*">
                                 </div>
                             </div>
     
@@ -158,7 +158,7 @@
                                         th:src="${chAdd_bodyUrl}"
                                         alt="전신 이미지 미리보기" 
                                         class="img-thumbnail">
-                                    <input th:field="*{bodyImage}" type="file" id="bodyImage" name="bodyImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
+                                    <input th:field="*{bodyImage}" type="file" id="bodyImage" name="bodyImage" class="form-control d-none img-input" accept="image/*">
                                 </div>
                             </div>
                         </div>
@@ -172,7 +172,7 @@
                 <!--/*[[ 왼쪽 버튼 그룹 ]]*/-->
                 <div class="d-flex gap-2">
                     <!--/*[[ 취소 버튼 ]]*/-->
-                    <button type="button" name="action" value="cancel" class="btn btn-danger" onclick="confirmCancel(this)">취소</button>
+                    <button type="button" class="btn btn-danger" id="cancelBtn">취소</button>
                     <!--/*[[ 저장 버튼 ]]*/-->
                     <button type="submit" name="action" value="save" class="btn btn-secondary">임시 저장</button>
                 </div>

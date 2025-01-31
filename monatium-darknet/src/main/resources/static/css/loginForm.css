@@ -1,0 +1,10 @@
+
+.field-error {
+    color: red;
+    border-color: red;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+}

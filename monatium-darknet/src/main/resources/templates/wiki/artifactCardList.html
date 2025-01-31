@@ -59,11 +59,11 @@
                 <!--/*[[ 이름 검색창 ]]*/-->
                 <div class="me-3">
 <!--                    <label for="searchName" class="form-label visually-hidden" th:text="#{card.search.button}">이름 검색</label>-->
-                    <input type="text" class="form-control form-control-sm" id="searchName" th:placeholder="#{card.search.placeholder}" onkeyup="handleEnter(event)">
+                    <input type="text" class="form-control form-control-sm" id="searchName" th:placeholder="#{card.search.placeholder}">
                 </div>
         
                 <!--/*[[ 검색 버튼 ]]*/-->
-                <button type="button" class="btn btn-primary btn-sm" onclick="filterItems()" th:text="#{card.search.button}">검색</button>
+                <button type="button" class="btn btn-primary btn-sm" id="cardSearchBtn" th:text="#{card.search.button}">검색</button>
             </section>
 
             <!--/*[[ 필터된 아티팩트 카드 목록 ]]*/-->

@@ -50,6 +50,9 @@ dependencies {
 	// devtools (dev profile에서만 활성화)
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+	// mysql connector (runtime Only)
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'

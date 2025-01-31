@@ -130,7 +130,7 @@
                                          th:src="${chEdit_profileUrl}"
                                          alt="프로필 이미지 미리보기"
                                          class="img-thumbnail">
-                                    <input th:field="*{profileImage}" type="file" id="profileImage" name="profileImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
+                                    <input th:field="*{profileImage}" type="file" id="profileImage" name="profileImage" class="form-control d-none img-input" accept="image/*" >
                                 </div>
                             </div>
 
@@ -142,7 +142,7 @@
                                          th:src="${chEdit_portraitUrl}"
                                          alt="초상화 이미지 미리보기"
                                          class="img-thumbnail">
-                                    <input th:field="*{portraitImage}" type="file" id="portraitImage" name="portraitImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
+                                    <input th:field="*{portraitImage}" type="file" id="portraitImage" name="portraitImage" class="form-control d-none img-input" accept="image/*" >
                                 </div>
                             </div>
 
@@ -154,7 +154,7 @@
                                          th:src="${chEdit_bodyUrl}"
                                          alt="전신 이미지 미리보기"
                                          class="img-thumbnail">
-                                    <input th:field="*{bodyImage}" type="file" id="bodyImage" name="bodyImage" class="form-control d-none" accept="image/*" onchange="previewImage(this)">
+                                    <input th:field="*{bodyImage}" type="file" id="bodyImage" name="bodyImage" class="form-control d-none img-input" accept="image/*" >
                                 </div>
                             </div>
                         </div>
@@ -354,8 +354,8 @@
                                 <div class="image-upload-wrapper">
                                     <img id="lowSkillImagePreview" th:src="${chEdit_lowSkillUrl}"
                                          alt="스킬 이미지 미리보기" class="img-thumbnail">
-                                    <input th:field="*{lowSkillImage}" type="file" id="lowSkillImage" name="lowSkillImage" class="form-control d-none"
-                                           accept="image/*" onchange="previewImage(this)">
+                                    <input th:field="*{lowSkillImage}" type="file" id="lowSkillImage" name="lowSkillImage" class="form-control d-none img-input"
+                                           accept="image/*" >
                                 </div>
                             </div>
 
@@ -484,8 +484,8 @@
                                 <div class="image-upload-wrapper">
                                     <img id="asideImagePreview1" th:src="${chEdit_asideUrl}"
                                          alt="이미지 미리보기" class="img-thumbnail">
-                                    <input th:field="*{asideImage}" type="file" id="asideImage" name="asideImage" class="form-control d-none"
-                                           accept="image/*" onchange="previewImage(this)">
+                                    <input th:field="*{asideImage}" type="file" id="asideImage" name="asideImage" class="form-control d-none img-input"
+                                           accept="image/*" >
                                 </div>
                             </div>
 
@@ -516,8 +516,8 @@
                                 <div class="image-upload-wrapper">
                                     <img id="aside1ImagePreview" th:src="${chEdit_asideLv1Url}"
                                          alt="이미지 미리보기" class="img-thumbnail">
-                                    <input th:field="*{asideLv1Image}" type="file" id="asideLv1Image" name="asideLv1Image" class="form-control d-none"
-                                           accept="image/*" onchange="previewImage(this)">
+                                    <input th:field="*{asideLv1Image}" type="file" id="asideLv1Image" name="asideLv1Image" class="form-control d-none img-input"
+                                           accept="image/*" >
                                 </div>
                             </div>
 
@@ -563,8 +563,8 @@
                                 <div class="image-upload-wrapper">
                                     <img id="aside2ImagePreview" th:src="${chEdit_asideLv2Url}"
                                          alt="이미지 미리보기" class="img-thumbnail">
-                                    <input th:field="*{asideLv2Image}" type="file" id="asideLv2Image" name="asideLv2Image" class="form-control d-none"
-                                           accept="image/*" onchange="previewImage(this)">
+                                    <input th:field="*{asideLv2Image}" type="file" id="asideLv2Image" name="asideLv2Image" class="form-control d-none img-input img-input"
+                                           accept="image/*" >
                                 </div>
                             </div>
 
@@ -610,8 +610,8 @@
                                 <div class="image-upload-wrapper">
                                     <img id="asideImagePreview4" th:src="${chEdit_asideLv3Url}"
                                          alt="이미지 미리보기" class="img-thumbnail">
-                                    <input th:field="*{asideLv3Image}" type="file" id="asideLv3Image" name="asideLv3Image" class="form-control d-none"
-                                           accept="image/*" onchange="previewImage(this)">
+                                    <input th:field="*{asideLv3Image}" type="file" id="asideLv3Image" name="asideLv3Image" class="form-control d-none img-input"
+                                           accept="image/*" >
                                 </div>
                             </div>
 
@@ -655,7 +655,7 @@
                 <!--/*[[ 왼쪽 버튼 그룹 ]]*/-->
                 <div class="d-flex gap-2">
                     <!--/*[[ 취소 버튼 ]]*/-->
-                    <button type="button" class="btn btn-danger" onclick="confirmCancel(this)">취소</button>
+                    <button type="button" class="btn btn-danger" id="cancelBtn">취소</button>
                     <!--/*[[ 저장 버튼 ]]*/-->
                     <button type="submit" name="action" value="save" class="btn btn-secondary">임시 저장</button>
                 </div>
@@ -663,7 +663,7 @@
                 <!--/*[[ 오른쪽 버튼 그룹 ]]*/-->
                 <div class="d-flex gap-2">
                     <!--/*[[ "다음 단계" 버튼 ]]*/-->
-                    <button type="submit" name="action" value="complete" class="btn btn-primary">캐릭터 수정하기!</button>
+                    <button type="button" class="btn btn-primary" id="completeBtn" >캐릭터 수정하기!</button>
                 </div>
             </div>
 

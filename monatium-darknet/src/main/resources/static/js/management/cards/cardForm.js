@@ -198,3 +198,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+
+document.addEventListener("DOMContentLoaded", function () {
+    const imageInput = document.getElementById("image");
+    const cancelButton = document.getElementById("cancelBtn");
+
+    // 파일 선택 시 이미지 미리보기
+    imageInput.addEventListener("change", function() {
+        previewImage(this);
+    });
+
+    // 취소 버튼 클릭 시 confirmCancel() 실행
+    cancelButton.addEventListener("click", function(event) {
+        confirmCancel(event.target);
+    });
+});
+

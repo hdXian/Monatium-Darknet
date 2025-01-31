@@ -267,12 +267,6 @@ public class SkinMgController {
         categorySc.setLangCode(langCode);
         categorySc.setName(name);
         List<SkinCategory> categoryList = skinService.findAllCategories(categorySc);
-//        if (name != null) {
-//            categoryList = skinService.findCategoriesByName(name);
-//        }
-//        else {
-//            categoryList = skinService.findAllCategories();
-//        }
 
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("query", name);
@@ -280,9 +274,12 @@ public class SkinMgController {
     }
 
     @GetMapping("/categories/new")
-    public String addCategoryForm(HttpSession session, Model model) {
+    public String addCategoryForm(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode, HttpSession session, Model model) {
         SkinCategoryForm categoryForm = Optional.ofNullable((SkinCategoryForm) session.getAttribute(CATEGORY_FORM)).orElse(new SkinCategoryForm());
-        List<Skin> skinOptions = skinService.findAllSkin();
+
+        SkinSearchCond csc = new SkinSearchCond();
+        csc.setLangCode(langCode);
+        List<Skin> skinOptions = skinService.findAllSkin(csc);
 
         model.addAttribute(CATEGORY_FORM, categoryForm);
         model.addAttribute(SKIN_OPTIONS, skinOptions);
@@ -307,7 +304,9 @@ public class SkinMgController {
         if (action.equals("complete")) {
 
             if (bindingResult.hasErrors()) {
-                List<Skin> skinOptions = skinService.findAllSkin();
+                SkinSearchCond csc = new SkinSearchCond();
+                csc.setLangCode(langCode);
+                List<Skin> skinOptions = skinService.findAllSkin(csc);
 
                 model.addAttribute(SKIN_OPTIONS, skinOptions);
                 return "management/skins/categoryAddForm";
@@ -328,8 +327,11 @@ public class SkinMgController {
     }
 
     @GetMapping("/categories/edit/{categoryId}")
-    public String editCategory(HttpSession session, @PathVariable("categoryId") Long categoryId, Model model) {
+    public String editCategory(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode, HttpSession session, @PathVariable("categoryId") Long categoryId, Model model) {
         SkinCategoryForm categoryForm = Optional.ofNullable((SkinCategoryForm) session.getAttribute(CATEGORY_FORM)).orElse(generateCategoryForm(categoryId));
+
+        SkinSearchCond csc = new SkinSearchCond();
+        csc.setLangCode(langCode);
         List<Skin> skinOptions = skinService.findAllSkin();
 
         model.addAttribute("categoryId", categoryId);
@@ -339,7 +341,7 @@ public class SkinMgController {
     }
 
     @PostMapping("/categories/edit/{categoryId}")
-    public String editCategory(HttpSession session, @PathVariable("categoryId") Long categoryId, @RequestParam("action") String action,
+    public String editCategory(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode, HttpSession session, @PathVariable("categoryId") Long categoryId, @RequestParam("action") String action,
                                @Validated @ModelAttribute("categoryForm") SkinCategoryForm categoryForm, BindingResult bindingResult,
                                Model model) {
 
@@ -356,7 +358,9 @@ public class SkinMgController {
         if (action.equals("complete")) {
 
             if (bindingResult.hasErrors()) {
-                List<Skin> skinOptions = skinService.findAllSkin();
+                SkinSearchCond csc = new SkinSearchCond();
+                csc.setLangCode(langCode);
+                List<Skin> skinOptions = skinService.findAllSkin(csc);
 
                 model.addAttribute("categoryId", categoryId);
                 model.addAttribute(SKIN_OPTIONS, skinOptions);

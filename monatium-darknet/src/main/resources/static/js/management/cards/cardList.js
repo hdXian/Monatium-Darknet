@@ -48,36 +48,48 @@ document.addEventListener('click', function(event) {
 
         const requestUrl = isActive ? `/management/cards/disable/${cardId}` : `/management/cards/activate/${cardId}`
 
+        // CSRF 토큰 읽기
+        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
         // AJAX 요청
-        fetch(requestUrl, { method: 'POST' })
-            .then(response => {
-                if (response.ok) {
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: {
+                [csrfHeader]: csrfToken
+            }
+        })
+        .then(response => {
+            if (response.ok) {
 
-                    // 성공적으로 처리된 경우 상태 변경
-                    const newStatus = isActive ? 'DISABLED' : 'ACTIVE';
-                    button.setAttribute('data-status', newStatus);
+                // 성공적으로 처리된 경우 상태 변경
+                const newStatus = isActive ? 'DISABLED' : 'ACTIVE';
+                button.setAttribute('data-status', newStatus);
 
-                    // 클래스 업데이트
-                    if (newStatus === 'ACTIVE') {
-                        button.classList.add('btn-success');
-                        button.classList.remove('btn-secondary');
-                    } else {
-                        button.classList.add('btn-secondary');
-                        button.classList.remove('btn-success');
-                    }
-
-                    // 버튼 텍스트 업데이트
-                    button.textContent = (newStatus === 'ACTIVE') ? '활성화 중' : '비활성화 중';
-
+                // 클래스 업데이트
+                if (newStatus === 'ACTIVE') {
+                    button.classList.add('btn-success');
+                    button.classList.remove('btn-secondary');
                 } else {
-                    throw new Error('서버 오류가 발생했습니다.');
+                    button.classList.add('btn-secondary');
+                    button.classList.remove('btn-success');
                 }
-            })
-            .catch(error => {
-                alert('상태 변경에 실패했습니다: ' + error.message);
-            });
+
+                // 버튼 텍스트 업데이트
+                button.textContent = (newStatus === 'ACTIVE') ? '활성화 중' : '비활성화 중';
+
+            } else {
+                throw new Error('서버 오류가 발생했습니다.');
+            }
+        })
+        .catch(error => {
+            alert('상태 변경에 실패했습니다: ' + error.message);
+        });
     }
 });
 
-
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("searchName").addEventListener("keyup", handleEnter);
+    document.getElementById("cardSearchBtn").addEventListener("click", filterItems);
+});
 

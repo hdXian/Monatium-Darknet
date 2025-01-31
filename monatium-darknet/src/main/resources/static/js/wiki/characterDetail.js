@@ -29,4 +29,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const walk = (x - startX) * 2; // *2는 드래그 속도를 조절
         skinRow.scrollLeft = scrollLeft - walk;
     });
+
+    document.querySelectorAll(".progress-bar").forEach(bar => {
+        const width = bar.getAttribute("data-width");
+        if (width) {
+            bar.style.width = width + "%";
+        }
+    });
+
 });

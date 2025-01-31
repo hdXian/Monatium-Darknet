@@ -11,7 +11,6 @@
     <!--/*[[ 커스텀 css ]]*/-->
 </head>
 
-<!-- TODO - 캐릭터 목록 페이지부터 스프링 메시지 적용 계속 진행 -->
 <body>
 
 <!--/*[[ 상단 네비게이션 바 ]]*/-->
@@ -185,8 +184,8 @@
             
                     <!--/*[[ 검색 및 초기화 버튼 ]]*/-->
                     <div class="d-flex align-items-center mt-3">
-                        <button type="button" class="btn btn-primary me-2" onclick="filterCharacters()" th:text="#{character.list.search}">검색</button>
-                        <button type="button" class="btn btn-secondary" onclick="resetFilters()" th:text="#{character.list.clear}">초기화</button>
+                        <button type="button" id="chSearchBtn" class="btn btn-primary me-2" th:text="#{character.list.search}">검색</button>
+                        <button type="button" id="chSearchClearBtn" class="btn btn-secondary" th:text="#{character.list.clear}">초기화</button>
                     </div>
                 </section>
             </div>

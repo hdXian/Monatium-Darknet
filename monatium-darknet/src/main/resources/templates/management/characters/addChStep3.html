@@ -124,8 +124,8 @@
                                 <div class="image-upload-wrapper">
                                     <img id="lowSkillImagePreview" th:src="${chAdd_lowSkillUrl}"
                                         alt="스킬 이미지 미리보기" class="img-thumbnail">
-                                    <input th:field="*{lowSkillImage}" type="file" id="lowSkillImage" name="lowSkillImage" class="form-control d-none"
-                                        accept="image/*" onchange="previewImage(this)">
+                                    <input th:field="*{lowSkillImage}" type="file" id="lowSkillImage" name="lowSkillImage" class="form-control d-none img-input"
+                                        accept="image/*">
                                 </div>
                             </div>
 
@@ -221,7 +221,7 @@
                 <!--/*[[ 왼쪽 버튼 그룹 ]]*/-->
                 <div class="d-flex gap-2">
                     <!--/*[[ 취소 버튼 ]]*/-->
-                    <button type="button" name="action" value="cancel" class="btn btn-danger" onclick="confirmCancel(this)">취소</button>
+                    <button type="button" class="btn btn-danger" id="cancelBtn">취소</button>
                     <!--/*[[ 저장 버튼 ]]*/-->
                     <button type="submit" name="action" value="save" class="btn btn-secondary">임시 저장</button>
                 </div>

@@ -77,6 +77,10 @@ h2.section-title {
     color: #FFF;
 }
 
+.hero-content .dl-image {
+    width: 180px;
+}
+
 /* 모바일 환경에서 글자 크기 축소 */
 @media (max-width: 768px) {
     .hero-content h1 {

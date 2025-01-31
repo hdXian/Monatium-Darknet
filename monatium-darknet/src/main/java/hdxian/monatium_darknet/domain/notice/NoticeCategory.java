@@ -12,7 +12,7 @@ import java.util.List;
 @Getter @Setter
 public class NoticeCategory {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notice_category_id")
     private Long id;
 

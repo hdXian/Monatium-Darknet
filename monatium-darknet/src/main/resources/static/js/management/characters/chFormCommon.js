@@ -157,3 +157,45 @@ function confirmCancel(button) {
         form.submit(); // 폼을 명시적으로 제출
     }
 }
+
+function confirmComplete(button) {
+    // 버튼이 속한 폼을 가져옴
+    const form = button.closest('form');
+
+    // 사용자 확인 후 폼 제출
+    if (confirm("캐릭터를 저장하시겠습니까?")) {
+        // action 파라미터를 명시적으로 설정
+        const hiddenField = document.createElement('input');
+        hiddenField.type = 'hidden';
+        hiddenField.name = 'action';
+        hiddenField.value = 'complete';
+        form.appendChild(hiddenField);
+
+        form.submit(); // 폼을 명시적으로 제출
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const imageInputs = document.querySelectorAll(".img-input");
+    const cancelButton = document.getElementById("cancelBtn");
+    const completeButton = document.getElementById("completeBtn");
+
+    // 모든 이미지 업로드 input 요소에 대해 이벤트 추가
+    imageInputs.forEach(input => {
+        input.addEventListener("change", function() {
+            previewImage(this);
+        });
+    });
+
+    // 취소 버튼 클릭 시 confirmCancel() 실행
+    cancelButton.addEventListener("click", function(event) {
+        confirmCancel(event.target);
+    });
+
+    // 완료 버튼 클릭 시 confirmComplete() 실행
+    completeButton.addEventListener("click", function(event) {
+        confirmComplete(event.target);
+    });
+
+});
+

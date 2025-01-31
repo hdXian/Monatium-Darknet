@@ -5,12 +5,19 @@ document.getElementById('delChar-btn').addEventListener('click', function (event
     // 확인 메시지
     const message = `정말 ${characterName} 캐릭터를 삭제하시겠습니까?`
 
+    // CSRF 토큰 읽기
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
     if (confirm(message)) {
         const characterId = event.target.getAttribute('data-id');
         const deleteUrl = `/management/characters/del/${characterId}`;
 
         fetch(deleteUrl, {
-            method: 'POST'
+            method: 'POST',
+            headers: {
+                [csrfHeader]: csrfToken
+            }
         })
         .then(response => {
             if (response.redirected) {

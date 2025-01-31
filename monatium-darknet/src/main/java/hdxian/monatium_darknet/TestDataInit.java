@@ -6,6 +6,7 @@ import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.aside.AsideSpec;
 import hdxian.monatium_darknet.domain.card.CardGrade;
 import hdxian.monatium_darknet.domain.character.*;
+import hdxian.monatium_darknet.domain.notice.MemberRole;
 import hdxian.monatium_darknet.domain.notice.NoticeCategoryStatus;
 import hdxian.monatium_darknet.service.*;
 import hdxian.monatium_darknet.service.dto.*;
@@ -29,12 +30,14 @@ public class TestDataInit {
 
     private final ImagePathService imagePathService;
 
-    @EventListener(ApplicationReadyEvent.class)
+    // DB를 옮겼기 때문에 매번 시작할 때마다 이걸 돌릴 필요가 없습니다! (배포할 때 최초 1회 다시 실행하긴 해야할듯)
+//    @EventListener(ApplicationReadyEvent.class)
     public void initData() {
 
         // 관리자 계정 추가
         MemberDto memberDto = new MemberDto();
         memberDto.setLoginId("admin");
+        memberDto.setGrade(MemberRole.SUPER);
         memberDto.setPassword("1234");
         memberDto.setNickName("GM릴2리");
         Long memberId = memberService.createNewMember(memberDto);
@@ -254,9 +257,9 @@ public class TestDataInit {
         skinService.linkSkinAndCategory(skinId8, skinCategoryId5);
 
         // JP
-        skinService.linkSkinAndCategory(skinId1, skinCategoryId6);
-        skinService.linkSkinAndCategory(skinId2, skinCategoryId6);
         skinService.linkSkinAndCategory(skinId3, skinCategoryId6);
+        skinService.linkSkinAndCategory(skinId6, skinCategoryId6);
+        skinService.linkSkinAndCategory(skinId9, skinCategoryId6);
 
 
         // 아티팩트 카드 테스트 데이터 추가

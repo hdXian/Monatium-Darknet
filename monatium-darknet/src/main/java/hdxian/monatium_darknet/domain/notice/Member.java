@@ -8,12 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "members")
 @Getter @Setter // getter, setter는 추후 개선해야 함
 public class Member {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    private MemberRole role;
 
     private String loginId;
     private String password;
@@ -41,9 +45,10 @@ public class Member {
     }
 
     // 생성 메서드
-    public static Member createMember(String loginId, String password, String nickName) {
+    public static Member createMember(String loginId, MemberRole role, String password, String nickName) {
         Member member = new Member();
         member.setLoginId(loginId);
+        member.setRole(role);
         member.setPassword(password);
         member.setNickName(nickName);
         member.setStatus(MemberStatus.ACTIVE); // 생성 시 기본 상태는 ACTIVE
