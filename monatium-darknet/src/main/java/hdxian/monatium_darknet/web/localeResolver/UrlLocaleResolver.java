@@ -25,7 +25,7 @@ public class UrlLocaleResolver extends AcceptHeaderLocaleResolver {
 //        log.info("UrlLocalResolver 동작: uri = {}", uri);
 
         StringTokenizer tkn = new StringTokenizer(uri, "/");
-        String lang;
+        String lang = null;
         if (tkn.hasMoreTokens()) {
             lang = tkn.nextToken();
             // en, ko, jp가 들어온 경우
@@ -38,10 +38,12 @@ public class UrlLocaleResolver extends AcceptHeaderLocaleResolver {
         // 2. / 이후 첫 번째 파라미터가 ko, en, jp가 아닌 경우
         // ==> accept language 헤더 기반으로 locale을 가져오되, 지원하지 않는 Locale이면 Locale.ENGLISH로 리턴
         Locale acceptLocale = super.resolveLocale(request);
-        if (enableLocales.contains(acceptLocale))
+        if (enableLocales.contains(acceptLocale)) {
             return acceptLocale;
-        else
+        }
+        else {
             return Locale.ENGLISH;
+        }
 
     }
 

@@ -226,7 +226,7 @@ class NoticeServiceTest {
         // when
         // 제목, 본문, 카테고리 모두 수정
         NoticeDto updateDto = generateNoticeDto("수정공지사항제목", categoryId, "수정공지사항본문");
-        Long updatedId = noticeService.updateNotice(savedNoticeId, updateDto); // 참고 - 업데이트 기능에 시간도 수정하는 로직 포함돼있음
+        Long updatedId = noticeService.updateNotice(savedNoticeId, updateDto, null); // 참고 - 업데이트 기능에 시간도 수정하는 로직 포함돼있음
 
         // then
         Notice updatedNotice = noticeService.findOne(updatedId);

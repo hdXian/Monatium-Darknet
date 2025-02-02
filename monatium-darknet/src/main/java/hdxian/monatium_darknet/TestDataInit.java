@@ -31,7 +31,7 @@ public class TestDataInit {
     private final ImagePathService imagePathService;
 
     // DB를 옮겼기 때문에 매번 시작할 때마다 이걸 돌릴 필요가 없습니다! (배포할 때 최초 1회 다시 실행하긴 해야할듯)
-    @EventListener(ApplicationReadyEvent.class)
+//    @EventListener(ApplicationReadyEvent.class)
     public void initData() {
 
         // 관리자 계정 추가
