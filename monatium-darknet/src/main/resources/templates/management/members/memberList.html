@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
+    <title>회원 관리</title>
+    <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
+</head>
+<body>
+<nav th:replace="~{fragments/navbar :: management_navbar}"></nav>
+
+<div class="container-fluid mt-3">
+    <h2>회원 관리</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>이름</th>
+            <th>이메일</th>
+            <th>권한</th>
+            <th>관리</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.role}"></td>
+            <td>
+                <a th:href="@{/management/users/edit/{id}(id=${user.id})}" class="btn btn-primary btn-sm">수정</a>
+                <a th:href="@{/management/users/delete/{id}(id=${user.id})}" class="btn btn-danger btn-sm">삭제</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<footer th:replace="~{fragments/footer :: management_footer}"></footer>
+</body>
+</html>
