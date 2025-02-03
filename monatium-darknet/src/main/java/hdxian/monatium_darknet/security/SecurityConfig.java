@@ -2,6 +2,7 @@ package hdxian.monatium_darknet.security;
 
 import hdxian.monatium_darknet.domain.notice.MemberRole;
 import hdxian.monatium_darknet.repository.MemberRepository;
+import hdxian.monatium_darknet.service.MemberService;
 import hdxian.monatium_darknet.web.filter.CspFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +25,8 @@ public class SecurityConfig {
 
     private final String sessionCookieName = "SID"; // 얘는 세션 쿠키 이름 지정하는게 아님. 정해져있는 이름의 쿠키를 지우기 위해 사용하는 변수.
 
-    private final MemberRepository memberRepository;
+    private final UserDetailsService userDetailService;
+    private final PasswordEncoder passwordEncoder;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -56,20 +58,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailService() {
-        return new DBUserDetailService(memberRepository);
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailService());
-        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(userDetailService);
+        provider.setPasswordEncoder(passwordEncoder);
         return provider;
     }
 
