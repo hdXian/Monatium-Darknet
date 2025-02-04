@@ -6,11 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -19,7 +15,7 @@ import static hdxian.monatium_darknet.web.controller.management.SessionConst.CUR
 @Controller
 @RequiredArgsConstructor
 @SessionAttributes(CURRENT_LANG_CODE)
-@RequestMapping("/management/users")
+@RequestMapping("/management/members")
 public class MemberMgController {
 
     private final MemberService memberService;
@@ -31,9 +27,18 @@ public class MemberMgController {
     }
 
     @GetMapping
-    public String memberList(Model model) {
-        
+    public String memberList() {
         return "management/members/memberList";
+    }
+
+    @GetMapping("/new")
+    public String memberForm(@ModelAttribute("memberForm") MemberForm memberForm) {
+        return "management/members/addMemberForm";
+    }
+
+    @PostMapping("/new")
+    public String addMember() {
+        return "redirect:/management";
     }
 
 }

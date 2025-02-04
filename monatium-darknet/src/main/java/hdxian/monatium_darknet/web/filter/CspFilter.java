@@ -40,12 +40,12 @@ public class CspFilter implements Filter {
     private String generateCspContent(String nonce) {
         return String.format(
                 "default-src 'self'; " +
-                        "script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
+                        "script-src 'self' 'nonce-%s' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
                         "style-src 'self' 'nonce-%s' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com; " +
                         "font-src 'self' 'nonce-%s' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com;" +
                         "img-src 'self' data:; " +
                         "frame-ancestors 'none'; " +
-                        "frame-src 'self' https://www.youtube-nocookie.com;", nonce, nonce);
+                        "frame-src 'self' https://www.youtube-nocookie.com;",nonce, nonce, nonce);
     }
 
 }
