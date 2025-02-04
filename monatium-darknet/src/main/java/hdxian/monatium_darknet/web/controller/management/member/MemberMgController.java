@@ -62,7 +62,7 @@ public class MemberMgController {
     // 회원 추가
     @GetMapping("/new")
     public String memberForm(@ModelAttribute("memberForm") MemberForm memberForm) {
-        return "management/members/addMemberForm";
+        return "management/members/memberAddForm";
     }
 
     @PostMapping("/new")
