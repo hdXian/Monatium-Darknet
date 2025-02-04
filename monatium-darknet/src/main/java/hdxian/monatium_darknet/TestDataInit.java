@@ -40,7 +40,7 @@ public class TestDataInit {
         MemberDto memberDto = new MemberDto();
         memberDto.setLoginId("admin");
         memberDto.setRole(MemberRole.SUPER);
-        memberDto.setPassword("1234");
+        memberDto.setPassword("T3st!User");
         memberDto.setNickName("GM릴2리");
         Long memberId = memberService.createNewMember(memberDto);
         memberService.activateMember(memberId);

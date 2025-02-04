@@ -70,7 +70,14 @@ public class MemberMgController {
     }
 
     @PostMapping("/new")
-    public String addMember(@ModelAttribute("memberForm") MemberForm memberForm, RedirectAttributes redirectAttributes) {
+    public String addMember(@Validated @ModelAttribute("memberForm") MemberForm memberForm,
+                            BindingResult bindingResult,
+                            RedirectAttributes redirectAttributes) {
+
+        // 회원 정보 필드 입력 검증
+        if (bindingResult.hasErrors()) {
+            return "management/members/memberAddForm";
+        }
 
         MemberDto memberDto = generateMemberDto(memberForm);
 
@@ -108,6 +115,7 @@ public class MemberMgController {
             return "redirect:/management";
         }
 
+        // 닉네임은 빈 벨리데이션을 적용하지 않았음
         if(!StringUtils.hasText(nickName)) {
             redirectAttributes.addFlashAttribute("globalError", "닉네임 정보가 올바르지 않습니다.");
             redirectAttributes.addAttribute("memberId", memberId);
@@ -133,6 +141,7 @@ public class MemberMgController {
         }
 
         String oldPassword = passwordForm.getOldPassword();
+        System.out.println("oldPassword = " + oldPassword);
         String newPassword = passwordForm.getNewPassword();
 
         // 기존 비밀번호 검증 (현재 로그인한 사용자의 패스워드로 검증)
@@ -156,7 +165,7 @@ public class MemberMgController {
     // === private ===
     private MemberDto generateMemberDto(MemberForm memberForm) {
         MemberDto dto = new MemberDto();
-        dto.setLoginId(memberForm.getUsername());
+        dto.setLoginId(memberForm.getLoginId());
         dto.setNickName(memberForm.getNickname());
         dto.setPassword(memberForm.getPassword());
         dto.setRole(MemberRole.NORMAL); // 추가되는 Member는 무조건 그냥 관리자

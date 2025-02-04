@@ -49,10 +49,11 @@
             </div>
 
             <!--/*[[ 닉네임 변경 폼 ]]*/-->
-            <form id="nicknameForm" th:action="@{/management/members/editNick/{id} (id=${member.id})}" method="post">
+            <form id="nicknameForm" class="confirm-form" th:action="@{/management/members/editNick/{id} (id=${member.id})}" method="post">
                 <div class="mb-3">
-                    <label for="nickname" class="form-label">닉네임 변경</label>
+                    <label for="nickname" class="form-label">닉네임 변경 (1 ~ 20자, 영문, 한글, 숫자 가능)</label>
                     <input type="text" th:value="${member.nickName}" id="nickName" name="nickName" class="form-control" required>
+                    <div th:if="${globalError}" class="field-error" th:text="${globalError}"></div>
                 </div>
 
                 <button type="submit" class="btn btn-success w-100">닉네임 변경하기</button>
@@ -61,7 +62,7 @@
             <hr>
 
             <!--/*[[ 비밀번호 변경 폼 ]]*/-->
-            <form id="passwordForm" th:object="${passwordForm}" th:action="@{/management/members/editPw/{id} (id=${member.id})}" method="post">
+            <form id="passwordForm" class="confirm-form" th:object="${passwordForm}" th:action="@{/management/members/editPw/{id} (id=${member.id})}" method="post">
 
                 <div class="mb-3">
                     <label for="oldPassword" class="form-label">기존 비밀번호</label>
@@ -70,7 +71,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="newPassword" class="form-label">신규 비밀번호</label>
+                    <label for="newPassword" class="form-label">신규 비밀번호 (8 ~ 50자)</label>
                     <input type="password" th:field="*{newPassword}" id="newPassword" name="newPassword" class="form-control" required>
                     <div class="field-error" th:errors="*{newPassword}"></div>
                 </div>
@@ -90,13 +91,16 @@
 
 <script th:attr="nonce=${cspNonce}">
     document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("memberForm").addEventListener("submit", function (event) {
-            if (!confirm("가입을 신청하시겠습니까?")) {
-                event.preventDefault();
-            }
+        document.querySelectorAll(".confirm-form").forEach(function (form) {
+            form.addEventListener("submit", function (event) {
+                if (!confirm("정보를 수정하시겠습니까?")) {
+                    event.preventDefault();
+                }
+            });
         });
     });
 </script>
+
 
 </body>
 
