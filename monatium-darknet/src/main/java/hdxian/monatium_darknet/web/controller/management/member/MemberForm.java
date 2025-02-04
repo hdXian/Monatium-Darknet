@@ -14,7 +14,7 @@ public class MemberForm {
     private String loginId;
 
     @NotBlank
-    @Pattern(regexp = "^[가-힣a-zA-Z0-9]+$")
+    @Pattern(regexp = "^[가-힣a-zA-Z0-9 ]+$")
     @Size(min = 1, max = 20)
     private String nickname;
 

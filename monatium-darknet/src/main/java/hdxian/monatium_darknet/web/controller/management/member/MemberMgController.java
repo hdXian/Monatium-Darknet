@@ -166,7 +166,7 @@ public class MemberMgController {
     private MemberDto generateMemberDto(MemberForm memberForm) {
         MemberDto dto = new MemberDto();
         dto.setLoginId(memberForm.getLoginId());
-        dto.setNickName(memberForm.getNickname());
+        dto.setNickName(memberForm.getNickname().trim());
         dto.setPassword(memberForm.getPassword());
         dto.setRole(MemberRole.NORMAL); // 추가되는 Member는 무조건 그냥 관리자
         return dto;
