@@ -7,27 +7,36 @@
 <body>
 <nav th:replace="~{fragments/navbar :: management_navbar}"></nav>
 
-<div class="container-fluid mt-3">
-    <h2>회원 관리</h2>
+<div class="main-content container-fluid mt-3">
+    <h2 class="mb-3">회원 관리</h2>
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>이름</th>
-            <th>이메일</th>
-            <th>권한</th>
+            <th>로그인 ID</th>
+            <th>닉네임</th>
+            <th>등급</th>
+            <th>활성화</th>
             <th>관리</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="user : ${users}">
-            <td th:text="${user.id}"></td>
-            <td th:text="${user.name}"></td>
-            <td th:text="${user.email}"></td>
-            <td th:text="${user.role}"></td>
+        <tr th:each="member : ${memberList}">
+            <td th:text="${member.loginId}"></td>
+            <td th:text="${member.nickName}"></td>
+            <td th:text="${member.role.name}"></td>
             <td>
-                <a th:href="@{/management/users/edit/{id}(id=${user.id})}" class="btn btn-primary btn-sm">수정</a>
-                <a th:href="@{/management/users/delete/{id}(id=${user.id})}" class="btn btn-danger btn-sm">삭제</a>
+                <button th:classappend="${member.status.name() == 'ACTIVE' ? 'btn-success' : 'btn-secondary'}"
+                        th:data-id="${member.id}"
+                        th:data-nickName="${member.nickName}"
+                        th:data-status="${member.status.name()}"
+                        th:text="${member.status.name() == 'ACTIVE' ? '활성화 중' : '비활성화 중'}"
+                        class="btn btn-sm member-status-btn">
+                    활성화
+                </button>
+            </td>
+            <td>
+                <a th:href="@{/management/members/edit/{id}(id=${member.id})}" class="btn btn-primary btn-sm">수정</a>
+                <a th:href="@{/management/members/delete/{id}(id=${member.id})}" class="btn btn-danger btn-sm">삭제</a>
             </td>
         </tr>
         </tbody>
@@ -35,5 +44,8 @@
 </div>
 
 <footer th:replace="~{fragments/footer :: management_footer}"></footer>
+
+<script th:src="@{/js/management/members/memberList.js}"></script>
+
 </body>
 </html>
