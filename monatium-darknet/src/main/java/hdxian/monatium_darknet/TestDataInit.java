@@ -39,10 +39,11 @@ public class TestDataInit {
         // 관리자 계정 추가
         MemberDto memberDto = new MemberDto();
         memberDto.setLoginId("admin");
-        memberDto.setGrade(MemberRole.SUPER);
+        memberDto.setRole(MemberRole.SUPER);
         memberDto.setPassword("1234");
         memberDto.setNickName("GM릴2리");
         Long memberId = memberService.createNewMember(memberDto);
+        memberService.activateMember(memberId);
 
 
         // 공지사항 카테고리 추가

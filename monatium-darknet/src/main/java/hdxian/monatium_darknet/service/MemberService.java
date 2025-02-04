@@ -34,7 +34,7 @@ public class MemberService {
 
         Member member = Member.createMember(
                 memberDto.getLoginId(),
-                memberDto.getGrade(),
+                memberDto.getRole(),
                 encoded,
                 memberDto.getNickName()
         );
@@ -67,7 +67,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void activeMember(Long memberId) {
+    public void activateMember(Long memberId) {
         Member member = findOne(memberId);
         if (member == null) {
             throw new MemberNotFoundException("해당 회원이 존재하지 않습니다. id=" + memberId);

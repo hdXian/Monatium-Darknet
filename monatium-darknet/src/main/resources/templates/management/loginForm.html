@@ -28,6 +28,8 @@
                 </p>
             </div>
 
+            <p th:if="${message}" class="alert alert-success" th:text="${message}"></p>
+
             <div class="mb-3">
                 <label for="loginId" class="form-label">로그인 ID</label>
                 <input th:field="*{loginId}"
