@@ -31,6 +31,10 @@ import static hdxian.monatium_darknet.web.controller.management.SessionConst.CUR
 @RequestMapping("/management/members")
 public class MemberMgController {
 
+    // TODO - 전체 회원 관리 기능은 최고 관리자만 볼 수 있도록 해야 함
+    // 그냥 관리자는 본인 정보 확인, 본인 정보 수정 등만 수행할 수 있도록 메뉴 추가
+    // 메인화면에 안녕하세요, 고동환참치님! 이런거 추가, 내 정보 추가
+
     private final MemberService memberService;
     private final UserDetailsService userDetailsService; // DBUserDetails
     private final PasswordEncoder passwordEncoder;
