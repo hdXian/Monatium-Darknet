@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,12 +39,11 @@ import static hdxian.monatium_darknet.web.controller.management.SessionConst.CUR
 @RequestMapping("/management/members")
 public class MemberMgController {
 
-    // 그냥 관리자는 본인 정보 확인, 본인 정보 수정 등만 수행할 수 있도록 메뉴 추가
-    // 메인화면에 안녕하세요, 고동환참치님! 이런거 추가, 내 정보 추가
-
     private final MemberService memberService;
+
     private final UserDetailsService userDetailsService; // DBUserDetails
     private final PasswordEncoder passwordEncoder;
+    private final SessionRegistry sessionRegistry;
 
     @ModelAttribute(CURRENT_LANG_CODE)
     public LangCode crntLangCode(HttpSession session) {
@@ -64,6 +65,7 @@ public class MemberMgController {
     @PostMapping("/activate/{memberId}")
     public ResponseEntity<Void> activate(@PathVariable("memberId") Long memberId) {
         memberService.activateMember(memberId);
+        expireUserSession(memberId);
         return ResponseEntity.ok().build();
     }
 
@@ -71,6 +73,7 @@ public class MemberMgController {
     @PostMapping("/deactivate/{memberId}")
     public ResponseEntity<Void> deactivate(@PathVariable("memberId") Long memberId) {
         memberService.deactivateMember(memberId);
+        expireUserSession(memberId);
         return ResponseEntity.ok().build();
     }
 
@@ -198,6 +201,7 @@ public class MemberMgController {
         }
 
         memberService.updatePassword(memberId, newPassword);
+        expireUserSession(memberId); // 비밀번호를 수정한 사용자의 세션 만료 (재로그인 강제)
 
         redirectAttributes.addAttribute("memberId", memberId);
         return "redirect:/management/members/edit/{memberId}";
@@ -205,8 +209,30 @@ public class MemberMgController {
 
 
     // === private ===
-    private void updateSecurityContext(Long memberId) {
+    private void expireUserSession(Long memberId) {
+        String loginId = memberService.findOne(memberId).getLoginId();
 
+        List<Object> principals = sessionRegistry.getAllPrincipals();
+
+        for (Object principal : principals) {
+
+            if (principal instanceof UserDetails userDetails) {
+
+                if (userDetails.getUsername().equals(loginId)) {
+
+                    List<SessionInformation> sessions = sessionRegistry.getAllSessions(userDetails, false);
+                    for (SessionInformation session : sessions) {
+                        session.expireNow(); // 세션 만료 처리
+                    }
+                }
+
+            }
+
+        }
+
+    }
+
+    private void updateSecurityContext(Long memberId) {
         // 업데이트된 Member를 가져옴
         Member updatedMember = memberService.findOne(memberId);
 
