@@ -31,7 +31,6 @@ import static hdxian.monatium_darknet.web.controller.management.SessionConst.CUR
 @RequestMapping("/management/members")
 public class MemberMgController {
 
-    // TODO - 전체 회원 관리 기능은 최고 관리자만 볼 수 있도록 해야 함
     // 그냥 관리자는 본인 정보 확인, 본인 정보 수정 등만 수행할 수 있도록 메뉴 추가
     // 메인화면에 안녕하세요, 고동환참치님! 이런거 추가, 내 정보 추가
 
@@ -55,12 +54,14 @@ public class MemberMgController {
         return "management/members/memberList";
     }
 
+    // 회원 활성화
     @PostMapping("/activate/{memberId}")
     public ResponseEntity<Void> activate(@PathVariable("memberId") Long memberId) {
         memberService.activateMember(memberId);
         return ResponseEntity.ok().build();
     }
 
+    // 회원 비활성화
     @PostMapping("/deactivate/{memberId}")
     public ResponseEntity<Void> deactivate(@PathVariable("memberId") Long memberId) {
         memberService.deactivateMember(memberId);
@@ -73,6 +74,7 @@ public class MemberMgController {
         return "management/members/memberAddForm";
     }
 
+    // 회원 추가 요청
     @PostMapping("/new")
     public String addMember(@Validated @ModelAttribute("memberForm") MemberForm memberForm,
                             BindingResult bindingResult,
@@ -91,6 +93,7 @@ public class MemberMgController {
         return "redirect:/management/login";
     }
 
+    // 회원 정보 수정
     @GetMapping("/edit/{memberId}")
     public String editForm(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("memberId") Long memberId, Model model) {
 
@@ -107,6 +110,7 @@ public class MemberMgController {
         return "management/members/memberEditForm";
     }
 
+    // 닉네임 수정 요청
     @PostMapping("/editNick/{memberId}")
     public String editNick(@AuthenticationPrincipal CustomUserDetails userDetails,
                            @PathVariable("memberId") Long memberId,
@@ -132,6 +136,7 @@ public class MemberMgController {
         return "redirect:/management/members/edit/{memberId}";
     }
 
+    // 패스워드 수정 요청
     @PostMapping("/editPw/{memberId}")
     public String editPw(@AuthenticationPrincipal CustomUserDetails userDetails,
                          @PathVariable("memberId") Long memberId,
