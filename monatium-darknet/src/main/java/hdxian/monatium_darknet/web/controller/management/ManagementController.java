@@ -49,7 +49,7 @@ public class ManagementController {
     public String dashBoard(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         Member loginMember = userDetails.getMember();
 
-        model.addAttribute("member", loginMember);
+        model.addAttribute("loginMember", loginMember);
         return "management/dashBoard";
     }
 

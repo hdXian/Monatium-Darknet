@@ -109,6 +109,7 @@ public class MemberMgController {
 
         Member findMember = memberService.findOne(memberId);
 
+        model.addAttribute("loginMember", loginMember);
         model.addAttribute("member", findMember);
         return "management/members/memberInfo";
     }
@@ -126,6 +127,7 @@ public class MemberMgController {
 
         Member member = memberService.findOne(memberId);
 
+        model.addAttribute("loginMember", loginMember);
         model.addAttribute("member", member);
         model.addAttribute("passwordForm", new PasswordEditForm());
         return "management/members/memberEditForm";

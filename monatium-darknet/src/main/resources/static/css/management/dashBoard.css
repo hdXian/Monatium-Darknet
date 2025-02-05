@@ -14,38 +14,7 @@ a.card {
     color: inherit;
 }
 
-.sidebar {
-    background-color: #fdf7e3; /* 아이보리 배경 */
-    border: 3px solid #4caf50; /* 모든 방향 초록 테두리 */
-    border-radius: 10px; /* 모서리 둥글게 */
-    padding: 5px; /* 내부 여백 */
-}
 
-.sidebar:hover {
-    box-shadow: 0px 4px 10px rgba(0, 128, 0, 0.2); /* 초록색 계열 그림자 */
-    border-color: #388e3c; /* 좀 더 진한 초록 테두리 */
-}
-
-.sidebar .nav-link {
-    color: #2e7d32; /* 초록색 텍스트 */
-    font-weight: bold; /* 글자 굵게 */
-}
-
-.sidebar .nav-link:hover {
-    background-color: #e9c46a; /* 호버 시 따뜻한 노랑 계열 */
-    color: white;
-}
-
-.user-info {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #ddd;
-    padding: 15px;
-    font-size: 1rem;
-}
-
-.user-info .btn {
-    width: 100%;
-}
 
 /*
 .sidebar {
