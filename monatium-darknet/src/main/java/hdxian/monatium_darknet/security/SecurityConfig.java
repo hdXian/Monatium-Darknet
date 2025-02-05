@@ -2,6 +2,7 @@ package hdxian.monatium_darknet.security;
 
 import hdxian.monatium_darknet.domain.notice.MemberRole;
 import hdxian.monatium_darknet.web.filter.CspFilter;
+import hdxian.monatium_darknet.web.filter.ExpireSessionFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.security.web.session.ConcurrentSessionFilter;
+import org.springframework.security.web.session.SessionManagementFilter;
 
 //@Profile("prod")
 @RequiredArgsConstructor
@@ -21,6 +23,7 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 public class SecurityConfig {
 
     private final CspFilter cspFilter; // DI
+    private final ExpireSessionFilter expireSessionFilter;
 
     private final String sessionCookieName = "SID"; // 얘는 세션 쿠키 이름 지정하는게 아님. 정해져있는 이름의 쿠키를 지우기 위해 사용하는 변수.
 
@@ -41,15 +44,15 @@ public class SecurityConfig {
                         .requestMatchers("/management/deactivate/**").hasRole(MemberRole.SUPER.name())
                         .requestMatchers("/management/**").hasAnyRole(MemberRole.SUPER.name(), MemberRole.NORMAL.name())
                 )
+                .addFilterBefore(cspFilter, UsernamePasswordAuthenticationFilter.class) // 사용자 인증 필터의 앞 순서에 cspFilter를 추가
+                .addFilterAfter(expireSessionFilter, SessionManagementFilter.class) // 로그인 및 인증 후 세션 등록 전에 기존 세션 모두 만료 처리
                 .sessionManagement(session -> session
-                        .sessionFixation().migrateSession() // 로그인 시 세션 변경 (고정 세션 공격 방지)
+                        .sessionFixation().changeSessionId() // 로그인 시 세션 변경 (고정 세션 공격 방지)
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                        .maximumSessions(1) // 동시 로그인 제한
-                        .maxSessionsPreventsLogin(false)
+                        .maximumSessions(1) // 동시 로그인 제한 -> 이거 동작 안함. 내가 세션 만료시키는 필터 따로 추가해놨음. sessionRegistry 등록을 위해 사용하는 설정.
                         .expiredUrl("/management/login?expired")
                         .sessionRegistry(sessionRegistry)
                 )
-                .addFilterBefore(cspFilter, UsernamePasswordAuthenticationFilter.class) // 사용자 인증 필터의 앞 순서에 cspFilter를 추가
                 .formLogin(form -> form
                         .loginPage("/management/login") // /management/login url로 로그인 페이지를 요청. -> 인증되지 않은 모든 사용자에 대해 해당 경로로 리다이렉트
                         .usernameParameter("loginId")

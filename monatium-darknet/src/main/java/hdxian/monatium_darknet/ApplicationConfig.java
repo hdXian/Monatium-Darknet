@@ -33,14 +33,13 @@ public class ApplicationConfig {
         return localeResolver;
     }
 
-    // MemberService에 주입
-    // securityConfig의 DaoAuthenticationProvider에 주입
+    // MemberService, securityConfig의 DaoAuthenticationProvider
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // securityConfig
+    // 스프링 시큐리티가 관리할 세션을 등록하는 곳
     @Bean
     public SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();

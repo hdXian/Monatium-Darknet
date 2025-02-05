@@ -23,7 +23,7 @@
         <tr th:each="member : ${memberList}">
             <td th:text="${member.loginId}"></td>
             <td th:text="${member.nickName}"></td>
-            <td th:text="${member.role.name}"></td>
+            <td th:text="${member.role.description}"></td>
             <td>
                 <button th:classappend="${member.status.name() == 'ACTIVE' ? 'btn-success' : 'btn-secondary'}"
                         th:data-id="${member.id}"

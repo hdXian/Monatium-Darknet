@@ -196,6 +196,7 @@ public class MemberMgController {
         if (bindingResult.hasErrors()) {
             Member member = memberService.findOne(memberId);
 
+            model.addAttribute("loginMember", loginMember);
             model.addAttribute("member", member);
             return "management/members/memberEditForm";
         }
