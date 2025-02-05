@@ -1,6 +1,7 @@
 package hdxian.monatium_darknet.security;
 
 import hdxian.monatium_darknet.domain.notice.Member;
+import hdxian.monatium_darknet.domain.notice.MemberStatus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,6 +31,11 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return member.getLoginId();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return member.getStatus() == MemberStatus.ACTIVE;
     }
 
 }
