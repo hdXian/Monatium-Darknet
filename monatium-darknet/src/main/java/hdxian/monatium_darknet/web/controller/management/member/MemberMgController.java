@@ -11,7 +11,10 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -156,6 +159,10 @@ public class MemberMgController {
 
         memberService.updateNickName(memberId, nickName);
 
+        // userDetails가 들고있는 member 객체는 영속 상태가 아니기 때문에, 대상 member 엔티티가 업데이트되어도 즉시 반영되지 않음.
+        // 따라서 member 정보에 변경이 있을 경우 repository에서 id로 다시 member 엔티티를 받아와 시큐리티 컨텍스트에 집어넣어야 함.
+        updateSecurityContext(memberId);
+
         redirectAttributes.addAttribute("memberId", memberId);
         return "redirect:/management/members/edit/{memberId}";
     }
@@ -196,7 +203,24 @@ public class MemberMgController {
         return "redirect:/management/members/edit/{memberId}";
     }
 
+
     // === private ===
+    private void updateSecurityContext(Long memberId) {
+
+        // 업데이트된 Member를 가져옴
+        Member updatedMember = memberService.findOne(memberId);
+
+        // Member의 로그인 ID를 기준으로 userDetails를 새로 받아옴.
+        UserDetails updatedDetails = userDetailsService.loadUserByUsername(updatedMember.getLoginId());
+
+        // 현재 로그인한 상태의 securityContext를 업데이트 함.
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                updatedDetails, updatedDetails.getPassword(), updatedDetails.getAuthorities()
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(token);
+    }
+
     private MemberDto generateMemberDto(MemberForm memberForm) {
         MemberDto dto = new MemberDto();
         dto.setLoginId(memberForm.getLoginId());

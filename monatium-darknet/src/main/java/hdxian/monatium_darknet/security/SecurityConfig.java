@@ -37,6 +37,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/management/members/new").permitAll()
                         .requestMatchers("/management/members").hasRole(MemberRole.SUPER.name())
+                        .requestMatchers("/management/activate/**").hasRole(MemberRole.SUPER.name())
+                        .requestMatchers("/management/deactivate/**").hasRole(MemberRole.SUPER.name())
                         .requestMatchers("/management/**").hasAnyRole(MemberRole.SUPER.name(), MemberRole.NORMAL.name())
                         .requestMatchers("/**").permitAll()
                 ) // /management 하위 url 경로에 대해 ADMIN 권한이 있는 유저만 접근 가능하도록 설정. 그 외에는 아무나 접근 가능.
