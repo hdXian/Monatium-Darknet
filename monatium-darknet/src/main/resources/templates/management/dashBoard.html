@@ -29,7 +29,7 @@
 
                     <!--/*[[ 내 정보 관리 링크 ]]*/-->
                     <div>
-                        <a th:href="@{/management/members/profile}" class="text-primary text-decoration-underline mt-1 d-inline-block">
+                        <a th:href="@{/management/members/profile/{id} (id=${member.id})}" class="text-primary text-decoration-underline mt-1 d-inline-block">
                             내 정보 관리
                         </a>
                     </div>

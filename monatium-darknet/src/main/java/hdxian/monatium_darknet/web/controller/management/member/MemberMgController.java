@@ -3,11 +3,13 @@ package hdxian.monatium_darknet.web.controller.management.member;
 import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.notice.MemberRole;
+import hdxian.monatium_darknet.exception.member.PermissionException;
 import hdxian.monatium_darknet.security.CustomUserDetails;
 import hdxian.monatium_darknet.service.MemberService;
 import hdxian.monatium_darknet.service.dto.MemberDto;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,6 +27,7 @@ import java.util.Optional;
 
 import static hdxian.monatium_darknet.web.controller.management.SessionConst.CURRENT_LANG_CODE;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @SessionAttributes(CURRENT_LANG_CODE)
@@ -68,13 +71,13 @@ public class MemberMgController {
         return ResponseEntity.ok().build();
     }
 
-    // 회원 추가
+    // 회원 등록 페이지
     @GetMapping("/new")
     public String memberForm(@ModelAttribute("memberForm") MemberForm memberForm) {
         return "management/members/memberAddForm";
     }
 
-    // 회원 추가 요청
+    // 회원 등록 요청
     @PostMapping("/new")
     public String addMember(@Validated @ModelAttribute("memberForm") MemberForm memberForm,
                             BindingResult bindingResult,
@@ -93,14 +96,32 @@ public class MemberMgController {
         return "redirect:/management/login";
     }
 
-    // 회원 정보 수정
+    // 프로필 페이지
+    @GetMapping("/profile/{memberId}")
+    public String memberInfo(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("memberId")Long memberId, Model model) {
+
+        // 최고 관리자거나 본인이 아니면 리다이렉트
+        Member loginMember = userDetails.getMember();
+        if (isInvalidMemberId(loginMember, memberId)) {
+            log.warn("access denied for member profile id {}, 범인 ID = {}, 범인 닉네임 = {}, 빠른 응징 요망", memberId, loginMember.getId(), loginMember.getNickName());
+            throw new PermissionException("access denied on member profile request: memberId = " + memberId);
+        }
+
+        Member findMember = memberService.findOne(memberId);
+
+        model.addAttribute("member", findMember);
+        return "management/members/memberInfo";
+    }
+
+    // 회원 정보 수정 페이지
     @GetMapping("/edit/{memberId}")
     public String editForm(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("memberId") Long memberId, Model model) {
 
         // 요청한 아이디와 로그인한 사용자 아이디 검증
         Member loginMember = userDetails.getMember();
         if (isInvalidMemberId(loginMember, memberId)) {
-            return "redirect:/management";
+            log.warn("access denied for edit page member id {}, 범인 ID = {}, 범인 닉네임 = {}, 빠른 응징 요망", memberId, loginMember.getId(), loginMember.getNickName());
+            throw new PermissionException("access denied on member profile request: memberId = " + memberId);
         }
 
         Member member = memberService.findOne(memberId);
@@ -120,7 +141,8 @@ public class MemberMgController {
         // 요청한 아이디와 로그인한 사용자 아이디 검증
         Member loginMember = userDetails.getMember();
         if (isInvalidMemberId(loginMember, memberId)) {
-            return "redirect:/management";
+            log.warn("access denied for edit member nickName id {}, 범인 ID = {}, 범인 닉네임 = {}, 빠른 응징 요망", memberId, loginMember.getId(), loginMember.getNickName());
+            throw new PermissionException("access denied on member profile request: memberId = " + memberId);
         }
 
         // 닉네임은 빈 벨리데이션을 적용하지 않았음
@@ -146,7 +168,8 @@ public class MemberMgController {
         // 요청한 아이디와 로그인한 사용자 아이디 검증
         Member loginMember = userDetails.getMember();
         if (isInvalidMemberId(loginMember, memberId)) {
-            return "redirect:/management";
+            log.warn("access denied for edit password id {}, 범인 ID = {}, 범인 닉네임 = {}, 빠른 응징 요망", memberId, loginMember.getId(), loginMember.getNickName());
+            throw new PermissionException("access denied on member profile request: memberId = " + memberId);
         }
 
         String oldPassword = passwordForm.getOldPassword();

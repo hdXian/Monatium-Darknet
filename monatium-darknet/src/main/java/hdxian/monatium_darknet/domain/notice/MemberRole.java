@@ -11,10 +11,10 @@ import lombok.Getter;
 public enum MemberRole {
     SUPER("최고 관리자"), NORMAL("그냥 관리자");
 
-    private final String name;
+    private final String description;
 
-    MemberRole(String name) {
-        this.name = name;
+    MemberRole(String description) {
+        this.description = description;
     }
 
 }
