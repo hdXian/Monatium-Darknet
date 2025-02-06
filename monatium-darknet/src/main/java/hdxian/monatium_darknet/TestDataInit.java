@@ -63,15 +63,15 @@ public class TestDataInit {
         noticeDtosKo.add(generateNoticeDto("테스트 공지사항3 제목 (이벤트)", noticeCategoryIdKo3, "테스트 공지사항3 본문", LangCode.KO));
         noticeDtosKo.add(generateNoticeDto("테스트 공지사항4 제목 (개발자노트)", noticeCategoryIdKo4, "테스트 공지사항4 본문", LangCode.KO));
 
-        noticeDtosKo.add(generateNoticeDto("테스트 공지사항5 제목 (공지사항)", noticeCategoryIdKo1, "테스트 공지사항4 본문", LangCode.KO));
-        noticeDtosKo.add(generateNoticeDto("테스트 공지사항6 제목 (업데이트)", noticeCategoryIdKo2, "테스트 공지사항4 본문", LangCode.KO));
-        noticeDtosKo.add(generateNoticeDto("테스트 공지사항7 제목 (이벤트)", noticeCategoryIdKo3, "테스트 공지사항4 본문", LangCode.KO));
-        noticeDtosKo.add(generateNoticeDto("테스트 공지사항8 제목 (개발자노트)", noticeCategoryIdKo4, "테스트 공지사항4 본문", LangCode.KO));
+        noticeDtosKo.add(generateNoticeDto("테스트 공지사항5 제목 (공지사항)", noticeCategoryIdKo1, "테스트 공지사항5 본문", LangCode.KO));
+        noticeDtosKo.add(generateNoticeDto("테스트 공지사항6 제목 (업데이트)", noticeCategoryIdKo2, "테스트 공지사항6 본문", LangCode.KO));
+        noticeDtosKo.add(generateNoticeDto("테스트 공지사항7 제목 (이벤트)", noticeCategoryIdKo3, "테스트 공지사항7 본문", LangCode.KO));
+        noticeDtosKo.add(generateNoticeDto("테스트 공지사항8 제목 (개발자노트)", noticeCategoryIdKo4, "테스트 공지사항8 본문", LangCode.KO));
 
-        noticeDtosKo.add(generateNoticeDto("테스트 공지사항9 제목 (공지사항)", noticeCategoryIdKo1, "테스트 공지사항4 본문", LangCode.KO));
-        noticeDtosKo.add(generateNoticeDto("테스트 공지사항10 제목 (업데이트)", noticeCategoryIdKo2, "테스트 공지사항4 본문", LangCode.KO));
-        noticeDtosKo.add(generateNoticeDto("테스트 공지사항11 제목 (이벤트)", noticeCategoryIdKo3, "테스트 공지사항4 본문", LangCode.KO));
-        noticeDtosKo.add(generateNoticeDto("테스트 공지사항12 제목 (개발자노트)", noticeCategoryIdKo4, "테스트 공지사항4 본문", LangCode.KO));
+        noticeDtosKo.add(generateNoticeDto("테스트 공지사항9 제목 (공지사항)", noticeCategoryIdKo1, "테스트 공지사항9 본문", LangCode.KO));
+        noticeDtosKo.add(generateNoticeDto("테스트 공지사항10 제목 (업데이트)", noticeCategoryIdKo2, "테스트 공지사항10 본문", LangCode.KO));
+        noticeDtosKo.add(generateNoticeDto("테스트 공지사항11 제목 (이벤트)", noticeCategoryIdKo3, "테스트 공지사항11 본문", LangCode.KO));
+        noticeDtosKo.add(generateNoticeDto("테스트 공지사항12 제목 (개발자노트)", noticeCategoryIdKo4, "테스트 공지사항12 본문", LangCode.KO));
 
         for (NoticeDto noticeDto : noticeDtosKo) {
             noticeService.createNewNotice(memberId, noticeDto, null);

@@ -186,7 +186,9 @@
             <!--/*[[ 왼쪽: 캐릭터 이미지 영역 ]]*/-->
             <div class="characters-content-col d-flex justify-content-center align-items-center">
                 <div class="image-container d-flex justify-content-center align-items-center">
-                    <img id="main-character-img" th:src="@{ |${chBaseUrl}body/1| }" alt="캐릭터 이미지" class="character-img rounded">
+                    <img id="main-character-img"
+                         th:src="${#lists.size(characterList) > 0} ? @{ |${chBaseUrl}body/${characterList[0].id}| } : ''"
+                         alt="캐릭터 이미지" class="character-img rounded">
                 </div>
             </div>
 
@@ -204,9 +206,9 @@
                 </div>
 
                 <!--/*[[ 캐릭터 정보 ]]*/-->
-                <div th:each="character: ${characterList}" th:id="|character-info-${character.id}|"
+                <div th:each="character, stat: ${characterList}" th:id="|character-info-${character.id}|"
                      class="character-info mx-auto d-flex flex-column align-items-center justify-content-center"
-                     th:classappend=" ${character.id == 1} ? '' : 'd-none' ">
+                     th:classappend=" ${stat.count == 1} ? '' : 'd-none' ">
 
                     <!--/*[[ 초상화 이미지와 이름, 수식어 ]]*/-->
                     <div class="character-title d-flex align-items-center justify-content-center">
@@ -437,7 +439,7 @@
     <h4>Quick Menu</h4>
     <a href="https://coupon.a.prod.service.trickcal.io" class="btn btn-custom" th:text="#{home.quick.coupon}">쿠폰 등록</a>
     <a href="#" class="btn btn-custom" th:text="#{home.quick.newbie}">신규 유저 혜택</a>
-    <a href="#" class="btn btn-custom" th:text="#{home.quick.event}">이벤트 참여</a>
+    <a th:href="@{/{lang}/notices?category=3 (lang=${language})}" class="btn btn-custom" th:text="#{home.quick.event}">이벤트</a>
 </div>
 
 <!--/*[[ 푸터 ]]*/-->
