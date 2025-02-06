@@ -46,6 +46,15 @@ public class ManagementController {
 
     // 대시보드 화면
     @GetMapping
+    public String home(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+//        Member loginMember = userDetails.getMember();
+//
+//        model.addAttribute("loginMember", loginMember);
+//        return "management/dashBoard";
+        return "redirect:/management/dashboard";
+    }
+
+    @GetMapping("/dashboard")
     public String dashBoard(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         Member loginMember = userDetails.getMember();
 

@@ -58,7 +58,7 @@ public class SecurityConfig {
                         .loginPage("/management/login") // /management/login url로 로그인 페이지를 요청. -> 인증되지 않은 모든 사용자에 대해 해당 경로로 리다이렉트
                         .usernameParameter("loginId")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/management", true) // 로그인 성공 시 /management 경로로 이동시킴. (url)
+                        .defaultSuccessUrl("/management/dashboard", true) // 로그인 성공 시 /management/dashboard 경로로 이동시킴. (url)
                         .permitAll()
                 )
                 .logout(logout -> logout
