@@ -192,10 +192,12 @@ document.addEventListener("DOMContentLoaded", function () {
         confirmCancel(event.target);
     });
 
-    // 완료 버튼 클릭 시 confirmComplete() 실행
-    completeButton.addEventListener("click", function(event) {
-        confirmComplete(event.target);
-    });
+    // completeButton 요소가 있을 때만 이벤트 리스너 추가
+    if (completeButton) {
+        completeButton.addEventListener("click", function(event) {
+            confirmComplete(event.target);
+        });
+    }
 
 });
 

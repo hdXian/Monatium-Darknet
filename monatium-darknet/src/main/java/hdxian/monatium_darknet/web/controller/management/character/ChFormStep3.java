@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public class ChFormStep3 {
     private String highSkillDescription;
 
     @NotNull
-    @Min(1)
+    @Range(min = 1, max = 999)
     private Integer highSkillCooldown;
 
     private List<Attribute> highSkillAttributes = new ArrayList<>();

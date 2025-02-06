@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class MemberDto {
     private String loginId;
-    private MemberRole grade;
+    private MemberRole role;
     private String password;
     private String nickName;
 }

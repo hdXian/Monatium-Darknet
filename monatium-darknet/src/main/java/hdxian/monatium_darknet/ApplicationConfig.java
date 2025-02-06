@@ -6,8 +6,11 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.servlet.LocaleResolver;
 
 import java.util.Locale;
@@ -30,11 +33,22 @@ public class ApplicationConfig {
         return localeResolver;
     }
 
-    // MemberService에 주입
-    // securityConfig의 DaoAuthenticationProvider에 주입
+    // MemberService, securityConfig의 DaoAuthenticationProvider
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    // 스프링 시큐리티가 관리할 세션을 등록하는 곳
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+    // 스프링 시큐리티가 세션을 추적하기 위해 필요 (생성, 파기 등 세션 이벤트 감지)
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher(); // 세션 상태 변경 감지
     }
 
 }

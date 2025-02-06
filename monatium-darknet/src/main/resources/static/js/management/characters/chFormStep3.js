@@ -51,5 +51,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const cooldownInput = document.getElementById("highSkillCooldown");
+    if (cooldownInput) {
+        cooldownInput.addEventListener("input", function () {
+            this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '');
+        });
+    }
+});
 
 

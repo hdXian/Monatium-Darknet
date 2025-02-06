@@ -36,7 +36,6 @@ public class CardForm {
     @Min(1)
     private Integer cost;
 
-    // TODO - attribute 객체에 대한 validation 설정
     private List<Attribute> cardAttributes = new ArrayList<>();
     public List<Attribute> getCardAttributes() {
         if (cardAttributes.isEmpty())
@@ -54,7 +53,6 @@ public class CardForm {
     private String attachmentSkillDescription;
     private String attachmentLv3Description; // 애착 아티팩트 레벨 3 달성 시 효과
 
-    // TODO - attribute 객체에 대한 validation 설정
     private List<Attribute> attachmentAttributes = new ArrayList<>();
     public List<Attribute> getAttachmentAttributes() {
         if (attachmentAttributes.isEmpty())

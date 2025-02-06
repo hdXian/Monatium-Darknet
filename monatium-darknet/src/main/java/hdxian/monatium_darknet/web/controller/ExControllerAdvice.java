@@ -3,10 +3,12 @@ package hdxian.monatium_darknet.web.controller;
 import hdxian.monatium_darknet.exception.IllegalLangCodeException;
 import hdxian.monatium_darknet.exception.card.CardNotFoundException;
 import hdxian.monatium_darknet.exception.character.CharacterNotFoundException;
+import hdxian.monatium_darknet.exception.member.PermissionException;
 import hdxian.monatium_darknet.exception.notice.NoticeNotFoundException;
 import hdxian.monatium_darknet.exception.skin.SkinNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,6 +21,7 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 
 // 예외가 발생하면 상태 코드를 설정해서 Error로 감싸 전달하는 Advice. RestController에는 적용 x.
+@Slf4j
 @ControllerAdvice(annotations = Controller.class)
 public class ExControllerAdvice {
 
@@ -74,6 +77,13 @@ public class ExControllerAdvice {
         }
 
         return sb.toString();
+    }
+
+    // 관리 기능 중 권한 관련 예외
+    @ExceptionHandler(PermissionException.class)
+    public void handlePermissionEx(PermissionException ex,HttpServletRequest request ,HttpServletResponse response) throws IOException {
+        log.warn("access denied for uri: {}", request.getRequestURI());
+        response.sendError(HttpStatus.FORBIDDEN.value(), "invalid member Id");
     }
 
 }

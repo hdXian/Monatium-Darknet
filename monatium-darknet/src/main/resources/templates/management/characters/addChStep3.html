@@ -183,7 +183,7 @@
                                 <label for="highSkillCooldown" class="form-label">재사용 대기시간</label>
                                 <div class="input-group">
                                     <input type="number" th:field="*{highSkillCooldown}" th:errorclass="field-error" id="highSkillCooldown" name="highSkillCooldown" class="form-control" placeholder="쿨타임"
-                                           min="1" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '');">
+                                           min="1" step="1">
                                     <span class="input-group-text">초</span>
                                 </div>
                                 <div class="field-error" th:errors="*{highSkillCooldown}"></div>

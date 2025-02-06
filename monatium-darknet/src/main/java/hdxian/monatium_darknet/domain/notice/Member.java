@@ -51,7 +51,7 @@ public class Member {
         member.setRole(role);
         member.setPassword(password);
         member.setNickName(nickName);
-        member.setStatus(MemberStatus.ACTIVE); // 생성 시 기본 상태는 ACTIVE
+        member.setStatus(MemberStatus.INACTIVE); // 생성 시 기본 상태는 INACTIVE
 
         return member;
     }

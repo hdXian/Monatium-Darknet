@@ -28,6 +28,8 @@
                 </p>
             </div>
 
+            <p th:if="${message}" class="alert alert-success" th:text="${message}"></p>
+
             <div class="mb-3">
                 <label for="loginId" class="form-label">로그인 ID</label>
                 <input th:field="*{loginId}"
@@ -50,7 +52,7 @@
         </form>
 
         <div class="text-center mt-3">
-            <a href="#" class="text-decoration-none">비밀번호를 잊으셨나요?</a>
+            <a th:href="@{/management/members/new}" class="text-decoration-none">신규 사용자 등록</a>
         </div>
 
     </div>

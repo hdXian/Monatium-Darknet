@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사용자 정보 수정</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/management/sidebar.css}">
+</head>
+
+<body>
+
+<!--/*[[ 상단 네비게이션 바 ]]*/-->
+<nav th:replace="~{fragments/navbar :: management_navbar}">
+    상단 네비게이션 바 영역
+</nav>
+
+<div class="main-content container-fluid mt-3">
+
+    <div class="row ">
+
+        <!--/*[[ 사이드바 ]]*/-->
+        <nav class="sidebar col-md-3 col-lg-2 d-md-block bg-light ms-2">
+
+            <!--/*[[ 사용자 정보 표시 영역 ]]*/-->
+            <div class="user-info text-center p-3">
+                안녕하세요. <br>
+                <span class="fw-bold" th:text="|${loginMember.nickName}|">사용자명</span>님!
+
+                <!--/*[[ 내 정보 관리 링크 ]]*/-->
+                <div>
+                    <a th:href="@{/management/members/profile/{id} (id=${loginMember.id})}" class="text-primary text-decoration-underline mt-1 d-inline-block">
+                        내 정보 관리
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/management/notices}">공지사항 관리</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/management/characters}">캐릭터 관리</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/management/cards}">카드 관리</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/management/skins}">스킨 관리</a></li>
+                    <li th:if="${loginMember.role.name() == 'SUPER'}" class="nav-item"><a class="nav-link" th:href="@{/management/members}">회원 관리</a></li>
+                </ul>
+            </div>
+
+        </nav>
+
+        <!--/*[[ 변경 폼 ]]*/-->
+        <div class="col-md-6 bg-white p-4 rounded shadow-sm mx-auto">
+            <h2 class="text-center mb-4">정보 수정</h2>
+
+            <!--/*[[ 오류 메시지 ]]*/-->
+            <div th:if="${globalError}" class="alert alert-danger">
+                <p th:text="${globalError}"></p>
+            </div>
+
+            <!--/*[[ 아이디 (수정 불가, 표시만) ]]*/-->
+            <div class="mb-3">
+                <label for="username" class="form-label">로그인 ID</label>
+                <input type="text" id="username" name="username" class="form-control" th:value="${member.loginId}" readonly>
+            </div>
+
+            <!--/*[[ 닉네임 변경 폼 ]]*/-->
+            <form id="nicknameForm" class="confirm-form" th:action="@{/management/members/editNick/{id} (id=${member.id})}" method="post">
+                <div class="mb-3">
+                    <label for="nickname" class="form-label">닉네임 변경 (1 ~ 20자, 영문, 한글, 숫자 가능)</label>
+                    <input type="text" th:value="${member.nickName}" id="nickName" name="nickName" class="form-control" required>
+                    <div th:if="${globalError}" class="field-error" th:text="${globalError}"></div>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">닉네임 변경하기</button>
+            </form>
+
+            <hr>
+
+            <!--/*[[ 비밀번호 변경 폼 ]]*/-->
+            <form id="passwordForm" class="confirm-form" th:object="${passwordForm}" th:action="@{/management/members/editPw/{id} (id=${member.id})}" method="post">
+
+                <div class="mb-3">
+                    <label for="oldPassword" class="form-label">기존 비밀번호</label>
+                    <input type="password" th:field="*{oldPassword}" id="oldPassword" name="oldPassword" class="form-control" required>
+                    <div class="field-error" th:errors="*{oldPassword}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="newPassword" class="form-label">신규 비밀번호 (8 ~ 50자)</label>
+                    <input type="password" th:field="*{newPassword}" id="newPassword" name="newPassword" class="form-control" required>
+                    <div class="field-error" th:errors="*{newPassword}"></div>
+                </div>
+
+                <button type="submit" class="btn btn-warning w-100">비밀번호 변경하기</button>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+<!--/*[[ 하단 푸터 ]]*/-->
+<footer th:replace="~{fragments/footer :: management_footer}">
+    하단 푸터 영역
+</footer>
+
+<script th:attr="nonce=${cspNonce}">
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".confirm-form").forEach(function (form) {
+            form.addEventListener("submit", function (event) {
+                if (!confirm("정보를 수정하시겠습니까?")) {
+                    event.preventDefault();
+                }
+            });
+        });
+    });
+</script>
+
+
+</body>
+
+</html>

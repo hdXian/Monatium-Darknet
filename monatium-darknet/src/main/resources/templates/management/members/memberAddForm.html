@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style th:attr="nonce=${cspNonce}">
+        .field-error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 bg-white p-4 rounded shadow-sm">
+            <h2 class="text-center mb-4">신규 사제 등록 신청서</h2>
+
+            <form id="memberForm" th:action="@{/management/members/new}" th:object="${memberForm}" method="post">
+                <div class="mb-3">
+                    <label for="loginId" class="form-label">아이디 (5 ~ 20자, 영문, 숫자 가능, 공백 불가)</label>
+                    <input type="text" th:field="*{loginId}" id="loginId" name="loginId" class="form-control" required>
+                    <div class="field-error" th:errors="*{loginId}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="nickname" class="form-label">닉네임 (1 ~ 20자, 영문, 한글, 숫자, 공백 가능)</label>
+                    <input type="text" th:field="*{nickname}" id="nickname" name="nickname" class="form-control" required>
+                    <div class="field-error" th:errors="*{nickname}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">비밀번호 (8 ~ 50자)</label>
+                    <input type="password" th:field="*{password}" id="password" name="password" class="form-control" required>
+                    <div class="field-error" th:errors="*{password}"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">가입 신청하기</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script th:attr="nonce=${cspNonce}">
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("memberForm").addEventListener("submit", function (event) {
+            if (!confirm("가입을 신청하시겠습니까?")) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+
+</body>
+
+</html>
