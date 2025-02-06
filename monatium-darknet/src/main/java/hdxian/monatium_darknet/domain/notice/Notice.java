@@ -32,7 +32,8 @@ public class Notice {
     private LocalDateTime date;
     private Long views;
 
-    @Column(length = 1000)
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -68,6 +69,11 @@ public class Notice {
 
     public void updateStatus(NoticeStatus status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Notice{id=" + id + ", content.length=" + (content != null ? content.length() : 0) + "}";
     }
 
 }
