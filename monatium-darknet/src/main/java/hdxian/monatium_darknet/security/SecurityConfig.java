@@ -42,6 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/management/members").hasRole(MemberRole.SUPER.name())
                         .requestMatchers("/management/activate/**").hasRole(MemberRole.SUPER.name())
                         .requestMatchers("/management/deactivate/**").hasRole(MemberRole.SUPER.name())
+                        .requestMatchers("/management/disconnect/**").hasRole(MemberRole.SUPER.name())
                         .requestMatchers("/management/**").hasAnyRole(MemberRole.SUPER.name(), MemberRole.NORMAL.name())
                 )
                 .addFilterBefore(cspFilter, UsernamePasswordAuthenticationFilter.class) // 사용자 인증 필터의 앞 순서에 cspFilter를 추가

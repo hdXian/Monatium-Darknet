@@ -15,7 +15,25 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             const requestUrl = isActive ? `/management/members/deactivate/${memberId}`
-                                        : `/management/members/activate/${memberId}`
+                                        : `/management/members/activate/${memberId}`;
+
+            sendRequest(requestUrl);
+        });
+    });
+
+    // 사용자 로그아웃 클릭 이벤트
+    document.querySelectorAll(".member-logout-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            const memberId = this.getAttribute("data-id");
+            const nickName = this.getAttribute("data-nickName");
+
+            const confirmMessage = `${nickName} 사용자를 로그아웃 처리하시겠습니까?`;
+
+            if (!confirm(confirmMessage)) {
+                return;
+            }
+
+            const requestUrl = `/management/members/disconnect/${memberId}`;
 
             sendRequest(requestUrl);
         });

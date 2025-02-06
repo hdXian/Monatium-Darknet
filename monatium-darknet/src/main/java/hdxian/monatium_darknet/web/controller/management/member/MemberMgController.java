@@ -27,8 +27,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static hdxian.monatium_darknet.web.controller.management.SessionConst.CURRENT_LANG_CODE;
 
@@ -57,7 +57,11 @@ public class MemberMgController {
         List<Member> memberList = memberService.findAll();
         memberList.removeIf(member -> member.getId().equals(curUserId)); // 현재 로그인한 관리자 계정은 제외
 
+        // memberList에 들어있는 member들의 loginId를 기준으로 sessionRegistry를 뒤져서 온라인 여부를 알아낸다.
+        Map<Long, Boolean> isOnline = findOnlineSessions(memberList);
+
         model.addAttribute("memberList", memberList);
+        model.addAttribute("isOnline", isOnline);
         return "management/members/memberList";
     }
 
@@ -73,6 +77,13 @@ public class MemberMgController {
     @PostMapping("/deactivate/{memberId}")
     public ResponseEntity<Void> deactivate(@PathVariable("memberId") Long memberId) {
         memberService.deactivateMember(memberId);
+        expireUserSession(memberId);
+        return ResponseEntity.ok().build();
+    }
+
+    // 회원 강제 로그아웃
+    @PostMapping("/disconnect/{memberId}")
+    public ResponseEntity<Void> disconnectMember(@PathVariable("memberId") Long memberId) {
         expireUserSession(memberId);
         return ResponseEntity.ok().build();
     }
@@ -210,27 +221,56 @@ public class MemberMgController {
 
 
     // === private ===
+
+    // 사용자 목록에서 해당 사용자의 세션이 존재하는지 찾는 메서드
+    private Map<Long, Boolean> findOnlineSessions(List<Member> memberList) {
+        Map<Long, Boolean> isOnline = new HashMap<>();
+
+        for (Member member : memberList) {
+            String loginId = member.getLoginId();
+
+            // 해당 member에 대한 userDetails를 찾는다. (findFirst를 쓰긴 했는데, 정책상 계정당 하나의 세션만 허용해서 하나밖에 없을 거임.)
+            Optional<CustomUserDetails> find = sessionRegistry.getAllPrincipals().stream()
+                    .filter(principal -> principal instanceof UserDetails)
+                    .map(principal -> (CustomUserDetails) principal)
+                    .filter(userDetails -> userDetails.getUsername().equals(loginId))
+                    .findFirst();
+
+            // 없으면 false
+            if (find.isEmpty()) {
+                isOnline.put(member.getId(), false);
+            }
+            // 있으면 해당 userDetails에 대한 세션이 있는지 확인
+            else {
+                CustomUserDetails userDetails = find.get();
+                List<SessionInformation> sessions = sessionRegistry.getAllSessions(userDetails, false);
+                if (sessions.isEmpty())
+                    isOnline.put(member.getId(), false);
+                else
+                    isOnline.put(member.getId(), true);
+            }
+
+        }
+
+        return isOnline;
+    }
+
+    // 지정한 id의 사용자에 대한 세션을 만료시키는 메서드
     private void expireUserSession(Long memberId) {
         String loginId = memberService.findOne(memberId).getLoginId();
 
         List<Object> principals = sessionRegistry.getAllPrincipals();
 
         for (Object principal : principals) {
-
             if (principal instanceof UserDetails userDetails) {
-
                 if (userDetails.getUsername().equals(loginId)) {
-
                     List<SessionInformation> sessions = sessionRegistry.getAllSessions(userDetails, false);
                     for (SessionInformation session : sessions) {
                         session.expireNow(); // 세션 만료 처리
                     }
                 }
-
             }
-
         }
-
     }
 
     private void updateSecurityContext(Long memberId) {
@@ -258,6 +298,7 @@ public class MemberMgController {
     }
 
     // 요청한 memberId와 현재 로그인한 사용자가 일치하는지 검증
+    // 닉네임, 비밀번호 수정은 그냥 관리자도 요청할 수 있어야 해서 필터 체인에 걸지 않고, 별도로 사용자 일치 여부를 검증해야 함.
     private boolean isInvalidMemberId(Member loginMember, Long requestMemberId) {
         if (loginMember.getRole() == MemberRole.SUPER)
             return false;
