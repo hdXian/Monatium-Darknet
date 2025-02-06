@@ -90,24 +90,24 @@
                 </div>
 
                 <!--/*[[ 하단 이미지와 텍스트 ]]*/-->
-                <div class="notice-media row text-center">  <!--/*[[ 중앙 정렬을 위해 text-center 추가 ]]*/-->
+                <div class="notice-media row text-center mb-2">  <!--/*[[ 중앙 정렬을 위해 text-center 추가 ]]*/-->
 
                     <!--/*[[ 미디어 타이틀 ]]*/-->
                     <div class="notice-media-title w-100 mb-2" th:text="#{home.media.title}">미디어</div>
 
-                    <div class="col-4">
+                    <div class="col-4 media-icon">
                         <a href="https://www.youtube.com/@epidgames6350" target="_blank" class="text-decoration-none">
                             <img th:src="@{|${staticMainUrl}sns_sc_1.webp|}" class="img-fluid rounded shadow mb-2" alt="유튜브">
                             <div class="media-text fw-bold" th:text="#{home.media.youtube}">유튜브 바로가기</div>
                         </a>
                     </div>
-                    <div class="col-4">
+                    <div class="col-4 media-icon">
                         <a href="https://x.com/Trickcal_Re" target="_blank" class="text-decoration-none">
                             <img th:src="@{|${staticMainUrl}sns_sc_2.png|}" class="img-fluid rounded shadow mb-2" alt="X">
                             <div class="media-text fw-bold" th:text="#{home.media.x}">공식 X</div>
                         </a>
                     </div>
-                    <div class="col-4">
+                    <div class="col-4 media-icon">
                         <a href="https://game.naver.com/lounge/Trickcal/home" target="_blank" class="text-decoration-none">
                             <img th:src="@{|${staticMainUrl}sns_sc_3.webp|}" class="img-fluid rounded shadow mb-2" alt="네이버 라운지">
                             <div class="media-text fw-bold" th:text="#{home.media.lounge}">공식 네이버 라운지</div>
@@ -259,173 +259,176 @@
 </section>
 
 <!--/*[[ 포토존 섹션 ]]*/-->
-<section id="photozone" class="container-fluid photozone-section">
-    <div class="photozone-content container row align-items-center justify-content-center">
+<!--<section id="photozone" class="container-fluid photozone-section">-->
+<!--    <div class="photozone-content container row align-items-center justify-content-center">-->
+<!--/*[[ 좌측: 세로 탭 ]]*/-->
+<!--        &lt;!&ndash;&ndash;&gt;-->
+<!--        <div class="photozone-tab">-->
+<!--            <ul class="nav nav-pills flex-column" id="photozoneTabs" role="tablist">-->
+<!--                <li class="nav-item" role="presentation">-->
+<!--                    <button class="nav-link active" id="battle-tab" data-bs-toggle="pill" data-bs-target="#battle"-->
+<!--                            type="button" role="tab" aria-controls="battle" aria-selected="true">-->
+<!--                        <div class="photozone-text" th:text="#{home.inGame.battle}">전투</div>-->
+<!--                    </button>-->
+<!--                </li>-->
+<!--                <li class="nav-item" role="presentation">-->
+<!--                    <button class="nav-link" id="theater-tab" data-bs-toggle="pill" data-bs-target="#theater"-->
+<!--                            type="button" role="tab" aria-controls="theater" aria-selected="false">-->
+<!--                        <div class="photozone-text" th:text="#{home.inGame.theme}">테마극장</div>-->
+<!--                    </button>-->
+<!--                </li>-->
+<!--                <li class="nav-item" role="presentation">-->
+<!--                    <button class="nav-link" id="adventure-tab" data-bs-toggle="pill" data-bs-target="#adventure"-->
+<!--                            type="button" role="tab" aria-controls="adventure" aria-selected="false">-->
+<!--                        <div class="photozone-text" th:text="#{home.inGame.life}">볼따구 라이프</div>-->
+<!--                    </button>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
 
-        <!--/*[[ 좌측: 세로 탭 ]]*/-->
-        <div class="photozone-tab">
-            <ul class="nav nav-pills flex-column" id="photozoneTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="battle-tab" data-bs-toggle="pill" data-bs-target="#battle"
-                            type="button" role="tab" aria-controls="battle" aria-selected="true">
-                        <div class="photozone-text" th:text="#{home.inGame.battle}">전투</div>
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="theater-tab" data-bs-toggle="pill" data-bs-target="#theater"
-                            type="button" role="tab" aria-controls="theater" aria-selected="false">
-                        <div class="photozone-text" th:text="#{home.inGame.theme}">테마극장</div>
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="adventure-tab" data-bs-toggle="pill" data-bs-target="#adventure"
-                            type="button" role="tab" aria-controls="adventure" aria-selected="false">
-                        <div class="photozone-text" th:text="#{home.inGame.life}">볼따구 라이프</div>
-                    </button>
-                </li>
-            </ul>
-        </div>
+<!--/*[[ 우측: 탭 콘텐츠 (슬라이드 캐러셀) ]]*/-->
+<!--        &lt;!&ndash;&ndash;&gt;-->
+<!--        <div class="photozone-tab-content">-->
+<!--            <div class="tab-content" id="photozoneTabsContent">-->
 
-        <!--/*[[ 우측: 탭 콘텐츠 (슬라이드 캐러셀) ]]*/-->
-        <div class="photozone-tab-content">
-            <div class="tab-content" id="photozoneTabsContent">
-                <!--/*[[ 전투 탭 ]]*/-->
-                <div class="tab-pane fade show active" id="battle" role="tabpanel" aria-labelledby="battle-tab">
-                    <div id="battleCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <div class="carousel-image-container">
-                                    <img th:src="@{|${staticMainUrl}battle/battle01.png|}" class="d-block w-100 carousel-img" alt="전투 이미지 1">
-                                </div>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="carousel-image-container">
-                                    <img th:src="@{|${staticMainUrl}battle/battle02.jpg|}" class="d-block w-100 carousel-img" alt="전투 이미지 1">
-                                </div>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="carousel-image-container">
-                                    <img th:src="@{|${staticMainUrl}battle/battle03.jpg|}" class="d-block w-100 carousel-img" alt="전투 이미지 1">
-                                </div>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="carousel-image-container">
-                                    <img th:src="@{|${staticMainUrl}battle/battle04.jpg|}" class="d-block w-100 carousel-img" alt="전투 이미지 1">
-                                </div>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="carousel-image-container">
-                                    <img th:src="@{|${staticMainUrl}battle/battle05.jpg|}" class="d-block w-100 carousel-img" alt="전투 이미지 1">
-                                </div>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#battleCarousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#battleCarousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon"></span>
-                        </button>
-                    </div>
-                </div>
+<!--/*[[ 전투 탭 ]]*/-->
+<!--                &lt;!&ndash;&ndash;&gt;-->
+<!--                <div class="tab-pane fade show active" id="battle" role="tabpanel" aria-labelledby="battle-tab">-->
+<!--                    <div id="battleCarousel" class="carousel slide" data-bs-ride="carousel">-->
+<!--                        <div class="carousel-inner">-->
+<!--                            <div class="carousel-item active">-->
+<!--                                <div class="carousel-image-container">-->
+<!--                                    <img th:src="@{|${staticMainUrl}battle/battle01.png|}" class="d-block w-100 carousel-img" alt="전투 이미지 1">-->
+<!--                                </div>-->
+<!--                                <div class="carousel-caption">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="carousel-item">-->
+<!--                                <div class="carousel-image-container">-->
+<!--                                    <img th:src="@{|${staticMainUrl}battle/battle02.jpg|}" class="d-block w-100 carousel-img" alt="전투 이미지 1">-->
+<!--                                </div>-->
+<!--                                <div class="carousel-caption">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="carousel-item">-->
+<!--                                <div class="carousel-image-container">-->
+<!--                                    <img th:src="@{|${staticMainUrl}battle/battle03.jpg|}" class="d-block w-100 carousel-img" alt="전투 이미지 1">-->
+<!--                                </div>-->
+<!--                                <div class="carousel-caption">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="carousel-item">-->
+<!--                                <div class="carousel-image-container">-->
+<!--                                    <img th:src="@{|${staticMainUrl}battle/battle04.jpg|}" class="d-block w-100 carousel-img" alt="전투 이미지 1">-->
+<!--                                </div>-->
+<!--                                <div class="carousel-caption">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="carousel-item">-->
+<!--                                <div class="carousel-image-container">-->
+<!--                                    <img th:src="@{|${staticMainUrl}battle/battle05.jpg|}" class="d-block w-100 carousel-img" alt="전투 이미지 1">-->
+<!--                                </div>-->
+<!--                                <div class="carousel-caption">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <button class="carousel-control-prev" type="button" data-bs-target="#battleCarousel" data-bs-slide="prev">-->
+<!--                            <span class="carousel-control-prev-icon"></span>-->
+<!--                        </button>-->
+<!--                        <button class="carousel-control-next" type="button" data-bs-target="#battleCarousel" data-bs-slide="next">-->
+<!--                            <span class="carousel-control-next-icon"></span>-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--/*[[ 테마극장 탭 ]]*/-->
+<!--                &lt;!&ndash;&ndash;&gt;-->
+<!--                <div class="tab-pane fade" id="theater" role="tabpanel" aria-labelledby="theater-tab">-->
+<!--                    <div id="theaterCarousel" class="carousel slide" data-bs-ride="carousel">-->
+<!--                        <div class="carousel-inner">-->
 
-                <!--/*[[ 테마극장 탭 ]]*/-->
-                <div class="tab-pane fade" id="theater" role="tabpanel" aria-labelledby="theater-tab">
-                    <div id="theaterCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
+<!--                            <div class="carousel-item active">-->
 
-                            <div class="carousel-item active">
+<!--                                <div class="carousel-image-container">-->
+<!--                                    <img th:src="@{|${staticMainUrl}theme/theme01.jpg|}" class="d-block w-100 " alt="테마극장 이미지 1">-->
+<!--                                </div>-->
+<!--                                <div class="carousel-caption">-->
+<!--                                </div>-->
 
-                                <div class="carousel-image-container">
-                                    <img th:src="@{|${staticMainUrl}theme/theme01.jpg|}" class="d-block w-100 " alt="테마극장 이미지 1">
-                                </div>
-                                <div class="carousel-caption">
-                                </div>
+<!--                            </div>-->
 
-                            </div>
+<!--                            <div class="carousel-item">-->
+<!--                                <div class="carousel-image-container">-->
+<!--                                    <img th:src="@{|${staticMainUrl}theme/theme02.jpg|}" class="d-block w-100" alt="테마극장 이미지 2">-->
+<!--                                </div>-->
+<!--                                <div class="carousel-caption">-->
+<!--                                </div>-->
+<!--                            </div>-->
 
-                            <div class="carousel-item">
-                                <div class="carousel-image-container">
-                                    <img th:src="@{|${staticMainUrl}theme/theme02.jpg|}" class="d-block w-100" alt="테마극장 이미지 2">
-                                </div>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
+<!--                            <div class="carousel-item">-->
+<!--                                <div class="carousel-image-container">-->
+<!--                                    <img th:src="@{|${staticMainUrl}theme/theme03.jpg|}" class="d-block w-100" alt="테마극장 이미지 2">-->
+<!--                                </div>-->
+<!--                                <div class="carousel-caption">-->
+<!--                                </div>-->
+<!--                            </div>-->
 
-                            <div class="carousel-item">
-                                <div class="carousel-image-container">
-                                    <img th:src="@{|${staticMainUrl}theme/theme03.jpg|}" class="d-block w-100" alt="테마극장 이미지 2">
-                                </div>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
+<!--                            <div class="carousel-item">-->
+<!--                                <div class="carousel-image-container">-->
+<!--                                    <img th:src="@{|${staticMainUrl}theme/theme04.jpg|}" class="d-block w-100" alt="테마극장 이미지 2">-->
+<!--                                </div>-->
+<!--                                <div class="carousel-caption">-->
+<!--                                </div>-->
+<!--                            </div>-->
 
-                            <div class="carousel-item">
-                                <div class="carousel-image-container">
-                                    <img th:src="@{|${staticMainUrl}theme/theme04.jpg|}" class="d-block w-100" alt="테마극장 이미지 2">
-                                </div>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
+<!--                        </div>-->
+<!--                        <button class="carousel-control-prev" type="button" data-bs-target="#theaterCarousel" data-bs-slide="prev">-->
+<!--                            <span class="carousel-control-prev-icon"></span>-->
+<!--                        </button>-->
+<!--                        <button class="carousel-control-next" type="button" data-bs-target="#theaterCarousel" data-bs-slide="next">-->
+<!--                            <span class="carousel-control-next-icon"></span>-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--/*[[ 모험회 탭 ]]*-->
+<!--                &lt;!&ndash;/&ndash;&gt;-->
+<!--                <div class="tab-pane fade" id="adventure" role="tabpanel" aria-labelledby="adventure-tab">-->
+<!--                    <div id="adventureCarousel" class="carousel slide" data-bs-ride="carousel">-->
+<!--                        <div class="carousel-inner">-->
+<!--                            <div class="carousel-item active">-->
+<!--                                <div class="carousel-image-container">-->
+<!--                                    <img th:src="@{|${staticMainUrl}adventure/adventure01.jpg|}" class="d-block w-100" alt="모험 이미지 1">-->
+<!--                                </div>-->
+<!--                                <div class="carousel-caption">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="carousel-item">-->
+<!--                                <div class="carousel-image-container">-->
+<!--                                    <img th:src="@{|${staticMainUrl}adventure/adventure02.jpg|}" class="d-block w-100" alt="모험 이미지 2">-->
+<!--                                </div>-->
+<!--                                <div class="carousel-caption">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="carousel-item">-->
+<!--                                <div class="carousel-image-container">-->
+<!--                                    <img th:src="@{|${staticMainUrl}adventure/adventure03.jpg|}" class="d-block w-100" alt="모험 이미지 2">-->
+<!--                                </div>-->
+<!--                                <div class="carousel-caption">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <button class="carousel-control-prev" type="button" data-bs-target="#adventureCarousel" data-bs-slide="prev">-->
+<!--                            <span class="carousel-control-prev-icon"></span>-->
+<!--                        </button>-->
+<!--                        <button class="carousel-control-next" type="button" data-bs-target="#adventureCarousel" data-bs-slide="next">-->
+<!--                            <span class="carousel-control-next-icon"></span>-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
 
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#theaterCarousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#theaterCarousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon"></span>
-                        </button>
-                    </div>
-                </div>
-
-                <!--/*[[ 모험회 탭 ]]*/-->
-                <div class="tab-pane fade" id="adventure" role="tabpanel" aria-labelledby="adventure-tab">
-                    <div id="adventureCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <div class="carousel-image-container">
-                                    <img th:src="@{|${staticMainUrl}adventure/adventure01.jpg|}" class="d-block w-100" alt="모험 이미지 1">
-                                </div>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="carousel-image-container">
-                                    <img th:src="@{|${staticMainUrl}adventure/adventure02.jpg|}" class="d-block w-100" alt="모험 이미지 2">
-                                </div>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="carousel-image-container">
-                                    <img th:src="@{|${staticMainUrl}adventure/adventure03.jpg|}" class="d-block w-100" alt="모험 이미지 2">
-                                </div>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#adventureCarousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#adventureCarousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon"></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</section>
+<!--    </div>-->
+<!--</section>-->
 
 <!--/*[[ 리모컨 섹션 ]]*/-->
 <div class="remote-control">
