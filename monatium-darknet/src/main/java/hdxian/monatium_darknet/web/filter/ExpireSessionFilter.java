@@ -4,6 +4,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ExpireSessionFilter implements Filter {
@@ -41,7 +43,6 @@ public class ExpireSessionFilter implements Filter {
     }
 
     private void expireUserSession(String loginId, String curSessionId) {
-        System.out.println("ExpireSessionFilter.expireUserSession");
         List<Object> principals = sessionRegistry.getAllPrincipals();
 
         for (Object principal : principals) {
@@ -57,7 +58,7 @@ public class ExpireSessionFilter implements Filter {
                             continue;
 
                         session.expireNow(); // 세션 만료 처리
-                        System.out.println("expire session = " + session.getSessionId());
+                        log.info("expire session {}", session.getSessionId());
                     }
 
                 }
