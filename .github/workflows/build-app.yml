@@ -21,15 +21,15 @@ jobs:
           java-version: '17'  # JDK 17
 
       - name: Grant execute permission to Gradle
-        run: chmod +x gradlew
+        run: chmod +x monatium-darknet/gradlew
 
       - name: Build Application
-        run: ./gradlew clean build -x test  # 테스트 제외하고 빌드
+        run: cd monatium-darknet && ./gradlew clean build -x test  # 테스트 제외하고 빌드
 
       # jar build/libs 경로에서 jar 파일을 찾아 (gitub actions 컨테이너 내부) 환경변수에 저장
       - name: Find JAR file
         id: find_jar
-        run: echo "JAR_FILE=$(find build/libs -name '*-SNAPSHOT.jar' ! -name '*-plain.jar' | head -n 1)" >> $GITHUB_ENV
+        run: echo "JAR_FILE=$(find monatium-darknet/build/libs -name '*-SNAPSHOT.jar' ! -name '*-plain.jar' | head -n 1)" >> $GITHUB_ENV
 
       # upload-artifact: 빌드 결과물을 저장하는 공식 액션
       # 하나의 job에서 빌드한 결과물을 다른 job에서 다운로드받아 사용 가능
