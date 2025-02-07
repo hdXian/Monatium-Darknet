@@ -90,7 +90,6 @@ jobs:
       - name: Deploy JAR to Server via SFTP
         run: |
           lftp -c "
-            set glob on;
             set sftp:connect-program 'ssh -a -x -i ~/.ssh/id_rsa -p ${{ secrets.SFTP_PORT }}';
             open -u ${{ secrets.SFTP_USER }}, sftp://${{ secrets.SFTP_HOST }};
             put -O ${{ secrets.BUILD_TARGET }} monatium-darknet-latest.jar;
