@@ -35,7 +35,7 @@ jobs:
       # 하나의 job에서 빌드한 결과물을 다른 job에서 다운로드받아 사용 가능
       # actions/download-artifact에서 가져올 수 있음.
       - name: Upload JAR file as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: spring-boot-jar
           path: ${{ env.JAR_FILE }}
@@ -50,7 +50,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download built JAR
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: spring-boot-jar
           path: .
