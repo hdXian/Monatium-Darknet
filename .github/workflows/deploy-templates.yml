@@ -1,7 +1,0 @@
-# 템플릿 파일 동기화 action
-name: thymeleaf 템플릿 파일 동기화
-
-on:
-  push:
-    branches:
-      - nonebranch  # main 브랜치에 push될 때 실행

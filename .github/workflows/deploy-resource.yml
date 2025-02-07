@@ -26,12 +26,10 @@ jobs:
 
       - name: Upload static resources via SFTP
         run: |
-          echo "Hello, SFTP Test!" > hello.txt
           lftp -c "
           set sftp:connect-program 'ssh -a -x -i ~/.ssh/id_rsa -p ${{ secrets.SFTP_PORT }}';
           open -u ${{ secrets.SFTP_USER }}, sftp://${{ secrets.SFTP_HOST }};
-          put -O ~/ hello.txt;
+          mirror -R -e --parallel=2 ${{ secrets.RESOURCES_SOURCE }} ${{ secrets.RESOURCES_TARGET }};
           bye
           "
-
 
