@@ -1,5 +1,5 @@
 # 정적 리소스 동기화 action
-name: Deploy Static Resources (via sftp)
+name: 정적 리소스 동기화 (via sftp)
 
 on:
   push:
