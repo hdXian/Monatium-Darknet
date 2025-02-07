@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: 어플리케이션 빌드
+    name: Build Spring Boot App
     runs-on: ubuntu-latest
 
     steps:
@@ -61,6 +61,14 @@ jobs:
       # 확인용 작업, 빌드 파일이 정상적으로 로드되었는지 확인하는 디버깅 단계. (종요)
       - name: Verify JAR file
         run: ls -lh *.jar || echo "No JAR file found!"
+      
+      - name: Move JAR file to current directory
+        run: mv $JAR_FILE .
+
+      - name: Debug Current Directory Before SFTP
+        run: |
+          pwd
+          ls -lh
 
       # ssh 키 디코딩 및 설정
       - name: Decode and Setup SSH Key for SFTP
@@ -76,6 +84,6 @@ jobs:
           lftp -c "
             set sftp:connect-program 'ssh -a -x -i ~/.ssh/id_rsa -p ${{ secrets.SFTP_PORT }}';
             open -u ${{ secrets.SFTP_USER }}, sftp://${{ secrets.SFTP_HOST }};
-            put -O ${{ secrets.BUILD_TARGET }} *.jar;
+            put -O ${{ secrets.BUILD_TARGET }} $JAR_FILE;
             bye
           "
