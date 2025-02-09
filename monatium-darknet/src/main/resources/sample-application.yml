@@ -51,16 +51,6 @@ logging:
     org.hibernate.resource.transaction: debug # show transaction (commit, rollback)
     org.springframework.orm.jpa.JpaTransactionManager: debug
     org.hibernate.orm.jdbc.bind: trace # show binding parameter
-  file:
-    name: /var/log/this-app.log # manual setup
-  pattern:
-    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n" # log pattern on file (essential, able to edit manually), 파일에 찍히는 로그의 패턴
-    # console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n" # if you want to log on console too, activate this configuration.
-  logback:
-    rollingpolicy:
-      file-name-pattern: /var/log/this-app-%d{yyyy-MM-dd}.log # file pattern. manual setup, 로그 파일명 패턴
-      max-history: 7 # save logs only in current 7 days (able to edit)
-      total-size-cap: 1GB # remove old log when log file size is bigger than 1GB. (able to edit)
 
 # file path (local, for test)
 file:
