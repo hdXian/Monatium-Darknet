@@ -1,0 +1,77 @@
+server:
+  port: <PORT> # manual setup
+  address: <ADDRESS> # manual setup
+  servlet:
+    session:
+      tracking-modes: cookie # default
+      timeout: <SEC> # manual setup
+
+spring:
+  profiles:
+    active: <spring profile> # dev, test, etc..
+
+  messages:
+    basename: messages, errors # essential
+    encoding: UTF-8 # default
+
+  datasource:
+    url: <DB_URL> # manual setup
+    username: <USERNAME> # manual setup
+    password: <PASSWORD> # manual setup
+    driver-class-name: <DB_DRIVER_CLASS> # manual setup
+
+  jpa:
+    hibernate:
+      ddl-auto: create # CREATE if let your system uses auto ddl by JPA, NONE or VALIDATE if let your system uses on-demand Database
+    properties:
+      hibernate:
+        format_sql: true # TRUE make easy to read sql statement
+      jakarta:
+        persistence:
+          schema-generation:
+            # activate following configuration with [ddl-auto: none], you can get ddl query in file
+            scripts:
+              # action: create
+              # create-target: create.sql
+              # create-source: metadata
+  web:
+    resources:
+      encoding:
+        charset: UTF-8 # default
+      chain:
+        enabled: true # activate resource chain
+        strategy:
+          content:
+            enabled: true # add version info on query string to disable browser cache
+
+# logging configuration. able to edit manually.
+logging:
+  level:
+    org.hibernate.SQL: debug # show executed SQL
+    org.hibernate.resource.transaction: debug # show transaction (commit, rollback)
+    org.springframework.orm.jpa.JpaTransactionManager: debug
+    org.hibernate.orm.jdbc.bind: trace # show binding parameter
+  file:
+    name: /var/log/this-app.log # manual setup
+  logback:
+    rollingpolicy:
+      file-name-pattern: /var/log/this-app-%d{yyyy-MM-dd}.log # manual setup
+      max-history: 7 # save logs only in current 7 days (able to edit)
+      total-size-cap: 1GB # remove old log when log file size is bigger than 1GB. (able to edit)
+
+# file path (local, for test)
+file:
+  dir: /var/resources/files/ # manual setup (the root path of file, absolute path)
+  tempDir: temp/ # manual setup (relative path) -> /var/resources/files/temp/
+  imgDir: images/ # manual setup (relative path) -> /var/resources/files/images/
+  noticeDir: notices/ # manual setup (relative path)
+  wikiDir: <FILE_LOCATION> # manual setup (relative path)
+  chDir: <FILE_LOCATION> # manual setup (relative path)
+  cardDir: <FILE_LOCATION> # manual setup (relative path)
+  skinDir: <FILE_LOCATION> # manual setup (relative path)
+  thumbnailDir: <FILE_LOCATION> # manual setup (relative path)
+
+url:
+  api_baseUrl: /apis/ # manual setup
+  staticImg_baseUrl: <URL> # able to config manually setup
+
