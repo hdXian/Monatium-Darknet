@@ -46,6 +46,7 @@ spring:
 
 # logging configuration. able to edit manually.
 logging:
+  config: /opt/app/config/logback-spring.xml # manual setup
   level:
     org.hibernate.SQL: debug # show executed SQL
     org.hibernate.resource.transaction: debug # show transaction (commit, rollback)
