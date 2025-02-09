@@ -1,0 +1,85 @@
+<configuration>
+    <!-- 설정 파일에서 변수 가져오기 -->
+    <property resource="logback-variables.properties" />
+
+    <!-- 현재 날짜 가져오기 (logback 기능) -->
+    <timestamp key="ToDay" datePattern="yyyyMMdd" />
+
+    <!-- ConsoleAppender: 콘솔에 로그를 출력하는 클래스 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                ${LOG_PATTERN}
+            </Pattern>
+        </layout>
+
+    </appender>
+
+    <!-- 일반 애플리케이션 로그 appender (INFO, WARN, ERROR) -->
+    <appender name="APP_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+<!--        로그 필터 설정: 해당 appender에만 적용되는 세밀한 필터링을 추가할 때 설정. -->
+<!--        root나 logger 태그에서 지정한 레벨은 전체에 적용되는 설정임 -->
+<!--        <filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+<!--            <level>info</level>-->
+<!--            <onMatch>ACCEPT</onMatch>-->
+<!--            <onMismatch>DENY</onMismatch>-->
+<!--        </filter>-->
+
+        <!-- 기본 파일명 설정 (롤링 정책 반영 시 사용되지는 않음) -->
+        <file>${LOG_PATH}/app/${ToDay}_${LOG_FILE_NAME}.log</file>
+
+        <!-- 롤링 정책 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/info/%d{yyyyMMdd}_app.log</fileNamePattern>
+            <maxHistory>30</maxHistory> <!-- 30일간 보관 -->
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Hibernate 및 SQL 로그 appender (debug, trace 포함) -->
+    <appender name="SQL_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <!-- 기본 파일명 설정 (롤링 정책 반영 시 사용되지는 않음) -->
+        <file>${LOG_PATH}/sql/${ToDay}_${LOG_FILE_NAME}.log</file>
+
+        <!-- 롤링 정책 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/sql/%d{yyyyMMdd}_sql.log</fileNamePattern>
+            <maxHistory>30</maxHistory> <!-- 30일간 보관 -->
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 최상위 로그 레벨 설정 -->
+    <root level="INFO"> <!--- INFO 이상의 로그 (INFO, WARN, ERROR)만 저장 -->
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="APP_LOG_FILE" />
+    </root>
+
+    <!-- Hibernate & SQL 로그 -->
+    <!-- 해당 패키지나 클래스에 적용하는 전체적인 로그 설정 -->
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+        <appender-ref ref="SQL_LOG_FILE" /> <!-- appender: logger가 찍는 로그를 어디에 출력할지 등을 설정하는 부분 (콘솔, 파일 등) -->
+    </logger>
+
+    <logger name="org.hibernate.resource.transaction" level="DEBUG" additivity="false">
+        <appender-ref ref="SQL_LOG_FILE" />
+    </logger>
+
+    <logger name="org.springframework.orm.jpa.JpaTransactionManager" level="DEBUG" additivity="false">
+        <appender-ref ref="SQL_LOG_FILE" />
+    </logger>
+
+    <logger name="org.hibernate.orm.jdbc.bind" level="TRACE" additivity="false">
+        <appender-ref ref="SQL_LOG_FILE" />
+    </logger>
+
+</configuration>
