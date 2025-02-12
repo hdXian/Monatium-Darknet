@@ -40,6 +40,7 @@
     /* color: #FF9800; */
 }
 
+/*
 #languageSelect {
     background-color: #3A5FCD;
     color: #E0E0E0;
@@ -47,45 +48,52 @@
     padding: 5px 10px;
     border-radius: 5px;
 }
+*/
 
-/* 아이콘 스타일 */
-.lang-icon {
-    font-size: 1.2rem;
-    color: #E0E0E0;
-}
-
-/* 기본 select 숨기기 */
-/* 언어 선택 드롭다운 스타일 */
-/*
-#languageSelect {
+.custom-dropdown {
+    position: relative;
+    display: inline-block;
     background-color: #3A5FCD;
     color: #E0E0E0;
-    border: 1px solid #E0E0E0;
-    padding: 8px 12px;
-    font-size: 1rem;
+    padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
-    appearance: none;
+    user-select: none;
+    width: 100px;
+    text-align: center;
+    font-size: 1.25rem;
 }
-*/
 
-/* 드롭다운 클릭 시 펼쳐지는 옵션 스타일 */
-/*
-#languageSelect option {
+.custom-options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
     background-color: #3A5FCD;
-    color: #E0E0E0;
+    border-radius: 5px;
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.custom-options li {
     padding: 10px;
+    color: white;
+    cursor: pointer;
 }
-*/
 
-/* 각 옵션 hover 스타일 */
-/*
-#languageSelect option:hover {
-    background-color: #5B9BD5;
-    color: #FFFFFF;
+.custom-options li:hover {
+    background-color: #7FAAFF; /* 밝은 파란색 */
 }
-*/
 
+.custom-dropdown.open .custom-options {
+    display: block;
+}
+
+/* 네비게이션 바 오른쪽 영역에 클래스 지정, 너비 얼마만큼 먹을지 지정, 그 하위 요소들 (언어 선택 드롭다운, 커뮤니티 이미지) 비율로 차지하도록 변경 */
 
 .navbar .language-select {
     position: relative;

@@ -45,15 +45,31 @@
             <div class="d-flex align-items-center">
                 <!--/*[[ 언어 선택 드롭다운 ]]*/-->
                 <div class="dropdown language-select me-4">
-                    <form th:action="@{/lang-change}" method="post" class="d-inline-block align-items-center">
-                        <i class="fa-solid fa-globe me-2 lang-icon"></i>
-                        <select id="languageSelect" name="lang">
-                            <option th:value="ko" th:selected="${language == 'ko'}">한국어</option>
-                            <option th:value="en" th:selected="${language == 'en'}">English</option>
-                            <option th:value="jp" th:selected="${language == 'jp'}">日本語</option>
-                        </select>
+                    <div id="customLanguageSelect" class="custom-dropdown">
+                        <span id="selectedLanguage" th:text="${language == 'ko' ? '한국어' : (language == 'en' ? 'English' : '日本語')}">언어 선택</span>
+                        <ul id="customOptions" class="custom-options">
+                            <li data-lang="ko">한국어</li>
+                            <li data-lang="en">English</li>
+                            <li data-lang="jp">日本語</li>
+                        </ul>
+                    </div>
+
+                    <form id="languageForm" th:action="@{/lang-change}" method="post">
+                        <input type="hidden" id="languageInput" name="lang" value="">
                     </form>
                 </div>
+
+
+
+                <!--                <div class="dropdown language-select me-4">-->
+<!--                    <form th:action="@{/lang-change}" method="post" class="d-inline-block align-items-center">-->
+<!--                        <select id="languageSelect" name="lang">-->
+<!--                            <option th:value="ko" th:selected="${language == 'ko'}">한국어</option>-->
+<!--                            <option th:value="en" th:selected="${language == 'en'}">English</option>-->
+<!--                            <option th:value="jp" th:selected="${language == 'jp'}">日本語</option>-->
+<!--                        </select>-->
+<!--                    </form>-->
+<!--                </div>-->
 
                 <!--/*[[ SNS 아이콘 ]]*/-->
                 <div class="community-icons d-flex me-4">
