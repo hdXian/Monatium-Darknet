@@ -5,7 +5,8 @@
     display: flex;
     justify-content: space-between; /* 양쪽 끝으로 로고와 햄버거 버튼 배치 */
     padding: 0; /* 패딩 제거 */
-    background-color: #4682B4;
+    /* background-color: #4682B4; */
+    background-color: #3A5FCD;
 }
 
 .navbar-toggler {
@@ -29,32 +30,66 @@
 }
 
 .nav-link {
-    color: #FFFFFF;
+    /* color: #FFFFFF; */
+    color: #E0E0E0; /* 기존 흰색보다 부드러운 느낌 */
     font-size: 1.25rem; /* 기존보다 글씨 크기 키움 */
 }
 
 .nav-link:hover {
-    color: #FF9800;
+    color: #FFD700; /* 주황색보다 부드럽게 강조되는 금색 */
+    /* color: #FF9800; */
 }
+
+#languageSelect {
+    background-color: #3A5FCD;
+    color: #E0E0E0;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+/* 아이콘 스타일 */
+.lang-icon {
+    font-size: 1.2rem;
+    color: #E0E0E0;
+}
+
+/* 기본 select 숨기기 */
+/* 언어 선택 드롭다운 스타일 */
+/*
+#languageSelect {
+    background-color: #3A5FCD;
+    color: #E0E0E0;
+    border: 1px solid #E0E0E0;
+    padding: 8px 12px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    appearance: none;
+}
+*/
+
+/* 드롭다운 클릭 시 펼쳐지는 옵션 스타일 */
+/*
+#languageSelect option {
+    background-color: #3A5FCD;
+    color: #E0E0E0;
+    padding: 10px;
+}
+*/
+
+/* 각 옵션 hover 스타일 */
+/*
+#languageSelect option:hover {
+    background-color: #5B9BD5;
+    color: #FFFFFF;
+}
+*/
+
 
 .navbar .language-select {
     position: relative;
     margin-right: 15px;
-}
-
-.navbar .language-select .dropdown-menu {
-    background-color: #1E1E1E;
-    border: none;
-}
-
-.navbar .language-select .dropdown-menu a {
-    color: white;
-    padding: 10px 15px;
-    display: block;
-}
-
-.navbar .language-select .dropdown-menu a:hover {
-    background-color: #333;
 }
 
 .navbar .btn-download {
