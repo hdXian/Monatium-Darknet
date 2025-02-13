@@ -82,11 +82,16 @@ body {
     padding: 20px;
 }
 
+.guide-search-form {
+    width: 30%;
+}
+
 .guide-list-section {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    max-width: 70%;
 }
 
 .guide-list {
-    width: 80%;
+    width: 100%;
 }

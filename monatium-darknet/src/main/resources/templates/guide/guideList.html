@@ -49,8 +49,8 @@
     <main class="content">
 
         <!--/*[[ 검색창 ]]*/-->
-        <div class="notice-search d-flex justify-content-end mb-3">
-            <form class="d-flex w-30" method="get" th:action="@{/{lang}/guides (lang=${language})}">
+        <div class="guide-search d-flex justify-content-end mb-3">
+            <form class="guide-search-form d-flex" method="get" th:action="@{/{lang}/guides (lang=${language})}">
                 <input type="text" name="query" class="form-control form-control-sm" th:placeholder="#{notice.list.search.placeholder}" th:value="${query}">
                 <input type="hidden" name="category" class="form-control" th:value="${curCategoryId}">
                 <button class="btn btn-sm btn-primary ms-2" type="submit" th:text="#{notice.list.search.button}">검색</button>
@@ -58,10 +58,10 @@
         </div>
 
         <!--/*[[ 가이드 목록 섹션 ]]*/-->
-        <section class="guide-list-section container mt-5">
+        <section class="guide-list-section mt-5">
             <!-- FAQ 목록 섹션 -->
             <div class="guide-list">
-                <h2 class="text-center mb-4" th:text="#{notice.list.title}">자주 묻는 질문</h2>
+                <h2 class="text-start mb-4" th:text="#{notice.list.title}">자주 묻는 질문</h2>
 
                 <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between align-items-center"
