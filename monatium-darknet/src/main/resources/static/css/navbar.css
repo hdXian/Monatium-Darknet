@@ -1,19 +1,73 @@
 /* 상단 네비게이션 스타일 */
 .navbar {
+    display: flex;
+    align-items: center;
+    padding: 0 2vw;
+
     min-height: 4vh;
     height: auto;
+    justify-content: space-between;
+    background-color: #3A5FCD;
+}
+
+/* 네비게이션 바 내부 컨테이너 설정 */
+.navbar-left {
     display: flex;
-    justify-content: space-between; /* 양쪽 끝으로 로고와 햄버거 버튼 배치 */
-    padding: 0; /* 패딩 제거 */
-    background-color: #4682B4;
+    flex-grow: 1; /* 좌측 메뉴가 가능한 공간을 차지 */
+}
+
+.navbar-right {
+    display: flex;
+    flex-grow: 1; /* 우측 요소도 유동적으로 크기를 차지 */
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    gap: 15px;
+    max-width: 40%;
+}
+
+/* 반응형 조정: 화면이 작아지면 요소 크기 자동 조절 */
+@media (max-width: 992px) {
+    .navbar-left {
+        flex-grow: 2; /* 작은 화면에서는 좌측 메뉴 비율 증가 */
+        justify-content: flex-start;
+    }
+    .navbar-right {
+        flex-grow: 1;
+        justify-content: flex-start;
+    }
+}
+
+/* 네비게이션 아이템 스타일 */
+.navbar-nav {
+    margin-left: 0; /* 왼쪽 여백을 0으로 설정 */
+    padding-left: 0; /* 패딩 제거 */
+}
+
+.nav-link {
+    font-size: 1.1rem; /* 너무 크지 않도록 적절한 크기 설정 */
+    padding: 0.5rem 1rem;
+
+    color: #E0E0E0; /* 기존 흰색보다 부드러운 느낌 */
+    font-size: 1.25rem; /* 기존보다 글씨 크기 키움 */
 }
 
 .navbar-toggler {
     padding: 0; /* 필요 시 패딩 제거 */
+
+    padding: 5px 10px; /* 클릭 영역을 키움 */
+    border: none;
+    outline: none;
 }
 
 .navbar-toggler-icon {
     padding: 0;
+
+    width: 30px;
+    height: 30px;
+}
+
+.navbar-brand {
+    padding: 0;
+    height: 100%;
 }
 
 .navbar-brand img {
@@ -22,39 +76,70 @@
     object-fit: contain;
 }
 
-/* navbar-nav에 패딩과 마진을 제거 */
-.navbar-nav {
-    margin-left: 0; /* 왼쪽 여백을 0으로 설정 */
-    padding-left: 0; /* 패딩 제거 */
-}
-
-.nav-link {
-    color: #FFFFFF;
-    font-size: 1.25rem; /* 기존보다 글씨 크기 키움 */
-}
-
 .nav-link:hover {
-    color: #FF9800;
+    color: #FFD700; /* 주황색보다 부드럽게 강조되는 금색 */
+    /* color: #FF9800; */
 }
+
+.custom-dropdown {
+    position: relative;
+    /* display: inline-block; */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    background-color: #3A5FCD;
+    color: #E0E0E0;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
+    min-width: 100px;
+    text-align: center;
+    font-size: 1.25rem;
+}
+
+.custom-options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #3A5FCD;
+    border-radius: 5px;
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.custom-options li {
+    padding: 10px;
+    color: white;
+    cursor: pointer;
+}
+
+.custom-options li:hover {
+    background-color: #7FAAFF; /* 밝은 파란색 */
+}
+
+.custom-dropdown.open .custom-options {
+    display: block;
+}
+
+/* ▼ 화살표 아이콘 스타일 */
+.dropdown-arrow {
+    font-size: 2rem; /* 크기 조정 */
+    color: #E0E0E0; /* 기존 텍스트 색상과 맞춤 */
+    margin-right: 8px; /* 텍스트와 간격 추가 */
+}
+
+/* TODO - 네비게이션 바 오른쪽 영역에 클래스 지정, 너비 얼마만큼 먹을지 지정, 그 하위 요소들 (언어 선택 드롭다운, 커뮤니티 이미지) 비율로 차지하도록 변경 */
 
 .navbar .language-select {
     position: relative;
     margin-right: 15px;
-}
-
-.navbar .language-select .dropdown-menu {
-    background-color: #1E1E1E;
-    border: none;
-}
-
-.navbar .language-select .dropdown-menu a {
-    color: white;
-    padding: 10px 15px;
-    display: block;
-}
-
-.navbar .language-select .dropdown-menu a:hover {
-    background-color: #333;
 }
 
 .navbar .btn-download {
@@ -69,14 +154,31 @@
 }
 
 /* 커뮤니티 아이콘 스타일 */
+.community-icons {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 아이콘 사이 여백 조정 */
+}
+
+.sns-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
 .community-icons img {
     width: 30px;
     height: 30px;
     margin-right: 15px;
     transition: transform 0.3s;
-    /*background-color: #333;*/
 }
 
-.community-icons img:hover {
+.sns-link img:hover {
+    opacity: 0.8;
     transform: scale(1.2);
 }
+

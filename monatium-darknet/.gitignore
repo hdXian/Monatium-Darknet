@@ -39,3 +39,6 @@ out/
 # Ignore application.yml
 application.yml
 
+# ignore log dir
+/logs/
+
