@@ -15,8 +15,14 @@ public class MonatiumDarknetApplication {
 
 	@Bean
 	@Profile("dev")
-	public TestDataInit dataInit(MemberService memberService, NoticeService noticeService, CharacterService characterService, SkinService skinService, CardService cardService, ImagePathService imagePathService) {
-		return new TestDataInit(memberService, noticeService, characterService, skinService, cardService, imagePathService);
+	public TestDataInit dataInit(MemberService memberService,
+								 NoticeService noticeService,
+								 CharacterService characterService,
+								 SkinService skinService,
+								 CardService cardService,
+								 UserGuideService userGuideService,
+								 ImagePathService imagePathService) {
+		return new TestDataInit(memberService, noticeService, characterService, skinService, cardService, userGuideService, imagePathService);
 	}
 
 }
