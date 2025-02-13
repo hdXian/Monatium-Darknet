@@ -17,7 +17,11 @@ import java.util.*;
 public class UrlLocaleResolver extends AcceptHeaderLocaleResolver {
 
     private final Set<String> enableLangParams = new HashSet<>(Set.of("ko", "en", "jp"));
-    private final Set<Locale> enableLocales = new HashSet<>(Set.of(Locale.KOREAN, Locale.ENGLISH, Locale.JAPANESE));
+    private final Set<Locale> enableLocales = new HashSet<>(Set.of(
+            Locale.KOREAN, new Locale("ko", "KR"),
+            Locale.ENGLISH, new Locale("en", "US"), new Locale("en", "GB"),
+            Locale.JAPANESE, new Locale("ja", "jp")
+    ));
 
     @Override
     public Locale resolveLocale(HttpServletRequest request) {
