@@ -30,6 +30,9 @@ public class ImagePathService {
     @Value("${file.noticeDir}")
     private String noticeDir;
 
+    @Value("${file.guideDir}")
+    private String guideDir;
+
     @Value("${file.wikiDir}")
     private String wikiDir;
 
@@ -55,6 +58,10 @@ public class ImagePathService {
     }
 
     // 서버 스토리지 내 이미지 저장 경로를 리턴
+    // === 유저 가이드 관련 이미지 ===
+    public String getUserGuideDir(Long guideId) {
+        return guideDir + (guideId + "/");
+    }
 
     // === 공지사항 관련 이미지 ===
     public String getNoticeDefaultThumbnailFilePath() {
