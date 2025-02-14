@@ -36,7 +36,6 @@ body {
     text-decoration: none;  /* 밑줄 제거 */
     color: #333;  /* 기본 글씨색 (어두운 회색) */
     font-size: 1.1rem;  /* 기존보다 살짝 키움 (1.1rem) */
-    font-weight: 500; /* 글씨를 조금 더 두껍게 */
     transition: color 0.3s ease;
 }
 
@@ -101,9 +100,41 @@ body {
 }
 
 .guide-list {
+    display: flex;
+    flex-direction: column;
     width: 100%;
 }
 
+/* 개별 가이드 항목을 카드 형태로 스타일링 */
+.guide-item {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.guide-item:hover {
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+/* 가이드 제목 스타일 */
+.guide-item .title {
+    font-size: 1.2rem;
+    color: #333;
+    text-decoration: none;
+}
+
+/* 가이드 날짜 스타일 */
+.guide-item .date {
+    font-size: 0.9rem;
+    color: #777;
+}
 
 /*
   가이드 본문

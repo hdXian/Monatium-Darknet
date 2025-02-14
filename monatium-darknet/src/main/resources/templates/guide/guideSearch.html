@@ -32,7 +32,7 @@
             <li class="nav-item">
                 <a class="nav-link active"
                    th:href="@{/{lang}/guides/search (lang=${language})}"
-                   th:text="#{notice.list.all}">전체 검색</a>
+                   th:text="#{guide.tab.all}">전체 검색</a>
             </li>
             <li class="nav-item" th:each="category : ${categoryList}">
                 <a class="nav-link"
@@ -50,8 +50,8 @@
         <!--/*[[ 검색창 ]]*/-->
         <div class="guide-search d-flex justify-content-end mb-3">
             <form class="guide-search-form d-flex" method="get" th:action="@{/{lang}/guides/search (lang=${language})}">
-                <input type="text" name="query" class="form-control form-control-sm" th:placeholder="#{notice.list.search.placeholder}" th:value="${query}">
-                <button class="btn btn-sm btn-primary ms-2" type="submit" th:text="#{notice.list.search.button}">검색</button>
+                <input type="text" name="query" class="form-control form-control-sm" th:placeholder="#{guide.list.search.placeholder}" th:value="${query}">
+                <button class="btn btn-sm btn-primary ms-2" type="submit" th:text="#{guide.list.search.button}">검색</button>
             </form>
         </div>
 
