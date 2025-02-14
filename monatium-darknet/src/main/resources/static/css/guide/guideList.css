@@ -103,3 +103,39 @@ body {
 .guide-list {
     width: 100%;
 }
+
+
+/*
+  가이드 본문
+*/
+/* 가이드 제목 스타일 */
+.guide-detail {
+    max-width: 70%;
+}
+
+.guide-title {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* 작성일 스타일 */
+.guide-date {
+    font-size: 0.9rem;
+    color: #6c757d; /* Bootstrap의 muted 색상 */
+}
+
+/* 구분선 스타일 */
+.guide-divider {
+    border: none;
+    height: 1px;
+    background-color: black;
+    margin-bottom: 20px;
+}
+
+/* 가이드 본문 스타일 */
+.guide-body {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #333;
+}
+

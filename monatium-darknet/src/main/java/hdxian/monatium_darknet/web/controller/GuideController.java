@@ -68,8 +68,14 @@ public class GuideController {
         return "guide/guideSearch";
     }
 
-    @GetMapping("/{faqId}")
-    public String getDetail(@PathVariable("lang")LangCode langCode, @PathVariable("faqId") Long faqId) {
+    @GetMapping("/{guideId}")
+    public String getDetail(@PathVariable("lang")LangCode langCode, @PathVariable("guideId") Long guideId, Model model) {
+        UserGuide userGuide = userGuideService.findOne(guideId);
+        List<UserGuideCategory> categoryList = userGuideService.findCategoriesByLangCode(langCode);
+
+        model.addAttribute("guide", userGuide);
+        model.addAttribute("curCategory", userGuide.getCategory());
+        model.addAttribute("categoryList", categoryList);
         return "guide/guideDetail";
     }
 
