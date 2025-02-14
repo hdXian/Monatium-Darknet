@@ -17,10 +17,10 @@
 </nav>
 
 <div class="container mt-4 main-content">
-    <h1>공지사항 수정</h1>
+    <h1>가이드 수정</h1>
 
     <!--/*[[ 공지사항 수정 폼 ]]*/-->
-    <form id="notice-form" th:action="@{/management/guides/{id}/edit (id=${guideId})}" th:object="${guideForm}" method="post" enctype="multipart/form-data">
+    <form id="guide-form" th:action="@{/management/guides/{id}/edit (id=${guideId})}" th:object="${guideForm}" method="post" enctype="multipart/form-data">
         <!--/*[[ 제목 입력 ]]*/-->
         <div class="mb-3">
             <label for="title" class="form-label">제목</label>
@@ -78,7 +78,7 @@
 <!--/*[[ Quill 에디터 스크립트 ]]*/-->
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 
-<script th:src="@{/js/management/notice/noticeEditForm.js}"></script>
+<script th:src="@{/js/management/guide/guideEditForm.js}"></script>
 
 </body>
 </html>

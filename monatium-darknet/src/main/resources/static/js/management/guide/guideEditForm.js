@@ -6,7 +6,7 @@ const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttrib
 // Quill 초기화
 const quill = new Quill('#editor', {
     theme: 'snow',
-    placeholder: '공지사항 내용을 입력하세요...',
+    placeholder: '가이드 내용을 입력하세요...',
     modules: {
         toolbar: {
             container: [
@@ -96,7 +96,7 @@ document.querySelector('#btnComplete').addEventListener('click', function () {
     // 버튼이 속한 폼을 가져옴
     const form = this.closest('form');
 
-    if (confirm('공지사항을 등록하시겠습니까?')) {
+    if (confirm('가이드를 수정하시겠습니까?')) {
         // 추가적인 작성 처리 로직
         document.querySelector('#content').value = quill.root.innerHTML;
 
@@ -112,15 +112,3 @@ document.querySelector('#btnComplete').addEventListener('click', function () {
 
 });
 
-// 썸네일 미리보기 이벤트 등록
-document.addEventListener("DOMContentLoaded", function () {
-    const imageInputs = document.querySelectorAll(".img-input");
-
-    // 모든 이미지 업로드 input 요소에 대해 이벤트 추가
-    imageInputs.forEach(input => {
-        input.addEventListener("change", function() {
-            previewImage(this);
-        });
-    });
-
-});

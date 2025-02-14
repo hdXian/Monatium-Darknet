@@ -112,7 +112,7 @@ document.querySelector('#btnComplete').addEventListener('click', function () {
     // 버튼이 속한 폼을 가져옴
     const form = this.closest('form');
 
-    if (confirm('공지사항을 등록하시겠습니까?')) {
+    if (confirm('공지사항을 수정하시겠습니까?')) {
         // 추가적인 작성 처리 로직
         document.querySelector('#content').value = quill.root.innerHTML;
 

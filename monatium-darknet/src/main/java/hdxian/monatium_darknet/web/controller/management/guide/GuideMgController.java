@@ -7,7 +7,6 @@ import hdxian.monatium_darknet.repository.dto.UserGuideSearchCond;
 import hdxian.monatium_darknet.security.CustomUserDetails;
 import hdxian.monatium_darknet.service.ImageUrlService;
 import hdxian.monatium_darknet.service.UserGuideService;
-import hdxian.monatium_darknet.service.dto.NoticeDto;
 import hdxian.monatium_darknet.service.dto.UserGuideDto;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -144,6 +145,96 @@ public class GuideMgController {
 
     }
 
+    @GetMapping("/categories/new")
+    public String categoryForm(HttpSession session, Model model) {
+        UserGuideCategoryForm categoryForm = Optional.ofNullable((UserGuideCategoryForm) session.getAttribute(GUIDE_CATEGORY_FORM))
+                .orElse(new UserGuideCategoryForm());
+
+        model.addAttribute(GUIDE_CATEGORY_FORM, categoryForm);
+        return "management/guide/categoryAddForm";
+    }
+
+    // 공지사항 카테고리 추가
+    @PostMapping("/categories/new")
+    public String addCategory(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
+                              HttpSession session, @RequestParam("action") String action,
+                              @ModelAttribute(GUIDE_CATEGORY_FORM) UserGuideCategoryForm categoryForm,
+                              Model model) {
+
+        // 취소 버튼을 누른 경우
+        if (action.equals("cancel")) {
+            clearSessionAttributes(session);
+            return "redirect:/management/guides";
+        }
+
+        // 완료 버튼을 누른 경우
+        if (action.equals("complete")) {
+
+//            if(bindingResult.hasErrors()) {
+//                return "management/notice/categoryAddForm";
+//            }
+
+            String name = categoryForm.getName();
+            Long savedId = userGuideService.createNewUserGuideCategory(langCode, name);
+
+            clearSessionAttributes(session);
+            return "redirect:/management/guides";
+        }
+        // 임시 저장 버튼을 누른 경우
+        else {
+            session.setAttribute(GUIDE_CATEGORY_FORM, categoryForm);
+            return "redirect:/management/guides/categories/new";
+        }
+
+    }
+
+    // 가이드 카테고리 수정 폼
+    @GetMapping("/categories/{categoryId}/edit")
+    public String categoryEditForm(HttpSession session, Model model, @PathVariable("categoryId") Long categoryId) {
+        UserGuideCategory category = userGuideService.findOneCategory(categoryId);
+
+        UserGuideCategoryForm categoryForm = Optional.ofNullable((UserGuideCategoryForm) session.getAttribute(GUIDE_CATEGORY_FORM))
+                .orElse(generateCategoryForm(category));
+
+        model.addAttribute("categoryId", categoryId);
+        model.addAttribute(GUIDE_CATEGORY_FORM, categoryForm);
+        return "management/guide/categoryEditForm";
+    }
+
+    // 가이드 카테고리 수정
+    @PostMapping("/categories/{categoryId}/edit")
+    public String editCategory(HttpSession session, @RequestParam("action") String action,
+                               @PathVariable("categoryId") Long categoryId,
+                               @ModelAttribute(GUIDE_CATEGORY_FORM) UserGuideCategoryForm categoryForm,
+                               Model model) {
+
+        // 취소 버튼을 누른 경우
+        if (action.equals("cancel")) {
+            clearSessionAttributes(session);
+            return "redirect:/management/guides";
+        }
+
+        // 완료 버튼을 누른 경우
+        if (action.equals("complete")) {
+
+//            if (bindingResult.hasErrors()) {
+//                model.addAttribute("categoryId", categoryId);
+//                return "management/guide/categoryEditForm";
+//            }
+
+            // 카테고리 업데이트 로직
+            Long updatedId = userGuideService.updateUserGuideCategory(categoryId, categoryForm.getName());
+
+            clearSessionAttributes(session);
+            return "redirect:/management/guides";
+        }
+        // 임시저장 버튼을 누른 경우
+        else {
+            session.setAttribute(GUIDE_CATEGORY_FORM, categoryForm);
+            return "redirect:/management/guides/categories/" + categoryId + "/edit";
+        }
+
+    }
 
     @ModelAttribute("categoryList")
     public List<UserGuideCategory> categoryList(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode) {
@@ -156,6 +247,10 @@ public class GuideMgController {
     }
 
     // === private ===
+    private UserGuideCategoryForm generateCategoryForm(UserGuideCategory category) {
+        return new UserGuideCategoryForm(category.getName());
+    }
+
     private UserGuideForm generateGuideForm(UserGuide guide) {
         UserGuideForm form = new UserGuideForm();
         form.setCategoryId(guide.getCategory().getId());

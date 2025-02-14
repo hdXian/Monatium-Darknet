@@ -20,7 +20,7 @@
 
 <div class="container mt-4 main-content">
     <h1>사용자 가이드 작성</h1>
-    <form th:action="@{/management/guides/new}" th:object="${guideForm}" id="notice-form" method="post" class="info-group" enctype="multipart/form-data">
+    <form th:action="@{/management/guides/new}" th:object="${guideForm}" id="guide-form" method="post" class="info-group" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="title" class="form-label">제목</label>
             <input th:field="*{title}" th:errorclass="field-error" type="text" id="title" name="title" class="form-control" placeholder="공지사항 제목을 입력하세요">
@@ -57,7 +57,7 @@
             <!--/*[[ 오른쪽 버튼 그룹 ]]*/-->
             <div class="d-flex gap-2">
                 <!--/*[[ 다음 버튼 ]]*/-->
-                <button id="btnComplete" type="button" class="btn btn-primary">공지사항 작성하기!</button>
+                <button id="btnComplete" type="button" class="btn btn-primary">가이드 작성하기!</button>
             </div>
 
         </div>
