@@ -39,11 +39,12 @@
 
                 <div class="position-sticky">
                     <ul class="nav flex-column">
+                        <li th:if="${loginMember.role.name() == 'SUPER'}" class="nav-item"><a class="nav-link" th:href="@{/management/members}">회원 관리</a></li>
                         <li class="nav-item"><a class="nav-link active" th:href="@{/management/notices}">공지사항 관리</a></li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/management/characters}">캐릭터 관리</a></li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/management/cards}">카드 관리</a></li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/management/skins}">스킨 관리</a></li>
-                        <li th:if="${loginMember.role.name() == 'SUPER'}" class="nav-item"><a class="nav-link" th:href="@{/management/members}">회원 관리</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/management/guides}">사용자 가이드 관리</a></li>
                     </ul>
                 </div>
 
@@ -53,6 +54,7 @@
             <main class="col-md-7 mx-auto col-lg-9 px-md-4">
                 <h2 class="mt-4 mb-2 text-center">대시보드</h2>
                 <div class="row">
+
                     <div class="col-md-6 col-lg-3 mb-4">
                         <a th:href="@{/management/notices}" class="card text-white bg-info">
                             <div class="card-body">
@@ -61,6 +63,7 @@
                             </div>
                         </a>
                     </div>
+
                     <div class="col-md-6 col-lg-3 mb-4">
                         <a th:href="@{/management/characters}" class="card text-white bg-primary">
                             <div class="card-body">
@@ -69,6 +72,7 @@
                             </div>
                         </a>
                     </div>
+
                     <div class="col-md-6 col-lg-3 mb-4">
                         <a th:href="@{/management/cards}" class="card text-white bg-success">
                             <div class="card-body">
@@ -77,6 +81,7 @@
                             </div>
                         </a>
                     </div>
+
                     <div class="col-md-6 col-lg-3 mb-4">
                         <a th:href="@{/management/skins}" class="card text-white bg-warning">
                             <div class="card-body">
@@ -85,6 +90,16 @@
                             </div>
                         </a>
                     </div>
+
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <a th:href="@{/management/guides}" class="card text-white bg-success">
+                            <div class="card-body">
+                                <h5 class="card-title">사용자 가이드 관리</h5>
+                                <p class="card-text">사용자 가이드를 추가, 수정, 삭제할 수 있습니다.</p>
+                            </div>
+                        </a>
+                    </div>
+
                 </div>
             </main>
 

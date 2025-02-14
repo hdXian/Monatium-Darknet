@@ -30,7 +30,6 @@ import static hdxian.monatium_darknet.web.controller.management.SessionConst.*;
 @RequestMapping("/management")
 public class ManagementController {
 
-    // TODO - **중요** 아무나 로그인할 수 없도록 접근 권한 설정 필요 -> IP 제한으로 구현할 듯 (nginx 등)
     private final LoginService loginService;
 
     private final ImageUrlService imageUrlService;
@@ -47,10 +46,6 @@ public class ManagementController {
     // 대시보드 화면
     @GetMapping
     public String home(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
-//        Member loginMember = userDetails.getMember();
-//
-//        model.addAttribute("loginMember", loginMember);
-//        return "management/dashBoard";
         return "redirect:/management/dashboard";
     }
 
