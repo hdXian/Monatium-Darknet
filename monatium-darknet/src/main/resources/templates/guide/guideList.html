@@ -3,13 +3,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header :: common_header(~{::title}, ~{::link})}">
-    <title th:text="|#{character.title} - #{page.title}|">이용 안내</title>
+    <title th:text="|#{guide.page.title} - #{page.title}|">이용 안내</title>
     <link rel="stylesheet" th:href="@{/css/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/font.css}">
     <link rel="stylesheet" th:href="@{/css/guide/guideList.css}">
     <!--/*[[ 커스텀 css ]]*/-->
 </head>
+
+<!-- TODO - 가이드 상세 페이지 추가 (공지사항 상세 페이지 활용) -->
+<!-- TODO - 다국어 데이터 추가 -->
 
 <body>
 
@@ -32,11 +35,11 @@
             <li class="nav-item">
                 <a class="nav-link"
                    th:href="@{/{lang}/guides/search (lang=${language})}"
-                   th:text="#{notice.list.all}">전체 검색</a>
+                   th:text="#{guide.tab.all}">전체 검색</a>
             </li>
             <li class="nav-item" th:each="category : ${categoryList}">
                 <a class="nav-link"
-                   th:classappend="${curCategoryId == category.id} ? 'active'"
+                   th:classappend="${curCategory.id == category.id} ? 'active'"
                    th:href="@{/{lang}/guides (lang=${language}, category=${category.id})}"
                    th:text="${category.name}">
                     <!-- 카테고리 이름 -->
@@ -51,9 +54,9 @@
         <!--/*[[ 검색창 ]]*/-->
         <div class="guide-search d-flex justify-content-end mb-3">
             <form class="guide-search-form d-flex" method="get" th:action="@{/{lang}/guides (lang=${language})}">
-                <input type="text" name="query" class="form-control form-control-sm" th:placeholder="#{notice.list.search.placeholder}" th:value="${query}">
-                <input type="hidden" name="category" class="form-control" th:value="${curCategoryId}">
-                <button class="btn btn-sm btn-primary ms-2" type="submit" th:text="#{notice.list.search.button}">검색</button>
+                <input type="text" name="query" class="form-control form-control-sm" th:placeholder="#{guide.list.search.placeholder}" th:value="${query}">
+                <input type="hidden" name="category" class="form-control" th:value="${curCategory.id}">
+                <button class="btn btn-sm btn-primary ms-2" type="submit" th:text="#{guide.list.search.button}">검색</button>
             </form>
         </div>
 
@@ -61,7 +64,7 @@
         <section class="guide-list-section mt-5">
             <!-- FAQ 목록 섹션 -->
             <div class="guide-list">
-                <h2 class="text-start mb-4" th:text="#{notice.list.title}">자주 묻는 질문</h2>
+                <h2 class="text-start mb-4" th:text="${curCategory.name}">자주 묻는 질문</h2>
 
                 <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between align-items-center"

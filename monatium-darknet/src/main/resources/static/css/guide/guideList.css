@@ -83,7 +83,15 @@ body {
 }
 
 .guide-search-form {
-    width: 30%;
+    width: 25%; /* 기존 30%에서 20%로 줄임 */
+    min-width: 180px; /* 너무 작아지지 않도록 최소 너비 설정 */
+}
+
+/* 검색 버튼 스타일 조정 */
+.guide-search-form button {
+    white-space: nowrap; /* 버튼 텍스트 줄바꿈 방지 */
+    padding: 5px 10px; /* 버튼 내부 여백 조정 */
+    font-size: 0.9rem; /* 버튼 글자 크기 조정 */
 }
 
 .guide-list-section {

@@ -32,9 +32,11 @@ public class GuideController {
     public String guideList(@PathVariable("lang")LangCode langCode,
                             @RequestParam(value = "category", required = false) Long categoryId,
                             @RequestParam(value = "query", required = false) String title, Model model) {
+
+        List<UserGuideCategory> categoryList = userGuideService.findCategoriesByLangCode(langCode);
         // 카테고리 넘어온게 없으면 1번 카테고리로 설정
         if (categoryId == null)
-            categoryId = 1L;
+            categoryId = categoryList.get(0).getId();
 
         UserGuideSearchCond searchCond = new UserGuideSearchCond();
         searchCond.setLangCode(langCode);
@@ -42,11 +44,11 @@ public class GuideController {
         searchCond.setTitle(title);
 
         List<UserGuide> guideList = userGuideService.findAll(searchCond);
-        List<UserGuideCategory> categoryList = userGuideService.findCategoriesByLangCode(langCode);
+        UserGuideCategory curCategory = userGuideService.findOneCategory(categoryId);
 
         model.addAttribute("guideList", guideList);
         model.addAttribute("categoryList", categoryList);
-        model.addAttribute("curCategoryId", categoryId);
+        model.addAttribute("curCategory", curCategory);
         model.addAttribute("query", title);
         return "guide/guideList";
     }
