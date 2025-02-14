@@ -1,12 +1,19 @@
 package hdxian.monatium_darknet.web.controller.management.guide;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class UserGuideForm {
 
+    @NotBlank
     private String title;
+
+    @NotNull
     private Long categoryId;
+
+    @NotBlank
     private String content;
 
     public UserGuideForm() {

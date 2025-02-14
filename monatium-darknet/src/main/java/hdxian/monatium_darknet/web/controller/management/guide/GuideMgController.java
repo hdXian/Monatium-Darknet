@@ -67,11 +67,12 @@ public class GuideMgController {
         return "management/guide/guideAddForm";
     }
 
+    // 가이드 작성
     @PostMapping("/new")
     public String createGuide(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
                               HttpSession session, @RequestParam("action") String action,
                               @AuthenticationPrincipal CustomUserDetails userDetails,
-                              @ModelAttribute(GUIDE_FORM) UserGuideForm guideForm, Model model) {
+                              @Validated @ModelAttribute(GUIDE_FORM) UserGuideForm guideForm, BindingResult bindingResult, Model model) {
 
         // 취소 버튼을 누른 경우
         if (action.equals("cancel")) {
@@ -82,9 +83,9 @@ public class GuideMgController {
         // 완료 버튼을 누른 경우
         if (action.equals("complete")) {
 
-//            if (bindingResult.hasErrors()) {
-//                return "management/notice/noticeAddForm";
-//            }
+            if (bindingResult.hasErrors()) {
+                return "management/guide/guideAddForm";
+            }
 
             UserGuideDto guideDto = generateGuideDto(langCode, guideForm);
             Long savedId = userGuideService.createNewUserGuide(guideDto);
@@ -116,7 +117,7 @@ public class GuideMgController {
     public String edit(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
                        HttpSession session, @RequestParam("action") String action,
                        @PathVariable("guideId") Long guideId,
-                       @ModelAttribute(GUIDE_FORM) UserGuideForm guideForm, Model model) {
+                       @Validated @ModelAttribute(GUIDE_FORM) UserGuideForm guideForm, BindingResult bindingResult, Model model) {
 
         // 취소 버튼을 누른 경우
         if (action.equals("cancel")) {
@@ -127,10 +128,10 @@ public class GuideMgController {
         // 완료 버튼을 누른 경우
         if (action.equals("complete")) {
 
-//            if (bindingResult.hasErrors()) {
-//                model.addAttribute("noticeId", noticeId);
-//                return "management/notice/noticeEditForm";
-//            }
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("guideId", guideId);
+                return "management/guide/guideEditForm";
+            }
 
             UserGuideDto updateParam = generateGuideDto(langCode, guideForm);
             Long updatedId = userGuideService.updateUserGuide(guideId, updateParam);
@@ -158,7 +159,7 @@ public class GuideMgController {
     @PostMapping("/categories/new")
     public String addCategory(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,
                               HttpSession session, @RequestParam("action") String action,
-                              @ModelAttribute(GUIDE_CATEGORY_FORM) UserGuideCategoryForm categoryForm,
+                              @Validated @ModelAttribute(GUIDE_CATEGORY_FORM) UserGuideCategoryForm categoryForm, BindingResult bindingResult,
                               Model model) {
 
         // 취소 버튼을 누른 경우
@@ -170,9 +171,9 @@ public class GuideMgController {
         // 완료 버튼을 누른 경우
         if (action.equals("complete")) {
 
-//            if(bindingResult.hasErrors()) {
-//                return "management/notice/categoryAddForm";
-//            }
+            if(bindingResult.hasErrors()) {
+                return "management/guide/categoryAddForm";
+            }
 
             String name = categoryForm.getName();
             Long savedId = userGuideService.createNewUserGuideCategory(langCode, name);
@@ -205,7 +206,7 @@ public class GuideMgController {
     @PostMapping("/categories/{categoryId}/edit")
     public String editCategory(HttpSession session, @RequestParam("action") String action,
                                @PathVariable("categoryId") Long categoryId,
-                               @ModelAttribute(GUIDE_CATEGORY_FORM) UserGuideCategoryForm categoryForm,
+                               @Validated @ModelAttribute(GUIDE_CATEGORY_FORM) UserGuideCategoryForm categoryForm, BindingResult bindingResult,
                                Model model) {
 
         // 취소 버튼을 누른 경우
@@ -217,10 +218,10 @@ public class GuideMgController {
         // 완료 버튼을 누른 경우
         if (action.equals("complete")) {
 
-//            if (bindingResult.hasErrors()) {
-//                model.addAttribute("categoryId", categoryId);
-//                return "management/guide/categoryEditForm";
-//            }
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("categoryId", categoryId);
+                return "management/guide/categoryEditForm";
+            }
 
             // 카테고리 업데이트 로직
             Long updatedId = userGuideService.updateUserGuideCategory(categoryId, categoryForm.getName());
