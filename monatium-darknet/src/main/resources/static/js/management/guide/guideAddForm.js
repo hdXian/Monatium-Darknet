@@ -3,60 +3,166 @@
 const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
+// BlotFormatter 모듈 등록
+Quill.register('modules/blotFormatter', QuillBlotFormatter2.default);
+
 // Quill 초기화
 const quill = new Quill('#editor', {
-    theme: 'snow',
-    placeholder: '가이드 내용을 입력하세요...',
-    modules: {
-        toolbar: {
-            container: [
-                [{ 'header': [1, 2, false] }],
+	theme: 'snow',
+	modules: {
+		toolbar: {
+		    container: [
+		        [{ 'header': [1, 2, false] }],
                 ['bold', 'italic', 'underline'],
-                ['link', 'image'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }]
-            ],
-            handlers: {
-                image: function () {
-                    console.log('이미지 업로드 시작');
-                    const input = document.createElement('input');
-                    input.type = 'file';
-                    input.accept = 'image/*';
-                    input.onchange = async function () {
-                        const file = input.files[0];
-                        if (!file) return;
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ['image', 'link']
+		    ],
+		    handlers: {
+            	image: function () {
+            		console.log('이미지 업로드 시작');
+            		const input = document.createElement('input');
+            		input.type = 'file';
+            		input.accept = 'image/*';
+            		input.onchange = async function () {
+            			const file = input.files[0];
+            			if (!file) return;
 
-                        const formData = new FormData();
-                        formData.append('file', file);
+            			const formData = new FormData();
+            			formData.append('file', file);
 
-                        try {
-                            const response = await fetch('/api/images/upload/tmp', {
-                                method: 'POST',
-                                headers: {
-                                    [csrfHeader]: csrfToken
-                                },
-                                body: formData
-                            });
+            			try {
+            				const response = await fetch('/api/images/upload/tmp', {
+            					method: 'POST',
+            					headers: {
+            						[csrfHeader]: csrfToken
+            					},
+            					body: formData
+            				});
 
-                            if (response.ok) {
-                                const imageUrl = await response.text(); // 서버에서 반환한 imageUrl 읽기
-                                const range = quill.getSelection();
-                                quill.insertEmbed(range.index, 'image', imageUrl);
-                            } else {
-                                alert('이미지 업로드 실패');
-                            }
+            				if (response.ok) {
+            					const imageUrl = await response.text(); // 서버에서 반환한 imageUrl 읽기
+            					const range = quill.getSelection();
+            					quill.insertEmbed(range.index, 'image', imageUrl);
+            				} else {
+            					alert('이미지 업로드 실패');
+            				}
 
-                        } catch (error) {
-                            alert('이미지 업로드 중 오류가 발생했습니다.');
-                            console.error(error);
-                        }
-                    };
+            			} catch (error) {
+            				alert('이미지 업로드 중 오류가 발생했습니다.');
+            				console.error(error);
+            			}
+            		};
 
-                    input.click();
-                }
+            		input.click();
+            	}
             }
-        }
+		},
+		blotFormatter: {
+		    // 옵션 설정 (선택 사항)
+		    align: {
+			    allowAligning: true,
+			    alignments: ['left', 'center', 'right']
+		    },
+		    resize: {
+			    allowResizing: true,
+			    handleStyles: {
+			        backgroundColor: 'blue',
+			        borderRadius: '50%',
+			        width: '12px',
+			        height: '12px'
+			    },
+			    useRelativeSize: true,
+			    allowResizeModeChange: true,
+			    imageOversizeProtection: true,
+			    minimumWidthPx: 50
+		    },
+		    delete: {
+			    allowKeyboardDelete: true
+		    },
+		    image: {
+			    allowAltTitleEdit: true,
+			    registerImageTitleBlot: true,
+			    allowCompressor: true
+		    },
+		    overlay: {
+			    style: {
+			        border: '2px dashed red'
+			    },
+			    sizeInfoStyle: {
+			        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+			        color: 'white',
+			        borderRadius: '4px',
+			        padding: '5px'
+			    }
+		    },
+		    toolbar: {
+			    toolbarSize: 'small',
+			    toolbarButtonSvg: {
+			        alignLeft: '<svg>...</svg>',
+			        alignCenter: '<svg>...</svg>',
+			        alignRight: '<svg>...</svg>',
+			        altTitle: '<svg>...</svg>',
+			        compress: '<svg>...</svg>'
+			    }
+		    }
+		}
     }
 });
+
+
+//const quill = new Quill('#editor', {
+//    theme: 'snow',
+//    placeholder: '가이드 내용을 입력하세요...',
+//    modules: {
+//        toolbar: {
+//            container: [
+//                [{ 'header': [1, 2, false] }],
+//                ['bold', 'italic', 'underline'],
+//                ['link', 'image'],
+//                [{ 'list': 'ordered' }, { 'list': 'bullet' }]
+//            ],
+//            handlers: {
+//                image: function () {
+//                    console.log('이미지 업로드 시작');
+//                    const input = document.createElement('input');
+//                    input.type = 'file';
+//                    input.accept = 'image/*';
+//                    input.onchange = async function () {
+//                        const file = input.files[0];
+//                        if (!file) return;
+//
+//                        const formData = new FormData();
+//                        formData.append('file', file);
+//
+//                        try {
+//                            const response = await fetch('/api/images/upload/tmp', {
+//                                method: 'POST',
+//                                headers: {
+//                                    [csrfHeader]: csrfToken
+//                                },
+//                                body: formData
+//                            });
+//
+//                            if (response.ok) {
+//                                const imageUrl = await response.text(); // 서버에서 반환한 imageUrl 읽기
+//                                const range = quill.getSelection();
+//                                quill.insertEmbed(range.index, 'image', imageUrl);
+//                            } else {
+//                                alert('이미지 업로드 실패');
+//                            }
+//
+//                        } catch (error) {
+//                            alert('이미지 업로드 중 오류가 발생했습니다.');
+//                            console.error(error);
+//                        }
+//                    };
+//
+//                    input.click();
+//                }
+//            }
+//        }
+//    }
+//});
 
 // Quill 에디터에 서버에서 받은 HTML 본문을 안전하게 삽입
 window.onload = function() {

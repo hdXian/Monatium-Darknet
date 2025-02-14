@@ -5,6 +5,8 @@
 <head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
     <title>공지사항 작성</title>
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <!--/*[[ quill-blot-formatter2 스타일시트 ]]*/-->
+    <link href="https://cdn.jsdelivr.net/npm/@enzedonline/quill-blot-formatter2@2.3/dist/css/quill-blot-formatter2.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
     <link rel="stylesheet" th:href="@{/css/management/guide/guideForm.css}">
     <!--/*[[ 커스텀 css ]]*/-->
@@ -73,6 +75,9 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
+<!--/*[[ quill-blot-formatter2 모듈 ]]*/-->
+<script src="https://cdn.jsdelivr.net/npm/@enzedonline/quill-blot-formatter2@2.3/dist/js/quill-blot-formatter2.min.js"></script>
 
 <script th:src="@{/js/management/guide/guideAddForm.js}"></script>
 
