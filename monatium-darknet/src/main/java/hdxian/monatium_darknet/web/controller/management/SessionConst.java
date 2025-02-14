@@ -5,6 +5,10 @@ public interface SessionConst {
 
     public static final String CURRENT_LANG_CODE = "currentLangCode";
 
+    // 가이드 기능 관련 상수
+    public static final String GUIDE_FORM = "guideForm";
+    public static final String GUIDE_CATEGORY_FORM = "categoryForm";
+
     // 공지사항 기능 관련 상수
     public static final String NOTICE_FORM = "noticeForm";
     public static final String NOTICE_CATEGORY_FORM = "categoryForm";

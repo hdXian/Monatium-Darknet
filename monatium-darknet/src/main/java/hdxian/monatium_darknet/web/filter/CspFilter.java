@@ -10,7 +10,7 @@ import java.util.Base64;
 
 // csp 정책 및 nonce를 적용하는 필터
 
-@Component
+//@Component
 public class CspFilter implements Filter {
 
     private static final SecureRandom secureRandom = new SecureRandom();

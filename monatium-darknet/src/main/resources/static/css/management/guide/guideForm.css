@@ -1,0 +1,17 @@
+.ql-container {
+    min-height: 200px; /* 에디터 최소 높이 */
+}
+
+.info-group {
+    border: 2px solid #4CAF50;
+    border-radius: 10px;
+    padding: 20px;
+
+    /* v18 추가 */
+    margin-bottom: 20px;
+    background-color: #ffffff;
+}
+
+.img-thumbnail {
+    max-width: 300px;
+}
