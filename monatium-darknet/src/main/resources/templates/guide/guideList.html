@@ -11,8 +11,6 @@
     <!--/*[[ 커스텀 css ]]*/-->
 </head>
 
-<!-- TODO - 가이드 상세 페이지 추가 (공지사항 상세 페이지 활용) -->
-
 <body>
 
 <!--/*[[ 상단 네비게이션 바 ]]*/-->
@@ -72,6 +70,17 @@
                 </a>
             </div>
         </section>
+
+<!--        <section class="guide-list-section mt-5">-->
+<!--            <div class="guide-list">-->
+<!--                <h2 class="text-start mb-4" th:text="${curCategory.name}">카테고리 이름</h2>-->
+
+<!--                <div th:each="guide : ${guideList}" class="guide-item">-->
+<!--                    <a th:href="@{/{lang}/guides/{id} (lang=${language}, id=${guide.id})}" class="title" th:text="${guide.title}">가이드 제목</a>-->
+<!--                    <span class="date" th:text="${#dates.format(guide.createdDate, 'yyyy-MM-dd')}">2024-02-14</span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </section>-->
 
         <!--        <section class="guide-list-section mt-5">-->
 <!--            &lt;!&ndash; FAQ 목록 섹션 &ndash;&gt;-->

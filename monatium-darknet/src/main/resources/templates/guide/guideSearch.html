@@ -57,22 +57,35 @@
 
         <!--/*[[ 가이드 목록 섹션 ]]*/-->
         <section class="guide-list-section mt-5">
-            <!-- FAQ 목록 섹션 -->
             <div class="guide-list">
-                <h2 class="text-start mb-4" th:text="#{guide.search.title}">자주 묻는 질문</h2>
+                <h2 class="text-start mb-4" th:text="#{guide.search.title}">카테고리 이름</h2>
 
-                <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-center"
-                        th:each="guide : ${guideList}">
-                        <a th:href="@{/{lang}/guides/{id} (lang=${language}, id=${guide.id})}"
-                           class="guide-title"
-                           th:text="${guide.title}">질문 제목</a>
-                        <span class="guide-date" th:text="${#temporals.format(guide.date, 'yyyy-MM-dd')}">날짜</span>
-                    </li>
-                </ul>
+                <a th:each="guide : ${guideList}"
+                   th:href="@{/{lang}/guides/{id} (lang=${language}, id=${guide.id})}"
+                   class="guide-item mb-2">
+                    <span class="title" th:text="${guide.title}">가이드 제목</span>
+                    <span class="date" th:text="${#temporals.format(guide.date, 'yyyy-MM-dd')}">2024-02-14</span>
+                </a>
             </div>
-
         </section>
+
+<!--        <section class="guide-list-section mt-5">-->
+<!--            &lt;!&ndash; FAQ 목록 섹션 &ndash;&gt;-->
+<!--            <div class="guide-list">-->
+<!--                <h2 class="text-start mb-4" th:text="#{guide.search.title}">자주 묻는 질문</h2>-->
+
+<!--                <ul class="list-group">-->
+<!--                    <li class="list-group-item d-flex justify-content-between align-items-center"-->
+<!--                        th:each="guide : ${guideList}">-->
+<!--                        <a th:href="@{/{lang}/guides/{id} (lang=${language}, id=${guide.id})}"-->
+<!--                           class="guide-title"-->
+<!--                           th:text="${guide.title}">질문 제목</a>-->
+<!--                        <span class="guide-date" th:text="${#temporals.format(guide.date, 'yyyy-MM-dd')}">날짜</span>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+
+<!--        </section>-->
 
     </main>
 
