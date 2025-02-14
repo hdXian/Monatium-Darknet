@@ -23,7 +23,7 @@
     <form th:action="@{/management/guides/new}" th:object="${guideForm}" id="guide-form" method="post" class="info-group" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="title" class="form-label">제목</label>
-            <input th:field="*{title}" th:errorclass="field-error" type="text" id="title" name="title" class="form-control" placeholder="공지사항 제목을 입력하세요">
+            <input th:field="*{title}" th:errorclass="field-error" type="text" id="title" name="title" class="form-control" placeholder="가이드 제목을 입력하세요">
             <div class="field-error" th:errors="*{title}"></div>
         </div>
 
