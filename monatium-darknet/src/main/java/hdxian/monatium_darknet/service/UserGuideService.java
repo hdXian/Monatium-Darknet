@@ -3,10 +3,10 @@ package hdxian.monatium_darknet.service;
 import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.guide.UserGuide;
 import hdxian.monatium_darknet.domain.guide.UserGuideCategory;
-import hdxian.monatium_darknet.domain.notice.NoticeCategory;
 import hdxian.monatium_darknet.exception.IllegalLangCodeException;
-import hdxian.monatium_darknet.exception.notice.NoticeCategoryNotFoundException;
-import hdxian.monatium_darknet.exception.notice.NoticeImageProcessException;
+import hdxian.monatium_darknet.exception.guide.UserGuideCategoryNotFoundException;
+import hdxian.monatium_darknet.exception.guide.UserGuideImageProcessException;
+import hdxian.monatium_darknet.exception.guide.UserGuideNotFoundException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.repository.UserGuideCategoryRepository;
@@ -48,12 +48,12 @@ public class UserGuideService {
         Long categoryId = guideDto.getCategoryId();
         Optional<UserGuideCategory> findCategory = categoryRepository.findOne(categoryId);
         if (findCategory.isEmpty()) {
-            throw new RuntimeException("해당 가이드 카테고리가 없습니다.");
+            throw new UserGuideCategoryNotFoundException("해당 가이드 카테고리가 없습니다. categoryId = " + categoryId);
         }
 
         UserGuideCategory userGuideCategory = findCategory.get();
         if (langCode != userGuideCategory.getLangCode()) {
-            throw new RuntimeException("가이드 카테고리의 언어 코드가 맞지 않습니다.");
+            throw new IllegalLangCodeException("카테고리와 가이드의 언어 코드가 맞지 않습니다. Category LangCode = " + userGuideCategory.getLangCode() + ", LangCode to add = " + langCode);
         }
 
         // html 콘텐츠 필터링 (이상한 태그, 요소 제거)
@@ -86,14 +86,14 @@ public class UserGuideService {
         UserGuide userGuide = findOne(guideId);
 
         if (userGuide.getLangCode() != updateParam.getLangCode()) {
-            throw new IllegalLangCodeException("언어 코드가 맞지 않습니다.");
+            throw new IllegalLangCodeException("가이드의 언어 코드가 맞지 않습니다. UserGuide LangCode = " + userGuide.getLangCode() + ", LangCode to update = " + updateParam.getLangCode());
         }
 
         // 변경하려는 카테고리 유무 검증
         Long categoryId = updateParam.getCategoryId();
         Optional<UserGuideCategory> findCategory = categoryRepository.findOne(categoryId);
         if (findCategory.isEmpty()) {
-            throw new NoticeCategoryNotFoundException("해당 가이드 카테고리가 없습니다.");
+            throw new UserGuideCategoryNotFoundException("해당 가이드 카테고리가 없습니다. categoryId = " + categoryId);
         }
 
         // 공지사항-카테고리 간 언어코드 일치 검증
@@ -135,7 +135,7 @@ public class UserGuideService {
     public UserGuide findOne(Long guideId) {
         Optional<UserGuide> find = userGuideRepository.findOne(guideId);
         if (find.isEmpty()) {
-            throw new RuntimeException("해당 가이드를 찾을 수 없습니다.");
+            throw new UserGuideNotFoundException("해당 가이드를 찾을 수 없습니다. guideId = " + guideId);
         }
         return find.get();
     }
@@ -183,7 +183,7 @@ public class UserGuideService {
             try {
                 fileStorageService.copyFile(from, to);
             } catch (IOException e) {
-                throw new NoticeImageProcessException(e);
+                throw new UserGuideImageProcessException(e);
             }
 
             seq++;
@@ -211,7 +211,7 @@ public class UserGuideService {
     public UserGuideCategory findOneCategory(Long categoryId) {
         Optional<UserGuideCategory> find = categoryRepository.findOne(categoryId);
         if (find.isEmpty()) {
-            throw new RuntimeException("해당 가이드 카테고리를 찾을 수 없습니다.");
+            throw new UserGuideCategoryNotFoundException("해당 가이드 카테고리를 찾을 수 없습니다. categoryId = " + categoryId);
         }
         return find.get();
     }
