@@ -11,6 +11,9 @@
 
 </head>
 
+<!--/*[[TODO - 메인 페이지에 가이드 링크 추가해야 함 */-->
+<!--/*[[TODO - 퀵메뉴 리모컨에 유저 가이드 추가하는게 나으려나? */-->
+
 <body>
 <!--/*[[ 상단 네비게이션 바 ]]*/-->
 <nav th:replace="~{fragments/navbar :: common_navbar}">
@@ -437,8 +440,8 @@
     <!--/*[[ 닫기 버튼 ]]*/-->
     <button class="btn-close btn-close-white" id="btnCloseRemote"></button>
     <h4>Quick Menu</h4>
-    <a href="https://coupon.a.prod.service.trickcal.io" class="btn btn-custom" th:text="#{home.quick.coupon}">쿠폰 등록</a>
-    <a href="#" class="btn btn-custom" th:text="#{home.quick.newbie}">신규 유저 혜택</a>
+    <a th:href="@{https://coupon.a.prod.service.trickcal.io}" class="btn btn-custom" th:text="#{home.quick.coupon}">쿠폰 등록</a>
+    <a th:href="@{/{lang}/guides (lang=${language})}" class="btn btn-custom" th:text="#{home.quick.guide}">신규 유저 혜택</a>
     <a th:href="@{/{lang}/notices?category=3 (lang=${language})}" class="btn btn-custom" th:text="#{home.quick.event}">이벤트</a>
 </div>
 
