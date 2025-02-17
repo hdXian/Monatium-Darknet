@@ -53,15 +53,15 @@
         <!--/*[[ 가이드 ]]*/-->
         <article class="guide-detail">
             <!--/*[[ 가이드 제목 ]]*/-->
-            <h1 th:text="${guide.title}" class="guide-title mb-3">가이드 제목</h1>
-
-            <!--/*[[ 작성일 ]]*/-->
-            <p class="guide-date" th:text="${#temporals.format(guide.date, 'yyyy-MM-dd')}">
-                2024년 02월 14일
-            </p>
-
-            <!--/*[[ 구분선 ]]*/-->
-            <hr class="guide-divider">
+            <div class="guide-head">
+                <h1 th:text="${guide.title}" class="guide-title mb-3">가이드 제목</h1>
+                <!--/*[[ 작성일 ]]*/-->
+                <p class="guide-date" th:text="${#temporals.format(guide.date, 'yyyy-MM-dd')}">
+                    2024년 02월 14일
+                </p>
+                <!--/*[[ 구분선 ]]*/-->
+                <hr class="guide-divider">
+            </div>
 
             <!--/*[[ 가이드 본문 ]]*/-->
             <div class="guide-body" th:utext="${guide.content}">

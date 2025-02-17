@@ -141,10 +141,15 @@ body {
 */
 /* 가이드 제목 스타일 */
 .guide-detail {
-    max-width: 70%;
+    max-width: 100%;
+}
+
+.guide-head {
+    max-width: 100%;
 }
 
 .guide-title {
+    width: 80%;
     font-size: 2rem;
     font-weight: bold;
 }
@@ -157,6 +162,7 @@ body {
 
 /* 구분선 스타일 */
 .guide-divider {
+    width: 80%;
     border: none;
     height: 1px;
     background-color: black;
