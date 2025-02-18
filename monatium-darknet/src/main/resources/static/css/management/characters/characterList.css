@@ -19,7 +19,7 @@ h2 {
 */
 
 .btn-sm {
-    font-size: 0.8vw;
+    font-size: 0.9vw;
 }
 
 .btn-success {
@@ -159,35 +159,6 @@ h2 {
 
 .btn-danger {
     background-color: #DC3545;
-}
-
-/* =====================
-캐릭터 추가 모달 스타일
-===================== */
-.modal-content {
-    border-radius: 10px;
-}
-
-.modal-header {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.modal-body {
-    padding: 20px;
-}
-
-.form-control,
-.form-select {
-    border-radius: 5px;
-}
-
-.btn-close {
-    background-color: #f8f9fa;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    padding: 0;
 }
 
 /* 반응형 디자인 */

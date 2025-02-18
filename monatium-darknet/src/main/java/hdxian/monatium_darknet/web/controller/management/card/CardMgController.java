@@ -5,12 +5,14 @@ import hdxian.monatium_darknet.domain.Skill;
 import hdxian.monatium_darknet.domain.card.Card;
 import hdxian.monatium_darknet.domain.card.CardType;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.exception.card.CardImageProcessException;
 import hdxian.monatium_darknet.exception.card.CardTypeMisMatchException;
 import hdxian.monatium_darknet.file.FileDto;
 import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.repository.dto.CardSearchCond;
 import hdxian.monatium_darknet.repository.dto.CharacterSearchCond;
+import hdxian.monatium_darknet.security.CustomUserDetails;
 import hdxian.monatium_darknet.service.CardService;
 import hdxian.monatium_darknet.service.CharacterService;
 import hdxian.monatium_darknet.service.ImagePathService;
@@ -21,6 +23,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -53,6 +56,11 @@ public class CardMgController {
     @ModelAttribute(CURRENT_LANG_CODE)
     public LangCode crntLangCode(HttpSession session) {
         return Optional.ofNullable((LangCode)session.getAttribute(CURRENT_LANG_CODE)).orElse(LangCode.KO);
+    }
+
+    @ModelAttribute("loginMember")
+    public Member loginMember(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return userDetails.getMember();
     }
 
     // 아티팩트 카드 리스트
