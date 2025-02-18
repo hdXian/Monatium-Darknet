@@ -135,7 +135,9 @@
     margin-right: 8px; /* 텍스트와 간격 추가 */
 }
 
-/* TODO - 네비게이션 바 오른쪽 영역에 클래스 지정, 너비 얼마만큼 먹을지 지정, 그 하위 요소들 (언어 선택 드롭다운, 커뮤니티 이미지) 비율로 차지하도록 변경 */
+#selectedLanguage {
+    white-space: nowrap;
+}
 
 .navbar .language-select {
     position: relative;
