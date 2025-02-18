@@ -3,6 +3,7 @@ package hdxian.monatium_darknet.web.controller.management.guide;
 import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.guide.UserGuide;
 import hdxian.monatium_darknet.domain.guide.UserGuideCategory;
+import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.repository.dto.UserGuideSearchCond;
 import hdxian.monatium_darknet.security.CustomUserDetails;
 import hdxian.monatium_darknet.service.ImageUrlService;
@@ -37,6 +38,11 @@ public class GuideMgController {
     @ModelAttribute(CURRENT_LANG_CODE)
     public LangCode crntLangCode(HttpSession session) {
         return Optional.ofNullable((LangCode)session.getAttribute(CURRENT_LANG_CODE)).orElse(LangCode.KO);
+    }
+
+    @ModelAttribute("loginMember")
+    public Member loginMember(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return userDetails.getMember();
     }
 
     // 가이드 목록

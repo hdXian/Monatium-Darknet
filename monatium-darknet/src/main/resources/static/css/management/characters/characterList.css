@@ -1,17 +1,25 @@
 /* 공통 스타일 설정 */
+/*
 body {
-    background-color: #F9FAFB; /* 밝고 부드러운 배경색 */
-    font-family: 'Noto Sans KR', sans-serif; /* 깔끔한 한글 폰트 */
+    background-color: #F9FAFB;
+    font-family: 'Noto Sans KR', sans-serif;
 }
+*/
 
 h2 {
     color: #333;
     font-weight: bold;
 }
 
+/*
 .container-fluid {
     max-width: 1200px;
     margin: 0 auto;
+}
+*/
+
+.btn-sm {
+    font-size: 0.8vw;
 }
 
 .btn-success {
@@ -84,6 +92,11 @@ h2 {
     font-size: 1.1rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
+}
+
+/* 캐릭터 이름 */
+.card-title span {
+    white-space: nowrap;
 }
 
 .symbol-image {

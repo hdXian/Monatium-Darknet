@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<!--/*[[ 사이드바 ]]*/-->
+<nav th:fragment="management_sidebar" class="sidebar col-md-3 col-lg-2 d-md-block bg-light ms-2">
+
+    <!--/*[[ 사용자 정보 표시 영역 ]]*/-->
+    <div class="user-info text-center p-3">
+        안녕하세요. <br>
+        <span class="fw-bold" th:text="${loginMember.nickName}">사용자명</span>님!
+
+        <!--/*[[ 내 정보 관리 링크 ]]*/-->
+        <div>
+            <a th:href="@{/management/members/profile/{id} (id=${loginMember.id})}" class="text-primary text-decoration-underline mt-1 d-inline-block">
+                내 정보 관리
+            </a>
+        </div>
+
+    </div>
+
+    <div class="position-sticky">
+        <ul class="nav flex-column">
+            <li th:if="${loginMember.role.name() == 'SUPER'}" class="nav-item"><a class="nav-link" th:href="@{/management/members}">회원 관리</a></li>
+            <li class="nav-item"><a class="nav-link active" th:href="@{/management/notices}">공지사항 관리</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/management/characters}">캐릭터 관리</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/management/cards}">카드 관리</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/management/skins}">스킨 관리</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/management/guides}">사용자 가이드 관리</a></li>
+        </ul>
+    </div>
+
+</nav>
+
+</body>
+
+</html>
