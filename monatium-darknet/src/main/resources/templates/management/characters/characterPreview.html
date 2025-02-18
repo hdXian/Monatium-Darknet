@@ -33,11 +33,19 @@
 
         <!--/*[[ 본문 콘텐츠 섹션 ]]*/-->
         <main th:object="${character}" class="col-md-9 col-lg-10 content">
+
             <!--/*[[ 프로필 섹션 ]]*/-->
             <section id="profile" class="mb-5 container">
-                <h2 class="mb-4">프로필</h2>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="mb-4">프로필</h2>
+                    <a th:href="@{/management/characters/edit/{id} (id=*{id})}" class="btn btn-primary mb-4">수정하기</a>
+                </div>
+
                 <hr class="title-underline">
+
                 <div class="row align-items-center">
+
                     <!--/*[[ 좌측: 프로필 이미지와 정보 ]]*/-->
                     <div class="col-md-6 d-flex">
                         <div class="character-image me-4 d-flex align-items-center">
@@ -48,7 +56,7 @@
                                 <!--/*[[ 이름, 수식어, 등급 이미지 ]]*/-->
                                 <div class="d-flex align-items-start">
                                     <div class="d-flex flex-column">
-                                        <h3 th:text="*{name}" class="mb-1">캐릭터 이름</h3>
+                                        <h3 th:text="*{name}" class="character-name mb-1">캐릭터 이름</h3>
                                         <p th:text="*{subtitle}" class="character-subtitle mb-0">캐릭터 수식언</p>
                                     </div>
                                     <img th:src="@{ |${iconBaseUrl}star_*{grade}.webp| }" alt="등급 이미지" class="img-fluid grade-image ms-3">
@@ -206,7 +214,9 @@
 
                         </div>
                     </div>
+
                 </div>
+
             </section>                      
 
             <!--/*[[ 스킬 섹션 ]]*/-->
