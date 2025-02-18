@@ -1,8 +1,11 @@
 package hdxian.monatium_darknet.web.controller;
 
 import hdxian.monatium_darknet.exception.IllegalLangCodeException;
+import hdxian.monatium_darknet.exception.UrlLangCodeException;
 import hdxian.monatium_darknet.exception.card.CardNotFoundException;
 import hdxian.monatium_darknet.exception.character.CharacterNotFoundException;
+import hdxian.monatium_darknet.exception.guide.UserGuideCategoryNotFoundException;
+import hdxian.monatium_darknet.exception.guide.UserGuideNotFoundException;
 import hdxian.monatium_darknet.exception.member.PermissionException;
 import hdxian.monatium_darknet.exception.notice.NoticeNotFoundException;
 import hdxian.monatium_darknet.exception.skin.SkinNotFoundException;
@@ -48,9 +51,19 @@ public class ExControllerAdvice {
         response.sendError(HttpStatus.NOT_FOUND.value(), "invalid Skin Id");
     }
 
+    @ExceptionHandler(UserGuideNotFoundException.class)
+    public void handleUserGuideNFE(UserGuideNotFoundException ex, HttpServletResponse response) throws IOException {
+        response.sendError(HttpStatus.NOT_FOUND.value(), "invalid userGuide Id");
+    }
+
+    @ExceptionHandler(UserGuideCategoryNotFoundException.class)
+    public void handleUserGuideCategoryNFE(UserGuideCategoryNotFoundException ex, HttpServletResponse response) throws IOException {
+        response.sendError(HttpStatus.NOT_FOUND.value(), "invalid Category Id");
+    }
+
     // url의 lang부분에 다른 문자열을 입력했을 경우
     // LocaleResovler에서 EN, KO, JP 외의 Locale은 리턴하지 않기 때문에 locale에 대한 지원 여부 확인 로직은 제거해도 됨.
-    @ExceptionHandler(IllegalLangCodeException.class)
+    @ExceptionHandler(UrlLangCodeException.class)
     public String handleLangCodeEx(IllegalLangCodeException ex, Locale locale, HttpServletRequest request) {
         String uri = request.getRequestURI();
         String language = locale.getLanguage();

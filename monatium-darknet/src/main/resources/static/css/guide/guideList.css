@@ -1,0 +1,178 @@
+body {
+    background-color: #F0F8FF; /* 밝은 파스텔톤 배경 */
+}
+
+/* 표지 이미지 섹션 */
+.cover-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25vh;
+    max-width: 60%;
+    margin: 0 auto;
+}
+
+.cover-section img {
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+}
+
+/* 메인 컨텐츠 레이아웃 조정 */
+.main-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.content {
+    flex: 1;
+}
+
+/* 가이드 목록 링크 스타일 */
+.content a {
+    text-decoration: none;  /* 밑줄 제거 */
+    color: #333;  /* 기본 글씨색 (어두운 회색) */
+    font-size: 1.1rem;  /* 기존보다 살짝 키움 (1.1rem) */
+    transition: color 0.3s ease;
+}
+
+.content a:hover {
+    color: #4CAF50; /* 마우스 오버 시 초록색 강조 */
+}
+
+/* 좌측 네비게이션 스타일 */
+.side-nav {
+    width: 20%;
+    height: 100vh; /* 전체 높이 */
+    background-color: #F8F9FA; /* 연한 회색 배경 */
+    padding-top: 20px; /* 위쪽 여백 */
+}
+
+.side-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.side-nav a {
+    color: #333;
+    font-size: 1rem;
+    padding: 15px 20px;
+    display: block;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.side-nav a:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.side-nav .active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* 콘텐츠 스타일 */
+.content {
+    padding: 20px;
+}
+
+.guide-search-form {
+    width: 25%; /* 기존 30%에서 20%로 줄임 */
+    min-width: 180px; /* 너무 작아지지 않도록 최소 너비 설정 */
+}
+
+/* 검색 버튼 스타일 조정 */
+.guide-search-form button {
+    white-space: nowrap; /* 버튼 텍스트 줄바꿈 방지 */
+    padding: 5px 10px; /* 버튼 내부 여백 조정 */
+    font-size: 0.9rem; /* 버튼 글자 크기 조정 */
+}
+
+.guide-list-section {
+    display: flex;
+    justify-content: flex-start;
+    max-width: 70%;
+}
+
+.guide-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* 개별 가이드 항목을 카드 형태로 스타일링 */
+.guide-item {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.guide-item:hover {
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+/* 가이드 제목 스타일 */
+.guide-item .title {
+    font-size: 1.2rem;
+    color: #333;
+    text-decoration: none;
+}
+
+/* 가이드 날짜 스타일 */
+.guide-item .date {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+/*
+  가이드 본문
+*/
+/* 가이드 제목 스타일 */
+.guide-detail {
+    max-width: 100%;
+}
+
+.guide-head {
+    max-width: 100%;
+}
+
+.guide-title {
+    width: 80%;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* 작성일 스타일 */
+.guide-date {
+    font-size: 0.9rem;
+    color: #6c757d; /* Bootstrap의 muted 색상 */
+}
+
+/* 구분선 스타일 */
+.guide-divider {
+    width: 80%;
+    border: none;
+    height: 1px;
+    background-color: black;
+    margin-bottom: 20px;
+}
+
+/* 가이드 본문 스타일 */
+.guide-body {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #333;
+}
+

@@ -133,3 +133,24 @@ body {
     color: #808080;
 }
 
+/* 반응형 미디어 쿼리 */
+@media (max-width: 768px) {
+
+    /* 좌측 네비게이션 스타일 조정 */
+    .side-nav {
+        height: auto;
+        width: 100%;
+        padding: 10px;
+        display: flex;
+        justify-content: space-around;
+    }
+    .side-nav a {
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    /* 메인 콘텐츠 패딩 축소 */
+    .content {
+        padding: 10px;
+    }
+}

@@ -22,7 +22,7 @@ import org.springframework.security.web.session.SessionManagementFilter;
 @Configuration
 public class SecurityConfig {
 
-    private final CspFilter cspFilter; // DI
+//    private final CspFilter cspFilter; // DI
     private final ExpireSessionFilter expireSessionFilter;
 
     private final String sessionCookieName = "SID"; // 얘는 세션 쿠키 이름 지정하는게 아님. 정해져있는 이름의 쿠키를 지우기 위해 사용하는 변수.
@@ -45,7 +45,6 @@ public class SecurityConfig {
                         .requestMatchers("/management/disconnect/**").hasRole(MemberRole.SUPER.name())
                         .requestMatchers("/management/**").hasAnyRole(MemberRole.SUPER.name(), MemberRole.NORMAL.name())
                 )
-                .addFilterBefore(cspFilter, UsernamePasswordAuthenticationFilter.class) // 사용자 인증 필터의 앞 순서에 cspFilter를 추가
                 .addFilterAfter(expireSessionFilter, SessionManagementFilter.class) // 로그인 및 인증 후 세션 등록 전에 기존 세션 모두 만료 처리
                 .sessionManagement(session -> session
                         .sessionFixation().changeSessionId() // 로그인 시 세션 변경 (고정 세션 공격 방지)
@@ -82,8 +81,8 @@ public class SecurityConfig {
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 안 함
-                )
-                .addFilterBefore(cspFilter, UsernamePasswordAuthenticationFilter.class); // 사용자 인증 필터의 앞 순서에 cspFilter를 추가;
+                );
+                // .addFilterBefore(cspFilter, UsernamePasswordAuthenticationFilter.class); // 사용자 인증 필터의 앞 순서에 cspFilter를 추가;
 
         return http.build();
     }

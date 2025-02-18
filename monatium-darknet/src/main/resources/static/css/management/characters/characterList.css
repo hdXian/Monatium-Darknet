@@ -1,17 +1,25 @@
 /* 공통 스타일 설정 */
+/*
 body {
-    background-color: #F9FAFB; /* 밝고 부드러운 배경색 */
-    font-family: 'Noto Sans KR', sans-serif; /* 깔끔한 한글 폰트 */
+    background-color: #F9FAFB;
+    font-family: 'Noto Sans KR', sans-serif;
 }
+*/
 
 h2 {
     color: #333;
     font-weight: bold;
 }
 
+/*
 .container-fluid {
     max-width: 1200px;
     margin: 0 auto;
+}
+*/
+
+.btn-sm {
+    font-size: 0.9vw;
 }
 
 .btn-success {
@@ -86,6 +94,11 @@ h2 {
     margin-bottom: 0.5rem;
 }
 
+/* 캐릭터 이름 */
+.card-title span {
+    white-space: nowrap;
+}
+
 .symbol-image {
     width: 24px;
     height: 24px;
@@ -146,35 +159,6 @@ h2 {
 
 .btn-danger {
     background-color: #DC3545;
-}
-
-/* =====================
-캐릭터 추가 모달 스타일
-===================== */
-.modal-content {
-    border-radius: 10px;
-}
-
-.modal-header {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.modal-body {
-    padding: 20px;
-}
-
-.form-control,
-.form-select {
-    border-radius: 5px;
-}
-
-.btn-close {
-    background-color: #f8f9fa;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    padding: 0;
 }
 
 /* 반응형 디자인 */

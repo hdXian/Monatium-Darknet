@@ -3,60 +3,76 @@
 <head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
     <title>회원 관리</title>
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/management/sidebar.css}">
 </head>
 <body>
 <nav th:replace="~{fragments/navbar :: management_navbar}"></nav>
 
 <div class="main-content container-fluid mt-3">
-    <h2 class="mb-3">회원 관리</h2>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>로그인 ID</th>
-            <th>닉네임</th>
-            <th>등급</th>
-            <th>계정 활성화</th>
-            <th>접속 상태</th>
-            <th>연결 끊기</th>
-            <th>관리</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="member : ${memberList}">
-            <td th:text="${member.loginId}"></td>
-            <td th:text="${member.nickName}"></td>
-            <td th:text="${member.role.description}"></td>
-            <td>
-                <button th:classappend="${member.status.name() == 'ACTIVE' ? 'btn-success' : 'btn-secondary'}"
-                        th:data-id="${member.id}"
-                        th:data-nickName="${member.nickName}"
-                        th:data-status="${member.status.name()}"
-                        th:text="${member.status.name() == 'ACTIVE' ? '활성화 중' : '비활성화 중'}"
-                        class="btn btn-sm member-status-btn">
-                    활성화
-                </button>
-            </td>
-            <!-- 접속 상태 컬럼: member.online 값이 true이면 '접속 중', 아니면 '미접속'을 표시 -->
-            <td th:text="${isOnline[member.id] ? '접속 중' : '미접속'}"></td>
-            <!-- 연결 끊기 버튼 컬럼 -->
-            <td>
-                <!-- 접속 중일 때만 버튼 노출, sessionId를 data attribute로 전달 -->
-                <button th:if="${isOnline[member.id]}"
-                        class="btn btn-danger btn-sm member-logout-btn"
-                        th:data-id="${member.id}"
-                        th:data-nickName="${member.nickName}"
-                        type="button">
-                    연결 끊기
-                </button>
-                <!-- 접속 중이 아니라면 미접속 텍스트 표시 -->
-                <span th:if="${!isOnline[member.id]}">미접속</span>
-            </td>
-            <td>
-                <a th:href="@{/management/members/profile/{id}(id=${member.id})}" class="btn btn-primary btn-sm">사용자 정보</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+
+    <div class="row content-body">
+
+        <!--/*[[ 사이드바 ]]*/-->
+        <nav th:replace="~{fragments/sidebar :: management_sidebar}">
+            사이드바 영역
+        </nav>
+
+        <!-- 메인 컨텐츠 -->
+        <div class="col-md-7 col-lg-9 bg-white p-4 rounded shadow-sm mx-auto">
+            <h2 class="mb-3">회원 관리</h2>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>로그인 ID</th>
+                    <th>닉네임</th>
+                    <th>등급</th>
+                    <th>계정 활성화</th>
+                    <th>접속 상태</th>
+                    <th>연결 끊기</th>
+                    <th>관리</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="member : ${memberList}">
+                    <td th:text="${member.loginId}"></td>
+                    <td th:text="${member.nickName}"></td>
+                    <td th:text="${member.role.description}"></td>
+                    <td>
+                        <button th:classappend="${member.status.name() == 'ACTIVE' ? 'btn-success' : 'btn-secondary'}"
+                                th:data-id="${member.id}"
+                                th:data-nickName="${member.nickName}"
+                                th:data-status="${member.status.name()}"
+                                th:text="${member.status.name() == 'ACTIVE' ? '활성화 중' : '비활성화 중'}"
+                                class="btn btn-sm member-status-btn">
+                            활성화
+                        </button>
+                    </td>
+                    <!-- 접속 상태 컬럼: member.online 값이 true이면 '접속 중', 아니면 '미접속'을 표시 -->
+                    <td th:text="${isOnline[member.id] ? '접속 중' : '미접속'}"></td>
+                    <!-- 연결 끊기 버튼 컬럼 -->
+                    <td>
+                        <!-- 접속 중일 때만 버튼 노출, sessionId를 data attribute로 전달 -->
+                        <button th:if="${isOnline[member.id]}"
+                                class="btn btn-danger btn-sm member-logout-btn"
+                                th:data-id="${member.id}"
+                                th:data-nickName="${member.nickName}"
+                                type="button">
+                            연결 끊기
+                        </button>
+                        <!-- 접속 중이 아니라면 미접속 텍스트 표시 -->
+                        <span th:if="${!isOnline[member.id]}">미접속</span>
+                    </td>
+                    <td>
+                        <a th:href="@{/management/members/profile/{id}(id=${member.id})}" class="btn btn-primary btn-sm">사용자 정보</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
 </div>
 
 <footer th:replace="~{fragments/footer :: management_footer}"></footer>

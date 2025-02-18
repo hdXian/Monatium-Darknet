@@ -65,6 +65,24 @@ body {
         padding-left: 10px;         /* 좌측 패딩 추가 */
         padding-right: 10px;        /* 우측 패딩 추가 */
     }
+
+    /* 좌측 네비게이션 스타일 조정 */
+    .side-nav {
+        height: auto;
+        width: 100%;
+        padding: 10px;
+        display: flex;
+        justify-content: space-around;
+    }
+    .side-nav a {
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    /* 메인 콘텐츠 패딩 축소 */
+    .content {
+        padding: 10px;
+    }
 }
 
 /* 캐릭터 카드 스타일 */

@@ -5,6 +5,7 @@
 <head th:replace="~{fragments/header :: management_header(~{::title}, ~{::link})}">
     <title>사복 관리</title>
     <link rel="stylesheet" th:href="@{/css/management/commonStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/management/sidebar.css}">
     <link rel="stylesheet" th:href="@{/css/management/skins/skinList.css}">
     <!--/*[[ 커스텀 css ]]*/-->
 </head>
@@ -17,54 +18,67 @@
 </nav>
 
 <!--/*[[ 메인 콘텐츠 영역 ]]*/-->
-<div class="container mt-4 main-content">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 th:text="${categoryName != null} ? '사복 관리 (' + ${categoryName} + ')' : '사복 관리 (전체)'">사복 관리 제목</h2>
-        <div class="d-flex align-items-center">
-            <!--/*[[ 검색 창 ]]*/-->
-            <div class="d-flex me-3 align-items-center">
-                <input id="searchInput" type="text" name="query" class="form-control form-control-sm me-2" placeholder="사복 이름 검색" aria-label="검색">
-                <button id="searchButton" class="btn btn-primary btn-sm" type="submit">검색</button>
-            </div>
-            <a th:href="@{/management/skins/categories}" class="me-2"><button class="btn btn-primary">사복 카테고리 관리</button></a>
-            <a th:href="@{/management/skins/new}"><button class="btn btn-success">+ 사복 추가</button></a>
-        </div>
-    </div>
+<div class="container-fluid mt-4 main-content">
 
-    <!--/*[[ 사복 목록 ]]*/-->
-    <div class="row" id="skinList">
+    <div class="row content-body">
 
-        <!--/*[[ 사복 카드 (반복될 요소) ]]*/-->
-        <div th:each="skin : ${skinList}" class="col-6 col-sm-4 col-lg-2 mt-4 mb-4 g-3 skin-item">
+        <!--/*[[ 사이드바 ]]*/-->
+        <nav th:replace="~{fragments/sidebar :: management_sidebar}">
+            사이드바 영역
+        </nav>
 
-            <div class="card h-100">
-                <!--/*[[ 사복 이미지 ]]*/-->
-                <img th:src="@{ |${skinBaseUrl}${skin.id}| }" class="card-img-top" alt="스킨 이미지">
-
-                <!--/*[[ 사복 이름 ]]*/-->
-                <div class="card-body">
-                    <div class="card-title mb-2 d-inline-flex align-items-center">
-                        <span th:text="${skin.name}">사복 이름</span>
+        <!-- 메인 컨텐츠 -->
+        <div class="col-md-7 col-lg-9 bg-white p-4 rounded shadow-sm mx-auto">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 th:text="${categoryName != null} ? '사복 관리 (' + ${categoryName} + ')' : '사복 관리 (전체)'">사복 관리 제목</h2>
+                <div class="d-flex align-items-center">
+                    <!--/*[[ 검색 창 ]]*/-->
+                    <div class="d-flex me-3 align-items-center">
+                        <input id="searchInput" type="text" name="query" class="form-control form-control-sm me-2" placeholder="사복 이름 검색" aria-label="검색">
+                        <button id="searchButton" class="btn btn-primary btn-sm" type="submit">검색</button>
                     </div>
+                    <a th:href="@{/management/skins/categories}" class="me-2"><button class="btn btn-primary">사복 카테고리 관리</button></a>
+                    <a th:href="@{/management/skins/new}"><button class="btn btn-success">+ 사복 추가</button></a>
                 </div>
             </div>
 
-            <!--/*[[ 변경 및 삭제 버튼 ]]*/-->
-            <div class="d-flex justify-content-between mt-2 mb-2">
-                <!--/*[[ 정보 수정 버튼 ]]*/-->
-                <a th:href="@{/management/skins/edit/{id} (id=${skin.id})}" class="btn btn-sm btn-primary">정보 수정</a>
+            <!--/*[[ 사복 목록 ]]*/-->
+            <div class="row" id="skinList">
 
-                <!--/*[[ 활성화 스위치 ]]*/-->
-                <button th:classappend="${skin.status.name() == 'ACTIVE' ? 'btn-success' : 'btn-secondary'}"
-                        th:data-id="${skin.id}"
-                        th:data-name="${skin.name}"
-                        th:data-status="${skin.status.name()}"
-                        th:text="${skin.status.name() == 'ACTIVE' ? '활성화 중' : '비활성화 중'}"
-                        class="btn btn-sm toggle-skin-status">
-                    활성화 버튼
-                </button>
+                <!--/*[[ 사복 카드 (반복될 요소) ]]*/-->
+                <div th:each="skin : ${skinList}" class="col-6 col-sm-4 col-lg-2 mt-4 mb-4 g-3 skin-item">
+
+                    <div class="card h-100">
+                        <!--/*[[ 사복 이미지 ]]*/-->
+                        <img th:src="@{ |${skinBaseUrl}${skin.id}| }" class="card-img-top" alt="스킨 이미지">
+
+                        <!--/*[[ 사복 이름 ]]*/-->
+                        <div class="card-body">
+                            <div class="card-title mb-2 d-inline-flex align-items-center">
+                                <span th:text="${skin.name}">사복 이름</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--/*[[ 변경 및 삭제 버튼 ]]*/-->
+                    <div class="d-flex justify-content-between mt-2 mb-2">
+                        <!--/*[[ 정보 수정 버튼 ]]*/-->
+                        <a th:href="@{/management/skins/edit/{id} (id=${skin.id})}" class="btn btn-sm btn-primary">정보 수정</a>
+
+                        <!--/*[[ 활성화 스위치 ]]*/-->
+                        <button th:classappend="${skin.status.name() == 'ACTIVE' ? 'btn-success' : 'btn-secondary'}"
+                                th:data-id="${skin.id}"
+                                th:data-name="${skin.name}"
+                                th:data-status="${skin.status.name()}"
+                                th:text="${skin.status.name() == 'ACTIVE' ? '활성화 중' : '비활성화 중'}"
+                                class="btn btn-sm toggle-skin-status">
+                            활성화 버튼
+                        </button>
+                    </div>
+
+                </div>
+
             </div>
-
 
         </div>
 

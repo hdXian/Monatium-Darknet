@@ -2,6 +2,7 @@ package hdxian.monatium_darknet.web.controller.management.skin;
 
 import hdxian.monatium_darknet.domain.LangCode;
 import hdxian.monatium_darknet.domain.character.Character;
+import hdxian.monatium_darknet.domain.notice.Member;
 import hdxian.monatium_darknet.domain.skin.Skin;
 import hdxian.monatium_darknet.domain.skin.SkinCategory;
 import hdxian.monatium_darknet.domain.skin.SkinCategoryMapping;
@@ -11,6 +12,7 @@ import hdxian.monatium_darknet.file.LocalFileStorageService;
 import hdxian.monatium_darknet.repository.dto.CharacterSearchCond;
 import hdxian.monatium_darknet.repository.dto.SkinCategorySearchCond;
 import hdxian.monatium_darknet.repository.dto.SkinSearchCond;
+import hdxian.monatium_darknet.security.CustomUserDetails;
 import hdxian.monatium_darknet.service.CharacterService;
 import hdxian.monatium_darknet.service.ImagePathService;
 import hdxian.monatium_darknet.service.ImageUrlService;
@@ -21,6 +23,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -55,6 +58,11 @@ public class SkinMgController {
     @ModelAttribute(CURRENT_LANG_CODE)
     public LangCode crntLangCode(HttpSession session) {
         return Optional.ofNullable((LangCode)session.getAttribute(CURRENT_LANG_CODE)).orElse(LangCode.KO);
+    }
+
+    @ModelAttribute("loginMember")
+    public Member loginMember(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return userDetails.getMember();
     }
 
     // 스킨 목록
