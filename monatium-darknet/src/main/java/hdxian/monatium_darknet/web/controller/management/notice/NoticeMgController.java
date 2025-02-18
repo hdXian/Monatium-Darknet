@@ -51,6 +51,11 @@ public class NoticeMgController {
         return Optional.ofNullable((LangCode)session.getAttribute(CURRENT_LANG_CODE)).orElse(LangCode.KO);
     }
 
+    @ModelAttribute("loginMember")
+    public Member loginMember(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return userDetails.getMember();
+    }
+
     // 공지사항 목록 (대시보드 -> 공지사항 관리)
     @GetMapping
     public String noticeList(@ModelAttribute(CURRENT_LANG_CODE) LangCode langCode,

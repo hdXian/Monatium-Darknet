@@ -50,6 +50,11 @@ public class MemberMgController {
         return Optional.ofNullable((LangCode)session.getAttribute(CURRENT_LANG_CODE)).orElse(LangCode.KO);
     }
 
+    @ModelAttribute("loginMember")
+    public Member loginMember(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return userDetails.getMember();
+    }
+
     // 회원 목록
     @GetMapping
     public String memberList(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
@@ -126,7 +131,7 @@ public class MemberMgController {
 
         Member findMember = memberService.findOne(memberId);
 
-        model.addAttribute("loginMember", loginMember);
+//        model.addAttribute("loginMember", loginMember);
         model.addAttribute("member", findMember);
         return "management/members/memberInfo";
     }
@@ -144,7 +149,7 @@ public class MemberMgController {
 
         Member member = memberService.findOne(memberId);
 
-        model.addAttribute("loginMember", loginMember);
+//        model.addAttribute("loginMember", loginMember);
         model.addAttribute("member", member);
         model.addAttribute("passwordForm", new PasswordEditForm());
         return "management/members/memberEditForm";
@@ -207,7 +212,7 @@ public class MemberMgController {
         if (bindingResult.hasErrors()) {
             Member member = memberService.findOne(memberId);
 
-            model.addAttribute("loginMember", loginMember);
+//            model.addAttribute("loginMember", loginMember);
             model.addAttribute("member", member);
             return "management/members/memberEditForm";
         }

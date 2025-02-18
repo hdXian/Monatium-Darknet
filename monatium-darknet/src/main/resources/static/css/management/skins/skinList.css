@@ -43,4 +43,8 @@ button {
     justify-content: center; /* 텍스트 수평 중앙 정렬 */
 }
 
+.btn-sm {
+    font-size: 0.9vw;
+}
+
 

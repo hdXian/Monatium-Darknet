@@ -6,6 +6,7 @@ import hdxian.monatium_darknet.domain.aside.Aside;
 import hdxian.monatium_darknet.domain.aside.AsideSpec;
 import hdxian.monatium_darknet.domain.card.CardGrade;
 import hdxian.monatium_darknet.domain.character.*;
+import hdxian.monatium_darknet.domain.guide.UserGuideCategory;
 import hdxian.monatium_darknet.domain.notice.MemberRole;
 import hdxian.monatium_darknet.domain.notice.NoticeCategoryStatus;
 import hdxian.monatium_darknet.service.*;
@@ -28,6 +29,7 @@ public class TestDataInit {
     private final CharacterService characterService;
     private final SkinService skinService;
     private final CardService cardService;
+    private final UserGuideService userGuideService;
 
     private final ImagePathService imagePathService;
 
@@ -374,6 +376,95 @@ public class TestDataInit {
         Long cardId3 = cardService.createNewArtifactCard(cardDto_belita_jp, 6L, attachmentSkillJp, null);
 
         String cardBaseUrl = "/imgs/wiki/card/";
+
+        // 가이드 카테고리 추가
+//        Long guide_category_ko_id_1 = userGuideService.createNewUserGuideCategory(LangCode.KO, "게임이용");
+//        Long guide_category_ko_id_2 = userGuideService.createNewUserGuideCategory(LangCode.KO, "결제");
+//        Long guide_category_ko_id_3 = userGuideService.createNewUserGuideCategory(LangCode.KO, "계정");
+//        Long guide_category_ko_id_4 = userGuideService.createNewUserGuideCategory(LangCode.KO, "설치, 실행, 업데이트");
+//
+//        // 가이드 본문 추가 (2개씩)
+//        List<UserGuideDto> userGuideDtoKos = new ArrayList<>();
+//        userGuideDtoKos.add(new UserGuideDto(LangCode.KO, guide_category_ko_id_1, "게임이용 가이드 제목 1", "게임이용 가이드 본문 1"));
+//        userGuideDtoKos.add(new UserGuideDto(LangCode.KO, guide_category_ko_id_1, "게임이용 가이드 제목 2", "게임이용 가이드 본문 2"));
+//
+//        userGuideDtoKos.add(new UserGuideDto(LangCode.KO, guide_category_ko_id_2, "결제 가이드 제목 1", "결제 가이드 본문 1"));
+//        userGuideDtoKos.add(new UserGuideDto(LangCode.KO, guide_category_ko_id_2, "결제 가이드 제목 2", "결제 가이드 본문 2"));
+//
+//        userGuideDtoKos.add(new UserGuideDto(LangCode.KO, guide_category_ko_id_3, "계정 가이드 제목 1", "계정 가이드 본문 1"));
+//        userGuideDtoKos.add(new UserGuideDto(LangCode.KO, guide_category_ko_id_3, "계정 가이드 제목 2", "계정 가이드 본문 2"));
+//
+//        userGuideDtoKos.add(new UserGuideDto(LangCode.KO, guide_category_ko_id_4, "설치, 실행, 업데이트 가이드 제목 1", "설치, 실행, 업데이트 가이드 본문 1"));
+//        userGuideDtoKos.add(new UserGuideDto(LangCode.KO, guide_category_ko_id_4, "설치, 실행, 업데이트 가이드 제목 2", "설치, 실행, 업데이트 가이드 본문 2"));
+//
+//        for (UserGuideDto dto : userGuideDtoKos) {
+//            userGuideService.createNewUserGuide(dto);
+//        }
+
+        // Guide category addition (Korean, English, Japanese)
+        Long guide_category_ko_id_1 = userGuideService.createNewUserGuideCategory(LangCode.KO, "게임이용");
+        Long guide_category_ko_id_2 = userGuideService.createNewUserGuideCategory(LangCode.KO, "결제");
+        Long guide_category_ko_id_3 = userGuideService.createNewUserGuideCategory(LangCode.KO, "계정");
+        Long guide_category_ko_id_4 = userGuideService.createNewUserGuideCategory(LangCode.KO, "설치, 실행, 업데이트");
+
+        Long guide_category_en_id_1 = userGuideService.createNewUserGuideCategory(LangCode.EN, "Game Usage");
+        Long guide_category_en_id_2 = userGuideService.createNewUserGuideCategory(LangCode.EN, "Payment");
+        Long guide_category_en_id_3 = userGuideService.createNewUserGuideCategory(LangCode.EN, "Account");
+        Long guide_category_en_id_4 = userGuideService.createNewUserGuideCategory(LangCode.EN, "Installation, Execution, Update");
+
+        Long guide_category_jp_id_1 = userGuideService.createNewUserGuideCategory(LangCode.JP, "ゲーム利用");
+        Long guide_category_jp_id_2 = userGuideService.createNewUserGuideCategory(LangCode.JP, "決済");
+        Long guide_category_jp_id_3 = userGuideService.createNewUserGuideCategory(LangCode.JP, "アカウント");
+        Long guide_category_jp_id_4 = userGuideService.createNewUserGuideCategory(LangCode.JP, "インストール、実行、アップデート");
+
+        // Guide content addition (two for each category)
+        List<UserGuideDto> userGuideDtoList = new ArrayList<>();
+
+        // Korean
+        userGuideDtoList.add(new UserGuideDto(LangCode.KO, guide_category_ko_id_1, "게임이용 가이드 제목 1", "게임이용 가이드 본문 1"));
+        userGuideDtoList.add(new UserGuideDto(LangCode.KO, guide_category_ko_id_1, "게임이용 가이드 제목 2", "게임이용 가이드 본문 2"));
+
+        userGuideDtoList.add(new UserGuideDto(LangCode.KO, guide_category_ko_id_2, "결제 가이드 제목 1", "결제 가이드 본문 1"));
+        userGuideDtoList.add(new UserGuideDto(LangCode.KO, guide_category_ko_id_2, "결제 가이드 제목 2", "결제 가이드 본문 2"));
+
+        userGuideDtoList.add(new UserGuideDto(LangCode.KO, guide_category_ko_id_3, "계정 가이드 제목 1", "계정 가이드 본문 1"));
+        userGuideDtoList.add(new UserGuideDto(LangCode.KO, guide_category_ko_id_3, "계정 가이드 제목 2", "계정 가이드 본문 2"));
+
+        userGuideDtoList.add(new UserGuideDto(LangCode.KO, guide_category_ko_id_4, "설치, 실행, 업데이트 가이드 제목 1", "설치, 실행, 업데이트 가이드 본문 1"));
+        userGuideDtoList.add(new UserGuideDto(LangCode.KO, guide_category_ko_id_4, "설치, 실행, 업데이트 가이드 제목 2", "설치, 실행, 업데이트 가이드 본문 2"));
+
+        // English
+        userGuideDtoList.add(new UserGuideDto(LangCode.EN, guide_category_en_id_1, "Game Usage Guide Title 1", "Game Usage Guide Content 1"));
+        userGuideDtoList.add(new UserGuideDto(LangCode.EN, guide_category_en_id_1, "Game Usage Guide Title 2", "Game Usage Guide Content 2"));
+
+        userGuideDtoList.add(new UserGuideDto(LangCode.EN, guide_category_en_id_2, "Payment Guide Title 1", "Payment Guide Content 1"));
+        userGuideDtoList.add(new UserGuideDto(LangCode.EN, guide_category_en_id_2, "Payment Guide Title 2", "Payment Guide Content 2"));
+
+        userGuideDtoList.add(new UserGuideDto(LangCode.EN, guide_category_en_id_3, "Account Guide Title 1", "Account Guide Content 1"));
+        userGuideDtoList.add(new UserGuideDto(LangCode.EN, guide_category_en_id_3, "Account Guide Title 2", "Account Guide Content 2"));
+
+        userGuideDtoList.add(new UserGuideDto(LangCode.EN, guide_category_en_id_4, "Installation, Execution, Update Guide Title 1", "Installation, Execution, Update Guide Content 1"));
+        userGuideDtoList.add(new UserGuideDto(LangCode.EN, guide_category_en_id_4, "Installation, Execution, Update Guide Title 2", "Installation, Execution, Update Guide Content 2"));
+
+        // Japanese
+        userGuideDtoList.add(new UserGuideDto(LangCode.JP, guide_category_jp_id_1, "ゲーム利用ガイドタイトル 1", "ゲーム利用ガイド本文 1"));
+        userGuideDtoList.add(new UserGuideDto(LangCode.JP, guide_category_jp_id_1, "ゲーム利用ガイドタイトル 2", "ゲーム利用ガイド本文 2"));
+
+        userGuideDtoList.add(new UserGuideDto(LangCode.JP, guide_category_jp_id_2, "決済ガイドタイトル 1", "決済ガイド本文 1"));
+        userGuideDtoList.add(new UserGuideDto(LangCode.JP, guide_category_jp_id_2, "決済ガイドタイトル 2", "決済ガイド本文 2"));
+
+        userGuideDtoList.add(new UserGuideDto(LangCode.JP, guide_category_jp_id_3, "アカウントガイドタイトル 1", "アカウントガイド本文 1"));
+        userGuideDtoList.add(new UserGuideDto(LangCode.JP, guide_category_jp_id_3, "アカウントガイドタイトル 2", "アカウントガイド本文 2"));
+
+        userGuideDtoList.add(new UserGuideDto(LangCode.JP, guide_category_jp_id_4, "インストール、実行、アップデートガイドタイトル 1", "インストール、実行、アップデートガイド本文 1"));
+        userGuideDtoList.add(new UserGuideDto(LangCode.JP, guide_category_jp_id_4, "インストール、実行、アップデートガイドタイトル 2", "インストール、実行、アップデートガイド本文 2"));
+
+        // Save all guides
+        for (UserGuideDto dto : userGuideDtoList) {
+            userGuideService.createNewUserGuide(dto);
+        }
+
+
     }
 
     // attachmentSkill

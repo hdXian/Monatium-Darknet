@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!--/*[[ v7  ]]*/-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: common_header(~{::title}, ~{::link})}">
+    <title th:text="|#{guide.page.title} - #{page.title}|">이용 안내</title>
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/guide/guideList.css}">
+    <!--/*[[ 커스텀 css ]]*/-->
+</head>
+
+<!-- TODO - 가이드 상세 페이지 추가 (공지사항 상세 페이지 활용) -->
+
+<body>
+
+<!--/*[[ 상단 네비게이션 바 ]]*/-->
+<nav th:replace="~{fragments/navbar :: common_navbar}">
+    상단 네비게이션 바 영역
+</nav>
+
+<!--/*[[ 표지 이미지 섹션 ]]*/-->
+<section class="cover-section mt-3">
+    <img th:src="@{/imgs/banner/guideList.png}">
+</section>
+
+<!--/*[[ 전체 레이아웃 ]]*/-->
+<div class="main-content container-fluid">
+
+    <!--/*[[ 좌측 탭 네비게이션 ]]*/-->
+    <nav class="side-nav">
+        <ul>
+            <li class="nav-item">
+                <a class="nav-link"
+                   th:href="@{/{lang}/guides/search (lang=${language})}"
+                   th:text="#{guide.tab.all}">전체 검색</a>
+            </li>
+            <li class="nav-item" th:each="category : ${categoryList}">
+                <a class="nav-link"
+                   th:classappend="${curCategory.id == category.id} ? 'active'"
+                   th:href="@{/{lang}/guides (lang=${language}, category=${category.id})}"
+                   th:text="${category.name}">
+                    <!-- 카테고리 이름 -->
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!--/*[[ 우측 콘텐츠 ]]*/-->
+    <main class="content mt-5">
+
+        <!--/*[[ 가이드 ]]*/-->
+        <article class="guide-detail">
+            <!--/*[[ 가이드 제목 ]]*/-->
+            <div class="guide-head">
+                <h1 th:text="${guide.title}" class="guide-title mb-3">가이드 제목</h1>
+                <!--/*[[ 작성일 ]]*/-->
+                <p class="guide-date" th:text="${#temporals.format(guide.date, 'yyyy-MM-dd')}">
+                    2024년 02월 14일
+                </p>
+                <!--/*[[ 구분선 ]]*/-->
+                <hr class="guide-divider">
+            </div>
+
+            <!--/*[[ 가이드 본문 ]]*/-->
+            <div class="guide-body" th:utext="${guide.content}">
+                가이드 본문
+            </div>
+        </article>
+
+    </main>
+
+</div>
+
+<!--/*[[ 푸터 ]]*/-->
+<footer th:replace="~{fragments/footer :: common_footer}"></footer>
+
+<script th:src="@{/js/wiki/characterList.js}" defer></script>
+
+</body>
+</html>
