@@ -30,10 +30,13 @@ spring:
         persistence:
           schema-generation:
             # activate following configuration with [ddl-auto: none], you can get ddl query in file
+            # database.action: drop-and-create # drop and re-create scheme
             scripts:
-              # action: create
+              # action: drop-and-create
               # create-target: create.sql
-              # create-source: metadata
+              # create-source: metadata # entity-based creation
+              # drop-target: drop.sql
+              # drop-source: metadata
   web:
     resources:
       encoding:

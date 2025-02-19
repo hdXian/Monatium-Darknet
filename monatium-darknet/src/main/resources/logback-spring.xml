@@ -69,6 +69,25 @@
         </encoder>
     </appender>
 
+    <!-- p6spy 로그 appender -->
+<!--    <appender name="P6SPY-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+
+<!--        <file>logs/p6spy-sql.log</file>-->
+
+        <!-- 롤링 정책 -->
+<!--        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">-->
+<!--            &lt;!&ndash; SizeAndTimeBasedRollingPolicy 사용 시 새 로그 파일명에 사용할 넘버링 추가 필수 (없으면 오류 터짐)  &ndash;&gt;-->
+<!--            <fileNamePattern>${LOG_PATH}/sql/%d{yyyyMMdd}_${LOG_FILE_NAME}_p6spy_%i.log</fileNamePattern>-->
+<!--            <maxFileSize>10MB</maxFileSize> &lt;!&ndash; 10MB를 넘어가면 새로운 로그 파일 생성  &ndash;&gt;-->
+<!--            <maxHistory>30</maxHistory> &lt;!&ndash; 30일간 보관 &ndash;&gt;-->
+<!--            <totalSizeCap>1GB</totalSizeCap> &lt;!&ndash; 전체 로그 용량이 1GB를 넘어가면 오래된 로그 삭제 &ndash;&gt;-->
+<!--        </rollingPolicy>-->
+
+<!--        <encoder>-->
+<!--            <pattern>${LOG_PATTERN}</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+
     <!-- 최상위 로그 레벨 설정 -->
     <root level="INFO"> <!--- INFO 이상의 로그 (INFO, WARN, ERROR)만 저장 -->
         <appender-ref ref="CONSOLE" />
@@ -92,5 +111,11 @@
     <logger name="org.hibernate.orm.jdbc.bind" level="TRACE" additivity="false">
         <appender-ref ref="SQL_LOG_FILE" />
     </logger>
+
+    <!-- p6spy 로그 -->
+    <!-- 해당 패키지나 클래스에 적용하는 전체적인 로그 설정 -->
+<!--    <logger name="p6spy" level="INFO" additivity="false">-->
+<!--        <appender-ref ref="P6SPY-FILE"/>-->
+<!--    </logger>-->
 
 </configuration>
