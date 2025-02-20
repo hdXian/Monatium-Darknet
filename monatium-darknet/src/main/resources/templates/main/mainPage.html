@@ -12,6 +12,9 @@
 </head>
 
 <!-- TODO - 메인 페이지, 가이드 페이지, 공지사항 페이지 등 모바일 화면에서 볼 수 있도록 UI 개선 -->
+<!-- TODO - 이거 캐릭터 섹션 모바일 화면 너무 빡세다. 그냥 공식 사이트꺼 가져오는게 낫겠는데? -->
+<!-- 디자인으로 포폴 넣는 것도 아니고.. 이건 타협할 필요가 있는듯. -->
+<!-- 그래. 이건 타협하자. 공식꺼 가져오고 하자고.-->
 <!-- 여기까지만 만들고, 이력서 뿌리자! -->
 <!-- 버그를 잡기에는 끝도 없다. 완전무결하게 개발해놓는건 사실상 불가능함. 내가 짬밥이 안됨. -->
 
@@ -197,82 +200,88 @@
     <!--/*[[ 섹션 제목 ]]*/-->
     <h2 class="section-title">캐릭터</h2>
 
-    <div class="container characters-content d-flex justify-content-center align-items-center">
+    <div class=" characters-content d-flex justify-content-center align-items-center">
 
-        <div class="row w-100 align-items-center justify-content-center">
 
-            <!--/*[[ 왼쪽: 캐릭터 이미지 영역 ]]*/-->
-            <div class="characters-content-col d-flex justify-content-center align-items-center">
-                <div class="image-container d-flex justify-content-center align-items-center">
-                    <img id="main-character-img"
-                         th:src="${#lists.size(characterList) > 0} ? @{ |${chBaseUrl}body/${characterList[0].id}| } : ''"
-                         alt="캐릭터 이미지" class="character-img rounded">
-                </div>
+        <!--/*[[ 왼쪽: 캐릭터 이미지 영역 ]]*/-->
+        <div class="characters-content-col d-flex justify-content-start align-items-center">
+            <div class="image-container d-flex justify-content-center align-items-center">
+                <img id="main-character-img"
+                     th:src="@{|${staticMainUrl}/ch01.gif|}"
+                     alt="캐릭터 이미지" class="character-img rounded">
+            </div>
+        </div>
+
+        <!--                         th:src="${#lists.size(characterList) > 0} ? @{ |${chBaseUrl}body/${characterList[0].id}| } : ''"-->
+
+        <!--/*[[ 오른쪽: 캐릭터 정보 텍스트 ]]*/-->
+        <div class="characters-content-col d-flex align-items-center">
+
+            <div class="image-container d-flex justify-content-center align-items-center">
+                <img id="main-character-txt"
+                     th:src="@{|${staticMainUrl}/ch01-text.png|}"
+                     alt="캐릭터 이미지" class="character-img rounded">
             </div>
 
-            <!--/*[[ 오른쪽: 캐릭터 정보 텍스트 ]]*/-->
-            <div class="characters-content-col flex-column d-flex align-items-center">
+<!--            &lt;!&ndash;/*[[ 초상화 목록 ]]*/&ndash;&gt;-->
+<!--            <div class="character-portraits d-flex flex-wrap justify-content-center g-3"> &lt;!&ndash;/*[[ 자동 줄바꿈 ]]*/&ndash;&gt;-->
+<!--                <div th:each="character: ${characterList}" class="portrait-container">-->
+<!--                    <img th:src="@{ |${chBaseUrl}portrait/${character.id}| }" alt="캐릭터 1" class="character-portrait"-->
+<!--                    th:data-target="|character-info-${character.id}|"-->
+<!--                    th:data-img="@{ |${chBaseUrl}body/${character.id}| }"-->
+<!--                    th:data-portrait="@{ |${chBaseUrl}portrait/${character.id}| }">-->
+<!--                </div>-->
+<!--            </div>-->
 
-                <!--/*[[ 초상화 목록 ]]*/-->
-                <div class="character-portraits d-flex flex-wrap justify-content-center g-3"> <!--/*[[ 자동 줄바꿈 ]]*/-->
-                    <div th:each="character: ${characterList}" class="portrait-container">
-                        <img th:src="@{ |${chBaseUrl}portrait/${character.id}| }" alt="캐릭터 1" class="character-portrait"
-                        th:data-target="|character-info-${character.id}|"
-                        th:data-img="@{ |${chBaseUrl}body/${character.id}| }"
-                        th:data-portrait="@{ |${chBaseUrl}portrait/${character.id}| }">
-                    </div>
-                </div>
+<!--            &lt;!&ndash;/*[[ 캐릭터 정보 ]]*/&ndash;&gt;-->
+<!--            <div th:each="character, stat: ${characterList}" th:id="|character-info-${character.id}|"-->
+<!--                 class="character-info mx-auto d-flex flex-column align-items-center justify-content-center"-->
+<!--                 th:classappend=" ${stat.count == 1} ? '' : 'd-none' ">-->
 
-                <!--/*[[ 캐릭터 정보 ]]*/-->
-                <div th:each="character, stat: ${characterList}" th:id="|character-info-${character.id}|"
-                     class="character-info mx-auto d-flex flex-column align-items-center justify-content-center"
-                     th:classappend=" ${stat.count == 1} ? '' : 'd-none' ">
+<!--                &lt;!&ndash;/*[[ 초상화 이미지와 이름, 수식어 ]]*/&ndash;&gt;-->
+<!--                <div class="character-title d-flex align-items-center justify-content-center">-->
+<!--                    <div class="portrait-container">-->
+<!--                        <img th:src="@{ |${chBaseUrl}portrait/${character.id}| }" alt="캐릭터 1" class="info-portrait">-->
+<!--                    </div>-->
+<!--                    <div>-->
+<!--                        <div th:text="${character.name}" class="character-info-text mb-1"> 캐릭터 이름 <span th:text="${character.subtitle}" class="character-subtitle"> 캐릭터 수식언 </span></div>-->
+<!--                        <div class="character-info-text">CV. <span th:text="${character.cv}" class="character-cv"> 캐릭터 성우 </span></div>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                    <!--/*[[ 초상화 이미지와 이름, 수식어 ]]*/-->
-                    <div class="character-title d-flex align-items-center justify-content-center">
-                        <div class="portrait-container">
-                            <img th:src="@{ |${chBaseUrl}portrait/${character.id}| }" alt="캐릭터 1" class="info-portrait">
-                        </div>
-                        <div>
-                            <div th:text="${character.name}" class="character-info-text mb-1"> 캐릭터 이름 <span th:text="${character.subtitle}" class="character-subtitle"> 캐릭터 수식언 </span></div>
-                            <div class="character-info-text">CV. <span th:text="${character.cv}" class="character-cv"> 캐릭터 성우 </span></div>
-                        </div>
-                    </div>
+<!--                &lt;!&ndash;/*[[ 한마디와 TMI를 묶고, 가운데 정렬 ]]*/&ndash;&gt;-->
+<!--                <div class="character-info-text text-center">-->
 
-                    <!--/*[[ 한마디와 TMI를 묶고, 가운데 정렬 ]]*/-->
-                    <div class="character-info-text text-center">
+<!--                    &lt;!&ndash;/*[[ 종족명 및 심볼 ]]*/&ndash;&gt;-->
+<!--                    <div class="d-flex align-items-center justify-content-center gap-2">-->
+<!--                        <span th:text="|#{race.txt}:|">-->
+<!--                            종족:-->
+<!--                        </span>-->
+<!--                        <th:block th:switch="${{character.race}}">-->
+<!--                            <span th:case="'fairy'" th:text="#{race.fairy}" class="character-race">종족명</span>-->
+<!--                            <span th:case="'witch'" th:text="#{race.witch}" class="character-race">종족명</span>-->
+<!--                            <span th:case="'furry'" th:text="#{race.furry}" class="character-race">종족명</span>-->
+<!--                            <span th:case="'dragon'" th:text="#{race.dragon}" class="character-race">종족명</span>-->
+<!--                            <span th:case="'ghost'" th:text="#{race.ghost}" class="character-race">종족명</span>-->
+<!--                            <span th:case="'spirit'" th:text="#{race.spirit}" class="character-race">종족명</span>-->
+<!--                            <span th:case="'elf'" th:text="#{race.elf}" class="character-race">종족명</span>-->
+<!--                        </th:block>-->
+<!--                        <img th:src="@{ |${iconBaseUrl}race_${{character.race}}.webp| }" class="symbol-icon" alt="종족 심볼">-->
+<!--                    </div>-->
 
-                        <!--/*[[ 종족명 및 심볼 ]]*/-->
-                        <div class="d-flex align-items-center justify-content-center gap-2">
-                            <span th:text="|#{race.txt}:|">
-                                종족:
-                            </span>
-                            <th:block th:switch="${{character.race}}">
-                                <span th:case="'fairy'" th:text="#{race.fairy}" class="character-race">종족명</span>
-                                <span th:case="'witch'" th:text="#{race.witch}" class="character-race">종족명</span>
-                                <span th:case="'furry'" th:text="#{race.furry}" class="character-race">종족명</span>
-                                <span th:case="'dragon'" th:text="#{race.dragon}" class="character-race">종족명</span>
-                                <span th:case="'ghost'" th:text="#{race.ghost}" class="character-race">종족명</span>
-                                <span th:case="'spirit'" th:text="#{race.spirit}" class="character-race">종족명</span>
-                                <span th:case="'elf'" th:text="#{race.elf}" class="character-race">종족명</span>
-                            </th:block>
-                            <img th:src="@{ |${iconBaseUrl}race_${{character.race}}.webp| }" class="symbol-icon" alt="종족 심볼">
-                        </div>
+<!--                    &lt;!&ndash;/*[[ 캐릭터 한마디 ]]*/&ndash;&gt;-->
+<!--                    <div class="info-subtitle" th:text="#{home.character.quote}">한마디</div> &lt;!&ndash;/*[[ 소제목 ]]*/&ndash;&gt;-->
+<!--                    <div th:text="${character.quote}">캐릭터 한 마디</div>-->
 
-                        <!--/*[[ 캐릭터 한마디 ]]*/-->
-                        <div class="info-subtitle" th:text="#{home.character.quote}">한마디</div> <!--/*[[ 소제목 ]]*/-->
-                        <div th:text="${character.quote}">캐릭터 한 마디</div>
+<!--                    &lt;!&ndash;/*[[ 캐릭터 좋아하는 것 ]]*/&ndash;&gt;-->
+<!--                    <div class="info-subtitle" th:text="#{home.character.favorite}">좋아하는 것</div> &lt;!&ndash;/*[[ 소제목 ]]*/&ndash;&gt;-->
+<!--                    <div th:text="${character.favorite}">캐릭터 좋아하는 것</div>-->
 
-                        <!--/*[[ 캐릭터 좋아하는 것 ]]*/-->
-                        <div class="info-subtitle" th:text="#{home.character.favorite}">좋아하는 것</div> <!--/*[[ 소제목 ]]*/-->
-                        <div th:text="${character.favorite}">캐릭터 좋아하는 것</div>
-
-                    </div>
-                </div>
-
-            </div>
+<!--                </div>-->
+<!--            </div>-->
 
         </div>
+
 
     </div>
 
