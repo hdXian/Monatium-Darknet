@@ -318,14 +318,14 @@ h2.section-title {
 /* 이미지 컨테이너 스타일 */
 .characters-content .image-container {
     height: 100%;
-    padding-bottom: 3rem;
 }
 
 /* 캐릭터 섹션 좌측 이미지 */
 .character-img {
     width: 100%;         /* 이미지가 컨테이너를 채움 */
-    height: 100%;
+    max-height: 80%;
     object-fit: contain;
+    pointer-events: none;
 }
 
 /* 캐릭터 이미지 애니메이션 */
@@ -503,7 +503,7 @@ h2.section-title {
 
     /* 공지사항 섹션 크기 조정 */
     .notice-section {
-        height: 130vh; /* 모바일 화면에서 높이를 화면 높이와 맞춤 */
+        height: auto; /* 모바일 화면에서 높이를 화면 높이와 맞춤 */
         padding: 2rem 0; /* 여백 줄이기 */
         display: flex;
         align-items: center;
@@ -604,51 +604,66 @@ h2.section-title {
         max-width: 600px;
     }
 
-    /* 캐릭터 섹션 전체 높이 및 여백 조정 */
+
+    /* 캐릭터 섹션 높이 자동 조정 */
     .characters-section {
-        height: 100vh;
-        padding: 2rem 0;
-    }
-
-    /* 캐릭터 섹션 컨텐츠: 세로 배치 및 간격 추가 */
-    .characters-content {
-        height: auto;
+        background-image: url('/imgs/main/cont04-m-bg.jpg'); /* 모바일 전용 배경 */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh; /* 고정된 비율 대신 컨텐츠 크기에 맞게 조정 */
+        padding: 20px 0;
         display: flex;
-        flex-direction: column;
-        gap: 15px;
-
-        background: #FFFFF0;           /* 아이보리 배경색 */
-        border: 5px solid #2E8B57;      /* 초록색 테두리 */
-        border-radius: 15px;            /* 둥근 모서리 */
+        flex-direction: column; /* 모바일에서 세로 배치 */
+        align-items: center;
+        text-align: center;
     }
 
-    /* 내부 row도 세로 정렬로 변경 */
-    .characters-content .row {
-        flex-direction: column;
-        gap: 15px;
+    /* 캐릭터 컨텐츠 컬럼 - 세로 정렬 */
+    .characters-content {
+        height: 100%;
+        width: 100%
+        display: flex;
+        flex-direction: column; /* 데스크톱 좌우 배치를 모바일에서 세로 배치로 변경 */
+        align-items: center;
+        justify-content: center;
     }
 
-    /* 양쪽 컬럼을 전체 너비로 확장 */
-    .characters-content-col {
+    .characters-content .characters-content-col {
         width: 100%;
-    }
-
-    /* 왼쪽 이미지 영역 조정 */
-    .characters-content .image-container {
-        width: 80%;
+        height: 50%;
         margin: 0 auto;
     }
 
-    /* 캐릭터 정보 텍스트 크기 조정 */
-    .characters-content .character-info-text {
-        font-size: 0.8rem; /* 공지사항 섹션의 제목과 유사한 크기 */
+    .image-container {
+        max-width: 90%;
     }
 
-    /* 초상화 이미지 크기 축소 */
-    .character-portrait,
-    .info-portrait {
-        width: 60%;
+    /* 캐릭터 이미지 크기 조정 */
+    .image-container .character-img {
+        width: 90%; /* 화면에 꽉 차지 않도록 설정 */
+        height: auto; /* 가로세로 비율 유지 */
+        object-fit: contain;
+        transform: scale(1.3); /* 이미지 자체를 확대 */
     }
+
+    /* 캐릭터 텍스트 이미지 크기 조정 */
+    .character-text-img {
+        max-width: 80%;
+        height: auto;
+    }
+
+    /* 좌우 캐릭터 변경 버튼 - 모바일에서 아래로 배치 */
+    .character-btn {
+        position: relative;
+        top: auto;
+        bottom: 0;
+        padding: 0;
+        margin-top: 15px;
+        width: 40px;
+        height: 40px;
+    }
+
 
 }
 
