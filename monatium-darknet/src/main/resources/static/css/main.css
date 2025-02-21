@@ -304,9 +304,6 @@ h2.section-title {
 .characters-content {
     width: 100%;
     height: 45vw;
-    /* background-color: #D3D3D3; */
-    /* background: url('/imgs/bkg/main_book.png') no-repeat center center; */
-    /* background-size: contain; *//
 
     margin: 0 auto; /* 중앙 정렬 */
 }
@@ -314,94 +311,56 @@ h2.section-title {
 /* 양쪽 컨텐츠 영역 */
 .characters-content .characters-content-col {
     width: 45%;
-    /* background-color: #333; */
+    height: 100%;
+    margin-bottom: 3rem;
 }
 
 /* 이미지 컨테이너 스타일 */
 .characters-content .image-container {
     height: 100%;
-    margin-bottom: 3rem;
-    /* width: 70%; */
-    /* margin-left: 5%; */
-    /* background-color: #D3D3D3; */
+    padding-bottom: 3rem;
 }
 
 /* 캐릭터 섹션 좌측 이미지 */
 .character-img {
     width: 100%;         /* 이미지가 컨테이너를 채움 */
+    height: 100%;
     object-fit: contain;
 }
 
-.character-portraits {
-    width: 90%;
-    max-height: 30%;
-    margin-bottom: 5%;
-
-    /* background-color: #4682B4; */
+/* 캐릭터 이미지 애니메이션 */
+.character-img,
+.character-text-img {
+    transition: opacity 0.2s ease-in-out;
+    opacity: 1;
 }
 
-/* 캐릭터 섹션 우측 초상화 컨테이너 */
-.character-portraits .portrait-container {
-    width: 20%;
-    margin: 2%;    /* 이미지 사이의 간격 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* background-color: #45A049; */
+.fade-out {
+    opacity: 0;
 }
 
-.character-info {
-    width: 100%;
-    margin-top: 5%;
-
-    /* background-color: #D3D3D3; */
+.character-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-/* 캐릭터 소개 섹션 초상화 */
-.character-info .portrait-container {
-    width: 20%;
-
-    display: flex;
-    justify-content: center;
-    /* background-color: #45A049; */
-    margin: 0 5%;
+/* 왼쪽 버튼 위치 */
+.character-btn-prev {
+    left: 10px; /* 이미지 왼쪽 바깥 */
 }
 
-/* 캐릭터 섹션 우측 초상화 이미지 */
-.character-portrait,
-.info-portrait {
-    width: 75%;  /* 원하는 이미지 너비 */
-    object-fit: cover; /* 이미지 비율 유지하며 잘라내기 */
-    border-radius: 10px; /* 모서리 둥글게 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 가벼운 그림자 */
+/* 오른쪽 버튼 위치 */
+.character-btn-next {
+    right: 10px; /* 이미지 오른쪽 바깥 */
 }
 
-.character-title {
-    width: 100%;
-    margin-right: 5%;
-    margin-bottom: 5%;
-}
-
-.characters-content .character-info-text {
-    font-size: clamp(0rem, 1vw, 1.5rem); /* 최소 1rem, 최대 2rem */
-}
-
-.character-title .character-subtitle {
-    font-size: clamp(0rem, 1vw, 1rem); /* 최소 1rem, 최대 2rem */
-    color: #6c757d;
-}
-
-.character-info-text .info-subtitle {
-    margin-top: 5%;
-    margin-bottom: 3%;
-}
-
-/* 캐릭터 소개 섹션의 종족 심볼 */
-.symbol-icon {
-    width: 12%;    /* 적절한 크기로 조절 */
-    height: 12%;   /* 이미지의 정사각형 비율 유지 */
-    object-fit: contain;  /* 원본 비율 유지 */
-}
 
 /* 캐릭터 소개 섹션 스타일 끝 */
 

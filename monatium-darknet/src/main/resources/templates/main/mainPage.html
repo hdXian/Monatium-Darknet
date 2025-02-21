@@ -200,87 +200,77 @@
     <!--/*[[ 섹션 제목 ]]*/-->
     <h2 class="section-title">캐릭터</h2>
 
-    <div class=" characters-content d-flex justify-content-center align-items-center">
+    <div class="characters-content row d-flex justify-content-center align-items-center">
 
+        <!-- 좌측: 캐릭터 이미지 (캐러셀 적용) -->
+        <div class="characters-content-col col-md-6 text-center">
 
-        <!--/*[[ 왼쪽: 캐릭터 이미지 영역 ]]*/-->
-        <div class="characters-content-col d-flex justify-content-start align-items-center">
-            <div class="image-container d-flex justify-content-center align-items-center">
-                <img id="main-character-img"
-                     th:src="@{|${staticMainUrl}/ch01.gif|}"
-                     alt="캐릭터 이미지" class="character-img rounded">
+            <div class="image-container d-flex justify-content-center align-items-center position-relative">
+                <button id="prevCharacter" class="character-btn character-btn-prev btn">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+
+                <img id="characterImg" th:src="@{|${staticMainUrl}/ch01.gif|}" alt="캐릭터" class="character-img">
+
+                <button id="nextCharacter" class="character-btn character-btn-next btn">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
             </div>
+
+
+<!--            <div id="characterCarousel" class="carousel slide" data-bs-ride="false">-->
+<!--                <div class="carousel-inner">-->
+<!--                    <div class="carousel-item active" th:data-text-img="@{/imgs/main/ch01-text.png}">-->
+<!--                        <img th:src="@{/imgs/main/ch01.gif}" alt="에르핀" class="character-img">-->
+<!--                    </div>-->
+<!--                    <div class="carousel-item" th:data-text-img="@{/imgs/main/ch02-text.png}">-->
+<!--                        <img th:src="@{/imgs/main/ch02.gif}" alt="캐릭터2" class="character-img">-->
+<!--                    </div>-->
+<!--                    <div class="carousel-item" th:data-text-img="@{/imgs/main/ch03-text.png}">-->
+<!--                        <img th:src="@{/imgs/main/ch03.gif}" alt="캐릭터3" class="character-img">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; 이전/다음 버튼 &ndash;&gt;-->
+<!--                <button class="carousel-control-prev" type="button" data-bs-target="#characterCarousel" data-bs-slide="prev">-->
+<!--                    <span class="carousel-control-prev-icon"></span>-->
+<!--                </button>-->
+<!--                <button class="carousel-control-next" type="button" data-bs-target="#characterCarousel" data-bs-slide="next">-->
+<!--                    <span class="carousel-control-next-icon"></span>-->
+<!--                </button>-->
+<!--            </div>-->
+
         </div>
 
-        <!--                         th:src="${#lists.size(characterList) > 0} ? @{ |${chBaseUrl}body/${characterList[0].id}| } : ''"-->
-
-        <!--/*[[ 오른쪽: 캐릭터 정보 텍스트 ]]*/-->
+        <!-- 우측: 캐릭터 텍스트 이미지 -->
         <div class="characters-content-col d-flex align-items-center">
 
             <div class="image-container d-flex justify-content-center align-items-center">
-                <img id="main-character-txt"
+                <img id="characterText"
                      th:src="@{|${staticMainUrl}/ch01-text.png|}"
                      alt="캐릭터 이미지" class="character-img rounded">
             </div>
 
-<!--            &lt;!&ndash;/*[[ 초상화 목록 ]]*/&ndash;&gt;-->
-<!--            <div class="character-portraits d-flex flex-wrap justify-content-center g-3"> &lt;!&ndash;/*[[ 자동 줄바꿈 ]]*/&ndash;&gt;-->
-<!--                <div th:each="character: ${characterList}" class="portrait-container">-->
-<!--                    <img th:src="@{ |${chBaseUrl}portrait/${character.id}| }" alt="캐릭터 1" class="character-portrait"-->
-<!--                    th:data-target="|character-info-${character.id}|"-->
-<!--                    th:data-img="@{ |${chBaseUrl}body/${character.id}| }"-->
-<!--                    th:data-portrait="@{ |${chBaseUrl}portrait/${character.id}| }">-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            &lt;!&ndash;/*[[ 캐릭터 정보 ]]*/&ndash;&gt;-->
-<!--            <div th:each="character, stat: ${characterList}" th:id="|character-info-${character.id}|"-->
-<!--                 class="character-info mx-auto d-flex flex-column align-items-center justify-content-center"-->
-<!--                 th:classappend=" ${stat.count == 1} ? '' : 'd-none' ">-->
-
-<!--                &lt;!&ndash;/*[[ 초상화 이미지와 이름, 수식어 ]]*/&ndash;&gt;-->
-<!--                <div class="character-title d-flex align-items-center justify-content-center">-->
-<!--                    <div class="portrait-container">-->
-<!--                        <img th:src="@{ |${chBaseUrl}portrait/${character.id}| }" alt="캐릭터 1" class="info-portrait">-->
-<!--                    </div>-->
-<!--                    <div>-->
-<!--                        <div th:text="${character.name}" class="character-info-text mb-1"> 캐릭터 이름 <span th:text="${character.subtitle}" class="character-subtitle"> 캐릭터 수식언 </span></div>-->
-<!--                        <div class="character-info-text">CV. <span th:text="${character.cv}" class="character-cv"> 캐릭터 성우 </span></div>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--                &lt;!&ndash;/*[[ 한마디와 TMI를 묶고, 가운데 정렬 ]]*/&ndash;&gt;-->
-<!--                <div class="character-info-text text-center">-->
-
-<!--                    &lt;!&ndash;/*[[ 종족명 및 심볼 ]]*/&ndash;&gt;-->
-<!--                    <div class="d-flex align-items-center justify-content-center gap-2">-->
-<!--                        <span th:text="|#{race.txt}:|">-->
-<!--                            종족:-->
-<!--                        </span>-->
-<!--                        <th:block th:switch="${{character.race}}">-->
-<!--                            <span th:case="'fairy'" th:text="#{race.fairy}" class="character-race">종족명</span>-->
-<!--                            <span th:case="'witch'" th:text="#{race.witch}" class="character-race">종족명</span>-->
-<!--                            <span th:case="'furry'" th:text="#{race.furry}" class="character-race">종족명</span>-->
-<!--                            <span th:case="'dragon'" th:text="#{race.dragon}" class="character-race">종족명</span>-->
-<!--                            <span th:case="'ghost'" th:text="#{race.ghost}" class="character-race">종족명</span>-->
-<!--                            <span th:case="'spirit'" th:text="#{race.spirit}" class="character-race">종족명</span>-->
-<!--                            <span th:case="'elf'" th:text="#{race.elf}" class="character-race">종족명</span>-->
-<!--                        </th:block>-->
-<!--                        <img th:src="@{ |${iconBaseUrl}race_${{character.race}}.webp| }" class="symbol-icon" alt="종족 심볼">-->
-<!--                    </div>-->
-
-<!--                    &lt;!&ndash;/*[[ 캐릭터 한마디 ]]*/&ndash;&gt;-->
-<!--                    <div class="info-subtitle" th:text="#{home.character.quote}">한마디</div> &lt;!&ndash;/*[[ 소제목 ]]*/&ndash;&gt;-->
-<!--                    <div th:text="${character.quote}">캐릭터 한 마디</div>-->
-
-<!--                    &lt;!&ndash;/*[[ 캐릭터 좋아하는 것 ]]*/&ndash;&gt;-->
-<!--                    <div class="info-subtitle" th:text="#{home.character.favorite}">좋아하는 것</div> &lt;!&ndash;/*[[ 소제목 ]]*/&ndash;&gt;-->
-<!--                    <div th:text="${character.favorite}">캐릭터 좋아하는 것</div>-->
-
-<!--                </div>-->
-<!--            </div>-->
-
         </div>
+
+        <!--/*[[ 왼쪽: 캐릭터 이미지 영역 ]]*/-->
+<!--        <div class="characters-content-col d-flex justify-content-start align-items-center">-->
+<!--            <div class="image-container d-flex justify-content-center align-items-center">-->
+<!--                <img id="main-character-img"-->
+<!--                     th:src="@{|${staticMainUrl}/ch01.gif|}"-->
+<!--                     alt="캐릭터 이미지" class="character-img rounded">-->
+<!--            </div>-->
+<!--        </div>-->
+
+        <!--/*[[ 오른쪽: 캐릭터 정보 텍스트 ]]*/-->
+<!--        <div class="characters-content-col d-flex align-items-center">-->
+
+<!--            <div class="image-container d-flex justify-content-center align-items-center">-->
+<!--                <img id="main-character-txt"-->
+<!--                     th:src="@{|${staticMainUrl}/ch01-text.png|}"-->
+<!--                     alt="캐릭터 이미지" class="character-img rounded">-->
+<!--            </div>-->
+
+<!--        </div>-->
 
 
     </div>
