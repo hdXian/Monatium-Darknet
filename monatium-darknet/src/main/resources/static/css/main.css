@@ -609,11 +609,14 @@ h2.section-title {
     .characters-section {
         background-image: url('/imgs/main/cont04-m-bg.jpg'); /* 모바일 전용 배경 */
         background-size: cover;
-        background-position: center;
+        /* background-position: center; */
         background-repeat: no-repeat;
-        height: 100vh; /* 고정된 비율 대신 컨텐츠 크기에 맞게 조정 */
-        padding: 20px 0;
+
+        width: 100vw; /* 화면 너비 기준 */
+        height: calc(100vw * 2.03); /* 비율 유지 */
+        padding: 15% 0;
         display: flex;
+
         flex-direction: column; /* 모바일에서 세로 배치 */
         align-items: center;
         text-align: center;
@@ -636,15 +639,17 @@ h2.section-title {
     }
 
     .image-container {
-        max-width: 90%;
+        height: 100%;
+        width: auto;
     }
 
     /* 캐릭터 이미지 크기 조정 */
     .image-container .character-img {
-        width: 90%; /* 화면에 꽉 차지 않도록 설정 */
-        height: auto; /* 가로세로 비율 유지 */
+        height: auto;
+        width: 90%;
         object-fit: contain;
-        transform: scale(1.3); /* 이미지 자체를 확대 */
+        transform: scale(1.2); /* 이미지 자체를 확대 */
+        margin-top: 20%;
     }
 
     /* 캐릭터 텍스트 이미지 크기 조정 */
