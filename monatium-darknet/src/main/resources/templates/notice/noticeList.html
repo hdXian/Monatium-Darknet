@@ -79,7 +79,7 @@
 
                         <li class="notice-item" th:each="notice : ${noticeList}">
 
-                            <!-- 썸네일 -->
+                            <!--/*[[ 썸네일 ]]*/-->
                             <div class="thumbnail-container">
                                 <img th:src="@{ |${noticeBaseUrl}${notice.id}/${notice.thumbnailFileName}| }" alt="썸네일" class="notice-thumbnail">
                             </div>
