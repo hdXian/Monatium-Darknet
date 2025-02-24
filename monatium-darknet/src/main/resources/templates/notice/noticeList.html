@@ -40,6 +40,7 @@
 
             <!--/*[[ 공지사항 목록 ]]*/-->
             <div class="row d-flex flex-nowrap justify-content-between">
+
                 <!--/*[[ 카테고리 필터링 메뉴 ]]*/-->
                 <div class="category-menu col-3 me-3">
                     <h5 th:text="#{notice.category}">카테고리</h5>
@@ -59,6 +60,18 @@
                             </a>
                         </li>
                     </ul>
+                </div>
+
+                <!--/*[[ 모바일에서는 select 태그를 이용한 카테고리 선택 ]]*/-->
+                <div class="category-dropdown d-block d-md-none">
+                    <select class="form-select form-select-sm" id="categorySelect" th:data-lang="${language}">
+                        <option value="" th:text="#{notice.list.all}" th:selected="${curCategoryId == null}">전체</option>
+                        <option th:each="category : ${categoryList}"
+                                th:value="${category.id}"
+                                th:text="${category.name}"
+                                th:selected="${curCategoryId == category.id}">
+                        </option>
+                    </select>
                 </div>
 
                 <div class="col-9">
@@ -125,6 +138,8 @@
     </div>
 
     <footer th:replace="~{fragments/footer :: common_footer}"></footer>
+
+    <script th:src="@{/js/notice/noticeList.js}"></script>
 
 </body>
 
