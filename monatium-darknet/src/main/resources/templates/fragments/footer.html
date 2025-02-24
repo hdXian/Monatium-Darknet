@@ -3,7 +3,7 @@
 
 <footer th:fragment="common_footer" class="text-white py-4 fs-6">
     <div class="container footer-container">
-        <!-- 좌측: 게임 정보 -->
+        <!--/*[[ 좌측: 게임 정보 ]]*/-->
         <div class="footer-left">
             <div class="d-flex align-items-center justify-content-center justify-content-md-start">
                 <img th:src="@{/imgs/logo.png}" alt="게임 로고" width="150" class="me-4">
@@ -17,7 +17,7 @@
             <p class="small mt-2 mb-0 text-center text-md-start">ⓒ 2024 EPID Games. All rights reserved.</p>
         </div>
 
-        <!-- 우측: 기업 정보 -->
+        <!--/*[[ 우측: 기업 정보 ]]*/-->
         <div class="footer-right text-md-end text-center">
             <p class="mb-1 fw-bold"><span th:text="#{footer.company}">EPID Games</span></p>
             <p class="mb-1"><span class="fw-light">이메일:</span> <span th:text="#{footer.email}">support@epidgames.com</span></p>
@@ -26,13 +26,13 @@
             <p class="mb-0"><span class="fw-light">대표번호:</span> <span th:text="#{footer.phone}">+82-2-1234-5678</span></p>
         </div>
 
-        <!-- 하단: 링크 및 SNS -->
+        <!--/*[[ 하단: 링크 및 SNS ]]*/-->
         <div class="footer-links">
             <a th:href="@{/{lang}/opensource-license (lang=${language})}" class="text-white me-3">오픈소스 라이선스</a>
             <a href="https://epidgames.com/contact.aspx" class="text-white">Contact Us</a>
         </div>
 
-        <!-- SNS 아이콘 -->
+        <!--/*[[ SNS 아이콘 ]]*/-->
         <div class="footer-sns">
             <a href="https://www.youtube.com/@epidgames6350" target="_blank" class="text-white">
                 <i class="fab fa-youtube"></i>
@@ -47,7 +47,7 @@
     </div>
 </footer>
 
-<!--/*[[ 푸터 ]]*/-->
+<!--/*[[/*[[ 푸터 ]]*/]]*/-->
 <footer th:fragment="management_footer" class="bg-dark text-white text-center py-3">
     <p>ⓒ 2024 EPID Games Admin Dashboard</p>
 </footer>

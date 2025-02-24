@@ -53,9 +53,9 @@ function closeRemoteControl() {
     remoteControl.style.display = 'none'; // 리모컨 섹션 숨김
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("btnCloseRemote").addEventListener("click", closeRemoteControl);
-});
+//document.addEventListener("DOMContentLoaded", function() {
+//    document.getElementById("btnCloseRemote").addEventListener("click", closeRemoteControl);
+//});
 
 
 // 캐릭터 섹션 이미지 변경 이벤트 등록
