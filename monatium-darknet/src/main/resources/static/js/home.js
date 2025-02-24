@@ -103,5 +103,21 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// 리모컨 섹션
+document.addEventListener("DOMContentLoaded", function () {
+    const quickMenuToggle = document.getElementById("quickMenuToggle");
+    const quickMenu = document.getElementById("quickMenu");
+    const btnCloseQuickMenu = document.getElementById("btnCloseQuickMenu");
+
+    // 플로팅 버튼 클릭 시 메뉴 표시
+    quickMenuToggle.addEventListener("click", function () {
+        quickMenu.style.display = quickMenu.style.display === "flex" ? "none" : "flex";
+    });
+
+    // 닫기 버튼 클릭 시 메뉴 숨김
+    btnCloseQuickMenu.addEventListener("click", function () {
+        quickMenu.style.display = "none";
+    });
+});
 
 

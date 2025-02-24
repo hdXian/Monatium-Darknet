@@ -428,6 +428,68 @@ h2.section-title {
 }
 
 /* 리모컨 섹션 스타일 */
+
+/* 플로팅 버튼 스타일 */
+.fab-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 55px;
+    height: 55px;
+    background-color: #4CAF50; /* 녹색 버튼 */
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    line-height: 55px;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 999;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.fab-button:hover {
+    background-color: #45A049;
+}
+
+/* Quick Menu 기본 스타일 (처음에는 숨김) */
+.quick-menu {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 200px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    display: none; /* 처음에는 숨김 */
+    flex-direction: column;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Quick Menu 안의 버튼 스타일 */
+.quick-menu .btn-custom {
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* 닫기 버튼 스타일 */
+.btn-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+
+/*
 .remote-control {
     position: fixed;
     top: 150px;
@@ -449,6 +511,7 @@ h2.section-title {
     margin-bottom: 10px;
     text-align: center;
 }
+*/
 
 /* 모바일 화면 */
 @media (max-width: 768px) {
@@ -669,6 +732,11 @@ h2.section-title {
         height: 40px;
     }
 
+    /* 리모컨 섹션 모바일 */
+    .quick-menu {
+        right: 10px;
+        width: 180px;
+    }
 
 }
 

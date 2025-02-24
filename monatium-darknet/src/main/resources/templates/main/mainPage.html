@@ -234,14 +234,30 @@
 </section>
 
 <!--/*[[ 리모컨 섹션 ]]*/-->
-<div class="remote-control">
-    <!--/*[[ 닫기 버튼 ]]*/-->
-    <button class="btn-close btn-close-white" id="btnCloseRemote"></button>
-    <h4>Quick Menu</h4>
-    <a th:href="@{https://coupon.a.prod.service.trickcal.io}" class="btn btn-custom" th:text="#{home.quick.coupon}">쿠폰 등록</a>
-    <a th:href="@{/{lang}/guides (lang=${language})}" class="btn btn-custom" th:text="#{home.quick.guide}">신규 유저 혜택</a>
-    <a th:href="@{/{lang}/notices?category=3 (lang=${language})}" class="btn btn-custom" th:text="#{home.quick.event}">이벤트</a>
+
+<!--/*[[ 플로팅 버튼  ]]*/-->
+<div class="fab-button" id="quickMenuToggle">
+    ☰ <!--/*[[ 햄버거 아이콘처럼 표시  ]]*/-->
 </div>
+
+<!--/*[[ Quick Menu (초기에는 숨김 상태)  ]]*/-->
+<div class="quick-menu" id="quickMenu">
+    <button class="btn-close btn-close-white" id="btnCloseQuickMenu"></button>
+    <h4>Quick Menu</h4>
+    <a href="https://coupon.a.prod.service.trickcal.io" class="btn btn-custom">쿠폰 등록</a>
+    <a href="/guides" class="btn btn-custom">신규 유저 혜택</a>
+    <a href="/notices?category=3" class="btn btn-custom">이벤트</a>
+</div>
+
+
+<!--<div class="remote-control">-->
+    <!--/*[[ 닫기 버튼 ]]*/-->
+<!--    <button class="btn-close btn-close-white" id="btnCloseRemote"></button>-->
+<!--    <h4>Quick Menu</h4>-->
+<!--    <a th:href="@{https://coupon.a.prod.service.trickcal.io}" class="btn btn-custom" th:text="#{home.quick.coupon}">쿠폰 등록</a>-->
+<!--    <a th:href="@{/{lang}/guides (lang=${language})}" class="btn btn-custom" th:text="#{home.quick.guide}">신규 유저 혜택</a>-->
+<!--    <a th:href="@{/{lang}/notices?category=3 (lang=${language})}" class="btn btn-custom" th:text="#{home.quick.event}">이벤트</a>-->
+<!--</div>-->
 
 <!--/*[[ 푸터 ]]*/-->
 <footer th:replace="~{fragments/footer :: common_footer}"></footer>
