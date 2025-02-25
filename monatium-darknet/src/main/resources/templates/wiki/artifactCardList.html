@@ -37,7 +37,7 @@
             <!--/*[[ 필터링 섹션 ]]*/-->
             <section id="filtering-options" class="d-flex justify-content-end align-items-center mb-3">
                 <!--/*[[ 등급 필터링 (체크박스) ]]*/-->
-                <div class="me-3">
+                <div class="grade-checkbox">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="legendaryFilter" value="legendary">
                         <label class="form-check-label" for="legendaryFilter" th:text="#{card.grade.legendary}">전설</label>
@@ -57,7 +57,7 @@
                 </div>
         
                 <!--/*[[ 이름 검색창 ]]*/-->
-                <div class="me-3">
+                <div class="search-name">
 <!--                    <label for="searchName" class="form-label visually-hidden" th:text="#{card.search.button}">이름 검색</label>-->
                     <input type="text" class="form-control form-control-sm" id="searchName" th:placeholder="#{card.search.placeholder}">
                 </div>
@@ -98,6 +98,7 @@
                                     <p class="artifact-stats">
                                         <th:block th:each="attribute: ${card.attributes}">
                                             <span th:text="|${attribute.attrName} ${attribute.attrValue}|" class="me-2">카드 능력치</span>
+                                            <br>
                                         </th:block>
                                     </p>
                                     <hr>
