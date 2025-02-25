@@ -24,16 +24,8 @@
     max-width: 40%;
 }
 
-/* 반응형 조정: 화면이 작아지면 요소 크기 자동 조절 */
-@media (max-width: 992px) {
-    .navbar-left {
-        flex-grow: 2; /* 작은 화면에서는 좌측 메뉴 비율 증가 */
-        justify-content: flex-start;
-    }
-    .navbar-right {
-        flex-grow: 1;
-        justify-content: flex-start;
-    }
+.navbar-collapse {
+    background-color: #3A5FCD; /* 네비게이션 바 배경색과 동일하게 설정 */
 }
 
 /* 네비게이션 아이템 스타일 */
@@ -182,5 +174,23 @@
 .sns-link img:hover {
     opacity: 0.8;
     transform: scale(1.2);
+}
+
+/* 반응형 조정: 화면이 작아지면 요소 크기 자동 조절 */
+@media (max-width: 768px) {
+    .navbar {
+        height: auto;
+        min-height: 50px;
+    }
+
+    .navbar-left {
+        flex-grow: 2; /* 작은 화면에서는 좌측 메뉴 비율 증가 */
+        justify-content: flex-start;
+    }
+
+    .navbar-right {
+        flex-grow: 1;
+        justify-content: flex-start;
+    }
 }
 
