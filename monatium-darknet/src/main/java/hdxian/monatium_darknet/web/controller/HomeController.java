@@ -67,16 +67,7 @@ public class HomeController {
         Page<Notice> noticePage = noticeService.findAll_Paging(nsc, 1);
         List<Notice> noticeList = noticePage.getContent();
 
-        CharacterSearchCond csc = new CharacterSearchCond();
-        csc.setLangCode(langCode);
-        csc.setStatus(CharacterStatus.ACTIVE);
-        List<Character> characterList = characterService.findAll(csc);
-        if (characterList.size() > 7) {
-            characterList = characterList.subList(0, 7);
-        }
-
         model.addAttribute("noticeList", noticeList);
-        model.addAttribute("characterList", characterList);
         model.addAttribute("language", langCode.name().toLowerCase());
         return "main/mainPage";
     }
