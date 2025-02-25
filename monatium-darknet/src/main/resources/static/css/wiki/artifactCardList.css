@@ -39,6 +39,14 @@ body {
     color: white;
 }
 
+.grade-checkbox {
+    margin-rgiht: 10px;
+}
+
+.search-name {
+    margin-right: 10px;
+}
+
 /* 카드 커스텀 스타일 */
 .card-custom {
     margin: auto;
@@ -183,7 +191,57 @@ body {
     color: #808080;
 }
 
+
 /* 반응형 미디어 쿼리 */
+
+/* 필터링 섹션 */
+@media (max-width: 768px) {
+
+    /* 필터링 옵션 컨테이너 중앙 정렬 */
+    #filtering-options {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* 체크박스 그룹을 중앙 정렬 */
+    .grade-checkbox {
+        display: flex;
+        flex-wrap: wrap; /* 좁은 화면에서 자동 줄바꿈 */
+        justify-content: center; /* 중앙 정렬 */
+        gap: 10px; /* 체크박스 간 간격 */
+        width: 100%;
+        margin: auto 0;
+    }
+
+    /* 체크박스 스타일 조정 */
+    .form-check-inline {
+        margin-right: 5px; /* 간격을 줄여 균형 잡기 */
+    }
+
+    /* 검색 입력창 크기 조정 */
+    .search-name {
+        margin: 0;
+        margin-top: 10px;
+        width: 80%;
+    }
+
+    #searchName {
+        width: 100%; /* 검색창과 버튼 크기 동일하게 설정 */
+        max-width: 300px; /* 최대 크기 제한 */
+        font-size: 1rem;
+        padding: 8px;
+    }
+
+    /* 검색 버튼 크기 조정 */
+    #cardSearchBtn {
+        width: 80%; /* 검색창과 버튼 크기 동일하게 설정 */
+        max-width: 300px; /* 최대 크기 제한 */
+        font-size: 1rem;
+        padding: 8px;
+        margin-top: 5px; /* 검색창과 간격 조정 */
+    }
+}
+
 @media (max-width: 768px) {
 
     /* 좌측 네비게이션 스타일 조정 */
@@ -203,4 +261,59 @@ body {
     .content {
         padding: 10px;
     }
+
+    /* 카드 레이아웃을 세로로 정렬 */
+    .card-custom .card-body {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* 카드 이미지 크기 확대 및 중앙 정렬 */
+    .artifact-image {
+        max-width: 100px; /* 기존보다 크기 증가 */
+        width: auto; /* 너비를 자동 조정 */
+        height: auto; /* 비율 유지 */
+        display: block;
+        margin: auto; /* 가로 중앙 정렬 */
+        margin-bottom: 10px; /* 이미지 아래 여백 추가 */
+    }
+
+    /* 카드 제목 및 내용 왼쪽 정렬 유지 */
+    .artifact-content {
+        width: 100%;
+    }
+
+    .card-title,
+    .artifact-info,
+    .artifact-stats,
+    .artifact-effect,
+    .artifact-story {
+        text-align: left; /* 왼쪽 정렬 유지 */
+    }
+
+    /* 카드 정보 정렬 */
+    .artifact-info {
+        display: block; /* 한 줄에 배치되지 않도록 변경 */
+        font-size: 0.85rem;
+    }
+
+    /* 능력치 스타일 */
+    .artifact-stats {
+        font-size: 0.85rem;
+        margin-top: 5px;
+    }
+
+    /* 카드 설명 텍스트 크기 조정 */
+    .artifact-effect {
+        font-size: 0.85rem;
+        margin-top: 5px;
+    }
+
+    /* 카드 이야기 가독성 개선 */
+    .artifact-story {
+        font-size: 0.85rem;
+        color: #666;
+    }
 }
+
+
