@@ -14,14 +14,16 @@ body {
     /* scroll-margin-top: 80px;  */
 /* } */
 
+/*
 h2.section-title {
     position: relative;
     color: #FFFFFF;
     padding: 10px;
     border-radius: 5px;
     text-align: center;
-    font-size: 2rem; /* 폰트 크기 확대 */
+    font-size: 2rem;
 }
+*/
 
 /* 히어로 섹션 스타일 */
 .hero-section {
@@ -90,6 +92,8 @@ h2.section-title {
 
 /* 공지사항 섹션 스타일 */
 .notice-section {
+    position: relative;
+
     background: url('/imgs/bkg/bkg1.png') no-repeat center center;
     background-size: cover;
     width: 100%; /* 섹션이 화면 전체 너비를 사용 */
@@ -238,13 +242,45 @@ h2.section-title {
 
 .worldview-content {
     width: 80%;
-    /* height: 45vw; */
     height: 100%;
-    /* background-color: #D3D3D3; */ /* test bkg */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.worldview-content .video-container {
-    width: 80%;
+/* 세계관 제목 */
+.section-title {
+    position: absolute;
+    top: 40px; /* 기존보다 위쪽으로 이동 */
+    left: 0; /* 왼쪽 끝에 붙이기 */
+
+    font-size: 1.8rem; /* 기본 크기 */
+    color: #FFFFF0; /* 텍스트 색상 */
+
+    background-color: #C19A6B; /* 초록 배경 */
+    padding: 10px 20px; /* 내부 여백 */
+    border-radius: 0 10px 10px 0; /* 왼쪽은 직각, 오른쪽만 둥글게 */
+}
+
+/* 새로운 컨테이너 스타일 (PC, 태블릿) */
+.video-wrapper {
+    width: 80%; /* 화면 너비의 80% 사용 */
+    max-width: 900px; /* 최대 크기 제한 */
+    padding: 15px; /* 내부 여백 */
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #FFFFF0; /* 아이보리 배경 */
+    border: 5px solid #2E8B57; /* 초록 테두리 */
+    border-radius: 20px; /* 둥근 모서리 */
+}
+
+/* 유튜브 비디오 컨테이너 */
+.video-container {
+    width: 95%; /* video-wrapper보다 약간 작게 조정 */
+    max-width: 850px;
 }
 
 /* 세계관 섹션 스타일 끝 */
@@ -252,8 +288,10 @@ h2.section-title {
 
 /* 캐릭터 소개 섹션 스타일 */
 .characters-section {
-    background: url('/imgs/bkg/bkg3.jpg') no-repeat center center;
-    background-size: cover;
+    position: relative;
+
+    background: url('/imgs/main/cont04-bg.jpg') no-repeat center center;
+    background-size: cover;''
     width: 100%; /* 섹션이 화면 전체 너비를 사용 */
     height: 56.25vw; /* 16:9 비율 유지 */
     padding: 5rem 0;
@@ -264,11 +302,8 @@ h2.section-title {
 
 /* 캐릭터 섹션 컨텐츠 */
 .characters-content {
-    width: 80%;
+    width: 100%;
     height: 45vw;
-    /* background-color: #D3D3D3; */
-    background: url('/imgs/bkg/main_book.png') no-repeat center center;
-    background-size: contain;
 
     margin: 0 auto; /* 중앙 정렬 */
 }
@@ -276,92 +311,56 @@ h2.section-title {
 /* 양쪽 컨텐츠 영역 */
 .characters-content .characters-content-col {
     width: 45%;
-    /* background-color: #333; */
+    height: 100%;
+    margin-bottom: 3rem;
 }
 
 /* 이미지 컨테이너 스타일 */
 .characters-content .image-container {
-    width: 70%;
-    margin-left: 5%;
-    /* background-color: #D3D3D3; */
+    height: 100%;
 }
 
 /* 캐릭터 섹션 좌측 이미지 */
 .character-img {
     width: 100%;         /* 이미지가 컨테이너를 채움 */
+    max-height: 80%;
     object-fit: contain;
+    pointer-events: none;
 }
 
-.character-portraits {
-    width: 90%;
-    max-height: 30%;
-    margin-bottom: 5%;
-
-    /* background-color: #4682B4; */
+/* 캐릭터 이미지 애니메이션 */
+.character-img,
+.character-text-img {
+    transition: opacity 0.2s ease-in-out;
+    opacity: 1;
 }
 
-/* 캐릭터 섹션 우측 초상화 컨테이너 */
-.character-portraits .portrait-container {
-    width: 20%;
-    margin: 2%;    /* 이미지 사이의 간격 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* background-color: #45A049; */
+.fade-out {
+    opacity: 0;
 }
 
-.character-info {
-    width: 100%;
-    margin-top: 5%;
-
-    /* background-color: #D3D3D3; */
+.character-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-/* 캐릭터 소개 섹션 초상화 */
-.character-info .portrait-container {
-    width: 20%;
-
-    display: flex;
-    justify-content: center;
-    /* background-color: #45A049; */
-    margin: 0 5%;
+/* 왼쪽 버튼 위치 */
+.character-btn-prev {
+    left: 10px; /* 이미지 왼쪽 바깥 */
 }
 
-/* 캐릭터 섹션 우측 초상화 이미지 */
-.character-portrait,
-.info-portrait {
-    width: 75%;  /* 원하는 이미지 너비 */
-    object-fit: cover; /* 이미지 비율 유지하며 잘라내기 */
-    border-radius: 10px; /* 모서리 둥글게 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 가벼운 그림자 */
+/* 오른쪽 버튼 위치 */
+.character-btn-next {
+    right: 10px; /* 이미지 오른쪽 바깥 */
 }
 
-.character-title {
-    width: 100%;
-    margin-right: 5%;
-    margin-bottom: 5%;
-}
-
-.characters-content .character-info-text {
-    font-size: clamp(0rem, 1vw, 1.5rem); /* 최소 1rem, 최대 2rem */
-}
-
-.character-title .character-subtitle {
-    font-size: clamp(0rem, 1vw, 1rem); /* 최소 1rem, 최대 2rem */
-    color: #6c757d;
-}
-
-.character-info-text .info-subtitle {
-    margin-top: 5%;
-    margin-bottom: 3%;
-}
-
-/* 캐릭터 소개 섹션의 종족 심볼 */
-.symbol-icon {
-    width: 12%;    /* 적절한 크기로 조절 */
-    height: 12%;   /* 이미지의 정사각형 비율 유지 */
-    object-fit: contain;  /* 원본 비율 유지 */
-}
 
 /* 캐릭터 소개 섹션 스타일 끝 */
 
@@ -429,6 +428,68 @@ h2.section-title {
 }
 
 /* 리모컨 섹션 스타일 */
+
+/* 플로팅 버튼 스타일 */
+.fab-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 55px;
+    height: 55px;
+    background-color: #4CAF50; /* 녹색 버튼 */
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    line-height: 55px;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 999;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.fab-button:hover {
+    background-color: #45A049;
+}
+
+/* Quick Menu 기본 스타일 (처음에는 숨김) */
+.quick-menu {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 200px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    display: none; /* 처음에는 숨김 */
+    flex-direction: column;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Quick Menu 안의 버튼 스타일 */
+.quick-menu .btn-custom {
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* 닫기 버튼 스타일 */
+.btn-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+
+/*
 .remote-control {
     position: fixed;
     top: 150px;
@@ -450,3 +511,232 @@ h2.section-title {
     margin-bottom: 10px;
     text-align: center;
 }
+*/
+
+/* 모바일 화면 */
+@media (max-width: 768px) {
+
+    .hero-section {
+        height: 80vh; /* 모바일 화면 높이에 맞춤 */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden; /* 넘치는 부분을 숨김 */
+    }
+
+    .video-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .video-background iframe {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 120vw; /* 더 크게 설정하여 꽉 차도록 조정 */
+        height: 120vh;
+        transform: translate(-50%, -50%); /* 가운데 정렬 */
+        object-fit: cover; /* 비율을 유지하면서 꽉 차도록 설정 */
+    }
+
+    /* 히어로 섹션 내부 텍스트 크기 조정 */
+    .hero-content h1 {
+        font-size: 1.5rem; /* 기존 2rem에서 더 축소 */
+    }
+
+    .hero-content p {
+        font-size: 0.8rem; /* 기존 대비 줄여서 가독성 유지 */
+    }
+
+    /* 다운로드 버튼을 세로 배치 */
+    .hero-content .download-btn-container {
+        flex-direction: column; /* 버튼을 세로 정렬 */
+        align-items: center; /* 중앙 정렬 */
+        gap: 10px; /* 버튼 사이 여백 */
+    }
+
+    /* 다운로드 버튼 크기 조정 */
+    .hero-content .dl-image {
+        width: 150px; /* 기존 180px → 150px로 축소 */
+    }
+
+    /* 공지사항 섹션 크기 조정 */
+    .notice-section {
+        height: auto; /* 모바일 화면에서 높이를 화면 높이와 맞춤 */
+        padding: 2rem 0; /* 여백 줄이기 */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* 공지사항 컨텐츠 영역 */
+    .notice-content {
+        display: flex;
+        flex-direction: column; /* 모바일에서는 세로 배치 */
+        height: 90%; /* 높이 자동 조정 */
+        gap: 15px; /* 요소 사이 간격 추가 */
+    }
+
+    /* 공지사항 제목 크기 및 정렬 */
+    .notice-section h2 {
+        font-size: 1.5rem; /* 제목 크기 축소 */
+        text-align: left; /* 왼쪽 정렬 */
+        padding-left: 1rem;
+    }
+
+    .notice-content-col {
+        width: 100%;
+    }
+
+    /* 슬라이드 크기 조정 */
+    .notice-carousel {
+        width: 100%; /* 전체 너비 */
+        max-width: 400px; /* 최대 너비 설정 */
+        margin: 0 auto; /* 중앙 정렬 */
+    }
+
+    /* 슬라이드 이미지 크기 조정 */
+    .notice-image-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .slide-text .slide-title {
+        font-size: 0.8rem;
+    }
+
+    .slide-text .slide-date {
+        font-size: 0.6rem
+    }
+
+    .notice-media .media-text {
+        font-size: 0.8rem; /* 기존 1vw → 0.8rem으로 조정 */
+    }
+
+    .notice-button {
+        font-size: 0.8rem; /* 기존보다 더 작게 조정 */
+        padding: 8px 16px; /* 버튼 내부 여백 축소 */
+    }
+
+
+    .worldview-section {
+        height: 100vh; /* 모바일 화면 높이에 맞게 설정 */
+        padding: 0; /* 패딩 제거 */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .worldview-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 1rem; /* 좌우 여백 추가 */
+    }
+
+    .section-title {
+        font-size: 1.3rem; /* 모바일에서 더 작은 크기 */
+        top: 30px; /* 더 위로 이동 */
+        padding: 8px 16px; /* 내부 여백 조정 */
+    }
+
+    /* 새로운 컨테이너 스타일 */
+    .video-wrapper {
+        width: 95%; /* 유튜브 영상보다 살짝 넓게 설정 */
+        max-width: 650px; /* 최대 크기 제한 */
+        padding: 10px; /* 내부 여백 추가 */
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background-color: #FFFFF0; /* 아이보리 배경 */
+        border: 5px solid #2E8B57; /* 초록 테두리 */
+        border-radius: 15px; /* 둥근 모서리 */
+    }
+
+    .video-container {
+        width: 90%; /* 기존보다 약간 작게 조정하여 감싸는 효과 극대화 */
+        max-width: 600px;
+    }
+
+
+    /* 캐릭터 섹션 높이 자동 조정 */
+    .characters-section {
+        background-image: url('/imgs/main/cont04-m-bg.jpg'); /* 모바일 전용 배경 */
+        background-size: cover;
+        /* background-position: center; */
+        background-repeat: no-repeat;
+
+        width: 100vw; /* 화면 너비 기준 */
+        height: calc(100vw * 2.03); /* 비율 유지 */
+        padding: 15% 0;
+        display: flex;
+
+        flex-direction: column; /* 모바일에서 세로 배치 */
+        align-items: center;
+        text-align: center;
+    }
+
+    /* 캐릭터 컨텐츠 컬럼 - 세로 정렬 */
+    .characters-content {
+        height: 100%;
+        width: 100%
+        display: flex;
+        flex-direction: column; /* 데스크톱 좌우 배치를 모바일에서 세로 배치로 변경 */
+        align-items: center;
+        justify-content: center;
+    }
+
+    .characters-content .characters-content-col {
+        width: 100%;
+        height: 50%;
+        margin: 0 auto;
+    }
+
+    .image-container {
+        height: auto;
+        width: 90%;
+    }
+
+    /* 캐릭터 이미지 크기 조정 */
+    .image-container .character-img {
+        height: auto;
+        width: 90%;
+        object-fit: contain;
+        transform: scale(1.2); /* 이미지 자체를 확대 */
+        margin-top: 20%;
+    }
+
+    /* 캐릭터 텍스트 이미지 크기 조정 */
+    .character-text-img {
+        max-width: 80%;
+        height: auto;
+    }
+
+    /* 좌우 캐릭터 변경 버튼 - 모바일에서 아래로 배치 */
+    .character-btn {
+        position: relative;
+        top: auto;
+        bottom: 0;
+        padding: 0;
+        margin-top: 20%;
+        width: 40px;
+        height: 40px;
+    }
+
+    /* 리모컨 섹션 모바일 */
+    .quick-menu {
+        right: 10px;
+        width: 180px;
+    }
+
+}
+

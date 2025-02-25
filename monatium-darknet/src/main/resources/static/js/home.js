@@ -46,36 +46,78 @@ function getPositionX(event) {
     return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
 }
 
-// HTML 요소 선택
-const portraits = document.querySelectorAll('.character-portrait');
-const mainCharacterImg = document.getElementById('main-character-img');
-const characterInfos = document.querySelectorAll('.character-info');
 
-// 초상화 클릭 이벤트 등록
-portraits.forEach(portrait => {
-    portrait.addEventListener('click', () => {
-        const targetId = portrait.dataset.target; // 타겟 정보 ID
-        const newImgSrc = portrait.dataset.img; // 메인 캐릭터 이미지 경로
-
-        // 모든 캐릭터 정보를 숨김 처리
-        characterInfos.forEach(info => info.classList.add('d-none'));
-
-        // 선택된 캐릭터 정보만 표시
-        const targetInfo = document.getElementById(targetId);
-        targetInfo.classList.remove('d-none');
-
-        // 메인 캐릭터 이미지 변경
-        mainCharacterImg.src = newImgSrc;
-
-    });
-});
 
 function closeRemoteControl() {
     const remoteControl = document.querySelector('.remote-control');
     remoteControl.style.display = 'none'; // 리모컨 섹션 숨김
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("btnCloseRemote").addEventListener("click", closeRemoteControl);
+//document.addEventListener("DOMContentLoaded", function() {
+//    document.getElementById("btnCloseRemote").addEventListener("click", closeRemoteControl);
+//});
+
+
+// 캐릭터 섹션 이미지 변경 이벤트 등록
+document.addEventListener("DOMContentLoaded", function () {
+    const characterImg = document.getElementById("characterImg");
+    const characterText = document.getElementById("characterText");
+    const prevBtn = document.getElementById("prevCharacter");
+    const nextBtn = document.getElementById("nextCharacter");
+
+    const characters = [
+        { img: "/imgs/main/ch01.gif", text: "/imgs/main/ch01-text.png" },
+        { img: "/imgs/main/ch02.gif", text: "/imgs/main/ch02-text.png" },
+        { img: "/imgs/main/ch03.gif", text: "/imgs/main/ch03-text.png" },
+        { img: "/imgs/main/ch04.gif", text: "/imgs/main/ch04-text.png" },
+        { img: "/imgs/main/ch05.gif", text: "/imgs/main/ch05-text.png" },
+        { img: "/imgs/main/ch06.gif", text: "/imgs/main/ch06-text.png" },
+        { img: "/imgs/main/ch07.gif", text: "/imgs/main/ch07-text.png" }
+    ];
+    let currentIndex = 0;
+
+    function changeCharacter(index) {
+        // 이미지 변경 전 fade-out 효과
+        characterImg.classList.add("fade-out");
+        characterText.classList.add("fade-out");
+
+        setTimeout(() => {
+            // 이미지 변경
+            characterImg.src = characters[index].img;
+            characterText.src = characters[index].text;
+
+            // fade-in 효과
+            characterImg.classList.remove("fade-out");
+            characterText.classList.remove("fade-out");
+        }, 200); // 0.1초 후 변경
+    }
+
+    prevBtn.addEventListener("click", function () {
+        currentIndex = (currentIndex - 1 + characters.length) % characters.length;
+        changeCharacter(currentIndex);
+    });
+
+    nextBtn.addEventListener("click", function () {
+        currentIndex = (currentIndex + 1) % characters.length;
+        changeCharacter(currentIndex);
+    });
 });
+
+// 리모컨 섹션
+document.addEventListener("DOMContentLoaded", function () {
+    const quickMenuToggle = document.getElementById("quickMenuToggle");
+    const quickMenu = document.getElementById("quickMenu");
+    const btnCloseQuickMenu = document.getElementById("btnCloseQuickMenu");
+
+    // 플로팅 버튼 클릭 시 메뉴 표시
+    quickMenuToggle.addEventListener("click", function () {
+        quickMenu.style.display = quickMenu.style.display === "flex" ? "none" : "flex";
+    });
+
+    // 닫기 버튼 클릭 시 메뉴 숨김
+    btnCloseQuickMenu.addEventListener("click", function () {
+        quickMenu.style.display = "none";
+    });
+});
+
 

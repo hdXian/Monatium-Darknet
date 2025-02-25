@@ -1,4 +1,60 @@
+/* 기본 푸터 스타일 */
 footer {
-    /* margin-top: 50px; */ /* 푸터 상단 여백 추가 */
     background-color: #121212;
+    color: white;
+    padding: 20px 0;
+}
+
+/* 데스크톱: 기존 스타일 유지 */
+@media (min-width: 769px) {
+    .footer-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .footer-left, .footer-right {
+        width: 48%;
+    }
+
+    .footer-links {
+        text-align: left;
+    }
+
+    .footer-sns {
+        text-align: right;
+    }
+}
+
+/* 모바일 최적화 (768px 이하) */
+@media (max-width: 768px) {
+    .footer-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-left, .footer-right {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .footer-links {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    /* SNS 아이콘 중앙 정렬 */
+    .footer-sns {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    .footer-sns a {
+        font-size: 1.5rem; /* 모바일에서 SNS 아이콘 크기 증가 */
+    }
 }

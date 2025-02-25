@@ -176,3 +176,150 @@ body {
     color: #333;
 }
 
+/* 모바일 최적화 */
+@media screen and (max-width: 768px) {
+    /* 레이아웃 조정 */
+    .main-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .content {
+        width: 100%;
+        padding: 0;
+        /* padding: 15px; */
+    }
+
+    /* 사이드 네비게이션 (가로 스크롤) */
+    .side-nav {
+        width: 100%;
+        height: auto;
+        padding: 10px 0;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .side-nav ul {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 0 10px;
+    }
+
+    .side-nav .nav-item {
+        margin: 0 10px;
+    }
+
+    /* 검색창 */
+    .guide-search-form {
+        width: 100%;
+        display: flex;
+        gap: 5px;
+    }
+
+    .guide-search-form input {
+        flex: 1;  /* 남는 공간을 모두 차지하도록 설정 */
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    .guide-search-form button {
+        flex-shrink: 0;  /* 버튼 크기 줄어들지 않도록 설정 */
+        width: 100px;  /* 버튼의 너비를 일정하게 설정 */
+        font-size: 1rem;
+    }
+
+    /* 가이드 목록 */
+    .guide-list-section {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .guide-item {
+        padding: 12px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .guide-item .title {
+        font-size: 1rem;
+        text-align: left;
+    }
+
+    .guide-item .date {
+        font-size: 0.8rem;
+        color: #666;
+        margin-top: 5px;
+    }
+
+    /* 표지 이미지 */
+    .cover-section {
+        max-width: 100%;
+        height: auto;
+        padding: 10px;
+    }
+
+    .cover-section img {
+        width: 100%;
+        height: auto;
+    }
+
+    /* 터치 및 인터랙션 개선 */
+    .side-nav a {
+        padding: 12px 15px;
+        font-size: 1.1rem;
+    }
+
+    .guide-item {
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .guide-item:hover {
+        transform: scale(1.02);
+    }
+
+    button {
+        padding: 12px;
+        font-size: 1rem;
+    }
+
+    /* 🌟 가이드 제목 */
+    .guide-title {
+        width: 100%;
+        font-size: 1.5rem;  /* 제목 크기 조정 */
+        text-align: center;  /* 모바일에서 중앙 정렬 */
+        word-break: break-word;  /* 긴 제목 줄바꿈 허용 */
+    }
+
+    /* 🌟 가이드 날짜 */
+    .guide-date {
+        font-size: 0.9rem;  /* 가독성을 위한 크기 조정 */
+        text-align: center;  /* 중앙 정렬 */
+        margin-bottom: 10px;
+    }
+
+    /* 🌟 구분선 */
+    .guide-divider {
+        width: 90%;  /* 모바일에서는 길이 줄이기 */
+        margin: 10px auto;
+    }
+
+    /* 🌟 본문 */
+    .guide-body {
+        font-size: 1rem;  /* 기본 크기 유지 */
+        line-height: 1.8;  /* 가독성 향상 */
+        padding: 0 15px;  /* 좌우 여백 추가 */
+        text-align: justify;  /* 정렬을 맞춰 가독성 개선 */
+    }
+
+    .guide-body img {
+        max-width: 100%;
+        height: auto;
+        max-height: 400px; /* 특정 높이 이상으로 커지지 않도록 제한 */
+    }
+
+}
+
+

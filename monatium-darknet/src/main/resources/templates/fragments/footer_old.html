@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--/*[[ 푸터 ]]*/-->
+
+<!--/*[[ 푸터 ]]*/-->
+<footer th:fragment="common_footer" class="text-white py-4 fs-6">
+    <div class="container">
+        <div class="row align-items-start">
+            <!--/*[[ 좌측: 게임 로고 + 게임 정보 ]]*/-->
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <img th:src="@{/imgs/logo.png}" alt="게임 로고" width="150" class="me-4">
+                    <div class="small">
+                        <p class="mb-1 fw-bold" th:text="#{footer.gameName}">게임 이름</p>
+                        <p class="mb-1"><span class="fw-light" th:text="|#{footer.prefix.gameGenre} : |">장르:</span> <span th:text="#{footer.gameGenre}">RPG</span></p>
+                        <p class="mb-1"><span class="fw-light" th:text="|#{footer.prefix.gamePlatform} : |">플랫폼:</span> <span th:text="#{footer.gamePlatform}">iOS, Android</span></p>
+                        <p class="mb-0"><span class="fw-light" th:text="|#{footer.prefix.release} : |">출시:</span> <span th:text="#{footer.releaseYear}">2024</span></p>
+                    </div>
+                </div>
+                <!--/*[[ 저작권 문구 ]]*/-->
+                <p class="small mt-2 mb-0">ⓒ 2024 EPID Games. All rights reserved.</p>
+            </div>
+
+            <!--/*[[ 우측: 기업 정보 ]]*/-->
+            <div class="col-md-6 text-md-end small">
+                <p class="mb-1 fw-bold"><span th:text="#{footer.company}">EPID Games</span></p>
+                <p class="mb-1"><span th:text="|#{footer.prefix.email} : |">이메일:</span> <span th:text="#{footer.email}">support@epidgames.com</span></p>
+                <p class="mb-1"><span th:text="|#{footer.prefix.address} : |">주소:</span> <span th:text="#{footer.address}">서울특별시 강남구 테헤란로 123</span></p>
+                <p class="mb-1"><span th:text="|#{footer.prefix.zipcode} : |">우편번호:</span> <span th:text="#{footer.zipcode}">06123</span></p>
+                <p class="mb-0"><span th:text="|#{footer.prefix.phone} : |">대표번호:</span> <span th:text="#{footer.phone}">+82-2-1234-5678</span></p>
+            </div>
+        </div>
+
+        <!--/*[[ 하단: 링크 및 SNS ]]*/-->
+        <div class="row mt-3">
+            <!--/*[[ 좌측: 오픈소스 라이선스 & Contact Us ]]*/-->
+            <div class="col-md-6 small">
+                <a th:href="@{/{lang}/opensource-license (lang=${language})}" class="text-white me-3">오픈소스 라이선스</a>
+                <a href="https://epidgames.com/contact.aspx" class="text-white">Contact Us</a>
+            </div>
+
+            <!--/*[[ 우측: SNS 링크 ]]*/-->
+            <div class="col-md-6 text-md-end">
+                <a href="https://www.youtube.com/@epidgames6350" target="_blank" class="text-white me-3">
+                    <i class="fab fa-youtube fa-lg"></i>
+                </a>
+                <a href="https://x.com/Trickcal_Re" target="_blank" class="text-white me-3">
+                    <i class="fab fa-twitter fa-lg"></i>
+                </a>
+                <a href="https://www.instagram.com/trickcal.revive" target="_blank" class="text-white">
+                    <i class="fab fa-instagram fa-lg"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!--/*[[ 푸터 ]]*/-->
+<footer th:fragment="management_footer" class="bg-dark text-white text-center py-3">
+    <p>ⓒ 2024 EPID Games Admin Dashboard</p>
+</footer>
+
+</html>
