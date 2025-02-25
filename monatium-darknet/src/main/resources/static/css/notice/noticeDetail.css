@@ -51,6 +51,11 @@ hr {
     line-height: 1.8;
 }
 
+.notice-content img {
+    max-width: 100%;
+    height: auto;
+}
+
 .btn-back {
     background-color: #4caf50;
     color: white;
