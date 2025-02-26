@@ -19,11 +19,21 @@ footer {
     }
 
     .footer-links {
-        text-align: left;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 15px;
     }
 
     .footer-sns {
-        text-align: right;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .footer-sns a {
+        font-size: 1.2rem;
+        text-decoration: none;
     }
 }
 
@@ -42,8 +52,11 @@ footer {
     }
 
     .footer-links {
+        display: flex;
+        flex-direction: column;
         text-align: center;
         margin-top: 10px;
+        gap: 12px;
     }
 
     /* SNS 아이콘 중앙 정렬 */
@@ -55,6 +68,6 @@ footer {
     }
 
     .footer-sns a {
-        font-size: 1.5rem; /* 모바일에서 SNS 아이콘 크기 증가 */
+        font-size: 1.5rem;
     }
 }
