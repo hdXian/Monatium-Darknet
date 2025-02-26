@@ -11,6 +11,9 @@
 
 </head>
 
+<!-- TODO - 메인 페이지에 캐릭터 gif 클릭하면 당기는 모습으로 바뀌도록 추가-->
+<!-- 그럼 끝! 서버에 공지사항, 캐릭터 데이터 입력하면서 이력서 쓰기 -->
+
 <body>
 <!--/*[[ 상단 네비게이션 바 ]]*/-->
 <nav th:replace="~{fragments/navbar :: common_navbar}">
@@ -195,20 +198,23 @@
 
     <div class="characters-content d-flex justify-content-center align-items-center">
 
-        <!--/*[[ 좌측: 캐릭터 이미지 (캐러셀 적용) ]]*/-->
+        <!--/*[[ 좌측: 캐릭터 이미지 ]]*/-->
         <div class="characters-content-col d-flex justify-content-center text-center">
 
+            <!--/*[[ 왼쪽 버튼 ]]*/-->
+            <button id="prevCharacter" class="d-flex justify-content-start character-btn character-btn-prev btn">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+
+            <!--/*[[ 캐릭터 이미지 ]]*/-->
             <div class="image-container d-flex justify-content-center align-items-center position-relative">
-                <button id="prevCharacter" class="d-flex justify-content-start character-btn character-btn-prev btn">
-                    <span class="carousel-control-prev-icon"></span>
-                </button>
-
                 <img id="characterImg" th:src="@{/imgs/main/ch01.gif}" alt="캐릭터" class="character-img">
-
-                <button id="nextCharacter" class="d-flex justify-content-end character-btn character-btn-next btn">
-                    <span class="carousel-control-next-icon"></span>
-                </button>
             </div>
+
+            <!--/*[[ 오른쪽 버튼 ]]*/-->
+            <button id="nextCharacter" class="d-flex justify-content-end character-btn character-btn-next btn">
+                <span class="carousel-control-next-icon"></span>
+            </button>
 
         </div>
 
