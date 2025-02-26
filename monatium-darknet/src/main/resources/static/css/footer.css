@@ -5,6 +5,10 @@ footer {
     padding: 20px 0;
 }
 
+.release-year {
+    text-decoration: line-through;
+}
+
 /* 데스크톱: 기존 스타일 유지 */
 @media (min-width: 769px) {
     .footer-container {

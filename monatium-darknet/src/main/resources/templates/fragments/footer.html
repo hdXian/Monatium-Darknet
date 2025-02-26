@@ -9,9 +9,9 @@
                 <img th:src="@{/imgs/logo.png}" alt="게임 로고" width="150" class="me-4">
                 <div class="small">
                     <p class="mb-1 fw-bold" th:text="#{footer.gameName}">게임 이름</p>
-                    <p class="mb-1"><span class="fw-light">장르:</span> <span th:text="#{footer.gameGenre}">RPG</span></p>
-                    <p class="mb-1"><span class="fw-light">플랫폼:</span> <span th:text="#{footer.gamePlatform}">iOS, Android</span></p>
-                    <p class="mb-0"><span class="fw-light">출시:</span> <span th:text="#{footer.releaseYear}">2024</span></p>
+                    <p class="mb-1"><span class="fw-light" th:text="|#{footer.prefix.gameGenre}: |">장르:</span> <span th:text="#{footer.gameGenre}">RPG</span></p>
+                    <p class="mb-1"><span class="fw-light" th:text="|#{footer.prefix.gamePlatform}: |">플랫폼:</span> <span th:text="#{footer.gamePlatform}">iOS, Android</span></p>
+                    <p class="mb-0"><span class="fw-light" th:text="|#{footer.prefix.release}: |">출시:</span> <span class="release-year" th:text="#{footer.releaseYear}">2021</span> <span th:text="#{footer.reviveYear}">2023</span> </p>
                 </div>
             </div>
             <p class="small mt-2 mb-0 text-center text-md-start">ⓒ 2024 EPID Games. All rights reserved.</p>
@@ -20,15 +20,15 @@
         <!--/*[[ 우측: 기업 정보 ]]*/-->
         <div class="footer-right text-md-end text-center">
             <p class="mb-1 fw-bold"><span th:text="#{footer.company}">EPID Games</span></p>
-            <p class="mb-1"><span class="fw-light">이메일:</span> <span th:text="#{footer.email}">support@epidgames.com</span></p>
-            <p class="mb-1"><span class="fw-light">주소:</span> <span th:text="#{footer.address}">서울특별시 강남구 테헤란로 123</span></p>
-            <p class="mb-1"><span class="fw-light">우편번호:</span> <span th:text="#{footer.zipcode}">06123</span></p>
-            <p class="mb-0"><span class="fw-light">대표번호:</span> <span th:text="#{footer.phone}">+82-2-1234-5678</span></p>
+            <p class="mb-1"><span class="fw-light" th:text="|#{footer.prefix.email}: |">이메일:</span> <span th:text="#{footer.email}">support@epidgames.com</span></p>
+            <p class="mb-1"><span class="fw-light" th:text="|#{footer.prefix.address}: |">주소:</span> <span th:text="#{footer.address}">서울특별시 강남구 테헤란로 123</span></p>
+            <p class="mb-1"><span class="fw-light" th:text="|#{footer.prefix.zipcode}: |">우편번호:</span> <span th:text="#{footer.zipcode}">06123</span></p>
+            <p class="mb-0"><span class="fw-light" th:text="|#{footer.prefix.phone}: |">대표번호:</span> <span th:text="#{footer.phone}">+82-2-1234-5678</span></p>
         </div>
 
         <!--/*[[ 하단: 링크 및 SNS ]]*/-->
         <div class="footer-links">
-            <a th:href="@{/{lang}/opensource-license (lang=${language})}" class="text-white">오픈소스 라이선스</a>
+            <a th:href="@{/{lang}/opensource-license (lang=${language})}" class="text-white" th:text="#{footer.opensourceLicense}">오픈소스 라이선스</a>
             <a href="https://epidgames.com/contact.aspx" class="text-white">Contact Us</a>
 
             <!--/*[[ SNS 아이콘 ]]*/-->
