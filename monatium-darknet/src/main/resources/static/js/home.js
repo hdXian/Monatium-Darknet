@@ -77,6 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
 
     let currentIndex = 0;
+    let isMouseDown = false;
 
     function changeCharacter(index) {
         // 이미지 변경 전 fade-out 효과
@@ -104,25 +105,32 @@ document.addEventListener("DOMContentLoaded", function () {
         changeCharacter(currentIndex);
     });
 
-    // 📌 클릭 시 변경할 이미지 적용
+    // 클릭 시 변경할 이미지 적용
     characterImg.addEventListener("mousedown", function () {
+        isMouseDown = true;
         characterImg.src = characters[currentIndex].clickImg;
     });
 
     characterImg.addEventListener("mouseup", function () {
+        isMouseDown = false;
         characterImg.src = characters[currentIndex].img;
     });
 
     characterImg.addEventListener("mouseleave", function () {
-        characterImg.src = characters[currentIndex].img;
+        if (isMouseDown) {
+            isMouseDown = false;
+            characterImg.src = characters[currentIndex].img;
+        }
     });
 
-    // 📌 터치 이벤트도 추가 (모바일 대응)
+    // 터치 이벤트도 추가 (모바일 대응)
     characterImg.addEventListener("touchstart", function () {
+        isMouseDown = true;
         characterImg.src = characters[currentIndex].clickImg;
     });
 
     characterImg.addEventListener("touchend", function () {
+        isMouseDown = false;
         characterImg.src = characters[currentIndex].img;
     });
 });

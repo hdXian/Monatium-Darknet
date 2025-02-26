@@ -1,4 +1,11 @@
 /* 상단 네비게이션 스타일 */
+nav {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
 .navbar {
     display: flex;
     align-items: center;
