@@ -20,7 +20,7 @@
     <h1>공지사항 수정</h1>
 
     <!--/*[[ 공지사항 수정 폼 ]]*/-->
-    <form id="notice-form" th:action="@{/management/notices/{id}/edit (id=${noticeId})}" th:object="${noticeForm}" method="post" enctype="multipart/form-data">
+    <form id="notice-form" th:action="@{/management/notices/{id}/edit (id=${noticeId})}" th:object="${noticeForm}" class="info-group" method="post" enctype="multipart/form-data">
         <!--/*[[ 제목 입력 ]]*/-->
         <div class="mb-3">
             <label for="title" class="form-label">제목</label>
