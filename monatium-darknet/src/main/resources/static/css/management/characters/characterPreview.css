@@ -52,10 +52,41 @@ body {
 }
 
 /* 캐릭터 프로필 섹션 */
+#profile .row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 기존 좌우로 나뉘었던 영역을 전체 너비로 변경 */
+#profile .col-md-6 {
+    width: 100%;
+    max-width: 800px; /* 너무 길어지지 않도록 제한 */
+    margin-bottom: 20px;
+}
+
+.character-profile-container {
+    display: flex;
+    justify-content: center;
+}
+
+.character-image {
+    background-color: white;
+}
+
+/* 캐릭터 정보 중앙 정렬 */
+.character-image,
 .character-profile {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
+    margin: auto;
+}
+
+/* 특성 정보도 중앙 정렬 */
+.traits-section {
+    text-align: center;
 }
 
 .character-image img {
@@ -260,28 +291,128 @@ body {
 
 /* 반응형 미디어 쿼리 */
 @media (max-width: 768px) {
-    /* 프로필 섹션 조정 */
-    .character-image img {
-        width: 80%;
-        min-width: unset;
-        min-height: unset;
-    }
-    .grade-image {
-        max-width: 100px;
+
+    /* 프로필 섹션 - 모바일에서 세로 정렬 */
+    .character-profile-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
     }
 
-    /* 특성 아이콘 영역 재배치 */
+    /* 캐릭터 이미지 크기 조정 */
+    .character-image img {
+        width: 100%;
+        max-width: 200px;
+        margin: 15px aut0;
+    }
+
+    /* 이름 및 수식어와 성급 이미지를 세로로 정렬 */
+    .character-profile .name-rank-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .character-profile .character-name{
+        margin-top: 15px;
+    }
+
+    /* 성급 이미지 크기 조정 및 위쪽 여백 추가 */
+    .grade-image {
+        width: auto;
+        height: auto;
+        max-width: 120px;
+        margin-left: 0;
+        margin: auto;
+    }
+
+    /* 이름과 수식어 정렬 */
+    .character-profile h3,
+    .character-profile p {
+        text-align: center;
+    }
+
+    .character-profile {
+        text-align: center;
+        align-items: center;
+    }
+
+    /* 특성(트레이트) 섹션 - 2열 배치 */
     .traits-icons {
         flex-wrap: wrap;
         justify-content: center;
-        gap: 10px;
-    }
-    .trait {
-        width: auto;
-        margin: 5px;
+        gap: 15px;
     }
 
-    /* 좌측 네비게이션 스타일 조정 */
+    .trait {
+        width: 45%; /* 2열 정렬 */
+        text-align: center;
+    }
+
+    .trait img {
+        max-width: 40px;
+    }
+
+    /* 스킬 섹션 - 카드 세로 배치 */
+    .skill-image {
+        max-height: 100px;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+    }
+
+    .skill-row .col-md-4 {
+        width: 100%;
+    }
+
+    /* 어사이드(aside) 섹션 - 이미지와 설명 세로 정렬 */
+    .aside-content .row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .aside-image {
+        max-width: 80%;
+        margin: 15px auto;
+    }
+
+    /* 별 이미지 크기 조정 */
+    .aside-star-img {
+        width: 25px;
+        height: 25px;
+        max-width: 100%; /* 카드 영역을 벗어나지 않도록 */
+    }
+
+    /* 어사이드 설명 텍스트는 왼쪽 정렬 유지 */
+    .aside-content .col-md-7 {
+        width: 100%;
+        text-align: left;
+    }
+
+    .aside-content h3,
+    .aside-content p {
+        text-align: left;
+    }
+
+    /* 사복(스킨) 섹션 - 가로 스크롤 */
+    .skin-row {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        gap: 5px;
+        padding-bottom: 10px;
+        width: 100%;
+    }
+
+    .skin-card-container {
+        flex: 0 0 250px;
+        max-width: 250px;
+    }
+
+    /* 네비게이션 반응형 조정 */
     .side-nav {
         height: auto;
         width: 100%;
@@ -289,6 +420,7 @@ body {
         display: flex;
         justify-content: space-around;
     }
+
     .side-nav a {
         padding: 10px;
         font-size: 1rem;
@@ -299,3 +431,4 @@ body {
         padding: 10px;
     }
 }
+

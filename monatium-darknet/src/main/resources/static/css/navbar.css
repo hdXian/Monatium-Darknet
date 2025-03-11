@@ -31,7 +31,7 @@ nav {
     max-width: 40%;
 }
 
-.navbar-collapse {
+#common_navbarNav .navbar-collapse {
     background-color: #3A5FCD; /* 네비게이션 바 배경색과 동일하게 설정 */
 }
 
